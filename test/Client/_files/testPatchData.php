@@ -14,20 +14,14 @@
  *
  * @category   Zend
  * @package    Zend_Http
- * @subpackage Client_Exception
+ * @subpackage UnitTests
  * @copyright  Copyright (c) 2005-2012 Zend Technologies USA Inc. (http://www.zend.com)
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
  */
 
-namespace Zend\Http\Client;
+$putdata = fopen("php://input", "r");
+while ($data = fread($putdata, 1024)) {
+    echo $data;
+}
 
-/**
- * @uses       \Zend\Http\Exception
- * @category   Zend
- * @package    Zend_Http
- * @subpackage Client
- * @copyright  Copyright (c) 2005-2012 Zend Technologies USA Inc. (http://www.zend.com)
- * @license    http://framework.zend.com/license/new-bsd     New BSD License
- */
-interface Exception extends \Zend\Http\Exception
-{}
+fclose($putdata);
