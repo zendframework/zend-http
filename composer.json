@@ -9,7 +9,7 @@
     "homepage": "https://github.com/zendframework/zend-http",
     "autoload": {
         "psr-4": {
-            "Zend\\Http": "src/"
+            "Zend\\Http\\": "src/"
         }
     },
     "require": {
