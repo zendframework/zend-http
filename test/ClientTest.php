@@ -1,10 +1,18 @@
 <?php
+/**
+ * Zend Framework (http://framework.zend.com/)
+ *
+ * @link      http://github.com/zendframework/zf2 for the canonical source repository
+ * @copyright Copyright (c) 2005-2012 Zend Technologies USA Inc. (http://www.zend.com)
+ * @license   http://framework.zend.com/license/new-bsd New BSD License
+ * @package   Zend_Http
+ */
 
 namespace ZendTest\Http;
 
-use Zend\Http\Client,
-    Zend\Http\Exception,
-    Zend\Http\Header\SetCookie;
+use Zend\Http\Client;
+use Zend\Http\Exception;
+use Zend\Http\Header\SetCookie;
 
 class ClientTest extends \PHPUnit_Framework_TestCase
 {
@@ -70,5 +78,27 @@ class ClientTest extends \PHPUnit_Framework_TestCase
 
         $cookies = $client->getCookies();
         $this->assertEquals(2, count($cookies));
+    }
+
+    /**
+     * @group 2774
+     * @group 2745
+     */
+    public function testArgSeparatorDefaultsToIniSetting()
+    {
+        $argSeparator = ini_get('arg_separator.output');
+        $client = new Client();
+        $this->assertEquals($argSeparator, $client->getArgSeparator());
+    }
+
+    /**
+     * @group 2774
+     * @group 2745
+     */
+    public function testCanOverrideArgSeparator()
+    {
+        $client = new Client();
+        $client->setArgSeparator(';');
+        $this->assertEquals(';', $client->getArgSeparator());
     }
 }

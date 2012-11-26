@@ -1,8 +1,18 @@
 <?php
+/**
+ * Zend Framework (http://framework.zend.com/)
+ *
+ * @link      http://github.com/zendframework/zf2 for the canonical source repository
+ * @copyright Copyright (c) 2005-2012 Zend Technologies USA Inc. (http://www.zend.com)
+ * @license   http://framework.zend.com/license/new-bsd New BSD License
+ * @package   Zend_Http
+ */
 
 namespace ZendTest\Http;
 
 use Zend\Http\Request;
+use Zend\Http\Headers;
+use Zend\Http\Header\GenericHeader;
 
 class RequestTest extends \PHPUnit_Framework_TestCase
 {
@@ -23,9 +33,7 @@ class RequestTest extends \PHPUnit_Framework_TestCase
         $request = new Request();
         $this->assertInstanceOf('Zend\Stdlib\Parameters', $request->getQuery());
         $this->assertInstanceOf('Zend\Stdlib\Parameters', $request->getPost());
-        $this->assertInstanceOf('Zend\Stdlib\Parameters', $request->getFile());
-        $this->assertInstanceOf('Zend\Stdlib\Parameters', $request->getServer());
-        $this->assertInstanceOf('Zend\Stdlib\Parameters', $request->getEnv());
+        $this->assertInstanceOf('Zend\Stdlib\Parameters', $request->getFiles());
     }
 
     public function testRequestAllowsSettingOfParameterContainer()
@@ -34,15 +42,57 @@ class RequestTest extends \PHPUnit_Framework_TestCase
         $p = new \Zend\Stdlib\Parameters();
         $request->setQuery($p);
         $request->setPost($p);
-        $request->setFile($p);
-        $request->setServer($p);
-        $request->setEnv($p);
+        $request->setFiles($p);
 
         $this->assertSame($p, $request->getQuery());
         $this->assertSame($p, $request->getPost());
-        $this->assertSame($p, $request->getFile());
-        $this->assertSame($p, $request->getServer());
-        $this->assertSame($p, $request->getEnv());
+        $this->assertSame($p, $request->getFiles());
+
+        $headers = new Headers();
+        $request->setHeaders($headers);
+        $this->assertSame($headers, $request->getHeaders());
+    }
+
+    public function testRetrievingASingleValueForParameters()
+    {
+        $request = new Request();
+        $p = new \Zend\Stdlib\Parameters(array(
+            'foo' => 'bar'
+        ));
+        $request->setQuery($p);
+        $request->setPost($p);
+        $request->setFiles($p);
+
+        $this->assertSame('bar', $request->getQuery('foo'));
+        $this->assertSame('bar', $request->getPost('foo'));
+        $this->assertSame('bar', $request->getFiles('foo'));
+
+        $headers = new Headers();
+        $h = new GenericHeader('foo','bar');
+        $headers->addHeader($h);
+
+        $request->setHeaders($headers);
+        $this->assertSame($headers, $request->getHeaders());
+        $this->assertSame($h, $request->getHeaders()->get('foo'));
+        $this->assertSame($h, $request->getHeader('foo'));
+    }
+
+    public function testParameterRetrievalDefaultValue()
+    {
+        $request = new Request();
+        $p = new \Zend\Stdlib\Parameters(array(
+            'foo' => 'bar'
+        ));
+        $request->setQuery($p);
+        $request->setPost($p);
+        $request->setFiles($p);
+
+        $default = 15;
+        $this->assertSame($default, $request->getQuery('baz', $default));
+        $this->assertSame($default, $request->getPost('baz', $default));
+        $this->assertSame($default, $request->getFiles('baz', $default));
+        $this->assertSame($default, $request->getHeaders('baz', $default));
+        $this->assertSame($default, $request->getHeader('baz', $default));
     }
 
     public function testRequestPersistsRawBody()
@@ -124,7 +174,8 @@ class RequestTest extends \PHPUnit_Framework_TestCase
     {
         $request = new Request();
 
-        $this->setExpectedException('Zend\Http\Exception\InvalidArgumentException', 'not a valid version');
+        $this->setExpectedException('Zend\Http\Exception\InvalidArgumentException',
+                                    'Not valid or not supported HTTP version');
         $request->setVersion('1.2');
     }
 
@@ -200,5 +251,4 @@ class RequestTest extends \PHPUnit_Framework_TestCase
         }
         return $return;
     }
-
 }

@@ -1,4 +1,12 @@
 <?php
+/**
+ * Zend Framework (http://framework.zend.com/)
+ *
+ * @link      http://github.com/zendframework/zf2 for the canonical source repository
+ * @copyright Copyright (c) 2005-2012 Zend Technologies USA Inc. (http://www.zend.com)
+ * @license   http://framework.zend.com/license/new-bsd New BSD License
+ * @package   Zend_Http
+ */
 
 namespace ZendTest\Http\Header;
 
@@ -12,7 +20,7 @@ class SetCookieTest extends \PHPUnit_Framework_TestCase
     public function testSetCookieConstructor()
     {
         $setCookieHeader = new SetCookie(
-            'myname', 'myvalue', 'Wed, 13-Jan-2021 22:23:01 GMT', 
+            'myname', 'myvalue', 'Wed, 13-Jan-2021 22:23:01 GMT',
             '/accounts', 'docs.foo.com', true, true, 99, 9
         );
         $this->assertEquals('myname', $setCookieHeader->getName());
@@ -145,11 +153,22 @@ class SetCookieTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($target, $headerLine);
     }
 
-    /** Implmentation specific tests here */
-    
+    public function testIsValidForRequestSubdomainMatch()
+    {
+        $setCookieHeader = new SetCookie(
+            'myname', 'myvalue', 'Wed, 13-Jan-2021 22:23:01 GMT',
+            '/accounts', '.foo.com', true, true, 99, 9
+        );
+        $this->assertTrue($setCookieHeader->isValidForRequest('bar.foo.com', '/accounts', true));
+        $this->assertFalse($setCookieHeader->isValidForRequest('bar.foooo.com', '/accounts', true)); // false because of domain
+        $this->assertFalse($setCookieHeader->isValidForRequest('bar.foo.com', '/accounts', false)); // false because of isSecure
+        $this->assertFalse($setCookieHeader->isValidForRequest('bar.foo.com', '/somethingelse', true)); // false because of path
+    }
+
+    /** Implementation specific tests here */
+
     /**
      * @group ZF2-169
-     * @see http://framework.zend.com/issues/browse/ZF2-169
      */
     public function testZF2_169()
     {
@@ -173,7 +192,7 @@ class SetCookieTest extends \PHPUnit_Framework_TestCase
         $c = new SetCookie();
         $this->assertEquals('Set-Cookie', $c->getFieldName());
     }
-    
+
     /**
      * @dataProvider validCookieWithInfoProvider
      */
@@ -182,11 +201,11 @@ class SetCookieTest extends \PHPUnit_Framework_TestCase
         $cookie = SetCookie::fromString($cStr);
         if (! $cookie instanceof SetCookie) {
             $this->fail("Failed creating a cookie object from '$cStr'");
-        }        
+        }
         $this->assertEquals($expected, $cookie->getFieldValue());
         $this->assertEquals($cookie->getFieldName() . ': ' . $expected, $cookie->toString());
     }
-    
+
     /**
      * @dataProvider validCookieWithInfoProvider
      */
@@ -195,7 +214,7 @@ class SetCookieTest extends \PHPUnit_Framework_TestCase
         $cookie = SetCookie::fromString($cStr);
         if (! $cookie instanceof SetCookie) {
             $this->fail("Failed creating a cookie object from '$cStr'");
-        }        
+        }
         $this->assertEquals($cookie->getFieldName() . ': ' . $expected, $cookie->toString());
     }
 
@@ -300,7 +319,7 @@ class SetCookieTest extends \PHPUnit_Framework_TestCase
                     'secure'  => true,
                     'httponly'=> false
                 ),
-                'PHPSESSID=123456789%2Babcd%252Cef; Expires=Tue, 21-Nov-2006 08:33:44 GMT; Domain=.localdomain; Path=/foo/baz; Secure'
+                'PHPSESSID=123456789+abcd%2Cef; Expires=Tue, 21-Nov-2006 08:33:44 GMT; Domain=.localdomain; Path=/foo/baz; Secure'
             ),
             array(
                 'Set-Cookie: myname=myvalue; Domain=docs.foo.com; Path=/accounts; Expires=Wed, 13-Jan-2021 22:23:01 GMT; Secure; HttpOnly',
@@ -319,4 +338,3 @@ class SetCookieTest extends \PHPUnit_Framework_TestCase
     }
 
 }
-

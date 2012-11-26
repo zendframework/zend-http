@@ -1,4 +1,12 @@
 <?php
+/**
+ * Zend Framework (http://framework.zend.com/)
+ *
+ * @link      http://github.com/zendframework/zf2 for the canonical source repository
+ * @copyright Copyright (c) 2005-2012 Zend Technologies USA Inc. (http://www.zend.com)
+ * @license   http://framework.zend.com/license/new-bsd New BSD License
+ * @package   Zend_Http
+ */
 
 namespace ZendTest\Http;
 
@@ -63,6 +71,21 @@ class ResponseTest extends \PHPUnit_Framework_TestCase
         $response = Response::fromString($string);
         $this->assertEquals(200, $response->getStatusCode());
         $this->assertEquals('Foo Bar', $response->getContent());
+    }
+
+    public function testResponseHasZeroLengthReasonPhrase()
+    {
+        // Space after status code is mandatory,
+        // though, reason phrase can be empty.
+        // @see http://www.w3.org/Protocols/rfc2616/rfc2616-sec6.html#sec6.1
+        $string = 'HTTP/1.0 200 ' . "\r\n\r\n" . 'Foo Bar';
+
+        $response = Response::fromString($string);
+        $this->assertEquals(200, $response->getStatusCode());
+        $this->assertEquals('Foo Bar', $response->getContent());
+
+        // Reason phrase would fallback to default reason phrase.
+        $this->assertEquals('OK', $response->getReasonPhrase());
     }
 
     public function testGzipResponse ()

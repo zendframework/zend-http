@@ -1,25 +1,15 @@
 <?php
 /**
- * Zend Framework
+ * Zend Framework (http://framework.zend.com/)
  *
- * LICENSE
- *
- * This source file is subject to the new BSD license that is bundled
- * with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://framework.zend.com/license/new-bsd
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@zend.com so we can send you a copy immediately.
- *
- * @category   Zend
- * @package    Zend_Http_Client
- * @subpackage UnitTests
- * @copyright  Copyright (c) 2005-2012 Zend Technologies USA Inc. (http://www.zend.com)
- * @license    http://framework.zend.com/license/new-bsd     New BSD License
+ * @link      http://github.com/zendframework/zf2 for the canonical source repository
+ * @copyright Copyright (c) 2005-2012 Zend Technologies USA Inc. (http://www.zend.com)
+ * @license   http://framework.zend.com/license/new-bsd New BSD License
+ * @package   Zend_Http
  */
 
 namespace ZendTest\Http\Client;
+
 use Zend\Http\Client;
 
 /**
@@ -33,13 +23,16 @@ use Zend\Http\Client;
  * @category   Zend
  * @package    Zend_Http_Client
  * @subpackage UnitTests
- * @copyright  Copyright (c) 2005-2012 Zend Technologies USA Inc. (http://www.zend.com)
- * @license    http://framework.zend.com/license/new-bsd     New BSD License
  * @group      Zend_Http
  * @group      Zend_Http_Client
  */
 class ProxyAdapterTest extends SocketTest
 {
+
+
+    protected $host;
+    protected $port;
+
     /**
      * Configuration array
      *
@@ -55,6 +48,8 @@ class ProxyAdapterTest extends SocketTest
             if (! $host)
                 $this->markTestSkipped('No valid proxy host name or address specified.');
 
+            $this->host = $host;
+
             $port = (int) $port;
             if ($port == 0) {
                 $port = 8080;
@@ -62,6 +57,8 @@ class ProxyAdapterTest extends SocketTest
                 if (($port < 1 || $port > 65535))
                     $this->markTestSkipped("$port is not a valid proxy port number. Should be between 1 and 65535.");
             }
+
+            $this->port = $port;
 
             $user = '';
             $pass = '';
@@ -99,8 +96,8 @@ class ProxyAdapterTest extends SocketTest
         ));
 
         $this->client->setUri($this->baseuri . 'testGetLastRequest.php');
-        $res = $this->client->request(Client::TRACE);
-        if ($res->getStatus() == 405 || $res->getStatus() == 501) {
+        $res = $this->client->setMethod(\Zend\Http\Request::METHOD_TRACE)->send();
+        if ($res->getStatusCode() == 405 || $res->getStatusCode() == 501) {
             $this->markTestSkipped('Server does not allow the TRACE method');
         }
 
@@ -115,4 +112,25 @@ class ProxyAdapterTest extends SocketTest
          * the TRACE response
          */
     }
+
+    public function testDefaultConfig()
+    {
+        $config = $this->_adapter->getConfig();
+        $this->assertEquals(TRUE, $config['sslverifypeer']);
+        $this->assertEquals(FALSE, $config['sslallowselfsigned']);
+    }
+
+    /**
+     * Test that the proxy keys normalised by the client are correctly converted to what the proxy adapter expects.
+     */
+    public function testProxyKeysCorrectlySetInProxyAdapter()
+    {
+        $adapterConfig = $this->_adapter->getConfig();
+        $adapterHost = $adapterConfig['proxy_host'];
+        $adapterPort = $adapterConfig['proxy_port'];
+
+        $this->assertSame($this->host, $adapterHost);
+        $this->assertSame($this->port, $adapterPort);
+    }
+
 }
