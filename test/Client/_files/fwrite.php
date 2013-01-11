@@ -8,12 +8,15 @@
  * @package   Zend_Http
  */
 
-namespace Zend\Http\Header;
+namespace Zend\Http\Client\Adapter;
 
-interface HeaderInterface
+/**
+ * This is a stub for PHP's `fwrite` function. It
+ * allows us to check that a write operation to a
+ * socket producing a returned "0 bytes" written
+ * is actually valid.
+ */
+function fwrite($socket, $request)
 {
-    public static function fromString($headerLine);
-    public function getFieldName();
-    public function getFieldValue();
-    public function toString();
+    return 0;
 }
