@@ -3,7 +3,7 @@
  * Zend Framework (http://framework.zend.com/)
  *
  * @link      http://github.com/zendframework/zf2 for the canonical source repository
- * @copyright Copyright (c) 2005-2013 Zend Technologies USA Inc. (http://www.zend.com)
+ * @copyright Copyright (c) 2005-2012 Zend Technologies USA Inc. (http://www.zend.com)
  * @license   http://framework.zend.com/license/new-bsd New BSD License
  */
 
@@ -11,9 +11,9 @@ namespace Zend\Http\Header;
 
 /**
  * @throws Exception\InvalidArgumentException
- * @see http://www.w3.org/Protocols/rfc2616/rfc2616-sec14.html#sec14.45
+ * @see http://www.w3.org/Protocols/rfc2616/rfc2616-sec14.html#sec14.11 @todo find section
  */
-class Via implements HeaderInterface
+class ContentTransferEncoding implements HeaderInterface
 {
 
     public static function fromString($headerLine)
@@ -23,8 +23,8 @@ class Via implements HeaderInterface
         list($name, $value) = explode(': ', $headerLine, 2);
 
         // check to ensure proper header type for this factory
-        if (strtolower($name) !== 'via') {
-            throw new Exception\InvalidArgumentException('Invalid header line for Via string: "' . $name . '"');
+        if (strtolower($name) !== 'content-transfer-encoding') {
+            throw new Exception\InvalidArgumentException('Invalid header line for Content-Transfer-Encoding string: "' . $name . '"');
         }
 
         // @todo implementation details
@@ -35,7 +35,7 @@ class Via implements HeaderInterface
 
     public function getFieldName()
     {
-        return 'Via';
+        return 'Content-Transfer-Encoding';
     }
 
     public function getFieldValue()
@@ -45,7 +45,7 @@ class Via implements HeaderInterface
 
     public function toString()
     {
-        return 'Via: ' . $this->getFieldValue();
+        return 'Content-Transfer-Encoding: ' . $this->getFieldValue();
     }
 
 }
