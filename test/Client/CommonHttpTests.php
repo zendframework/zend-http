@@ -1,31 +1,21 @@
 <?php
 /**
- * Zend Framework
+ * Zend Framework (http://framework.zend.com/)
  *
- * LICENSE
- *
- * This source file is subject to the new BSD license that is bundled
- * with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://framework.zend.com/license/new-bsd
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@zend.com so we can send you a copy immediately.
- *
- * @category   Zend
- * @package    Zend_Http
- * @subpackage UnitTests
- * @copyright  Copyright (c) 2005-2012 Zend Technologies USA Inc. (http://www.zend.com)
- * @license    http://framework.zend.com/license/new-bsd     New BSD License
+ * @link      http://github.com/zendframework/zf2 for the canonical source repository
+ * @copyright Copyright (c) 2005-2013 Zend Technologies USA Inc. (http://www.zend.com)
+ * @license   http://framework.zend.com/license/new-bsd New BSD License
+ * @package   Zend_Http
  */
 
 namespace ZendTest\Http\Client;
-use Zend\Http\Client as HTTPClient,
-    Zend\Http,
-    Zend\Http\Client\Adapter,
-    Zend\Http\Client\Adapter\Exception as AdapterException,
-    Zend\Http\Request,
-    Zend\Http\Response;
+
+use Zend\Http\Client as HTTPClient;
+use Zend\Http;
+use Zend\Http\Client\Adapter;
+use Zend\Http\Client\Adapter\Exception as AdapterException;
+use Zend\Http\Request;
+use Zend\Http\Response;
 
 
 /**
@@ -35,7 +25,7 @@ use Zend\Http\Client as HTTPClient,
  * adapters and configurations.
  *
  * Note that $this->baseuri must point to a directory on a web server
- * containing all the files under the _files directory. You should symlink
+ * containing all the files under the files directory. You should symlink
  * or copy these files and set 'baseuri' properly.
  *
  * You can also set the proper constant in your test configuration file to
@@ -44,15 +34,13 @@ use Zend\Http\Client as HTTPClient,
  * @category   Zend
  * @package    Zend_Http_Client
  * @subpackage UnitTests
- * @copyright  Copyright (c) 2005-2012 Zend Technologies USA Inc. (http://www.zend.com)
- * @license    http://framework.zend.com/license/new-bsd     New BSD License
  * @group      Zend_Http
  * @group      Zend_Http_Client
  */
 abstract class CommonHttpTests extends \PHPUnit_Framework_TestCase
 {
     /**
-     * The bast URI for this test, containing all files in the _files directory
+     * The bast URI for this test, containing all files in the files directory
      * Should be set in TestConfiguration.php or TestConfiguration.php.dist
      *
      * @var string
@@ -599,12 +587,12 @@ abstract class CommonHttpTests extends \PHPUnit_Framework_TestCase
         // First - fail password
         $this->client->setAuth('alice', 'wrong');
         $res = $this->client->send();
-        $this->assertEquals(401, $res->getStatusCode(), 'Expected HTTP 401 response was not recieved');
+        $this->assertEquals(401, $res->getStatusCode(), 'Expected HTTP 401 response was not received');
 
         // Now use good password
         $this->client->setAuth('alice', 'secret');
         $res = $this->client->send();
-        $this->assertEquals(200, $res->getStatusCode(), 'Expected HTTP 200 response was not recieved');
+        $this->assertEquals(200, $res->getStatusCode(), 'Expected HTTP 200 response was not received');
     }
 
     /**
@@ -626,13 +614,13 @@ abstract class CommonHttpTests extends \PHPUnit_Framework_TestCase
         $this->client->setUri(sprintf($uri, 'alice', 'wrong'));
         $this->client->setMethod('GET');
         $res = $this->client->send();
-        $this->assertEquals(401, $res->getStatusCode(), 'Expected HTTP 401 response was not recieved');
+        $this->assertEquals(401, $res->getStatusCode(), 'Expected HTTP 401 response was not received');
 
         // Now use good password
         $this->client->setUri(sprintf($uri, 'alice', 'secret'));
         $this->client->setMethod('GET');
         $res = $this->client->send();
-        $this->assertEquals(200, $res->getStatusCode(), 'Expected HTTP 200 response was not recieved');
+        $this->assertEquals(200, $res->getStatusCode(), 'Expected HTTP 200 response was not received');
     }
 
     /**
@@ -828,7 +816,7 @@ abstract class CommonHttpTests extends \PHPUnit_Framework_TestCase
         $files = array('file1.txt', 'file2.txt', 'someotherfile.foo');
 
         $expectedBody = '';
-        foreach($files as $filename) {
+        foreach ($files as $filename) {
             $this->client->setFileUpload($filename, 'uploadfile[]', $rawData, 'text/plain');
             $expectedBody .= "uploadfile $filename text/plain " . strlen($rawData) . "\n";
         }
@@ -856,7 +844,7 @@ abstract class CommonHttpTests extends \PHPUnit_Framework_TestCase
 
     public function testStreamResponse()
     {
-        if(!($this->client->getAdapter() instanceof Adapter\StreamInterface)) {
+        if (!($this->client->getAdapter() instanceof Adapter\StreamInterface)) {
               $this->markTestSkipped('Current adapter does not support streaming');
               return;
         }
@@ -883,7 +871,7 @@ abstract class CommonHttpTests extends \PHPUnit_Framework_TestCase
     {
         $this->markTestSkipped('To check with the new ZF2 implementation');
 
-        if(!($this->client->getAdapter() instanceof Adapter\StreamInterface)) {
+        if (!($this->client->getAdapter() instanceof Adapter\StreamInterface)) {
               $this->markTestSkipped('Current adapter does not support streaming');
               return;
         }
@@ -903,7 +891,7 @@ abstract class CommonHttpTests extends \PHPUnit_Framework_TestCase
 
     public function testStreamResponseNamed()
     {
-        if(!($this->client->getAdapter() instanceof Adapter\StreamInterface)) {
+        if (!($this->client->getAdapter() instanceof Adapter\StreamInterface)) {
               $this->markTestSkipped('Current adapter does not support streaming');
               return;
         }
@@ -929,7 +917,7 @@ abstract class CommonHttpTests extends \PHPUnit_Framework_TestCase
 
     public function testStreamRequest()
     {
-        if(!($this->client->getAdapter() instanceof Adapter\StreamInterface)) {
+        if (!($this->client->getAdapter() instanceof Adapter\StreamInterface)) {
               $this->markTestSkipped('Current adapter does not support streaming');
               return;
         }
@@ -957,7 +945,7 @@ abstract class CommonHttpTests extends \PHPUnit_Framework_TestCase
             throw new AdapterException\RuntimeException("Error requesting test URL");
         }
 
-        $clen = $response->headers()->get('Content-Length');
+        $clen = $response->getHeaders()->get('Content-Length');
 
         if (! (is_array($clen))) {
             $this->markTestSkipped("Didn't get multiple Content-length headers");
@@ -986,7 +974,7 @@ abstract class CommonHttpTests extends \PHPUnit_Framework_TestCase
         $this->client->send();
         $request = Request::fromString($this->client->getLastRawRequest());
         $this->assertEquals($content_type,
-                            $request->headers()->get('Content-Type')->getFieldValue());
+                            $request->getHeaders()->get('Content-Type')->getFieldValue());
     }
 
     /**
@@ -1006,7 +994,7 @@ abstract class CommonHttpTests extends \PHPUnit_Framework_TestCase
      *
      * @return array
      */
-    static public function parameterArrayProvider()
+    public static function parameterArrayProvider()
     {
         return array(
             array(
@@ -1047,7 +1035,7 @@ abstract class CommonHttpTests extends \PHPUnit_Framework_TestCase
      *
      * @return array
      */
-    static public function invalidConfigProvider()
+    public static function invalidConfigProvider()
     {
         return array(
             array(false),

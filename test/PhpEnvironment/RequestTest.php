@@ -1,8 +1,19 @@
 <?php
+/**
+ * Zend Framework (http://framework.zend.com/)
+ *
+ * @link      http://github.com/zendframework/zf2 for the canonical source repository
+ * @copyright Copyright (c) 2005-2013 Zend Technologies USA Inc. (http://www.zend.com)
+ * @license   http://framework.zend.com/license/new-bsd New BSD License
+ * @package   Zend_Http
+ */
+
 namespace ZendTest\Http\PhpEnvironment;
 
-use PHPUnit_Framework_TestCase as TestCase,
-    Zend\Http\PhpEnvironment\Request;
+use PHPUnit_Framework_TestCase as TestCase;
+use Zend\Http\Headers;
+use Zend\Http\Header\GenericHeader;
+use Zend\Http\PhpEnvironment\Request;
 
 class RequestTest extends TestCase
 {
@@ -24,6 +35,7 @@ class RequestTest extends TestCase
             'cookie' => $_COOKIE,
             'server' => $_SERVER,
             'env'    => $_ENV,
+            'files'  => $_FILES,
         );
 
         $_POST   = array();
@@ -31,6 +43,7 @@ class RequestTest extends TestCase
         $_COOKIE = array();
         $_SERVER = array();
         $_ENV    = array();
+        $_FILES  = array();
     }
 
     /**
@@ -43,6 +56,7 @@ class RequestTest extends TestCase
         $_COOKIE = $this->originalEnvironment['cookie'];
         $_SERVER = $this->originalEnvironment['server'];
         $_ENV    = $this->originalEnvironment['env'];
+        $_FILES  = $this->originalEnvironment['files'];
     }
 
     /**
@@ -190,6 +204,17 @@ class RequestTest extends TestCase
                 '/html/index.php',
                 '/html'
             ),
+
+            //Test when url quert contains a full http url
+            array(
+                array(
+                    'REQUEST_URI' => '/html/index.php?url=http://test.example.com/path/&foo=bar',
+                    'PHP_SELF' => '/html/index.php',
+                    'SCRIPT_FILENAME' => '/var/web/html/index.php',
+                ),
+                '/html/index.php',
+                '/html'
+            ),
         );
     }
 
@@ -256,7 +281,7 @@ class RequestTest extends TestCase
         $_SERVER = $server;
         $request = new Request();
 
-        $header = $request->headers()->get($name);
+        $header = $request->getHeaders()->get($name);
         $this->assertNotEquals($header, false);
         $this->assertEquals($name,  $header->getFieldName($value));
         $this->assertEquals($value, $header->getFieldValue($value));
@@ -287,6 +312,7 @@ class RequestTest extends TestCase
                     'REQUEST_URI' => 'http://test.example.com/news',
                 ),
                 'test.example.com',
+                '80',
                 '/news',
             ),
             array(
@@ -295,6 +321,30 @@ class RequestTest extends TestCase
                     'REQUEST_URI' => 'http://test.example.com/news',
                 ),
                 'test.example.com',
+                '80',
+                '/news',
+            ),
+            array(
+                array(
+                    'SERVER_NAME' => '[1:2:3:4:5:6::6]',
+                    'SERVER_ADDR' => '1:2:3:4:5:6::6',
+                    'SERVER_PORT' => '80',
+                    'REQUEST_URI' => 'http://[1:2:3:4:5:6::6]/news',
+                ),
+                '[1:2:3:4:5:6::6]',
+                '80',
+                '/news',
+            ),
+               // Test for broken $_SERVER implementation from Windows-Safari
+            array(
+                array(
+                    'SERVER_NAME' => '[1:2:3:4:5:6:]',
+                    'SERVER_ADDR' => '1:2:3:4:5:6::6',
+                    'SERVER_PORT' => '6',
+                    'REQUEST_URI' => 'http://[1:2:3:4:5:6::6]/news',
+                ),
+                '[1:2:3:4:5:6::6]',
+                '80',
                 '/news',
             ),
             array(
@@ -304,6 +354,7 @@ class RequestTest extends TestCase
                     'REQUEST_URI' => 'http://test.example.com/news',
                 ),
                 'test.example.com',
+                '8080',
                 '/news',
             ),
             array(
@@ -314,8 +365,21 @@ class RequestTest extends TestCase
                     'REQUEST_URI' => 'https://test.example.com/news',
                 ),
                 'test.example.com',
+                '443',
                 '/news',
             ),
+
+            //Test when url quert contains a full http url
+            array(
+                array(
+                    'SERVER_NAME' => 'test.example.com',
+                    'REQUEST_URI' => '/html/index.php?url=http://test.example.com/path/&foo=bar',
+                ),
+                'test.example.com',
+                '80',
+                '/html/index.php?url=http://test.example.com/path/&foo=bar',
+            ),
+
         );
     }
 
@@ -325,15 +389,317 @@ class RequestTest extends TestCase
      * @param string $name
      * @param string $value
      */
-    public function testServerHostnameProvider(array $server, $expectedHost, $expectedRequestUri)
+    public function testServerHostnameProvider(array $server, $expectedHost, $expectedPort, $expectedRequestUri)
     {
         $_SERVER = $server;
         $request = new Request();
 
-        $host = $request->uri()->getHost();
+        $host = $request->getUri()->getHost();
         $this->assertEquals($expectedHost, $host);
+
+        $port = $request->getUri()->getPort();
+        $this->assertEquals($expectedPort, $port);
 
         $requestUri = $request->getRequestUri();
         $this->assertEquals($expectedRequestUri, $requestUri);
+    }
+
+    /**
+     * Data provider for testing mapping $_FILES
+     *
+     * @return array
+     */
+    public static function filesProvider()
+    {
+        return array(
+            // single file
+            array(
+                array(
+                    'file' => array (
+                        'name' => 'test1.txt',
+                        'type' => 'text/plain',
+                        'tmp_name' => '/tmp/phpXXX',
+                        'error' => 0,
+                        'size' => 1,
+                    ),
+                ),
+                array(
+                    'file' => array (
+                        'name' => 'test1.txt',
+                        'type' => 'text/plain',
+                        'tmp_name' => '/tmp/phpXXX',
+                        'error' => 0,
+                        'size' => 1,
+                    ),
+                ),
+            ),
+
+            // file name with brackets and int keys
+            // file[], file[]
+            array(
+                array(
+                    'file' => array (
+                        'name' => array (
+                            0 => 'test1.txt',
+                            1 => 'test2.txt',
+                        ),
+                        'type' => array (
+                            0 => 'text/plain',
+                            1 => 'text/plain',
+                        ),
+                        'tmp_name' => array (
+                            0 => '/tmp/phpXXX',
+                            1 => '/tmp/phpXXX',
+                        ),
+                        'error' => array (
+                            0 => 0,
+                            1 => 0,
+                        ),
+                        'size' => array (
+                            0 => 1,
+                            1 => 1,
+                        ),
+                    ),
+                ),
+                array(
+                    'file' => array (
+                        0 => array(
+                            'name' => 'test1.txt',
+                            'type' => 'text/plain',
+                            'tmp_name' => '/tmp/phpXXX',
+                            'error' => 0,
+                            'size' => 1,
+                        ),
+                        1 => array(
+                            'name' => 'test2.txt',
+                            'type' => 'text/plain',
+                            'tmp_name' => '/tmp/phpXXX',
+                            'error' => 0,
+                            'size' => 1,
+                        ),
+                    ),
+                ),
+            ),
+
+            // file name with brackets and string keys
+            // file[one], file[two]
+            array(
+                array(
+                    'file' => array (
+                        'name' => array (
+                            'one' => 'test1.txt',
+                            'two' => 'test2.txt',
+                        ),
+                        'type' => array (
+                            'one' => 'text/plain',
+                            'two' => 'text/plain',
+                        ),
+                        'tmp_name' => array (
+                            'one' => '/tmp/phpXXX',
+                            'two' => '/tmp/phpXXX',
+                        ),
+                        'error' => array (
+                            'one' => 0,
+                            'two' => 0,
+                        ),
+                        'size' => array (
+                            'one' => 1,
+                            'two' => 1,
+                        ),
+                      ),
+                ),
+                array(
+                    'file' => array (
+                        'one' => array(
+                            'name' => 'test1.txt',
+                            'type' => 'text/plain',
+                            'tmp_name' => '/tmp/phpXXX',
+                            'error' => 0,
+                            'size' => 1,
+                        ),
+                        'two' => array(
+                            'name' => 'test2.txt',
+                            'type' => 'text/plain',
+                            'tmp_name' => '/tmp/phpXXX',
+                            'error' => 0,
+                            'size' => 1,
+                        ),
+                    ),
+                ),
+            ),
+
+            // multilevel file name
+            // file[], file[][], file[][][]
+            array(
+                array (
+                    'file' => array (
+                        'name' => array (
+                            0 => 'test_0.txt',
+                            1 => array (
+                                0 => 'test_10.txt',
+                            ),
+                            2 => array (
+                                0 => array(
+                                    0 => 'test_200.txt',
+                                ),
+                            ),
+                        ),
+                        'type' => array(
+                            0 => 'text/plain',
+                            1 => array(
+                                0 => 'text/plain',
+                            ),
+                            2 => array(
+                                0 => array(
+                                    0 => 'text/plain',
+                                ),
+                            ),
+                        ),
+                        'tmp_name' => array (
+                            0 => '/tmp/phpXXX',
+                            1 => array(
+                                0 => '/tmp/phpXXX',
+                            ),
+                            2 => array (
+                                0 => array(
+                                    0 => '/tmp/phpXXX',
+                                ),
+                            ),
+                        ),
+                        'error' => array(
+                            0 => 0,
+                            1 => array(
+                                0 => 0,
+                            ),
+                            2 => array (
+                                0 => array(
+                                    0 => 0,
+                                ),
+                            ),
+                        ),
+                        'size' => array(
+                            0 => 1,
+                            1 => array(
+                                0 => 1,
+                            ),
+                            2 => array(
+                                0 => array(
+                                    0 => 1,
+                                ),
+                            ),
+                        ),
+                    )
+                ),
+                array(
+                    'file' => array(
+                        0 => array(
+                            'name' => 'test_0.txt',
+                            'type' => 'text/plain',
+                            'tmp_name' => '/tmp/phpXXX',
+                            'error' => 0,
+                            'size' => 1,
+                        ),
+                        1 => array(
+                            0 => array(
+                                'name' => 'test_10.txt',
+                                'type' => 'text/plain',
+                                'tmp_name' => '/tmp/phpXXX',
+                                'error' => 0,
+                                'size' => 1,
+                            ),
+                        ),
+                        2 => array(
+                            0 => array(
+                                0 => array(
+                                    'name' => 'test_200.txt',
+                                    'type' => 'text/plain',
+                                    'tmp_name' => '/tmp/phpXXX',
+                                    'error' => 0,
+                                    'size' => 1,
+                                ),
+                            ),
+                        ),
+                    )
+                ),
+            ),
+        );
+    }
+
+    /**
+     * @param array $files
+     * @param array $expectedFiles
+     * @dataProvider filesProvider
+     */
+    public function testRequestMapsPhpFies(array $files, array $expectedFiles)
+    {
+        $_FILES = $files;
+        $request = new Request();
+        $this->assertEquals($expectedFiles, $request->getFiles()->toArray());
+    }
+
+    public function testParameterRetrievalDefaultValue()
+    {
+        $request = new Request();
+        $p = new \Zend\Stdlib\Parameters(array(
+            'foo' => 'bar'
+        ));
+        $request->setQuery($p);
+        $request->setPost($p);
+        $request->setFiles($p);
+        $request->setServer($p);
+        $request->setEnv($p);
+
+        $default = 15;
+        $this->assertSame($default, $request->getQuery('baz', $default));
+        $this->assertSame($default, $request->getPost('baz', $default));
+        $this->assertSame($default, $request->getFiles('baz', $default));
+        $this->assertSame($default, $request->getServer('baz', $default));
+        $this->assertSame($default, $request->getEnv('baz', $default));
+        $this->assertSame($default, $request->getHeaders('baz', $default));
+        $this->assertSame($default, $request->getHeader('baz', $default));
+    }
+
+    public function testRetrievingASingleValueForParameters()
+    {
+        $request = new Request();
+        $p = new \Zend\Stdlib\Parameters(array(
+            'foo' => 'bar'
+        ));
+        $request->setQuery($p);
+        $request->setPost($p);
+        $request->setFiles($p);
+        $request->setServer($p);
+        $request->setEnv($p);
+
+        $this->assertSame('bar', $request->getQuery('foo'));
+        $this->assertSame('bar', $request->getPost('foo'));
+        $this->assertSame('bar', $request->getFiles('foo'));
+        $this->assertSame('bar', $request->getServer('foo'));
+        $this->assertSame('bar', $request->getEnv('foo'));
+
+        $headers = new Headers();
+        $h = new GenericHeader('foo','bar');
+        $headers->addHeader($h);
+
+        $request->setHeaders($headers);
+        $this->assertSame($headers, $request->getHeaders());
+        $this->assertSame($h, $request->getHeaders()->get('foo'));
+        $this->assertSame($h, $request->getHeader('foo'));
+    }
+
+    /**
+     * @group ZF2-480
+     */
+    public function testBaseurlFallsBackToRootPathIfScriptFilenameIsNotSet()
+    {
+        $request = new Request();
+        $server  = $request->getServer();
+        $server->set('SCRIPT_NAME', null);
+        $server->set('PHP_SELF', null);
+        $server->set('ORIG_SCRIPT_NAME', null);
+        $server->set('ORIG_SCRIPT_NAME', null);
+        $server->set('SCRIPT_FILENAME', null);
+
+        $this->assertEquals('', $request->getBaseUrl());
     }
 }

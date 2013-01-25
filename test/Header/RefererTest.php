@@ -1,9 +1,16 @@
 <?php
+/**
+ * Zend Framework (http://framework.zend.com/)
+ *
+ * @link      http://github.com/zendframework/zf2 for the canonical source repository
+ * @copyright Copyright (c) 2005-2013 Zend Technologies USA Inc. (http://www.zend.com)
+ * @license   http://framework.zend.com/license/new-bsd New BSD License
+ * @package   Zend_Http
+ */
 
 namespace ZendTest\Http\Header;
 
 use Zend\Http\Header\Referer;
-use Zend\Uri\Http as HttpUri;
 
 class RefererTest extends \PHPUnit_Framework_TestCase
 {
@@ -48,7 +55,7 @@ class RefererTest extends \PHPUnit_Framework_TestCase
     {
         $refererHeader = Referer::fromString('Referer: /path/to');
         $uri = $refererHeader->uri();
-        $this->assertInstanceOf('Zend\Uri\Http', $uri);
+        $this->assertInstanceOf('Zend\Uri\Uri', $uri);
         $this->assertFalse($uri->isAbsolute());
         $this->assertEquals('/path/to', $refererHeader->getUri());
     }
@@ -60,4 +67,3 @@ class RefererTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('Referer: http://www.example.com/path?query', $refererHeader->toString());
     }
 }
-
