@@ -11,9 +11,9 @@ namespace Zend\Http\Header;
 
 /**
  * @throws Exception\InvalidArgumentException
- * @see http://www.w3.org/Protocols/rfc2616/rfc2616-sec14.html#sec14.42
+ * @see http://www.w3.org/Protocols/rfc2616/rfc2616-sec14.html#sec14.11 @todo find section
  */
-class Upgrade implements HeaderInterface
+class ContentTransferEncoding implements HeaderInterface
 {
 
     public static function fromString($headerLine)
@@ -23,8 +23,8 @@ class Upgrade implements HeaderInterface
         list($name, $value) = explode(': ', $headerLine, 2);
 
         // check to ensure proper header type for this factory
-        if (strtolower($name) !== 'upgrade') {
-            throw new Exception\InvalidArgumentException('Invalid header line for Upgrade string: "' . $name . '"');
+        if (strtolower($name) !== 'content-transfer-encoding') {
+            throw new Exception\InvalidArgumentException('Invalid header line for Content-Transfer-Encoding string: "' . $name . '"');
         }
 
         // @todo implementation details
@@ -35,7 +35,7 @@ class Upgrade implements HeaderInterface
 
     public function getFieldName()
     {
-        return 'Upgrade';
+        return 'Content-Transfer-Encoding';
     }
 
     public function getFieldValue()
@@ -45,6 +45,7 @@ class Upgrade implements HeaderInterface
 
     public function toString()
     {
-        return 'Upgrade: ' . $this->getFieldValue();
+        return 'Content-Transfer-Encoding: ' . $this->getFieldValue();
     }
+
 }
