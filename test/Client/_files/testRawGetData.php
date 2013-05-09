@@ -8,9 +8,5 @@
  * @package   Zend_Http
  */
 
-$putdata = fopen("php://input", "r");
-while ($data = fread($putdata, 1024)) {
-    echo $data;
-}
-
-fclose($putdata);
+echo serialize($_GET);
+readfile('php://input');
