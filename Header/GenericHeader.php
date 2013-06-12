@@ -51,7 +51,7 @@ class GenericHeader implements HeaderInterface
             $this->setFieldName($fieldName);
         }
 
-        if ($fieldValue !== null) {
+        if ($fieldValue) {
             $this->setFieldValue($fieldValue);
         }
     }
@@ -103,7 +103,7 @@ class GenericHeader implements HeaderInterface
     {
         $fieldValue = (string) $fieldValue;
 
-        if (preg_match('/^\s+$/', $fieldValue)) {
+        if (empty($fieldValue) || preg_match('/^\s+$/', $fieldValue)) {
             $fieldValue = '';
         }
 
