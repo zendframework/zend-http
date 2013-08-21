@@ -93,7 +93,7 @@ class Request extends AbstractMessage implements RequestInterface
         $request->setMethod($matches['method']);
         $request->setUri($matches['uri']);
 
-        if (isset($matches['version'])) {
+        if ($matches['version']) {
             $request->setVersion($matches['version']);
         }
 
