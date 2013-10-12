@@ -7,5 +7,8 @@
  * @license   http://framework.zend.com/license/new-bsd New BSD License
  */
 
-echo serialize($_GET);
-readfile('php://input');
+namespace Zend\Http\Header\Exception;
+
+class DomainException extends \DomainException implements ExceptionInterface
+{
+}
