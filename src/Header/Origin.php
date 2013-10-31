@@ -9,38 +9,40 @@
 
 namespace Zend\Http\Header;
 
+use \Zend\Uri\UriFactory;
+
 /**
  * @throws Exception\InvalidArgumentException
- * @see http://www.w3.org/Protocols/rfc2616/rfc2616-sec14.html#sec14.23
+ * @see http://tools.ietf.org/id/draft-abarth-origin-03.html#rfc.section.2
  */
-class Host implements HeaderInterface
+class Origin implements HeaderInterface
 {
-    /** @var string */
-    protected $value;
 
     public static function fromString($headerLine)
     {
-        list($name, $value) = GenericHeader::splitHeaderLine($headerLine);
+        $header = new static();
+
+        list($name, $value) = explode(': ', $headerLine, 2);
 
         // check to ensure proper header type for this factory
-        if (strtolower($name) !== 'host') {
-            throw new Exception\InvalidArgumentException('Invalid header line for Host string: "' . $name . '"');
+        if (strtolower($name) !== 'origin') {
+            throw new Exception\InvalidArgumentException('Invalid header line for Origin string: "' . $name . '"');
+        }
+
+        $uri = UriFactory::factory($value);
+        if (!$uri->isValid()) {
+            throw new Exception\InvalidArgumentException('Invalid header value for Origin key: "' . $name . '"');
         }
 
         // @todo implementation details
-        $header = new static($value);
+        $header->value = $value;
 
         return $header;
     }
 
-    public function __construct($value = null)
-    {
-        $this->value = $value;
-    }
-
     public function getFieldName()
     {
-        return 'Host';
+        return 'Origin';
     }
 
     public function getFieldValue()
@@ -50,6 +52,6 @@ class Host implements HeaderInterface
 
     public function toString()
     {
-        return 'Host: ' . $this->getFieldValue();
+        return 'Origin: ' . $this->getFieldValue();
     }
 }
