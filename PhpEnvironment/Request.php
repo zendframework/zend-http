@@ -251,13 +251,8 @@ class Request extends HttpRequest
         $uri = new HttpUri();
 
         // URI scheme
-        if ((!empty($this->serverParams['HTTPS']) && $this->serverParams['HTTPS'] !== 'off')
-            || (!empty($this->serverParams['HTTP_X_FORWARDED_PROTO']) && $this->serverParams['HTTP_X_FORWARDED_PROTO'] == 'https')
-        ) {
-            $scheme = 'https';
-        } else {
-            $scheme = 'http';
-        }
+        $scheme = (!empty($this->serverParams['HTTPS'])
+                   && $this->serverParams['HTTPS'] !== 'off') ? 'https' : 'http';
         $uri->setScheme($scheme);
 
         // URI host & port
@@ -487,6 +482,7 @@ class Request extends HttpRequest
      */
     protected function detectBaseUrl()
     {
+        $baseUrl        = '';
         $filename       = $this->getServer()->get('SCRIPT_FILENAME', '');
         $scriptName     = $this->getServer()->get('SCRIPT_NAME');
         $phpSelf        = $this->getServer()->get('PHP_SELF');
