@@ -105,7 +105,7 @@ class SetCookie implements MultipleHeaderInterface
                 $keyValuePairs = preg_split('#;\s*#', $headerLine);
 
                 foreach ($keyValuePairs as $keyValue) {
-                    if (preg_match('#^(?P<headerKey>[^=]+)=\s*("?)(?P<headerValue>[^"]+)\2#', $keyValue, $matches)) {
+                    if (preg_match('#^(?P<headerKey>[^=]+)=\s*("?)(?P<headerValue>[^"]*)\2#', $keyValue, $matches)) {
                         $headerKey  = $matches['headerKey'];
                         $headerValue= $matches['headerValue'];
                     } else {
@@ -354,15 +354,24 @@ class SetCookie implements MultipleHeaderInterface
             return $this;
         }
 
+        $tsExpires = $expires;
         if (is_string($expires)) {
-            $expires = strtotime($expires);
+            $tsExpires = strtotime($expires);
+
+            // if $tsExpires is invalid and PHP is compiled as 32bit. Check if it fail reason is the 2038 bug
+            if (!is_int($tsExpires) && PHP_INT_SIZE === 4) {
+                $dateTime = new \DateTime($expires);
+                if ( $dateTime->format('Y') > 2038) {
+                    $tsExpires = PHP_INT_MAX;
+                }
+            }
         }
 
-        if (!is_int($expires) || $expires < 0) {
+        if (!is_int($tsExpires) || $tsExpires < 0) {
             throw new Exception\InvalidArgumentException('Invalid expires time specified');
         }
 
-        $this->expires = $expires;
+        $this->expires = $tsExpires;
         return $this;
     }
 
@@ -428,6 +437,8 @@ class SetCookie implements MultipleHeaderInterface
     }
 
     /**
+     * Set whether the value for this cookie should be quoted
+     *
      * @param  bool $quotedValue
      * @return SetCookie
      */
@@ -495,7 +506,7 @@ class SetCookie implements MultipleHeaderInterface
     }
 
     /**
-     * Check whether the cookie is a session cookie (has no expiry time set)
+     * Check whether the value for this cookie should be quoted
      *
      * @return bool
      */
@@ -525,10 +536,11 @@ class SetCookie implements MultipleHeaderInterface
     /**
      * Checks whether the cookie should be sent or not in a specific scenario
      *
-     * @param string|Zend\Uri\Uri $uri URI to check against (secure, domain, path)
+     * @param string|\Zend\Uri\Uri $uri URI to check against (secure, domain, path)
      * @param bool $matchSessionCookies Whether to send session cookies
      * @param int $now Override the current time when checking for expiry time
      * @return bool
+     * @throws Exception\InvalidArgumentException If URI does not have HTTP or HTTPS scheme.
      */
     public function match($uri, $matchSessionCookies = true, $now = null)
     {
@@ -572,14 +584,6 @@ class SetCookie implements MultipleHeaderInterface
      */
     public static function matchCookieDomain($cookieDomain, $host)
     {
-        if (! $cookieDomain) {
-            throw new Exception\InvalidArgumentException('$cookieDomain is expected to be a cookie domain');
-        }
-
-        if (! $host) {
-            throw new Exception\InvalidArgumentException('$host is expected to be a host name');
-        }
-
         $cookieDomain = strtolower($cookieDomain);
         $host = strtolower($host);
         // Check for either exact match or suffix match
@@ -598,14 +602,6 @@ class SetCookie implements MultipleHeaderInterface
      */
     public static function matchCookiePath($cookiePath, $path)
     {
-        if (! $cookiePath) {
-            throw new Exception\InvalidArgumentException('$cookiePath is expected to be a cookie path');
-        }
-
-        if (! $path) {
-            throw new Exception\InvalidArgumentException('$path is expected to be a host name');
-        }
-
         return (strpos($path, $cookiePath) === 0);
     }
 
