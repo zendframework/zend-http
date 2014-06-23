@@ -3,7 +3,7 @@
  * Zend Framework (http://framework.zend.com/)
  *
  * @link      http://github.com/zendframework/zf2 for the canonical source repository
- * @copyright Copyright (c) 2005-2014 Zend Technologies USA Inc. (http://www.zend.com)
+ * @copyright Copyright (c) 2005-2013 Zend Technologies USA Inc. (http://www.zend.com)
  * @license   http://framework.zend.com/license/new-bsd New BSD License
  */
 
@@ -41,7 +41,7 @@ abstract class AbstractAccept implements HeaderInterface
 
     /**
      *
-     * @var stdClass[]
+     * @var array
      */
     protected $fieldValueParts = array();
 
@@ -56,22 +56,18 @@ abstract class AbstractAccept implements HeaderInterface
 
 
     /**
-     * Parse a full header line or just the field value part.
      *
      * @param string $headerLine
      */
     public function parseHeaderLine($headerLine)
     {
-        if (strpos($headerLine, ':') !== false) {
-            list($name, $value) = GenericHeader::splitHeaderLine($headerLine);
-            if (strtolower($name) !== strtolower($this->getFieldName())) {
-                $value = $headerLine; // This is just for preserve the BC.
-            }
-        } else {
-            $value = $headerLine;
+        $fieldName = $this->getFieldName();
+        $pos = strlen($fieldName) + 2;
+        if (strtolower(substr($headerLine, 0, $pos)) == strtolower($fieldName) . ': ') {
+            $headerLine = substr($headerLine, $pos);
         }
 
-        foreach ($this->getFieldValuePartsFromHeaderLine($value) as $value) {
+        foreach ($this->getFieldValuePartsFromHeaderLine($headerLine) as $value) {
             $this->addFieldValuePartToQueue($value);
         }
     }
@@ -294,7 +290,7 @@ abstract class AbstractAccept implements HeaderInterface
      * Match a media string against this header
      *
      * @param array|string $matchAgainst
-     * @return Accept\FieldValuePArt\AcceptFieldValuePart|bool The matched value or false
+     * @return AcceptFieldValuePart|bool The matched value or false
      */
     public function match($matchAgainst)
     {
@@ -415,7 +411,7 @@ abstract class AbstractAccept implements HeaderInterface
      */
     protected function sortFieldValueParts()
     {
-        $sort = function ($a, $b) { // If A has higher precedence than B, return -1.
+        $sort = function ($a, $b) { // If A has higher prio than B, return -1.
             if ($a->priority > $b->priority) {
                 return -1;
             } elseif ($a->priority < $b->priority) {
@@ -440,10 +436,8 @@ abstract class AbstractAccept implements HeaderInterface
 
             //@todo count number of dots in case of type==application in subtype
 
-            // So far they're still the same. Longest string length may be more specific
-            if (strlen($a->raw) == strlen($b->raw)) {
-                return 0;
-            }
+            // So far they're still the same. Longest stringlength may be more specific
+            if (strlen($a->raw) == strlen($b->raw)) return 0;
             return (strlen($a->raw) > strlen($b->raw)) ? -1 : 1;
         };
 

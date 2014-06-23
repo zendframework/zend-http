@@ -7,16 +7,17 @@
  * @license   http://framework.zend.com/license/new-bsd New BSD License
  */
 
-namespace Zend\Http;
+namespace Zend\Http\Client;
 
 use ArrayIterator;
+use Traversable;
 use Zend\Http\Header\SetCookie;
 use Zend\Http\Response;
+use Zend\Stdlib\ArrayUtils;
 use Zend\Uri;
 
-
 /**
- * A Zend\Http\Cookies object is designed to contain and maintain HTTP cookies, and should
+ * A Cookies object is designed to contain and maintain HTTP cookies, and should
  * be used along with Zend\Http\Client in order to manage cookies across HTTP requests and
  * responses.
  *
@@ -33,10 +34,10 @@ use Zend\Uri;
  *
  * @link       http://wp.netscape.com/newsref/std/cookie_spec.html for some specs.
  */
-class Cookies extends Headers
+class Cookies
 {
     /**
-     * Return cookie(s) as a Zend\Http\Cookie object
+     * Return cookie(s) as a Zend\Http\Header\Cookie object
      *
      */
     const COOKIE_OBJECT = 0;
@@ -54,48 +55,38 @@ class Cookies extends Headers
     const COOKIE_STRING_CONCAT = 2;
 
     /**
-     * Return all cookies as one long string (strict mode)
-     *  - Single space after the semi-colon separating each cookie
-     *  - Remove trailing semi-colon, if any
-     */
-    const COOKIE_STRING_CONCAT_STRICT = 3;
-
-    /**
-     * @var \Zend\Http\Cookies
+     * Array storing cookies
+     *
+     * Cookies are stored according to domain and path:
+     * $cookies
+     *  + www.mydomain.com
+     *    + /
+     *      - cookie1
+     *      - cookie2
+     *    + /somepath
+     *      - othercookie
+     *  + www.otherdomain.net
+     *    + /
+     *      - alsocookie
+     *
+     * @var array
      */
     protected $cookies = array();
 
     /**
-     * @var \Zend\Http\Headers
-     */
-    protected $headers = null;
-
-    /**
+     * The Zend\Http\Header\Cookie array
+     *
      * @var array
      */
-    protected $rawCookies;
-
-    /**
-     * @static
-     * @throws Exception\RuntimeException
-     * @param $string
-     * @return void
-     */
-    public static function fromString($string)
-    {
-        throw new Exception\RuntimeException(
-            __CLASS__ . '::' . __FUNCTION__ . ' should not be used as a factory, use '
-            . __NAMESPACE__ . '\Headers::fromtString() instead.'
-        );
-    }
+    protected $rawCookies = array();
 
     /**
      * Add a cookie to the class. Cookie should be passed either as a Zend\Http\Header\Cookie object
      * or as a string - in which case an object is created from the string.
      *
      * @param SetCookie|string $cookie
-     * @param Uri\Uri|string $refUri Optional reference URI (for domain, path, secure)
-     * @throws Exception\InvalidArgumentException
+     * @param Uri\Uri|string    $refUri Optional reference URI (for domain, path, secure)
+     * @throws Exception\InvalidArgumentException if invalid $cookie value
      */
     public function addCookie($cookie, $refUri = null)
     {
@@ -128,8 +119,11 @@ class Cookies extends Headers
     public function addCookiesFromResponse(Response $response, $refUri)
     {
         $cookieHdrs = $response->getHeaders()->get('Set-Cookie');
+        if ($cookieHdrs instanceof Traversable) {
+            $cookieHdrs = ArrayUtils::iteratorToArray($cookieHdrs);
+        }
 
-        if (is_array($cookieHdrs) || $cookieHdrs instanceof ArrayIterator) {
+        if (is_array($cookieHdrs)) {
             foreach ($cookieHdrs as $cookie) {
                 $this->addCookie($cookie, $refUri);
             }
@@ -141,7 +135,7 @@ class Cookies extends Headers
     /**
      * Get all cookies in the cookie jar as an array
      *
-     * @param int $retAs Whether to return cookies as objects of \Zend\Http\Header\SetCookie or as strings
+     * @param int $retAs Whether to return cookies as objects of \Zend\Http\Header\Cookie or as strings
      * @return array|string
      */
     public function getAllCookies($retAs = self::COOKIE_OBJECT)
@@ -159,7 +153,7 @@ class Cookies extends Headers
      * @param bool $matchSessionCookies Whether to send session cookies
      * @param int $retAs Whether to return cookies as objects of \Zend\Http\Header\Cookie or as strings
      * @param int $now Override the current time when checking for expiry time
-     * @throws Exception\InvalidArgumentException if invalid URI specified
+     * @throws Exception\InvalidArgumentException if invalid URI
      * @return array|string
      */
     public function getMatchingCookies($uri, $matchSessionCookies = true,
@@ -198,9 +192,9 @@ class Cookies extends Headers
      *
      * @param Uri\Uri|string $uri The uri (domain and path) to match
      * @param string $cookieName The cookie's name
-     * @param int $retAs Whether to return cookies as objects of \Zend\Http\Header\SetCookie or as strings
+     * @param int $retAs Whether to return cookies as objects of \Zend\Http\Header\Cookie or as strings
      * @throws Exception\InvalidArgumentException if invalid URI specified or invalid $retAs value
-     * @return SetCookie|string
+     * @return Cookie|string
      */
     public function getCookie($uri, $cookieName, $retAs = self::COOKIE_OBJECT)
     {
@@ -246,7 +240,7 @@ class Cookies extends Headers
      * Helper function to recursively flatten an array. Should be used when exporting the
      * cookies array (or parts of it)
      *
-     * @param \Zend\Http\Header\SetCookie|array $ptr
+     * @param \Zend\Http\Header\Cookie|array $ptr
      * @param int $retAs What value to return
      * @return array|string
      */
@@ -346,6 +340,26 @@ class Cookies extends Headers
     }
 
     /**
+     * Required by Countable interface
+     *
+     * @return int
+     */
+    public function count()
+    {
+        return count($this->rawCookies);
+    }
+
+    /**
+     * Required by IteratorAggregate interface
+     *
+     * @return ArrayIterator
+     */
+    public function getIterator()
+    {
+        return new ArrayIterator($this->rawCookies);
+    }
+
+    /**
      * Tells if the array of cookies is empty
      *
      * @return bool
@@ -364,5 +378,122 @@ class Cookies extends Headers
     {
         $this->cookies = $this->rawCookies = array();
         return $this;
+    }
+
+    /**
+     * (PHP 5 &gt;= 5.1.0)<br/>
+     * Whether a offset exists
+     * @link http://php.net/manual/en/arrayaccess.offsetexists.php
+     * @param mixed $offset <p>
+     * An offset to check for.
+     * </p>
+     * @return bool Returns true on success or false on failure.
+     * </p>
+     * <p>
+     * The return value will be casted to boolean if non-boolean was returned.
+     */
+    public function offsetExists($offset)
+    {
+        // TODO: Implement offsetExists() method.
+    }
+
+    /**
+     * (PHP 5 &gt;= 5.1.0)<br/>
+     * Offset to retrieve
+     * @link http://php.net/manual/en/arrayaccess.offsetget.php
+     * @param mixed $offset <p>
+     * The offset to retrieve.
+     * </p>
+     * @return mixed Can return all value types.
+     */
+    public function offsetGet($offset)
+    {
+        // TODO: Implement offsetGet() method.
+    }
+
+    /**
+     * (PHP 5 &gt;= 5.1.0)<br/>
+     * Offset to set
+     * @link http://php.net/manual/en/arrayaccess.offsetset.php
+     * @param mixed $offset <p>
+     * The offset to assign the value to.
+     * </p>
+     * @param mixed $value <p>
+     * The value to set.
+     * </p>
+     * @return void
+     */
+    public function offsetSet($offset, $value)
+    {
+        // TODO: Implement offsetSet() method.
+    }
+
+    /**
+     * (PHP 5 &gt;= 5.1.0)<br/>
+     * Offset to unset
+     * @link http://php.net/manual/en/arrayaccess.offsetunset.php
+     * @param mixed $offset <p>
+     * The offset to unset.
+     * </p>
+     * @return void
+     */
+    public function offsetUnset($offset)
+    {
+        // TODO: Implement offsetUnset() method.
+    }
+
+    /**
+     * (PHP 5 &gt;= 5.1.0)<br/>
+     * String representation of object
+     * @link http://php.net/manual/en/serializable.serialize.php
+     * @return string the string representation of the object or &null;
+     */
+    public function serialize()
+    {
+        // TODO: Implement serialize() method.
+    }
+
+    /**
+     * (PHP 5 &gt;= 5.1.0)<br/>
+     * Constructs the object
+     * @link http://php.net/manual/en/serializable.unserialize.php
+     * @param string $serialized <p>
+     * The string representation of the object.
+     * </p>
+     * @return mixed the original value unserialized.
+     */
+    public function unserialize($serialized)
+    {
+        // TODO: Implement unserialize() method.
+    }
+
+    public function fromArray(array $values)
+    {
+        // TODO: Implement fromArray() method.
+    }
+
+    public function fromString($string)
+    {
+        // TODO: Implement fromString() method.
+    }
+
+    public function toArray()
+    {
+        // TODO: Implement toArray() method.
+    }
+
+    public function toString()
+    {
+        // TODO: Implement toString() method.
+    }
+
+    public function get($name, $default = null)
+    {
+        // TODO: Implement get() method.
+    }
+
+    public function set($name, $value)
+    {
+        // TODO: Implement set() method.
     }
 }
