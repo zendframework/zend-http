@@ -3,7 +3,7 @@
  * Zend Framework (http://framework.zend.com/)
  *
  * @link      http://github.com/zendframework/zf2 for the canonical source repository
- * @copyright Copyright (c) 2005-2013 Zend Technologies USA Inc. (http://www.zend.com)
+ * @copyright Copyright (c) 2005-2014 Zend Technologies USA Inc. (http://www.zend.com)
  * @license   http://framework.zend.com/license/new-bsd New BSD License
  */
 
@@ -905,7 +905,7 @@ class Client implements Stdlib\DispatchableInterface
                     $response->setCleanup(true);
                 }
             } else {
-                $response = Response::fromString($response);
+                $response = $this->getResponse()->fromString($response);
             }
 
             // Get the cookies from response (if any)
@@ -1154,9 +1154,10 @@ class Client implements Stdlib\DispatchableInterface
         }
 
         // Merge the headers of the request (if any)
-        $requestHeaders = $this->getRequest()->getHeaders()->toArray();
-        foreach ($requestHeaders as $key => $value) {
-            $headers[$key] = $value;
+        // here we need right 'http field' and not lowercase letters
+        $requestHeaders = $this->getRequest()->getHeaders();
+        foreach ($requestHeaders as $requestHeaderElement) {
+            $headers[$requestHeaderElement->getFieldName()] = $requestHeaderElement->getFieldValue();
         }
         return $headers;
     }
