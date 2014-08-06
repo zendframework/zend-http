@@ -17,10 +17,6 @@ use Zend\Uri\UriFactory;
  */
 class Origin implements HeaderInterface
 {
-    /**
-     * @var string
-     */
-    private $value;
 
     public static function fromString($headerLine)
     {
