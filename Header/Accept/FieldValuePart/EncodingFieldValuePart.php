@@ -24,6 +24,6 @@ class EncodingFieldValuePart extends AbstractFieldValuePart
      */
     public function getEncoding()
     {
-        return $this->getInternalValues()->type;
+        return $this->type;
     }
 }

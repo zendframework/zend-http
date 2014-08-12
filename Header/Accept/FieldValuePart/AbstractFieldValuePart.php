@@ -95,7 +95,7 @@ abstract class AbstractFieldValuePart
     }
 
     /**
-     * @return string $raw
+     * @return raw $raw
      */
     public function getRaw()
     {
