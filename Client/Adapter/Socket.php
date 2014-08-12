@@ -412,9 +412,7 @@ class Socket implements HttpAdapter, StreamInterface
         $statusCode = $responseObj->getStatusCode();
 
         // Handle 100 and 101 responses internally by restarting the read again
-        if ($statusCode == 100 || $statusCode == 101) {
-            return $this->read();
-        }
+        if ($statusCode == 100 || $statusCode == 101) return $this->read();
 
         // Check headers to see what kind of connection / transfer encoding we have
         $headers = $responseObj->getHeaders();
