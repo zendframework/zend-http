@@ -15,11 +15,11 @@ namespace Zend\Http\Header;
  */
 class Expect implements HeaderInterface
 {
-    /** @var string */
-    protected $value;
 
     public static function fromString($headerLine)
     {
+        $header = new static();
+
         list($name, $value) = GenericHeader::splitHeaderLine($headerLine);
 
         // check to ensure proper header type for this factory
@@ -28,14 +28,9 @@ class Expect implements HeaderInterface
         }
 
         // @todo implementation details
-        $header = new static($value);
+        $header->value = $value;
 
         return $header;
-    }
-
-    public function __construct($value = null)
-    {
-        $this->value = $value;
     }
 
     public function getFieldName()

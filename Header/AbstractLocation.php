@@ -10,6 +10,7 @@
 namespace Zend\Http\Header;
 
 use Zend\Uri\Exception as UriException;
+use Zend\Uri\Uri;
 use Zend\Uri\UriFactory;
 use Zend\Uri\UriInterface;
 
