@@ -157,11 +157,7 @@ class Stream extends Response
         $headerComplete = false;
         $headersString  = '';
 
-        if ($responseString) {
-            $responseArray = explode("\n", $responseString);
-        } else {
-            $responseArray = array();
-        }
+        $responseArray = explode("\n", $responseString);
 
         while (count($responseArray)) {
             $nextLine        = array_shift($responseArray);
