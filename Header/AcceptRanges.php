@@ -3,7 +3,7 @@
  * Zend Framework (http://framework.zend.com/)
  *
  * @link      http://github.com/zendframework/zf2 for the canonical source repository
- * @copyright Copyright (c) 2005-2015 Zend Technologies USA Inc. (http://www.zend.com)
+ * @copyright Copyright (c) 2005-2014 Zend Technologies USA Inc. (http://www.zend.com)
  * @license   http://framework.zend.com/license/new-bsd New BSD License
  */
 
@@ -16,10 +16,13 @@ namespace Zend\Http\Header;
  */
 class AcceptRanges implements HeaderInterface
 {
-    protected $rangeUnit;
+
+    protected $rangeUnit = null;
 
     public static function fromString($headerLine)
     {
+        $header = new static();
+
         list($name, $value) = GenericHeader::splitHeaderLine($headerLine);
 
         // check to ensure proper header type for this factory
@@ -27,14 +30,9 @@ class AcceptRanges implements HeaderInterface
             throw new Exception\InvalidArgumentException('Invalid header line for Accept-Ranges string');
         }
 
-        $header = new static($value);
+        $header->rangeUnit = trim($value);
 
         return $header;
-    }
-
-    public function __construct($rangeUnit = null)
-    {
-        $this->rangeUnit = $rangeUnit;
     }
 
     public function getFieldName()
