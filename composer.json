@@ -14,10 +14,10 @@
     },
     "require": {
         "php": ">=5.3.23",
-        "zendframework/zend-loader": "self.version",
-        "zendframework/zend-stdlib": "self.version",
-        "zendframework/zend-uri": "self.version",
-        "zendframework/zend-validator": "self.version"
+        "zendframework/zend-loader": "~2.4",
+        "zendframework/zend-stdlib": "~2.4",
+        "zendframework/zend-uri": "~2.4",
+        "zendframework/zend-validator": "~2.4"
     },
     "extra": {
         "branch-alias": {
