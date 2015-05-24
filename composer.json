@@ -19,6 +19,8 @@
         "zendframework/zend-uri": "~2.4",
         "zendframework/zend-validator": "~2.4"
     },
+    "minimum-stability": "dev",
+    "prefer-stable": true,
     "extra": {
         "branch-alias": {
             "dev-master": "2.4-dev",
