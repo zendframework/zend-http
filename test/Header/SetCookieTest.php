@@ -343,6 +343,12 @@ class SetCookieTest extends \PHPUnit_Framework_TestCase
         $this->assertNotEquals('leo_auth_token', $setCookieHeader->getName());
     }
 
+    public function testEmptyExpiresSection()
+    {
+        $cookie = 'Set-Cookie:path=/; Expires=; HttpOnly;';
+        $setCookieHeader = SetCookie::fromString($cookie);
+    }
+
     public function testGetFieldName()
     {
         $c = new SetCookie();
