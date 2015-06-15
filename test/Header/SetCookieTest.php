@@ -347,6 +347,7 @@ class SetCookieTest extends \PHPUnit_Framework_TestCase
     {
         $cookie = 'Set-Cookie:path=/; Expires=; HttpOnly;';
         $setCookieHeader = SetCookie::fromString($cookie);
+        $this->assertNull($setCookieHeader->getExpires());
     }
 
     public function testGetFieldName()
