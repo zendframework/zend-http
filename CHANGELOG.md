@@ -24,3 +24,7 @@ All notable changes to this project will be documented in this file, in reverse 
 - [#8](https://github.com/zendframework/zend-feed/pull/8) ensures that the Curl
   client adapter enables the `CURLINFO_HEADER_OUT`, which is required to ensure
   we can fetch the raw request after it is sent.
+- [#14](https://github.com/zendframework/zend-feed/pull/14) fixes
+  `Zend\Http\PhpEnvironment\Request` to ensure that empty `SCRIPT_FILENAME` and
+  `SCRIPT_NAME` values which result in an empty `$baseUrl` will not raise an
+  `E_WARNING` when used to do a `strpos()` check during base URI detection.

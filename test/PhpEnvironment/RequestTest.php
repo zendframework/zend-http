@@ -228,7 +228,7 @@ class RequestTest extends TestCase
         $_SERVER = $server;
         $request = new Request();
 
-        $this->assertEquals($baseUrl,  $request->getBaseUrl());
+        $this->assertEquals($baseUrl, $request->getBaseUrl());
         $this->assertEquals($basePath, $request->getBasePath());
     }
 
@@ -303,7 +303,7 @@ class RequestTest extends TestCase
 
         $header = $request->getHeaders()->get($name);
         $this->assertNotEquals($header, false);
-        $this->assertEquals($name,  $header->getFieldName($value));
+        $this->assertEquals($name, $header->getFieldName($value));
         $this->assertEquals($value, $header->getFieldValue($value));
     }
 
@@ -783,5 +783,23 @@ class RequestTest extends TestCase
         $request = new Request();
 
         $this->assertSame('http', $request->getUri()->getScheme());
+    }
+
+    /**
+     * @group 14
+     */
+    public function testDetectBaseUrlDoesNotRaiseErrorOnEmptyBaseUrl()
+    {
+        // This is testing that a PHP error is not raised. It would normally be
+        // raised when we call `getBaseUrl()`; the assertion is essentially
+        // just to make sure we get past that point.
+        $_SERVER['SCRIPT_FILENAME'] = '';
+        $_SERVER['SCRIPT_NAME']     = '';
+
+        $request = new Request();
+        $url     = $request->getBaseUrl();
+
+        // If no baseUrl is detected at all, an empty string is returned.
+        $this->assertEquals('', $url);
     }
 }
