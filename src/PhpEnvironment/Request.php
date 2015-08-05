@@ -515,6 +515,11 @@ class Request extends HttpRequest
             }
         }
 
+        // If the baseUrl is empty, then simply return it.
+        if (empty($baseUrl)) {
+            return '';
+        }
+
         // Does the base URL have anything in common with the request URI?
         $requestUri = $this->getRequestUri();
 
