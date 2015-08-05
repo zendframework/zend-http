@@ -244,7 +244,7 @@ class Proxy extends Socket
         ErrorHandler::stop();
 
         // Check that the response from the proxy is 200
-        if (Response::extractCode($response) != 200) {
+        if (Response::fromString($response)->getStatusCode() != 200) {
             throw new AdapterException\RuntimeException("Unable to connect to HTTPS proxy. Server response: " . $response);
         }
 
