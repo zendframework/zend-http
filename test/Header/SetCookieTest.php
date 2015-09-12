@@ -9,7 +9,6 @@
 
 namespace ZendTest\Http\Header;
 
-use Zend\Http\Header\HeaderValue;
 use Zend\Http\Header\SetCookie;
 
 class SetCookieTest extends \PHPUnit_Framework_TestCase
@@ -433,7 +432,7 @@ class SetCookieTest extends \PHPUnit_Framework_TestCase
     public function testPreventsCRLFAttackViaConstructor()
     {
         $header = new SetCookie("leo_auth_token", "example\r\n\r\nevilContent");
-        $this->assertTrue(HeaderValue::isValid($header->getFieldValue()));
+        $this->assertEquals('Set-Cookie: leo_auth_token=example%0D%0A%0D%0AevilContent', $header->toString());
     }
 
     public function setterInjections()
