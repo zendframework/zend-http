@@ -435,6 +435,13 @@ class SetCookieTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('Set-Cookie: leo_auth_token=example%0D%0A%0D%0AevilContent', $header->toString());
     }
 
+    public function testPreventsCRLFAttackViaSetValue()
+    {
+        $header = new SetCookie("leo_auth_token");
+        $header->setValue("example\r\n\r\nevilContent");
+        $this->assertEquals('Set-Cookie: leo_auth_token=example%0D%0A%0D%0AevilContent', $header->toString());
+    }
+
     public function setterInjections()
     {
         return [
