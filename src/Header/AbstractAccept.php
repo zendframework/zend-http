@@ -168,6 +168,10 @@ abstract class AbstractAccept implements HeaderInterface
             }
 
             foreach ($paramsStrings as $param) {
+                if (strpos($param, '=') === false) {
+                    continue;    
+                }
+                
                 $explode = explode('=', $param, 2);
 
                 $value = trim($explode[1]);
