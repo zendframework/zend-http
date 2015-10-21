@@ -170,7 +170,7 @@ class Response extends AbstractMessage implements ResponseInterface
     public static function fromString($string)
     {
         $lines = explode("\r\n", $string);
-        if (!is_array($lines) || count($lines) == 1) {
+        if (!is_array($lines) || count($lines) === 1) {
             $lines = explode("\n", $string);
         }
 
@@ -190,7 +190,7 @@ class Response extends AbstractMessage implements ResponseInterface
         $response->setStatusCode($matches['status']);
         $response->setReasonPhrase((isset($matches['reason']) ? $matches['reason'] : ''));
 
-        if (count($lines) == 0) {
+        if (count($lines) === 0) {
             return $response;
         }
 
@@ -198,7 +198,7 @@ class Response extends AbstractMessage implements ResponseInterface
         $headers = $content = [];
 
         foreach ($lines as $line) {
-            if ($isHeader && $line == '') {
+            if ($isHeader && $line === '') {
                 $isHeader = false;
                 continue;
             }
@@ -338,7 +338,7 @@ class Response extends AbstractMessage implements ResponseInterface
         $transferEncoding = $this->getHeaders()->get('Transfer-Encoding');
 
         if (!empty($transferEncoding)) {
-            if (strtolower($transferEncoding->getFieldValue()) == 'chunked') {
+            if (strtolower($transferEncoding->getFieldValue()) === 'chunked') {
                 $body = $this->decodeChunkedBody($body);
             }
         }
@@ -347,9 +347,9 @@ class Response extends AbstractMessage implements ResponseInterface
 
         if (!empty($contentEncoding)) {
             $contentEncoding = $contentEncoding->getFieldValue();
-            if ($contentEncoding =='gzip') {
+            if ($contentEncoding === 'gzip') {
                 $body = $this->decodeGzip($body);
-            } elseif ($contentEncoding == 'deflate') {
+            } elseif ($contentEncoding === 'deflate') {
                 $body = $this->decodeDeflate($body);
             }
         }
@@ -375,7 +375,7 @@ class Response extends AbstractMessage implements ResponseInterface
      */
     public function isForbidden()
     {
-        return (403 == $this->getStatusCode());
+        return (403 === $this->getStatusCode());
     }
 
     /**
@@ -559,7 +559,7 @@ class Response extends AbstractMessage implements ResponseInterface
          */
         $zlibHeader = unpack('n', substr($body, 0, 2));
 
-        if ($zlibHeader[1] % 31 == 0) {
+        if ($zlibHeader[1] % 31 === 0) {
             return gzuncompress($body);
         }
         return gzinflate($body);
