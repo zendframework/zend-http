@@ -88,7 +88,7 @@ class Cookies extends Headers
     }
 
     /**
-     * Add a cookie to the class. Cookie should be passed either as a Zend\Http\Header\Cookie object
+     * Add a cookie to the class. Cookie should be passed either as a Zend\Http\Header\SetCookie object
      * or as a string - in which case an object is created from the string.
      *
      * @param SetCookie|string $cookie
