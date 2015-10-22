@@ -32,6 +32,12 @@ class AcceptLanguageTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('xxx', $acceptLanguageHeader->getFieldValue());
     }
 
+    public function testAcceptLanguageGetFieldValueReturnsProperNonWellFormattedHeaderValue()
+    {
+        $acceptLanguageHeader = AcceptLanguage::fromString('Accept-Language: en-US;en');
+        $this->assertEquals('en-US', $acceptLanguageHeader->getFieldValue());
+    }
+
     public function testAcceptLanguageToStringReturnsHeaderFormattedString()
     {
         $acceptLanguageHeader = new AcceptLanguage();
