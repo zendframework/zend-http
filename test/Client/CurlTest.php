@@ -397,4 +397,73 @@ class CurlTest extends CommonHttpTests
         $this->client->send();
         $this->assertEquals('foo=bar', $this->client->getResponse()->getBody());
     }
+
+    public function testCurlThrowsTimeoutExceptionWhenTimeoutErrorOccursForValidAddress()
+    {
+        $timeout = 1;
+        $timeoutInMs = $timeout * 1000 + 1;
+        $this->client->setUri($this->baseuri . "testTimeout.php?timeout=$timeout");
+        $adapter = new Adapter\Curl();
+        $adapter->setOptions([
+            'curloptions' => [CURLOPT_TIMEOUT => $timeout]
+        ]);
+        $this->client->setAdapter($adapter);
+        $this->client->setMethod('GET');
+        $this->setExpectedException(Adapter\Exception\TimeoutException::CLASS, "Error in cURL request: Operation timed out after $timeoutInMs milliseconds with 0 bytes received");
+        $this->client->send();
+    }
+
+    public function testCurlThrowsConnectTimeoutExceptionWhenNonRoutableAddressIsUsed()
+    {
+        $timeoutInMs = 1001;
+        $this->client->setUri('http://10.0.0.0');
+        $adapter = new Adapter\Curl();
+        $adapter->setOptions([
+            'curloptions' => [CURLOPT_CONNECTTIMEOUT_MS => $timeoutInMs - 1]
+        ]);
+        $this->client->setAdapter($adapter);
+        $this->client->setMethod('GET');
+        $this->setExpectedException(Adapter\Exception\ConnectTimeoutException::CLASS, "Error in cURL request: Connection timed out after $timeoutInMs milliseconds");
+        $this->client->send();
+    }
+
+    public function testCurlThrowsRuntimeExceptionWhenNonTimeoutErrorOccurs()
+    {
+        $this->client->setUri($this->baseuri . "testHttpAuth.php");
+        $adapter = new Adapter\Curl();
+        $adapter->setOptions([
+            'curloptions' => [CURLOPT_FAILONERROR => true]
+        ]);
+        $this->client->setAdapter($adapter);
+        $this->client->setMethod('GET');
+        $this->setExpectedException(Adapter\Exception\RuntimeException::CLASS, "Error in cURL request: The requested URL returned error: 401 Unauthorized");
+        $this->client->send();
+    }
+
+    public function testCurlRetrievesResponseWhenTimeoutExceptionDoesNotOccur()
+    {
+        $timeout = 1;
+        $this->client->setUri($this->baseuri . "testTimeout.php?timeout=$timeout");
+        $adapter = new Adapter\Curl();
+        $adapter->setOptions([
+            'curloptions' => [CURLOPT_TIMEOUT => $timeout + 1]
+        ]);
+        $this->client->setAdapter($adapter);
+        $this->client->setMethod('GET');
+        $this->client->send();
+        $this->assertEquals($timeout, $this->client->getResponse()->getBody());
+    }
+
+    public function testCurlRetrievesResponseWhenConnectTimeoutExceptionDoesNotOccur()
+    {
+        $this->client->setUri($this->baseuri . "testSimpleRequests.php");
+        $adapter = new Adapter\Curl();
+        $adapter->setOptions([
+            'curloptions' => [CURLOPT_CONNECTTIMEOUT_MS => 1000]
+        ]);
+        $this->client->setAdapter($adapter);
+        $this->client->setMethod('GET');
+        $this->client->send();
+        $this->assertEquals('Success' . PHP_EOL, $this->client->getResponse()->getBody());
+    }
 }
