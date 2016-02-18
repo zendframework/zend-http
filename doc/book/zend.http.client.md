@@ -57,7 +57,7 @@ $client = new Client();
 $response = $client->send($request);
 ```
 
-> ## Note
+> ### Note
 `Zend\Http\Client` uses `Zend\Uri\Http` to validate URLs. See the Zend\\\\Uri manual
 page&lt;zend.uri&gt; for more information on the validation process.
 
