@@ -40,8 +40,6 @@ body. The fifth parameter can be used to pass configuration options to the HTTP 
 
 Returns Zend\\Http\\Response
 
-<!-- -->
-
 **post**  
 `post(string $url, array $params, array $headers = array(), mixed $body = null, $clientOptions =
 null)`
