@@ -382,7 +382,7 @@ Returns string
 
 ## Examples
 
-**Generating a Request object from a string**
+### Generating a Request object from a string
 
 ```php
 use Zend\Http\Request;
@@ -397,7 +397,7 @@ $request->getVersion();   // returns Request::VERSION_11 or '1.1'
 $request->getContent();   // returns 'Some Content'
 ```
 
-**Retrieving and setting headers**
+### Retrieving and setting headers
 
 ```php
 use Zend\Http\Request;
@@ -411,7 +411,7 @@ foreach ($request->getHeaders() as $header) {
 }
 ```
 
-**Retrieving and setting GET and POST values**
+### Retrieving and setting GET and POST values
 
 ```php
 use Zend\Http\Request;
@@ -425,7 +425,7 @@ $request->getPost('foo'); // returns 'Foo value'
 $request->getQuery()->offsetGet('bar'); // returns 'Bar value'
 ```
 
-**Generating a formatted HTTP Request from a Request object**
+### Generating a formatted HTTP Request from a Request object
 
 ```php
 use Zend\Http\Request;

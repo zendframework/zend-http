@@ -49,7 +49,7 @@ the server you are connecting to requires special client setup. If so, you shoul
 about *SSL* transport layers and options
 [here](http://www.php.net/manual/en/transports.php#transports.inet).
 
-**Changing the HTTPS transport layer**
+### Changing the HTTPS transport layer
 
 ```php
 // Set the configuration parameters
@@ -88,7 +88,7 @@ Providing an array will create a new stream context using these options, and set
 create a default stream context and return it. You can then set or get the value of different
 context options using regular *PHP* stream context functions.
 
-**Setting stream context options for the Socket adapter**
+#### Setting stream context options for the Socket adapter
 
 ```php
 // Array of options
@@ -160,7 +160,7 @@ require authentication, you can leave these two options out.
 Possibly values are similar to the ones accepted by the `Zend\Http\Client::setAuth()` method.
 Currently, only basic authentication (`Zend\Http\Client::AUTH_BASIC`) is supported.
 
-**Using Zend\\Http\\Client behind a proxy server**
+### Using Zend\\Http\\Client behind a proxy server
 
 ```php
 // Set the configuration parameters
@@ -195,7 +195,7 @@ for a *HTTP* client and make it a perfect choice for a *HTTP* adapter. It suppor
 connections, proxy, all sorts of authentication mechanisms and shines in applications that move
 large files around between servers.
 
-**Setting cURL options**
+### Setting cURL options
 
 ```php
 $config = array(
@@ -211,7 +211,7 @@ cURL options by either specifying the 'curloptions' key in the constructor of th
 calling `setCurlOption($name, $value)`. The `$name` key corresponds to the CURL\_\* constants of the
 cURL extension. You can get access to the Curl handle by calling `$adapter->getHandle();`
 
-**Transfering Files by Handle**
+### Transfering Files by Handle
 
 You can use cURL to transfer very large files over *HTTP* by filehandle.
 
@@ -248,7 +248,7 @@ method takes one parameter, which represents an *HTTP* response as either text o
 `Zend\Http\Response` object. Once set, your Test adapter will always return this response, without
 even performing an actual *HTTP* request.
 
-**Testing Against a Single HTTP Response Stub**
+### Testing Against a Single HTTP Response Stub
 
 ```php
 // Instantiate a new adapter and client
@@ -285,7 +285,7 @@ Sometimes, a single method call to an object can result in that object performin
 transactions. In this case, it's not possible to use setResponse() alone because there's no
 opportunity to set the next response(s) your program might need before returning to the caller.
 
-**Testing Against Multiple HTTP Response Stubs**
+### Testing Against Multiple HTTP Response Stubs
 
 ```php
 // Instantiate a new adapter and client
@@ -340,7 +340,7 @@ will cause the next call to `connect()` to throw an
 application caches content from an external site (in case the site goes down) and you want to test
 this feature.
 
-**Forcing the adapter to fail**
+### Forcing the adapter to fail
 
 ```php
 // Instantiate a new adapter and client
@@ -374,7 +374,7 @@ In order to do so, you must create your own adapter class that implements the
 user-implemented adapter class. All the public functions defined in this example must be defined in
 your adapter as well:
 
-**Creating your own connection adapter**
+### Creating your own connection adapter
 
 ```php
 class MyApp\Http\Client\Adapter\BananaProtocol
