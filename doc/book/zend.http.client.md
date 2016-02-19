@@ -67,6 +67,20 @@ The constructor and setOptions() method accepts an associative array of configur
 a `Zend\Config\Config` object. Setting these parameters is optional, as they all have default
 values.
 
+Parameter         | Description                                                                                                                                                                          | Expected Values | Default Value
+------------------|--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|-----------------|--------------
+`maxredirects`    | Maximum number of redirections to follow (0 = none)                                                                                                                                  | integer         | 5
+`strictredirects` | Whether to strictly follow the RFC when redirecting (see this section)                                                                                                               | boolean         | FALSE
+`useragent`       | User agent identifier string (sent in request headers)                                                                                                                               | string          | `Zend\Http\Client`
+`timeout`         | Connection timeout (seconds)                                                                                                                                                         | integer         | 10
+`httpversion`     | HTTP protocol version (usually '1.1' or '1.0')                                                                                                                                       | string          | 1.1
+`adapter`         | Connection adapter class to use (see this section)                                                                                                                                   | mixed           | `Zend\Http\Client\Adapter\Socket`
+`keepalive`       | Whether to enable keep-alive connections with the server. Useful and might improve performance if several consecutive requests to the same server are performed.                     | boolean         | FALSE
+`storeresponse`   | Whether to store last response for later retrieval with getLastResponse(). If set to FALSE, getLastResponse() will return NULL.                                                      | boolean         | TRUE
+`encodecookies`   | Whether to pass the cookie value through urlencode/urldecode. Enabling this breaks support with some web servers. Disabling this limits the range of values the cookies can contain. | boolean         | TRUE
+`outputstream`    | Destination for streaming of received data (options: string (filename), true for temp file, false/null to disable streaming)                                                         | boolean         | FALSE
+`rfc3986strict`   | Whether to strictly adhere to RFC 3986 (in practice, this means replacing '+' with '%20')                                                                                            | boolean         | FALSE
+
 The options are also passed to the adapter class upon instantiation, so the same array or
 `Zend\Config\Config` object) can be used for adapter configuration. See the Zend Http Client adapter
 section&lt;zend.http.client.adapters&gt; for more information on the adapter-specific options

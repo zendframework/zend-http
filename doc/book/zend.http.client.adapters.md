@@ -28,7 +28,18 @@ be used unless you explicitly set the connection adapter. The Socket adapter is 
 built-in fsockopen() function, and does not require any special extensions or compilation flags.
 
 The Socket adapter allows several extra configuration options that can be set using
-`Zend\Http\Client->setOptions()` or passed to the client constructor.
+`Zend\Http\Client->setOptions()` or passed to the client constructor:
+
+Parameter          | Description                                                                          | Expected Type | Default Value
+-------------------|--------------------------------------------------------------------------------------|---------------|--------------
+persistent         | Whether to use persistent TCP connections                                            | boolean       | FALSE
+ssltransport       | SSL transport layer (eg. 'sslv2', 'tls')                                             | string        | ssl 
+sslcert            | Path to a PEM encoded SSL certificate                                                | string        | NULL
+sslpassphrase      | Passphrase for the SSL certificate file                                              | string        | NULL
+sslverifypeer      | Whether to verify the SSL peer                                                       | string        | TRUE
+sslcapath          | Path to SSL certificate directory                                                    | string        | NULL
+sslallowselfsigned | Whether to allow self-signed certificates                                            | string        | FALSE
+sslusecontext      | Enables proxied connections to use SSL even if the proxy connection itself does not. | boolean       | FALSE
 
 > ## Note
 #### Persistent TCP Connections
@@ -147,6 +158,14 @@ security or performance reasons.
 
 Using the Proxy adapter requires several additional configuration parameters to be set, in addition
 to the default 'adapter' option:
+
+Parameter    | Description                    | Expected Type | Example Value
+-------------|--------------------------------|---------------|--------------
+`proxy_host` | Proxy server address           | string        | 'proxy.myhost.com'’ or '10.1.2.3'
+`proxy_port` | Proxy server TCP port          | integer       | 8080 (default) or 81
+`proxy_user` | Proxy user name, if required   | string        | 'shahar' or '' for none (default)
+`proxy_pass` | Proxy password, if required    | string        | 'secret' or '' for none (default)
+`proxy_auth` | Proxy HTTP authentication type | string        | `Zend\Http\Client::AUTH_BASIC` (default)
 
 `proxy_host` should always be set - if it is not set, the client will fall back to a direct
 connection using `Zend\Http\Client\Adapter\Socket`. `proxy_port` defaults to '8080' - if your proxy
