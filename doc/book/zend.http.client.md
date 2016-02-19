@@ -19,10 +19,13 @@ options. The `send()` method is used to submit the request to the remote server,
 ```php
 use Zend\Http\Client;
 
-$client = new Client('http://example.org', array(
-    'maxredirects' => 0,
-    'timeout'      => 30
-));
+$client = new Client(
+    'http://example.org',
+    [
+        'maxredirects' => 0,
+        'timeout'      => 30,
+    ]
+);
 $response = $client->send();
 ```
 
@@ -34,10 +37,12 @@ use Zend\Http\Client;
 
 $client = new Client();
 $client->setUri('http://example.org');
-$client->setOptions(array(
-    'maxredirects' => 0,
-    'timeout'      => 30
-));
+$client->setOptions(
+    [
+        'maxredirects' => 0,
+        'timeout'      => 30,
+    ]
+);
 $response = $client->send();
 ```
 
@@ -129,12 +134,14 @@ $client = new Client();
 $client->setUri('http://example.com/index.php?knight=lancelot');
 
 // Adding several parameters with one call
-$client->setParameterGet(array(
-   'first_name'  => 'Bender',
-   'middle_name' => 'Bending',
-   'last_name'   => 'Rodríguez',
-   'made_in'     => 'Mexico',
-));
+$client->setParameterGet(
+    [
+       'first_name'  => 'Bender',
+       'middle_name' => 'Bending',
+       'last_name'   => 'Rodríguez',
+       'made_in'     => 'Mexico',
+   ]
+);
 ```
 
 ### Setting POST Parameters
@@ -150,11 +157,13 @@ use Zend\Http\Client;
 $client = new Client();
 
 // Setting several POST parameters, one of them with several values
-$client->setParameterPost(array(
-    'language'  => 'es',
-    'country'   => 'ar',
-    'selection' => array(45, 32, 80)
-));
+$client->setParameterPost(
+    [
+        'language'  => 'es',
+        'country'   => 'ar',
+        'selection' => [45, 32, 80],
+    ]
+);
 ```
 
 Note that when sending `POST` requests, you can set both `GET` and `POST` parameters. On the other
@@ -170,9 +179,12 @@ option in order to allow PHP to validate the SSL certificate:
 ```php
 use Zend\Http\Client;
 
-$client = new Client('https://example.org', array(
-   'sslcapath' => '/etc/ssl/certs'
-));
+$client = new Client(
+    'https://example.org',
+    [
+        'sslcapath' => '/etc/ssl/certs',
+    ]
+);
 $response = $client->send();
 ```
 
@@ -185,9 +197,12 @@ transparently:
 ```php
 use Zend\Http\Client;
 
-$client = new Client('https://example.org', array(
-   'adapter' => 'Zend\Http\Client\Adapter\Curl'
-));
+$client = new Client(
+    'https://example.org',
+    [
+        'adapter' => 'Zend\Http\Client\Adapter\Curl',
+    ]
+);
 $response = $client->send();
 ```
 
@@ -199,9 +214,11 @@ use Zend\Http\Client;
 $client = new Client();
 $client->setUri('http://www.example.com');
 $client->setMethod('POST');
-$client->setParameterPost(array(
-   'foo' => 'bar'
-));
+$client->setParameterPost(
+    [
+        'foo' => 'bar',
+    ]
+);
 
 $response = $client->send();
 

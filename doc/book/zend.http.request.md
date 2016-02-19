@@ -6,10 +6,12 @@ The `Zend\Http\Request` object is responsible for providing a fluent API that al
 interact with all the various parts of an HTTP request.
 
 A typical HTTP request looks like this:
-## 
-##     | METHOD | URI | VERSION |
-##     |        HEADERS         |
-##     |         BODY           |
+
+```
+| METHOD | URI | VERSION |
+|        HEADERS         |
+|         BODY           |
+```
 
 In simplified terms, the request consists of a method, *URI* and HTTP version number which together
 make up the "Request Line." Next come the HTTP headers, of which there can be 0 or more. After that
@@ -41,10 +43,12 @@ EOS
 $request = new Request();
 $request->setMethod(Request::METHOD_POST);
 $request->setUri('/foo');
-$request->getHeaders()->addHeaders(array(
-    'HeaderField1' => 'header-field-value1',
-    'HeaderField2' => 'header-field-value2',
-));
+$request->getHeaders()->addHeaders(
+    [
+        'HeaderField1' => 'header-field-value1',
+        'HeaderField2' => 'header-field-value2',
+    ]
+);
 $request->getPost()->set('foo', 'bar');
 ```
 
@@ -405,7 +409,7 @@ use Zend\Http\Header\Cookie;
 
 $request = new Request();
 $request->getHeaders()->get('Content-Type'); // return content type
-$request->getHeaders()->addHeader(new Cookie(array('foo' => 'bar')));
+$request->getHeaders()->addHeader(new Cookie(['foo' => 'bar']));
 foreach ($request->getHeaders() as $header) {
     echo $header->getFieldName() . ' with value ' . $header->getFieldValue();
 }
@@ -433,10 +437,12 @@ use Zend\Http\Request;
 $request = new Request();
 $request->setMethod(Request::METHOD_POST);
 $request->setUri('/foo');
-$request->getHeaders()->addHeaders(array(
-    'HeaderField1' => 'header-field-value1',
-    'HeaderField2' => 'header-field-value2',
-));
+$request->getHeaders()->addHeaders(
+    [
+        'HeaderField1' => 'header-field-value1',
+        'HeaderField2' => 'header-field-value2',
+    ]
+);
 $request->getPost()->set('foo', 'bar');
 $request->setContent($request->getPost()->toString());
 echo $request->toString();

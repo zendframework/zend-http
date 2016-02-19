@@ -16,10 +16,10 @@ by setting the `strictredirects` configuration parameter to boolean `TRUE`:
 
 ```php
 // Strict Redirections
-$client->setOptions(array('strictredirects' => true));
+$client->setOptions(['strictredirects' => true]);
 
 // Non-strict Redirections
-$client->setOptions(array('strictredirects' => false));
+$client->setOptions(['strictredirects' => false]);
 ```
 
 You can always get the number of redirections done after sending a request using the
@@ -43,10 +43,10 @@ $client->addCookie($cookie);
 
 // Multiple cookies can be set at once by providing an
 // array of Zend\Http\Header\SetCookie objects
-$cookies = array(
+$cookies = [
     Zend\Http\Header\SetCookie::fromString('Set-Cookie: flavorOne=chocolate%20chips'),
     Zend\Http\Header\SetCookie::fromString('Set-Cookie: flavorTwo=vanilla'),
-);
+];
 $client->addCookie($cookies);
 ```
 
@@ -57,10 +57,12 @@ values as its only argument and also clears the cookie container before adding t
 
 ```php
 // setCookies accepts an array of cookie values as $name => $value
-$client->setCookies(array(
-    'flavor' => 'chocolate chips',
-    'amount' => 10,
-));
+$client->setCookies(
+    [
+        'flavor' => 'chocolate chips',
+        'amount' => 10,
+    ]
+);
 ```
 
 For more information about `Zend\Http\Header\SetCookie` objects, see \[this
@@ -79,7 +81,7 @@ $cookies = new Zend\Http\Cookies($headers);
 
 // First request: log in and start a session
 $client->setUri('http://example.com/login.php');
-$client->setParameterPost(array('user' => 'h4x0r', 'password' => 'l33t'));
+$client->setParameterPost(['user' => 'h4x0r', 'password' => 'l33t']);
 $client->setMethod('POST');
 
 $response = $client->getResponse();
@@ -119,16 +121,18 @@ $headers->addHeader(Zend\Http\Header\Host::fromString('Host: www.example.com'));
 
 // You can also add multiple headers at once by passing an
 // array to addHeaders using any of the formats below:
-$headers->addHeaders(array(
-    // Zend\Http\Header\* object
-    Zend\Http\Header\Host::fromString('Host: www.example.com'),
-
-    // Header name as array key, header value as array key value
-    'Cookie' => 'PHPSESSID=1234567890abcdef1234567890abcdef',
-
-    // Raw header string
-    'Cookie: language=he',
-));
+$headers->addHeaders(
+    [
+        // Zend\Http\Header\* object
+        Zend\Http\Header\Host::fromString('Host: www.example.com'),
+    
+        // Header name as array key, header value as array key value
+        'Cookie' => 'PHPSESSID=1234567890abcdef1234567890abcdef',
+    
+        // Raw header string
+        'Cookie: language=he',
+    ]
+);
 ```
 
 `Zend\Http\Client` also provides a convenience method for setting request headers, `setHeaders`.
@@ -141,11 +145,13 @@ be erased.
 ```php
 // Setting multiple headers.  Will remove all existing
 // headers and add new ones to the Request header container
-$client->setHeaders(array(
-    Zend\Http\Header\Host::fromString('Host: www.example.com'),
-    'Accept-Encoding' => 'gzip,deflate',
-    'X-Powered-By: Zend Framework',
-));
+$client->setHeaders(
+    [
+        Zend\Http\Header\Host::fromString('Host: www.example.com'),
+        ['Accept-Encoding' => 'gzip,deflate'],
+        'X-Powered-By: Zend Framework',
+    ]
+);
 ```
 
 ## File Uploads
@@ -275,9 +281,12 @@ session.
 
 ```php
 // First, instantiate the client
-$client = new Zend\Http\Client('http://www.example.com/fetchdata.php', array(
-    'keepalive' => true
-));
+$client = new Zend\Http\Client(
+    'http://www.example.com/fetchdata.php',
+    [
+        'keepalive' => true,
+    ]
+);
 
 // Do we have the cookies stored in our session?
 if (isset($_SESSION['cookiejar']) &&
@@ -287,10 +296,12 @@ if (isset($_SESSION['cookiejar']) &&
 } else {
     // If we don't, authenticate and store cookies
     $client->setUri('http://www.example.com/login.php');
-    $client->setParameterPost(array(
-        'user' => 'shahar',
-        'pass' => 'somesecret'
-    ));
+    $client->setParameterPost(
+        [
+            'user' => 'shahar',
+            'pass' => 'somesecret',
+        ]
+    );
     $response = $client->setMethod('POST')->send();
     $cookieJar = Zend\Http\Cookies::fromResponse($response);
 
