@@ -434,18 +434,18 @@ class Curl implements HttpAdapter, StreamInterface
 
         // cURL automatically decodes chunked-messages, this means we have to
         // disallow the Zend\Http\Response to do it again.
-        $responseHeaders = preg_replace("/Transfer-Encoding:\s*chunked\\r\\n/", "", $responseHeaders);
+        $responseHeaders = preg_replace("/Transfer-Encoding:\s*chunked\\r\\n/i", '', $responseHeaders);
 
         // cURL can automatically handle content encoding; prevent double-decoding from occurring
         if (isset($this->config['curloptions'][CURLOPT_ENCODING])
             && '' == $this->config['curloptions'][CURLOPT_ENCODING]
         ) {
-            $responseHeaders = preg_replace("/Content-Encoding:\s*gzip\\r\\n/", '', $responseHeaders);
+            $responseHeaders = preg_replace("/Content-Encoding:\s*gzip\\r\\n/i", '', $responseHeaders);
         }
 
         // cURL automatically handles Proxy rewrites, remove the "HTTP/1.0 200 Connection established" string:
         $responseHeaders = preg_replace(
-            "/HTTP\/1.0\s*200\s*Connection\s*established\\r\\n\\r\\n/",
+            "/HTTP\/1.0\s*200\s*Connection\s*established\\r\\n\\r\\n/i",
             '',
             $responseHeaders
         );
