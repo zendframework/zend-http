@@ -70,16 +70,12 @@ Populate object from string
 
 Returns `Zend\Http\Response`
 
-<!-- -->
-
 **renderStatusLine**  
 `renderStatusLine()`
 
 Render the status line header
 
 Returns string
-
-<!-- -->
 
 **setHeaders**  
 `setHeaders(Zend\Http\Headers $headers)`
@@ -88,8 +84,6 @@ Provide an alternate Parameter Container implementation for headers in this obje
 primary API for value setting; for that, see `getHeaders()`.)
 
 Returns `Zend\Http\Request`
-
-<!-- -->
 
 **getHeaders**  
 `getHeaders()`
@@ -100,8 +94,6 @@ Zend\\\\Http\\\\Headers&lt;zend.http.headers&gt; for more information.
 
 Returns `Zend\Http\Headers`
 
-<!-- -->
-
 **setVersion**  
 `setVersion(string $version)`
 
@@ -110,16 +102,12 @@ Set the HTTP version for this object, one of 1.0 or 1.1 (`Request::VERSION_10`,
 
 Returns `Zend\Http\Request`.
 
-<!-- -->
-
 **getVersion**  
 `getVersion()`
 
 Return the HTTP version for this request
 
 Returns string
-
-<!-- -->
 
 **setStatusCode**  
 `setStatusCode(numeric $code)`
@@ -128,16 +116,12 @@ Set HTTP status code
 
 Returns `Zend\Http\Response`
 
-<!-- -->
-
 **getStatusCode**  
 `getStatusCode()`
 
 Retrieve HTTP status code
 
 Returns int
-
-<!-- -->
 
 **setReasonPhrase**  
 `setReasonPhrase(string $reasonPhrase)`
@@ -146,16 +130,12 @@ Set custom HTTP status message
 
 Returns `Zend\Http\Response`
 
-<!-- -->
-
 **getReasonPhrase**  
 `getReasonPhrase()`
 
 Get HTTP status message
 
 Returns string
-
-<!-- -->
 
 **isClientError**  
 `isClientError()`
@@ -164,16 +144,12 @@ Does the status code indicate a client error?
 
 Returns bool
 
-<!-- -->
-
 **isForbidden**  
 `isForbidden()`
 
 Is the request forbidden due to ACLs?
 
 Returns bool
-
-<!-- -->
 
 **isInformational**  
 `isInformational()`
@@ -182,16 +158,12 @@ Is the current status "informational"?
 
 Returns bool
 
-<!-- -->
-
 **isNotFound**  
 `isNotFound()`
 
 Does the status code indicate the resource is not found?
 
 Returns bool
-
-<!-- -->
 
 **isOk**  
 `isOk()`
@@ -200,16 +172,12 @@ Do we have a normal, OK response?
 
 Returns bool
 
-<!-- -->
-
 **isServerError**  
 `isServerError()`
 
 Does the status code reflect a server error?
 
 Returns bool
-
-<!-- -->
 
 **isRedirect**  
 `isRedirect()`
@@ -218,8 +186,6 @@ Do we have a redirect?
 
 Returns bool
 
-<!-- -->
-
 **isSuccess**  
 `isSuccess()`
 
@@ -227,16 +193,12 @@ Was the response successful?
 
 Returns bool
 
-<!-- -->
-
 **decodeChunkedBody**  
 `decodeChunkedBody(string $body)`
 
 Decode a "chunked" transfer-encoded body and return the decoded text
 
 Returns string
-
-<!-- -->
 
 **decodeGzip**  
 `decodeGzip(string $body)`
@@ -247,8 +209,6 @@ Currently requires PHP with zlib support
 
 Returns string
 
-<!-- -->
-
 **decodeDeflate**  
 `decodeDeflate(string $body)`
 
@@ -257,8 +217,6 @@ Decode a zlib deflated message (when Content-encoding = deflate)
 Currently requires PHP with zlib support
 
 Returns string
-
-<!-- -->
 
 **setMetadata**  
 `setMetadata(string|int|array|Traversable $spec, mixed $value)`
@@ -270,16 +228,12 @@ entire metadata container.
 
 Returns `Zend\Stdlib\Message`
 
-<!-- -->
-
 **getMetadata**  
 `getMetadata(null|string|int $key, null|mixed $default)`
 
 Retrieve all metadata or a single metadatum as specified by key
 
 Returns mixed
-
-<!-- -->
 
 **setContent**  
 `setContent(mixed $value)`
@@ -288,8 +242,6 @@ Set message content
 
 Returns `Zend\Stdlib\Message`
 
-<!-- -->
-
 **getContent**  
 `getContent()`
 
@@ -297,16 +249,12 @@ Get raw message content
 
 Returns mixed
 
-<!-- -->
-
 **getBody**  
 `getBody()`
 
 Get decoded message content
 
 Returns mixed
-
-<!-- -->
 
 **toString**  
 `toString()`

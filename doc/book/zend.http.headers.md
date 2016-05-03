@@ -63,8 +63,6 @@ strings until they are needed (they will be lazy loaded).
 
 Returns `Zend\Http\Headers`
 
-<!-- -->
-
 **setPluginClassLoader**  
 `setPluginClassLoader(Zend\Loader\PluginClassLocator $pluginClassLoader)`
 
@@ -72,16 +70,12 @@ Set an alternate implementation for the plugin class loader
 
 Returns `Zend\Http\Headers`
 
-<!-- -->
-
 **getPluginClassLoader**  
 `getPluginClassLoader()`
 
 Return an instance of a `Zend\Loader\PluginClassLocator`, lazyload and inject map if necessary.
 
 Returns `Zend\Loader\PluginClassLocator`
-
-<!-- -->
 
 **addHeaders**  
 `addHeaders(array|Traversable $headers)`
@@ -91,8 +85,6 @@ Add many headers at once
 Expects an array (or `Traversable` object) of type/value pairs.
 
 Returns `Zend\Http\Headers`
-
-<!-- -->
 
 **addHeaderLine**  
 `addHeaderLine(string $headerFieldNameOrLine, string $fieldValue)`
@@ -104,8 +96,6 @@ delayed until they are retrieved by either `get()` or `current()`.
 
 Returns `Zend\Http\Headers`
 
-<!-- -->
-
 **addHeader**  
 `addHeader(Zend\Http\Header\HeaderInterface $header)`
 
@@ -113,16 +103,12 @@ Add a Header to this container, for raw values see `addHeaderLine()` and `addHea
 
 Returns `Zend\Http\Headers`
 
-<!-- -->
-
 **removeHeader**  
 `removeHeader(Zend\Http\Header\HeaderInterface $header)`
 
 Remove a Header from the container
 
 Returns bool
-
-<!-- -->
 
 **clearHeaders**  
 `clearHeaders()`
@@ -133,16 +119,12 @@ Removes all headers from queue
 
 Returns `Zend\Http\Headers`
 
-<!-- -->
-
 **get**  
 `get(string $name)`
 
 Get all headers of a certain name/type
 
 Returns false| `Zend\Http\Header\HeaderInterface`| `ArrayIterator`
-
-<!-- -->
 
 **has**  
 `has(string $name)`
@@ -151,16 +133,12 @@ Test for existence of a type of header
 
 Returns bool
 
-<!-- -->
-
 **next**  
 `next()`
 
 Advance the pointer for this object as an iterator
 
 Returns void
-
-<!-- -->
 
 **key**  
 `key()`
@@ -169,16 +147,12 @@ Return the current key for this object as an iterator
 
 Returns mixed
 
-<!-- -->
-
 **valid**  
 `valid()`
 
 Is this iterator still valid?
 
 Returns bool
-
-<!-- -->
 
 **rewind**  
 `rewind()`
@@ -187,16 +161,12 @@ Reset the internal pointer for this object as an iterator
 
 Returns void
 
-<!-- -->
-
 **current**  
 `current()`
 
 Return the current value for this iterator, lazy loading it if need be
 
 Returns `Zend\Http\Header\HeaderInterface`
-
-<!-- -->
 
 **count**  
 `count()`
@@ -206,8 +176,6 @@ could increase if MultipleHeader objects exist in the Request/Response. If you n
 iterate.
 
 Returns int
-
-<!-- -->
 
 **toString**  
 `toString()`
@@ -219,16 +187,12 @@ with the appropriate status/request line.
 
 Returns string
 
-<!-- -->
-
 **toArray**  
 `toArray()`
 
 Return the headers container as an array
 
 Returns array
-
-<!-- -->
 
 **forceLoading**  
 `forceLoading()`
@@ -247,8 +211,6 @@ Factory to generate a header object from a string
 
 Returns `Zend\Http\Header\GenericHeader`
 
-<!-- -->
-
 **getFieldName**  
 `getFieldName()`
 
@@ -256,16 +218,12 @@ Retrieve header field name
 
 Returns string
 
-<!-- -->
-
 **getFieldValue**  
 `getFieldValue()`
 
 Retrieve header field value
 
 Returns string
-
-<!-- -->
 
 **toString**  
 `toString()`
@@ -424,8 +382,6 @@ Does the header have the requested media type?
 
 Returns bool
 
-<!-- -->
-
 **AcceptCharset**  
 See `Zend\Http\Header\AbstractAccept` methods&lt;zend.http.header.abstractaccept.methods&gt;.
 
@@ -438,8 +394,6 @@ Returns self
 Does the header have the requested charset?
 
 Returns bool
-
-<!-- -->
 
 **AcceptEncoding**  
 See `Zend\Http\Header\AbstractAccept` methods&lt;zend.http.header.abstractaccept.methods&gt;.
@@ -454,8 +408,6 @@ Does the header have the requested encoding?
 
 Returns bool
 
-<!-- -->
-
 **AcceptLanguage**  
 See `Zend\Http\Header\AbstractAccept` methods&lt;zend.http.header.abstractaccept.methods&gt;.
 
@@ -469,14 +421,10 @@ Does the header have the requested language?
 
 Returns bool
 
-<!-- -->
-
 **AcceptRanges**  
 `getRangeUnit()`
 
 `setRangeUnit($rangeUnit)`
-
-<!-- -->
 
 **Age**  
 `getDeltaSeconds()`  
@@ -488,8 +436,6 @@ Returns int
 Set number of seconds
 
 Returns self
-
-<!-- -->
 
 **Allow**  
 `getAllMethods()`  
@@ -522,17 +468,11 @@ Check whether method is allowed
 
 Returns bool
 
-<!-- -->
-
 **AuthenticationInfo**  
 No additional methods
 
-<!-- -->
-
 **Authorization**  
 No additional methods
-
-<!-- -->
 
 **CacheControl**  
 `isEmpty()`  
@@ -564,8 +504,6 @@ Remove a directive
 
 Returns self
 
-<!-- -->
-
 **Connection**  
 `setValue($value)`  
 Set arbitrary header value
@@ -584,42 +522,26 @@ Set Connection header to define persistent connection
 
 Returns self
 
-<!-- -->
-
 **ContentDisposition**  
 No additional methods
-
-<!-- -->
 
 **ContentEncoding**  
 No additional methods
 
-<!-- -->
-
 **ContentLanguage**  
 No additional methods
-
-<!-- -->
 
 **ContentLength**  
 No additional methods
 
-<!-- -->
-
 **ContentLocation**  
 See `Zend\Http\Header\AbstractLocation` methods&lt;zend.http.header.abstractlocation.methods&gt;.
-
-<!-- -->
 
 **ContentMD5**  
 No additional methods
 
-<!-- -->
-
 **ContentRange**  
 No additional methods
-
-<!-- -->
 
 **ContentSecurityPolicy**  
 `getDirectives()`  
@@ -647,12 +569,8 @@ $csp->setDirective('default-src', array()) // No sources
 
 Returns self
 
-<!-- -->
-
 **ContentTransferEncoding**  
 No additional methods
-
-<!-- -->
 
 **ContentType**  
 `match(array|string $matchAgainst)`  
@@ -690,8 +608,6 @@ Set the content-type character set encoding
 
 Returns self
 
-<!-- -->
-
 **Cookie**  
 Extends `ArrayObject`
 
@@ -701,117 +617,71 @@ static `fromSetCookieArray(array $setCookies)`
 
 `getEncodeValue()`
 
-<!-- -->
-
 **Date**  
 See `Zend\Http\Header\AbstractDate` methods&lt;zend.http.header.abstractdate.methods&gt;.
-
-<!-- -->
 
 **Etag**  
 No additional methods
 
-<!-- -->
-
 **Expect**  
 No additional methods
-
-<!-- -->
 
 **Expires**  
 See `Zend\Http\Header\AbstractDate` methods&lt;zend.http.header.abstractdate.methods&gt;.
 
-<!-- -->
-
 **From**  
 No additional methods
-
-<!-- -->
 
 **Host**  
 No additional methods
 
-<!-- -->
-
 **IfMatch**  
 No additional methods
-
-<!-- -->
 
 **IfModifiedSince**  
 See `Zend\Http\Header\AbstractDate` methods&lt;zend.http.header.abstractdate.methods&gt;.
 
-<!-- -->
-
 **IfNoneMatch**  
 No additional methods
-
-<!-- -->
 
 **IfRange**  
 No additional methods
 
-<!-- -->
-
 **IfUnmodifiedSince**  
 See `Zend\Http\Header\AbstractDate` methods&lt;zend.http.header.abstractdate.methods&gt;.
-
-<!-- -->
 
 **KeepAlive**  
 No additional methods
 
-<!-- -->
-
 **LastModified**  
 See `Zend\Http\Header\AbstractDate` methods&lt;zend.http.header.abstractdate.methods&gt;.
-
-<!-- -->
 
 **Location**  
 See `Zend\Http\Header\AbstractLocation` methods&lt;zend.http.header.abstractlocation.methods&gt;.
 
-<!-- -->
-
 **MaxForwards**  
 No additional methods
-
-<!-- -->
 
 **Origin**  
 No additional methods
 
-<!-- -->
-
 **Pragma**  
 No additional methods
-
-<!-- -->
 
 **ProxyAuthenticate**  
 `toStringMultipleHeaders(array $headers)`
 
-<!-- -->
-
 **ProxyAuthorization**  
 No additional methods
-
-<!-- -->
 
 **Range**  
 No additional methods
 
-<!-- -->
-
 **Referer**  
 See `Zend\Http\Header\AbstractLocation` methods&lt;zend.http.header.abstractlocation.methods&gt;.
 
-<!-- -->
-
 **Refresh**  
 No additional methods
-
-<!-- -->
 
 **RetryAfter**  
 See `Zend\Http\Header\AbstractDate` methods&lt;zend.http.header.abstractdate.methods&gt;.
@@ -826,12 +696,8 @@ Get number of seconds
 
 Returns int
 
-<!-- -->
-
 **Server**  
 No additional methods
-
-<!-- -->
 
 **SetCookie**  
 `getName()` / `setName(string $name)`  
@@ -918,47 +784,30 @@ Returns bool
 `toStringMultipleHeaders(array $headers)`  
 Returns string
 
-<!-- -->
-
 **TE**  
 No additional methods
-
-<!-- -->
 
 **Trailer**  
 No additional methods
 
-<!-- -->
-
 **TransferEncoding**  
 No additional methods
-
-<!-- -->
 
 **Upgrade**  
 No additional methods
 
-<!-- -->
-
 **UserAgent**  
 No additional methods
-
-<!-- -->
 
 **Vary**  
 No additional methods
 
-<!-- -->
-
 **Via**  
 No additional methods
 
-<!-- -->
 
 **Warning**  
 No additional methods
-
-<!-- -->
 
 **WWWAuthenticate**  
 `toStringMultipleHeaders(array $headers)`

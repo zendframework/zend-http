@@ -61,16 +61,12 @@ A factory that produces a Request object from a well-formed HTTP Request string.
 
 Returns `Zend\Http\Request`
 
-<!-- -->
-
 **setMethod**  
 `setMethod(string $method)`
 
 Set the method for this request.
 
 Returns `Zend\Http\Request`
-
-<!-- -->
 
 **getMethod**  
 `getMethod()`
@@ -79,16 +75,12 @@ Return the method for this request.
 
 Returns string
 
-<!-- -->
-
 **setUri**  
 `setUri(string|Zend\Uri\Http $uri)`
 
 Set the URI/URL for this request; this can be a string or an instance of `Zend\Uri\Http`.
 
 Returns `Zend\Http\Request`
-
-<!-- -->
 
 **getUri**  
 `getUri()`
@@ -97,16 +89,12 @@ Return the URI for this request object.
 
 Returns `Zend\Uri\Http`
 
-<!-- -->
-
 **getUriString**  
 `getUriString()`
 
 Return the URI for this request object as a string.
 
 Returns string
-
-<!-- -->
 
 **setVersion**  
 `setVersion(string $version)`
@@ -116,16 +104,12 @@ Set the HTTP version for this object, one of 1.0 or 1.1 (`Request::VERSION_10`,
 
 Returns `Zend\Http\Request`
 
-<!-- -->
-
 **getVersion**  
 `getVersion()`
 
 Return the HTTP version for this request.
 
 Returns string
-
-<!-- -->
 
 **setQuery**  
 `setQuery(Zend\Stdlib\ParametersInterface $query)`
@@ -135,8 +119,6 @@ is NOT the primary API for value setting; for that, see `getQuery()`).
 
 Returns `Zend\Http\Request`
 
-<!-- -->
-
 **getQuery**  
 `getQuery(string|null $name, mixed|null $default)`
 
@@ -144,8 +126,6 @@ Return the parameter container responsible for query parameters or a single quer
 
 Returns `string`, `Zend\Stdlib\ParametersInterface`, or `null` depending on value of `$name`
 argument.
-
-<!-- -->
 
 **setPost**  
 `setPost(Zend\Stdlib\ParametersInterface $post)`
@@ -155,8 +135,6 @@ NOT the primary API for value setting; for that, see `getPost()`).
 
 Returns `Zend\Http\Request`
 
-<!-- -->
-
 **getPost**  
 `getPost(string|null $name, mixed|null $default)`
 
@@ -164,8 +142,6 @@ Return the parameter container responsible for POST parameters or a single POST 
 
 Returns `string`, `Zend\Stdlib\ParametersInterface`, or `null` depending on value of `$name`
 argument.
-
-<!-- -->
 
 **getCookie**  
 `getCookie()`
@@ -175,8 +151,6 @@ Return the Cookie header, this is the same as calling
 
 Returns `Zend\Http\Header\Cookie`
 
-<!-- -->
-
 **setFiles**  
 `setFiles(Zend\Stdlib\ParametersInterface $files)`
 
@@ -184,8 +158,6 @@ Provide an alternate Parameter Container implementation for file parameters in t
 NOT the primary API for value setting; for that, see `getFiles()`).
 
 Returns `Zend\Http\Request`
-
-<!-- -->
 
 **getFiles**  
 `getFiles(string|null $name, mixed|null $default)`
@@ -195,8 +167,6 @@ Return the parameter container responsible for file parameters or a single file 
 Returns `string`, `Zend\Stdlib\ParametersInterface`, or `null` depending on value of `$name`
 argument.
 
-<!-- -->
-
 **setHeaders**  
 `setHeaders(Zend\Http\Headers $headers)`
 
@@ -204,8 +174,6 @@ Provide an alternate Parameter Container implementation for headers in this obje
 primary API for value setting, for that see `getHeaders()`).
 
 Returns `Zend\Http\Request`
-
-<!-- -->
 
 **getHeaders**  
 `getHeaders(string|null $name, mixed|null $default)`
@@ -217,8 +185,6 @@ Zend\\\\Http\\\\Headers&lt;zend.http.headers&gt; for more information.
 Returns `Zend\Http\Headers` if `$name` is `null`. Returns `Zend\Http\Header\HeaderInterface` or
 `ArrayIterator` if `$name` matches one or more stored headers, respectively.
 
-<!-- -->
-
 **setMetadata**  
 `setMetadata(string|int|array|Traversable $spec, mixed $value)`
 
@@ -229,16 +195,12 @@ entire metadata container.
 
 Returns `Zend\Http\Request`
 
-<!-- -->
-
 **getMetadata**  
 `getMetadata(null|string|int $key, null|mixed $default)`
 
 Retrieve all metadata or a single metadatum as specified by key.
 
 Returns mixed
-
-<!-- -->
 
 **setContent**  
 `setContent(mixed $value)`
@@ -247,16 +209,12 @@ Set request body (content).
 
 Returns `Zend\Http\Request`
 
-<!-- -->
-
 **getContent**  
 `getContent()`
 
 Get request body (content).
 
 Returns mixed
-
-<!-- -->
 
 **isOptions**  
 `isOptions()`
@@ -265,16 +223,12 @@ Is this an OPTIONS method request?
 
 Returns bool
 
-<!-- -->
-
 **isGet**  
 `isGet()`
 
 Is this a GET method request?
 
 Returns bool
-
-<!-- -->
 
 **isHead**  
 `isHead()`
@@ -283,16 +237,12 @@ Is this a HEAD method request?
 
 Returns bool
 
-<!-- -->
-
 **isPost**  
 `isPost()`
 
 Is this a POST method request?
 
 Returns bool
-
-<!-- -->
 
 **isPut**  
 `isPut()`
@@ -301,16 +251,12 @@ Is this a PUT method request?
 
 Returns bool
 
-<!-- -->
-
 **isDelete**  
 `isDelete()`
 
 Is this a DELETE method request?
 
 Returns bool
-
-<!-- -->
 
 **isTrace**  
 `isTrace()`
@@ -319,16 +265,12 @@ Is this a TRACE method request?
 
 Returns bool
 
-<!-- -->
-
 **isConnect**  
 `isConnect()`
 
 Is this a CONNECT method request?
 
 Returns bool
-
-<!-- -->
 
 **isPatch**  
 `isPatch()`
@@ -337,16 +279,12 @@ Is this a PATCH method request?
 
 Returns bool
 
-<!-- -->
-
 **isXmlHttpRequest**  
 `isXmlHttpRequest()`
 
 Is this a Javascript XMLHttpRequest?
 
 Returns bool
-
-<!-- -->
 
 **isFlashRequest**  
 `isFlashRequest()`
@@ -355,8 +293,6 @@ Is this a Flash request?
 
 Returns bool
 
-<!-- -->
-
 **renderRequestLine**  
 `renderRequestLine()`
 
@@ -364,14 +300,10 @@ Return the formatted request line (first line) for this HTTP request.
 
 Returns string
 
-<!-- -->
-
 **toString**  
 `toString()`
 
 Returns string
-
-<!-- -->
 
 **\_\_toString**  
 `__toString()`
