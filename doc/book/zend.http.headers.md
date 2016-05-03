@@ -965,7 +965,7 @@ No additional methods
 
 ## Examples
 
-**Retrieving headers from a Zend\\Http\\Headers object**
+### Retrieving headers from a Zend\\Http\\Headers object
 
 ```php
 // $client is an instance of Zend\Http\Client
@@ -990,7 +990,7 @@ There are three possibilities for the return value of the above call to the `get
 - If more than one Content-Type header was set in the Request, `get` will return an ArrayIterator
 containing one `Zend\Http\Header\ContentType` instance per header.
 
-**Adding headers to a Zend\\Http\\Headers object**
+### Adding headers to a Zend\\Http\\Headers object
 
 ```php
 $headers = new Zend\Http\Headers();
@@ -1024,7 +1024,7 @@ $headers->addHeaders(array(
 ));
 ```
 
-**Removing headers from a Zend\\Http\\Headers object**
+### Removing headers from a Zend\\Http\\Headers object
 
 We can remove all headers of a specific type using the `removeHeader` method, which accepts a single
 object implementing `Zend\Http\Header\HeaderInterface`

@@ -12,7 +12,7 @@ clients to not implement this and always use a `GET` request when redirecting. B
 parameters are reset, and a `GET` request is sent to the new location. This behavior can be changed
 by setting the `strictredirects` configuration parameter to boolean `TRUE`:
 
-**Forcing RFC 2616 Strict Redirections on 301 and 302 Responses**
+### Forcing RFC 2616 Strict Redirections on 301 and 302 Responses
 
 ```php
 // Strict Redirections
@@ -31,7 +31,7 @@ You can always get the number of redirections done after sending a request using
 header modification is required. Cookies can be added using either the addCookie() or `setCookies`
 method. The `addCookie` method has a number of operating modes:
 
-**Setting Cookies Using addCookie()**
+### Setting Cookies Using addCookie()
 
 ```php
 // Easy and simple: by providing a cookie name and cookie value
@@ -53,7 +53,7 @@ $client->addCookie($cookies);
 The `setCookies()` method works in a similar manner, except that it requires an array of cookie
 values as its only argument and also clears the cookie container before adding the new cookies:
 
-**Setting Cookies Using setCookies()**
+### Setting Cookies Using setCookies()
 
 ```php
 // setCookies accepts an array of cookie values as $name => $value
@@ -71,7 +71,7 @@ client internally store all sent and received cookies, and resend them on subseq
 `Zend\Http\Cookies`. This is useful, for example when you need to log in to a remote site first and
 receive and authentication or session ID cookie before sending further requests.
 
-**Enabling Cookie Stickiness**
+### Enabling Cookie Stickiness
 
 ```php
 $headers = $client->getRequest()->getHeaders();
@@ -100,7 +100,7 @@ Setting custom headers is performed by first fetching the header container from 
 `Zend\Http\Request` object. This method is quite diverse and can be used in several ways, as the
 following example shows:
 
-**Setting A Single Custom Request Header**
+### Setting A Single Custom Request Header
 
 ```php
 // Fetch the container
@@ -136,7 +136,7 @@ This method will create a new header container, add the specified headers and th
 header container in it's `Zend\Http\Request` object. As a consequence, any pre-existing headers will
 be erased.
 
-**Setting Multiple Custom Request Headers**
+### Setting Multiple Custom Request Headers
 
 ```php
 // Setting multiple headers.  Will remove all existing
@@ -162,7 +162,7 @@ reads the file from the disk, the `mime_content_type` function will be used to g
 content type, if it is available. In any case, the default MIME type will be
 application/octet-stream.
 
-**Using setFileUpload to Upload Files**
+### Using setFileUpload to Upload Files
 
 ```php
 // Uploading arbitrary data as a file
@@ -194,7 +194,7 @@ You can use a `Zend\Http\Client` to send raw POST data using the `setRawBody()` 
 takes one parameter: the data to send in the request body. When sending raw POST data, it is
 advisable to also set the encoding type using `setEncType()`.
 
-**Sending Raw POST Data**
+### Sending Raw POST Data
 
 ```php
 $xml = '<book>' .
@@ -225,7 +225,7 @@ method takes 3 parameters: The user name, the password and an optional authentic
 parameter. As mentioned, currently only basic authentication is supported (digest authentication
 support is planned).
 
-**Setting HTTP Authentication User and Password**
+### Setting HTTP Authentication User and Password
 
 ```php
 // Using basic authentication
@@ -271,7 +271,7 @@ performed in more than one script in your application, it might be a good idea t
 object in the user's session. This way, you will only need to authenticate the user once every
 session.
 
-**Performing consecutive requests with one client**
+### Performing consecutive requests with one client
 
 ```php
 // First, instantiate the client
@@ -327,7 +327,8 @@ stored, and `getStream()` will return stream from which the response could be re
 You can either write the response to pre-defined file, or use temporary file for storing it and send
 it out or write it to another file using regular stream functions.
 
-> ## Receiving file from HTTP server with streaming
+### Receiving file from HTTP server with streaming
+
 ```php
 $client-setStream(); // will use temp file
 $response = $client-send();

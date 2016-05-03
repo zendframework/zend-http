@@ -315,7 +315,7 @@ Returns string
 
 ## Examples
 
-**Generating a Response object from a string**
+### Generating a Response object from a string
 
 ```php
 use Zend\Http\Response;
@@ -332,7 +332,7 @@ HeaderField2: header-field-value2
 EOS);
 ```
 
-**Generating a formatted HTTP Response from a Response object**
+### Generating a formatted HTTP Response from a Response object
 
 ```php
 use Zend\Http\Response;
