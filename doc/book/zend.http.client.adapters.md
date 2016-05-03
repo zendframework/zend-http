@@ -30,7 +30,7 @@ built-in fsockopen() function, and does not require any special extensions or co
 The Socket adapter allows several extra configuration options that can be set using
 `Zend\Http\Client->setOptions()` or passed to the client constructor.
 
-> ## Note
+> ### Note
 #### Persistent TCP Connections
 Using persistent *TCP* connections can potentially speed up *HTTP* requests - but in most use cases,
 will have little positive effect and might overload the *HTTP* server you are connecting to.
@@ -41,7 +41,8 @@ both the client speed and server load before using this option.
 Additionally, when using persistent connections it is recommended to enable Keep-Alive *HTTP*
 requests as described in \[the configuration section\](zend.http.client.options)- otherwise
 persistent connections might have little or no effect.
-#### note
+
+> ### Note
 #### HTTPS SSL Stream Parameters
 `ssltransport`, `sslcert` and `sslpassphrase` are only relevant when connecting using *HTTPS*.
 While the default *SSL* settings should work for most applications, you might need to change them if
@@ -132,7 +133,7 @@ $opts = stream_context_get_options($adapter->getStreamContext());
 echo $opts['ssl']['peer_certificate'];
 ```
 
-> ## Note
+> ### Note
 Note that you must set any stream context options before using the adapter to perform actual
 requests. If no context is set before performing *HTTP* requests with the Socket adapter, a default
 stream context will be created. This context resource could be accessed after performing any
@@ -182,7 +183,7 @@ As mentioned, if `proxy_host` is not set or is set to a blank string, the connec
 to a regular direct connection. This allows you to easily write your application in a way that
 allows a proxy to be used optionally, according to a configuration parameter.
 
-> ## Note
+> ### Note
 Since the proxy adapter inherits from `Zend\Http\Client\Adapter\Socket`, you can use the stream
 context access method (see \[this section\](zend.http.client.adapters.socket.streamcontext)) to set
 stream context options on Proxy connections as demonstrated above.

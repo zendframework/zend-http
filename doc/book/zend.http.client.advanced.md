@@ -182,7 +182,7 @@ on the server side. In the second example, the existing file `/tmp/Backup.tar.gz
 server and will be available as `$_FILES['bufile']`. The content type will be guessed automatically
 if possible - and if not, the content type will be set to 'application/octet-stream'.
 
-> ## Note
+> ### Note
 #### Uploading files
 When uploading files, the *HTTP* request content-type is automatically set to multipart/form-data.
 Keep in mind that you must send a POST or PUT request in order to upload files. Most servers will
@@ -211,7 +211,7 @@ $client->send();
 The data should be available on the server side through *PHP*'s `$HTTP_RAW_POST_DATA` variable or
 through the `php://input` stream.
 
-> ## Note
+> ### Note
 #### Using raw POST data
 Setting raw POST data for a request will override any POST parameters or file uploads. You should
 not try to use both on the same request. Keep in mind that most servers will ignore the request body
@@ -255,7 +255,7 @@ request-specific parameters are cleared, you should use the `resetParameters()` 
 that GET and POST parameters, request body and headers are reset and are not reused in the next
 request.
 
-> ## Note
+> ### Note
 #### Resetting parameters
 Note that cookies are not reset by default when the `resetParameters()` method is used. To clean all
 cookies as well, use `resetParameters(true)`, or call `clearCookies()` after calling
