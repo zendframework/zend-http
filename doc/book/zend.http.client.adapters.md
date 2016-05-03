@@ -54,10 +54,10 @@ about *SSL* transport layers and options
 
 ```php
 // Set the configuration parameters
-$config = array(
+$config = [
     'adapter'      => 'Zend\Http\Client\Adapter\Socket',
-    'ssltransport' => 'tls'
-);
+    'ssltransport' => 'tls',
+];
 
 // Instantiate a client object
 $client = new Zend\Http\Client('https://www.example.com', $config);
@@ -93,25 +93,25 @@ context options using regular *PHP* stream context functions.
 
 ```php
 // Array of options
-$options = array(
-    'socket' => array(
+$options = [
+    'socket' => [
         // Bind local socket side to a specific interface
         'bindto' => '10.1.2.3:50505'
-    ),
-    'ssl' => array(
+    ],
+    'ssl'    => [
         // Verify server side certificate,
         // do not accept invalid or self-signed SSL certificates
-        'verify_peer' => true,
+        'verify_peer'       => true,
         'allow_self_signed' => false,
 
         // Capture the peer's certificate
         'capture_peer_cert' => true
-    )
-);
+    ],
+];
 
 // Create an adapter object and attach it to the HTTP client
 $adapter = new Zend\Http\Client\Adapter\Socket();
-$client = new Zend\Http\Client();
+$client  = new Zend\Http\Client();
 $client->setAdapter($adapter);
 
 // Method 1: pass the options array to setStreamContext()
@@ -165,13 +165,13 @@ Currently, only basic authentication (`Zend\Http\Client::AUTH_BASIC`) is support
 
 ```php
 // Set the configuration parameters
-$config = array(
+$config = [
     'adapter'    => 'Zend\Http\Client\Adapter\Proxy',
     'proxy_host' => 'proxy.int.zend.com',
     'proxy_port' => 8000,
     'proxy_user' => 'shahar.e',
-    'proxy_pass' => 'bananashaped'
-);
+    'proxy_pass' => 'bananashaped',
+];
 
 // Instantiate a client object
 $client = new Zend\Http\Client('http://www.example.com', $config);
@@ -199,10 +199,10 @@ large files around between servers.
 ### Setting cURL options
 
 ```php
-$config = array(
-    'adapter'   => 'Zend\Http\Client\Adapter\Curl',
-    'curloptions' => array(CURLOPT_FOLLOWLOCATION => true),
-);
+$config = [
+    'adapter'     => 'Zend\Http\Client\Adapter\Curl',
+    'curloptions' => [CURLOPT_FOLLOWLOCATION => true],
+];
 $client = new Zend\Http\Client($uri, $config);
 ```
 
@@ -224,12 +224,14 @@ $adapter = new Zend\Http\Client\Adapter\Curl();
 $client = new Zend\Http\Client();
 $client->setAdapter($adapter);
 $client->setMethod('PUT');
-$adapter->setOptions(array(
-    'curloptions' => array(
-        CURLOPT_INFILE => $putFileHandle,
-        CURLOPT_INFILESIZE => $putFileSize
-    )
-));
+$adapter->setOptions(
+    [
+        'curloptions' => [
+            CURLOPT_INFILE     => $putFileHandle,
+            CURLOPT_INFILESIZE => $putFileSize,
+        ],
+    ]
+);
 $client->send();
 ```
 
@@ -254,9 +256,12 @@ even performing an actual *HTTP* request.
 ```php
 // Instantiate a new adapter and client
 $adapter = new Zend\Http\Client\Adapter\Test();
-$client = new Zend\Http\Client('http://www.example.com', array(
-    'adapter' => $adapter
-));
+$client  = new Zend\Http\Client(
+    'http://www.example.com',
+    [
+        'adapter' => $adapter,
+    ]
+);
 
 // Set the expected response
 $adapter->setResponse(
@@ -291,9 +296,12 @@ opportunity to set the next response(s) your program might need before returning
 ```php
 // Instantiate a new adapter and client
 $adapter = new Zend\Http\Client\Adapter\Test();
-$client = new Zend\Http\Client('http://www.example.com', array(
-    'adapter' => $adapter
-));
+$client = new Zend\Http\Client(
+    'http://www.example.com',
+    [
+        'adapter' => $adapter,
+    ]
+);
 
 // Set the first expected response
 $adapter->setResponse(
@@ -346,9 +354,12 @@ this feature.
 ```php
 // Instantiate a new adapter and client
 $adapter = new Zend\Http\Client\Adapter\Test();
-$client = new Zend\Http\Client('http://www.example.com', array(
-    'adapter' => $adapter
-));
+$client  = new Zend\Http\Client(
+    'http://www.example.com',
+    [
+        'adapter' => $adapter,
+    ]
+);
 
 // Force the next request to fail with an exception
 $adapter->setNextRequestWillFail(true);
@@ -386,7 +397,7 @@ class MyApp\Http\Client\Adapter\BananaProtocol
      *
      * @param array $config
      */
-    public function setOptions($config = array())
+    public function setOptions($config = [])
     {
         // This rarely changes - you should usually copy the
         // implementation in Zend\Http\Client\Adapter\Socket.
@@ -417,7 +428,7 @@ class MyApp\Http\Client\Adapter\BananaProtocol
     public function write($method,
                           $url,
                           $http_ver = '1.1',
-                          $headers = array(),
+                          $headers = [],
                           $body = '')
     {
         // Send request to the remote server.
@@ -446,7 +457,9 @@ class MyApp\Http\Client\Adapter\BananaProtocol
 }
 
 // Then, you could use this adapter:
-$client = new Zend\Http\Client(array(
-    'adapter' => 'MyApp\Http\Client\Adapter\BananaProtocol'
-));
+$client = new Zend\Http\Client(
+    [
+        'adapter' => 'MyApp\Http\Client\Adapter\BananaProtocol',
+    ]
+);
 ```

@@ -6,10 +6,12 @@ The `Zend\Http\Response` class is responsible for providing a fluent API that al
 interact with all the various parts of an HTTP response.
 
 A typical HTTP Response looks like this:
-## 
-##     | VERSION | CODE | REASON |
-##     |        HEADERS          |
-##     |         BODY            |
+
+```
+| VERSION | CODE | REASON |
+|        HEADERS          |
+|         BODY            |
+```
 
 The first line of the response consists of the HTTP version, status code, and the reason string for
 the provided status code; this is called the Response Line. Next is a set of headers; there can be 0
@@ -43,10 +45,12 @@ EOS);
 
 $response = new Response();
 $response->setStatusCode(Response::STATUS_CODE_200);
-$response->getHeaders()->addHeaders(array(
-    'HeaderField1' => 'header-field-value',
-    'HeaderField2' => 'header-field-value2',
-));
+$response->getHeaders()->addHeaders(
+    [
+        'HeaderField1' => 'header-field-value',
+        'HeaderField2' => 'header-field-value2',
+    ]
+);
 $response->setContent(<<<EOS
 <html>
 <body>
@@ -286,10 +290,12 @@ EOS);
 use Zend\Http\Response;
 $response = new Response();
 $response->setStatusCode(Response::STATUS_CODE_200);
-$response->getHeaders()->addHeaders(array(
-    'HeaderField1' => 'header-field-value',
-    'HeaderField2' => 'header-field-value2',
-));
+$response->getHeaders()->addHeaders(
+    [
+        'HeaderField1' => 'header-field-value',
+        'HeaderField2' => 'header-field-value2',
+    ]
+);
 $response->setContent(<<<EOS
 <html>
 <body>

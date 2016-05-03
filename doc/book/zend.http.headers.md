@@ -560,11 +560,11 @@ under its control hosting sanitized ECMAScript:
 // http://www.w3.org/TR/2012/CR-CSP-20121115/#sample-policy-definitions
 // Example #2
 $csp = new ContentSecurityPolicy();
-$csp->setDirective('default-src', array()) // No sources
-    ->setDirective('img-src', array('*'))
-    ->setDirective('object-src' array('media1.example.com', 'media2.example.com',
-'*.cdn.example.com'))
-    ->setDirective('script-src', array('trustedscripts.example.com'));
+$csp->setDirective('default-src', []) // No sources
+    ->setDirective('img-src', ['*'])
+    ->setDirective('object-src', ['media1.example.com', 'media2.example.com',
+'*.cdn.example.com'])
+    ->setDirective('script-src', ['trustedscripts.example.com']);
 ```
 
 Returns self
@@ -858,19 +858,19 @@ $headers->addHeaderLine('Content-Type: text/html');
 // We can also add headers in bulk using addHeaders, which accepts
 // an array of individual header definitions that can be in any of
 // the accepted formats outlined below:
-$headers->addHeaders(array(
-
-    // An object implementing Zend\Http\Header\HeaderInterface
-    Zend\Http\Header\ContentType::fromString('Content-Type: text/html'),
-
-    // A raw header string
-    'Content-Type: text/html',
-
-    // We can also pass the header name as the array key and the
-    // header content as that array key's value
-    'Content-Type' => 'text/html');
-
-));
+$headers->addHeaders(
+    [
+        // An object implementing Zend\Http\Header\HeaderInterface
+        Zend\Http\Header\ContentType::fromString('Content-Type: text/html'),
+    
+        // A raw header string
+        'Content-Type: text/html',
+    
+        // We can also pass the header name as the array key and the
+        // header content as that array key's value
+        'Content-Type' => 'text/html',
+    ]
+);
 ```
 
 ### Removing headers from a Zend\\Http\\Headers object
