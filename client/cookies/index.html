@@ -1,0 +1,574 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">  
+    <link rel="shortcut icon" href="../../img/favicon.ico">
+
+    <title>Cookie Persistence - zend-http</title>
+
+    <link href="../../css/bootstrap-custom.min.css" rel="stylesheet">
+    <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="//cdn.jsdelivr.net/font-hack/2.018/css/hack.min.css">
+    <link href="//fonts.googleapis.com/css?family=PT+Sans:400,400italic,700,700italic&subset=latin-ext,latin" rel="stylesheet" type="text/css">
+    <link href="//fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,700italic,400,300,600,700&subset=latin-ext,latin" rel="stylesheet" type="text/css">
+    <link href="//fonts.googleapis.com/css?family=Libre+Baskerville:400,400italic,700&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+    <link href="../../css/base.css" rel="stylesheet">
+    <link href="../../css/zf.css" rel="stylesheet">
+    <link href="../../css/prism-zf.css" rel="stylesheet">
+
+    <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+            <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+            <script src="https://oss.maxcdn.com/libs/respond.js/1.3.0/respond.min.js"></script>
+        <![endif]-->
+
+    <script src="https://ajax.googleapis.com/ajax/libs/webfont/1.5.18/webfont.js"></script>
+    <script>
+    WebFont.load({
+        google: {
+            families: ['Open Sans', 'PT Sans']
+        }
+    });
+    </script>
+
+    
+</head>
+
+<body>
+
+    <div class="navbar navbar-default navbar-fixed-top" role="navigation">
+    <div class="container">
+
+        <!-- Collapsed navigation -->
+        <div class="navbar-header">
+            
+            <!-- Expander button -->
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            
+
+            <!-- Main title -->
+            <span class="navbar-brand">
+              <a class="logo-link" href="http://framework.zend.com" data-toggle="tooltip" data-placement="bottom" title="Zend Framework"><img src="../../img/zf-logo-mark.png" height="28" alt="Zend Framework" /></a>
+              <a href="../..">zend-http</a>
+            </span>
+        </div>
+
+        <!-- Expanded navigation -->
+        <div class="navbar-collapse collapse">
+            
+                <!-- Main navigation -->
+                <ul class="nav navbar-nav">
+                
+                
+                    <li >
+                        <a href="../..">Home</a>
+                    </li>
+                
+                
+                
+                    <li >
+                        <a href="../../intro/">Intro</a>
+                    </li>
+                
+                
+                
+                    <li class="dropdown active">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">Reference <b class="caret"></b></a>
+                        <ul class="dropdown-menu">
+                        
+                            
+<li >
+    <a href="../../request/">Request</a>
+</li>
+
+                        
+                            
+<li >
+    <a href="../../response/">Response</a>
+</li>
+
+                        
+                            
+<li >
+    <a href="../../headers/">Headers</a>
+</li>
+
+                        
+                            
+  <li class="dropdown-submenu">
+    <a tabindex="-1" href="">Client</a>
+    <ul class="dropdown-menu">
+        
+            
+<li >
+    <a href="../intro/">Intro</a>
+</li>
+
+        
+            
+<li >
+    <a href="../adapters/">Adapters</a>
+</li>
+
+        
+            
+<li >
+    <a href="../static/">Static Client</a>
+</li>
+
+        
+            
+<li class="active">
+    <a href="./">Cookie Persistence</a>
+</li>
+
+        
+            
+<li >
+    <a href="../advanced/">Advanced</a>
+</li>
+
+        
+    </ul>
+  </li>
+
+                        
+                        </ul>
+                    </li>
+                
+                
+                </ul>
+            
+
+            <ul class="nav navbar-nav navbar-right">
+                <li>
+                    <a href="#" class="component-toggle" data-toggle="tooltip" data-placement="bottom" title="Show component list">
+                        <i class="fa fa-book"></i> Components
+                    </a>
+                </li>
+
+                <li>
+                    <a href="#" data-toggle="modal" data-target="#mkdocs_search_modal">
+                        <i class="fa fa-search"></i> Search
+                    </a>
+                </li>
+                
+                    <li>
+                        <a href="https://github.com/zendframework/zend-http">
+                            
+                                <i class="fa fa-github"></i>
+                            
+                            GitHub
+                        </a>
+                    </li>
+                
+            </ul>
+        </div>
+    </div>
+</div>
+
+    <!-- content:begin -->
+    <div class="container">
+        
+        <div class="col-md-3"><div class="bs-sidebar hidden-print affix well" role="complementary">
+    <ul class="nav bs-sidenav">
+    
+        <li class="main active"><a href="#client-cookies">Client Cookies</a></li>
+        
+            <li><a href="#usage">Usage</a></li>
+        
+            <li><a href="#serializing-and-caching-cookies">Serializing and caching cookies</a></li>
+        
+            <li><a href="#public-methods">Public methods</a></li>
+        
+    
+    </ul>
+
+    
+    <ul class="pager hidden-print">
+      <li class="previous">
+        <a rel="prev" href="../static/"><i class="fa fa-arrow-left"></i> Previous</a>
+      </li>
+      <li class="next">
+        <a rel="next" href="../advanced/">Next <i class="fa fa-arrow-right"></i></a>
+      </li>
+    </ul>
+    
+</div></div>
+        <div class="col-md-9" role="main">
+
+<ol class="breadcrumb" role="navigation" aria-label="breadcrumbs navigation">
+  <li><a href="../..">Docs</a> &raquo;</li>
+  
+    
+      
+        <li>Reference &raquo;</li>
+      
+    
+      
+        <li>Client &raquo;</li>
+      
+    
+  
+  <li class="active">Cookie Persistence</li>
+</ol>
+
+<h1 id="client-cookies">Client Cookies</h1>
+<p><code>Zend\Http\Cookies</code> can be used with <code>Zend\Http\Client</code> to manage sending
+cookies in the request and setting cookies from the response; it is populated
+from the <code>Set-Cookie</code> headers obtained from a client response, and then used to
+populate the <code>Cookie</code> headers for a client request. This is highly useful in
+cases where you need to maintain a user session over consecutive HTTP requests,
+automatically sending the session ID cookies when required. Additionally, the
+<code>Zend\Http\Cookies</code> object can be serialized and stored in <code>$_SESSION</code> when
+needed.</p>
+<p><code>Zend\Http\Client</code> already provides methods for managing cookies for requests;
+<code>Zend\Http\Cookies</code> manages the parsing of <code>Set-Cookie</code> headers returned in the
+response, and allows persisting them. Additionally, <code>Cookies</code> can return a
+subset of cookies that match the current request, ensuring you are only sending
+relevant cookies.</p>
+<h2 id="usage">Usage</h2>
+<p><code>Cookies</code> is an extension of <code>Zend\Http\Headers</code>, and inherits its methods. It
+can be instantiated without any arguments.</p>
+<pre class="codehilite"><code class="language-php">use Zend\Http\Cookies;
+
+$cookies = new Cookies();</code></pre>
+
+
+<p>On your first client request, you likely won't have any cookies, so the
+instance does nothing.</p>
+<p>Once you've made your first request, you can start using it. Populate it from
+the response:</p>
+<pre class="codehilite"><code class="language-php">$response = $client-&gt;send();
+
+$cookies-&gt;addCookiesFromResponse($response, $client-&gt;getUri());</code></pre>
+
+
+<p>Alternately, you can create your initial <code>Cookies</code> instance using the static <code>fromResponse()</code> method:</p>
+<pre class="codehilite"><code class="language-php">$cookies = Cookies::fromResponse($response, $client-&gt;getUri());</code></pre>
+
+
+<p>On subsequent requests, we'll notify the client of our cookies. To do this, we
+should use the same URI we'll use for the request.</p>
+<pre class="codehilite"><code class="language-php">$client-&gt;setUri($uri);
+$client-&gt;setCookies($cookies-&gt;getMatchingCookies($uri));</code></pre>
+
+
+<p>After the request, don't forget to add any cookies returned!</p>
+<p>Essentially, <code>Cookies</code> aggregates all cookies for our client interactions, and
+allows us to send only those relevant to a given request.</p>
+<h2 id="serializing-and-caching-cookies">Serializing and caching cookies</h2>
+<p>To cache cookies &mdash; e.g., to store in <code>$_SESSION</code>, or between job
+invocations &mdash; you will need to serialize them. <code>Zend\Http\Cookies</code>
+provides this functionality via the <code>getAllCookies()</code> method.</p>
+<p>If your cache storage allows array structures, use the <code>COOKIE_STRING_ARRAY</code> constant:</p>
+<pre class="codehilite"><code class="language-php">$cookiesToCache = $cookies-&gt;getAllCookies($cookies::COOKIE_STRING_ARRAY);</code></pre>
+
+
+<p>If your cache storage only allows string values, use <code>COOKIE_STRING_CONCAT</code>:</p>
+<pre class="codehilite"><code class="language-php">$cookiesToCache = $cookies-&gt;getAllCookies($cookies::COOKIE_STRING_CONCAT);</code></pre>
+
+
+<p>When you retrieve the value later, you can test its type to determine how to
+deserialize the values:</p>
+<pre class="codehilite"><code class="language-php">use Zend\Http\Cookies;
+use Zend\Http\Headers;
+
+$cookies = new Cookies();
+
+if (is_array($cachedCookies)) {
+    foreach ($cachedCookies as $cookie) {
+        $cookies-&gt;addCookie($cookie);
+    }
+} elseif (is_string($cachedCookies)) {
+    foreach (Headers::fromString($cachedCookies) as $cookie) {
+        $cookies-&gt;addCookie($cookie);
+    }
+}</code></pre>
+
+
+<h2 id="public-methods">Public methods</h2>
+<p>Besides the methods demonstrated in the examples, <code>Zend\Http\Cookies</code> defines the following:</p>
+<div class="table-responsive"><table>
+<thead>
+<tr>
+<th>Method signature</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>static fromResponse(Response $response, string $refUri) : Cookies</code></td>
+<td>Create a <code>Cookies</code> instance from a response and the request URI. Parses all <code>Set-Cookie</code> headers, maps them to the URI, and aggregates them.</td>
+</tr>
+<tr>
+<td><code>addCookie(string|SetCookie $cookie, string $refUri = null) : void</code></td>
+<td>Add a cookie, mapping it to the given URI. If no URI is provided, it will be inferred from the cookie value's domain and path.</td>
+</tr>
+<tr>
+<td><code>addCookiesFromResponse(Response $response, string $refUri) : void</code></td>
+<td>Add all <code>Set-Cookie</code> values from the provided response, mapping to the given URI.</td>
+</tr>
+<tr>
+<td><code>getAllCookies(int $retAs = self::COOKIE_OBJECT) : array|string</code></td>
+<td>Retrieve all cookies. Returned array will have either <code>SetCookie</code> instances (the default), strings for each <code>Set-Cookie</code> declaration, or a single string containing all declarations, based on the <code>COOKIE_*</code> constant used.</td>
+</tr>
+<tr>
+<td><code>getCookie(/* ... */) : string|SetCookie</code></td>
+<td>Retrieve a single cookie by name for the given URI. See below for argument details.</td>
+</tr>
+<tr>
+<td><code>getMatchingCookies(/* ... */) : array</code></td>
+<td>See below for details.</td>
+</tr>
+<tr>
+<td><code>isEmpty() : bool</code></td>
+<td>Whether or not the instance aggregates any cookies currently.</td>
+</tr>
+<tr>
+<td><code>reset() : void</code></td>
+<td>Clear all aggregated cookies from the instance.</td>
+</tr>
+</tbody>
+</table></div>
+<p><code>getCookie()</code> accepts the following arguments, in the following order:</p>
+<div class="table-responsive"><table>
+<thead>
+<tr>
+<th>Argument</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>string $uri</code></td>
+<td>URI to match when retrieving the cookie. Will use its protocol, domain, and path.</td>
+</tr>
+<tr>
+<td><code>string $cookieName</code></td>
+<td>The specific cookie name to retrieve.</td>
+</tr>
+<tr>
+<td><code>int $retAs = self::COOKIE_OBJECT</code></td>
+<td>How to return matched cookies; defaults to <code>SetCookie</code> objects. Can be any of the <code>Cookies::COOKIE_*</code> constant values.</td>
+</tr>
+</tbody>
+</table></div>
+<p><code>getMatchingCookies()</code> accepts the following arguments, in the following order:</p>
+<div class="table-responsive"><table>
+<thead>
+<tr>
+<th>Argument</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>string $uri</code></td>
+<td>URI to match when retrieving cookies. Will use its protocol, domain, and path.</td>
+</tr>
+<tr>
+<td><code>bool $matchSessionCookies = true</code></td>
+<td>Whether or not to also return related session cookies.</td>
+</tr>
+<tr>
+<td><code>int $retAs = self::COOKIE_OBJECT</code></td>
+<td>How to return matched cookies; defaults to <code>SetCookie</code> objects. Can be any of the <code>Cookies::COOKIE_*</code> constant values.</td>
+</tr>
+<tr>
+<td><code>int $now = null</code></td>
+<td>Timestamp against which to match; defaults to <code>time()</code>. Any expired cookies will be ignored.</td>
+</tr>
+</tbody>
+</table></div>
+
+<hr />
+
+
+<nav>
+  <ul class="pager hidden-print">
+    <li class="previous">
+      <a rel="prev" href="../static/"><i class="fa fa-arrow-left"></i> Previous</a>
+    </li>
+    <li class="next">
+      <a rel="next" href="../advanced/">Next <i class="fa fa-arrow-right"></i></a>
+    </li>
+  </ul>
+</nav>
+</div>
+        
+    </div>
+    <!-- content:end -->
+
+    <footer class="col-md-12 text-center">
+        <hr>
+        <p>
+        <small>Copyright (c) 2016 <a href="http://www.zend.com/">Zend Technologies USA Inc.</a><br></small>
+        </p>
+        <p><small><a href="http://framework.zend.com">Learn more about Zend Framework</a></small></p>
+    </footer>
+
+    <script src="../../js/jquery-1.10.2.min.js"></script>
+    <script src="../../js/bootstrap-3.0.3.min.js"></script>
+    <script src="../../js/prism-zf.js"></script>
+
+    <script>var base_url = '../..';</script>
+    <script data-main="../../mkdocs/js/search.js" src="../../mkdocs/js/require.js"></script>
+    <script src="../../js/base.js"></script>
+
+    <div class="modal" id="mkdocs_search_modal" tabindex="-1" role="dialog" aria-labelledby="Search Modal" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">
+                        <span aria-hidden="true">&times;</span>
+                        <span class="sr-only">Close</span>
+                    </button>
+                    <h4 class="modal-title" id="exampleModalLabel">Search</h4>
+                </div>
+                <div class="modal-body">
+                    <p>
+                        From here you can search these documents. Enter your search terms below.
+                    </p>
+                    <form role="form">
+                        <div class="form-group">
+                            <input type="text" class="form-control" placeholder="Search..." id="mkdocs-search-query">
+                        </div>
+                    </form>
+                    <div id="mkdocs-search-results"></div>
+                </div>
+                <div class="modal-footer">
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="zf-components">
+  <div class="zf-components-grid">
+    <div class="zf-logo">
+      <a href="http://framework.zend.com" data-toggle="tooltip" data-placement="bottom" title="Go to the ZF homepage"><img src="../../img/zf-logo-mark.png" alt="Zend Framework" width="250" /></a>
+    </div>
+
+    <div class="component-list"></div>
+
+    <p class="zf-components-rollup"><a href="#">Hide list</a></p>
+  </div>
+</div>
+
+    <script>
+  // Prepare the component list dropdown for display
+  $(function () {
+    var components = $(".zf-components"),
+        componentList = components.find(".component-list"),
+        sidebar = $(".bs-sidebar.affix"),
+        sidebarInitialPos = sidebar.css("position"),
+        hidden,
+        componentToggle = $(".component-toggle"),
+        navbar = $(".navbar-fixed-top"),
+        rollUpLink = $(".zf-components-rollup a");
+
+    // Initial setup on document load
+    components.insertBefore(navbar);
+    $(".zf-logo a").tooltip();
+    componentToggle.tooltip();
+    rollUpLink.attr({ href: "#", alt: "Hide component list" });
+
+    // Cast initial sidebar position value
+    if (undefined === sidebarInitialPos) {
+      sidebarInitialPos = "fixed";
+    }
+
+    // Setup onclick events to toggle list
+    componentToggle.click(toggleComponentList);
+    rollUpLink.click(toggleComponentList);
+
+    // Toggle the component list display
+    function toggleComponentList(event) {
+      event.preventDefault();
+
+      if (hidden === undefined) {
+        // Not loaded yet; load and display.
+        loadComponentList();
+        return;
+      }
+
+      if (hidden) {
+        // Hidden; display.
+        showComponentList();
+        return;
+      }
+
+      // Currently visible; hide
+      hideComponentList();
+    }
+
+    // Show the component list
+    function showComponentList() {
+      navbar.css({position: "relative"});
+      sidebar.css({position: "relative"});
+      components
+        .css({"margin-top": "-" + components.outerHeight() + "px"})
+        .show()
+        .animate({"margin-top": 0}, {
+          complete: function () {
+            componentToggle
+              .data("placement", "top")
+              .attr("data-original-title", "Hide component list");
+            hidden = false;
+          },
+          queue: false
+        });
+    }
+
+    // Hide the component list
+    function hideComponentList() {
+      components.animate({"margin-top": "-" + components.outerHeight() + "px"}, {
+        complete: function () {
+          navbar.css({position: "fixed"});
+          sidebar.css({position: sidebarInitialPos});
+          componentToggle
+            .data("placement", "bottom")
+            .attr("data-original-title", "Show component list");
+          components.hide();
+          hidden = true;
+        },
+        queue: false
+      });
+      sidebar.animate({ top: sidebarInitialTop + "px" }, { queue: false});
+    }
+
+    // Inject a component into the componet list DOM.
+    function injectComponent(index, component) {
+      componentList.append('<div class="component"><h4><a href="' + component.url + '">' + component.name + '</a></h4><p>' + component.description + '</p></div>');
+    }
+
+    // Parse the component list, build the DOM, and display it.
+    function parseComponentList(components) {
+      $.each(components, injectComponent);
+      showComponentList();
+    }
+
+    // Fetch the component list and display it.
+    function loadComponentList () {
+      $.ajax({
+        url: "//zendframework.github.io/zf-mkdoc-theme/scripts/zf-component-list.json",
+        dataType: "text json",
+        success: parseComponentList,
+        error: function (e) {
+          console.log("Error occurred with XHR call", e);
+        }
+      });
+    }
+  });
+</script>
+    </body>
+
+</html>

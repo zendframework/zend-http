@@ -1,0 +1,1333 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">  
+    <link rel="shortcut icon" href="../img/favicon.ico">
+
+    <title>Headers - zend-http</title>
+
+    <link href="../css/bootstrap-custom.min.css" rel="stylesheet">
+    <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="//cdn.jsdelivr.net/font-hack/2.018/css/hack.min.css">
+    <link href="//fonts.googleapis.com/css?family=PT+Sans:400,400italic,700,700italic&subset=latin-ext,latin" rel="stylesheet" type="text/css">
+    <link href="//fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,700italic,400,300,600,700&subset=latin-ext,latin" rel="stylesheet" type="text/css">
+    <link href="//fonts.googleapis.com/css?family=Libre+Baskerville:400,400italic,700&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+    <link href="../css/base.css" rel="stylesheet">
+    <link href="../css/zf.css" rel="stylesheet">
+    <link href="../css/prism-zf.css" rel="stylesheet">
+
+    <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+            <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+            <script src="https://oss.maxcdn.com/libs/respond.js/1.3.0/respond.min.js"></script>
+        <![endif]-->
+
+    <script src="https://ajax.googleapis.com/ajax/libs/webfont/1.5.18/webfont.js"></script>
+    <script>
+    WebFont.load({
+        google: {
+            families: ['Open Sans', 'PT Sans']
+        }
+    });
+    </script>
+
+    
+</head>
+
+<body>
+
+    <div class="navbar navbar-default navbar-fixed-top" role="navigation">
+    <div class="container">
+
+        <!-- Collapsed navigation -->
+        <div class="navbar-header">
+            
+            <!-- Expander button -->
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            
+
+            <!-- Main title -->
+            <span class="navbar-brand">
+              <a class="logo-link" href="http://framework.zend.com" data-toggle="tooltip" data-placement="bottom" title="Zend Framework"><img src="../img/zf-logo-mark.png" height="28" alt="Zend Framework" /></a>
+              <a href="..">zend-http</a>
+            </span>
+        </div>
+
+        <!-- Expanded navigation -->
+        <div class="navbar-collapse collapse">
+            
+                <!-- Main navigation -->
+                <ul class="nav navbar-nav">
+                
+                
+                    <li >
+                        <a href="..">Home</a>
+                    </li>
+                
+                
+                
+                    <li >
+                        <a href="../intro/">Intro</a>
+                    </li>
+                
+                
+                
+                    <li class="dropdown active">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">Reference <b class="caret"></b></a>
+                        <ul class="dropdown-menu">
+                        
+                            
+<li >
+    <a href="../request/">Request</a>
+</li>
+
+                        
+                            
+<li >
+    <a href="../response/">Response</a>
+</li>
+
+                        
+                            
+<li class="active">
+    <a href="./">Headers</a>
+</li>
+
+                        
+                            
+  <li class="dropdown-submenu">
+    <a tabindex="-1" href="">Client</a>
+    <ul class="dropdown-menu">
+        
+            
+<li >
+    <a href="../client/intro/">Intro</a>
+</li>
+
+        
+            
+<li >
+    <a href="../client/adapters/">Adapters</a>
+</li>
+
+        
+            
+<li >
+    <a href="../client/static/">Static Client</a>
+</li>
+
+        
+            
+<li >
+    <a href="../client/cookies/">Cookie Persistence</a>
+</li>
+
+        
+            
+<li >
+    <a href="../client/advanced/">Advanced</a>
+</li>
+
+        
+    </ul>
+  </li>
+
+                        
+                        </ul>
+                    </li>
+                
+                
+                </ul>
+            
+
+            <ul class="nav navbar-nav navbar-right">
+                <li>
+                    <a href="#" class="component-toggle" data-toggle="tooltip" data-placement="bottom" title="Show component list">
+                        <i class="fa fa-book"></i> Components
+                    </a>
+                </li>
+
+                <li>
+                    <a href="#" data-toggle="modal" data-target="#mkdocs_search_modal">
+                        <i class="fa fa-search"></i> Search
+                    </a>
+                </li>
+                
+                    <li>
+                        <a href="https://github.com/zendframework/zend-http">
+                            
+                                <i class="fa fa-github"></i>
+                            
+                            GitHub
+                        </a>
+                    </li>
+                
+            </ul>
+        </div>
+    </div>
+</div>
+
+    <!-- content:begin -->
+    <div class="container">
+        
+        <div class="col-md-3"><div class="bs-sidebar hidden-print affix well" role="complementary">
+    <ul class="nav bs-sidenav">
+    
+        <li class="main active"><a href="#headers">Headers</a></li>
+        
+            <li><a href="#quick-start">Quick Start</a></li>
+        
+            <li><a href="#configuration-options">Configuration Options</a></li>
+        
+            <li><a href="#available-methods">Available Methods</a></li>
+        
+            <li><a href="#headerinterface-methods">HeaderInterface Methods</a></li>
+        
+            <li><a href="#abstractaccept-methods">AbstractAccept Methods</a></li>
+        
+            <li><a href="#abstractdate-methods">AbstractDate Methods</a></li>
+        
+            <li><a href="#abstractlocation-methods">AbstractLocation Methods</a></li>
+        
+            <li><a href="#list-of-http-header-types">List of HTTP Header Types</a></li>
+        
+            <li><a href="#examples">Examples</a></li>
+        
+    
+    </ul>
+
+    
+    <ul class="pager hidden-print">
+      <li class="previous">
+        <a rel="prev" href="../response/"><i class="fa fa-arrow-left"></i> Previous</a>
+      </li>
+      <li class="next">
+        <a rel="next" href="../client/intro/">Next <i class="fa fa-arrow-right"></i></a>
+      </li>
+    </ul>
+    
+</div></div>
+        <div class="col-md-9" role="main">
+
+<ol class="breadcrumb" role="navigation" aria-label="breadcrumbs navigation">
+  <li><a href="..">Docs</a> &raquo;</li>
+  
+    
+      
+        <li>Reference &raquo;</li>
+      
+    
+  
+  <li class="active">Headers</li>
+</ol>
+
+<h1 id="headers">Headers</h1>
+<p><code>Zend\Http\Headers</code> is a container for HTTP headers. It is typically accessed as
+part of a <code>Zend\Http\Request</code> or <code>Zend\Http\Response</code> instance, via a
+<code>getHeaders()</code> call. The <code>Headers</code> container will lazily load actual
+<code>Zend\Http\Header\HeaderInterface</code> instances as to reduce the overhead of header
+specific parsing.</p>
+<p>The class under the <code>Zend\Http\Header</code> namespace are the domain specific
+implementations for the various types of headers that one might encounter during
+the typical HTTP request. If a header of unknown type is encountered, it will be
+implemented as a <code>Zend\Http\Header\GenericHeader</code> instance. See the below table
+for a list of the various HTTP headers and the API that is specific to each
+header type.</p>
+<h2 id="quick-start">Quick Start</h2>
+<p>The quickest way to get started interacting with header objects is by retrieving
+an already populated <code>Headers</code> container from a request or response instance.</p>
+<pre class="codehilite"><code class="language-php">// $client is an instance of Zend\Http\Client
+
+// You can retrieve the request headers by first retrieving
+// the Request object and then calling getHeaders on it
+$requestHeaders  = $client-&gt;getRequest()-&gt;getHeaders();
+
+// The same method also works for retrieving Response headers
+$responseHeaders = $client-&gt;getResponse()-&gt;getHeaders();</code></pre>
+
+
+<p><code>Zend\Http\Headers</code> can also extract headers from a string:</p>
+<pre class="codehilite"><code class="language-php">use Zend\Http\Headers;
+
+$headerString = &lt;&lt;&lt;EOB
+Host: www.example.com
+Content-Type: text/html
+Content-Length: 1337
+EOB;
+
+$headers = Headers::fromString($headerString);
+// $headers is now populated with three objects
+//   (1) Zend\Http\Header\Host
+//   (2) Zend\Http\Header\ContentType
+//   (3) Zend\Http\Header\ContentLength</code></pre>
+
+
+<p>Now that you have an instance of <code>Zend\Http\Headers</code>, you can manipulate the
+individual headers it contains using the provided public API methods outlined in
+the <a href="#available-methods">Available Methods</a> section.</p>
+<h2 id="configuration-options">Configuration Options</h2>
+<p>No configuration options are available.</p>
+<h2 id="available-methods">Available Methods</h2>
+<p>The following is a list of methods available to <code>Zend\Http\Headers</code>. For
+brevity, we map the following references to the following classes or namespaces:</p>
+<ul>
+<li><code>HeaderInterface</code>: <code>Zend\Http\Header\HeaderInterface</code></li>
+<li><code>Headers</code>: <code>Zend\Http\Headers</code></li>
+<li><code>PluginClassLocator</code>: <code>Zend\Loader\PluginClassLocator</code></li>
+</ul>
+<div class="table-responsive"><table>
+<thead>
+<tr>
+<th>Method signature</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>static fromString(string $string) : Headers</code></td>
+<td>Parses a string for headers, and aggregates them, in order, a new <code>Headers</code> instance, primarily as strings until they are needed (they will be lazy loaded).</td>
+</tr>
+<tr>
+<td><code>setPluginClassLoader(PluginClassLocator $pluginClassLoader) : self</code></td>
+<td>Set an alternate implementation for the plugin class loader.</td>
+</tr>
+<tr>
+<td><code>getPluginClassLoader() : PluginClassLocator</code></td>
+<td>Return an instance of a <code>PluginClassLocator</code>; lazy-load and inject map if necessary.</td>
+</tr>
+<tr>
+<td><code>addHeaders(array|Traversable $headers) : self</code></td>
+<td>Add many headers at once; expects an array (or <code>Traversable</code> object) of type/value pairs.</td>
+</tr>
+<tr>
+<td><code>addHeaderLine(string $headerFieldNameOrLine, string $fieldValue) : self</code></td>
+<td>Add a raw header line, either as separate name and value arguments, or as a single string in the form <code>name: value</code> This method allows for lazy-loading in that the parsing and instantiation of a <code>HeaderInterface</code> implementation will be delayed until they are retrieved by either <code>get()</code> or <code>current()</code>.</td>
+</tr>
+<tr>
+<td><code>addHeader(HeaderInterface $header) : self</code></td>
+<td>Add a header instance to the container; for raw values see <code>addHeaderLine()</code> and <code>addHeaders()</code>.</td>
+</tr>
+<tr>
+<td><code>removeHeader(HeaderInterface $header) : bool</code></td>
+<td>Remove a Header from the container.</td>
+</tr>
+<tr>
+<td><code>clearHeaders() : self</code></td>
+<td>Removes all headers from the container.</td>
+</tr>
+<tr>
+<td><code>get(string $name) : false|HeaderInterface|ArrayIterator</code></td>
+<td>Get all values for a given header. If none are found, <code>false</code> is returned. If the header is a single-value header, a <code>HeaderInterface</code> is returned. If the header is a multi-value header, an <code>ArrayIterator</code> containing all values is returned.</td>
+</tr>
+<tr>
+<td><code>has(string $name) : bool</code></td>
+<td>Test for existence of a header.</td>
+</tr>
+<tr>
+<td><code>next() : void</code></td>
+<td>Advance the pointer for this object as an iterator.</td>
+</tr>
+<tr>
+<td><code>key() : mixed</code></td>
+<td>Return the current key for this object as an iterator.</td>
+</tr>
+<tr>
+<td><code>valid() : bool</code></td>
+<td>Is this iterator still valid?</td>
+</tr>
+<tr>
+<td><code>rewind() : void</code></td>
+<td>Reset the internal pointer for this object as an iterator.</td>
+</tr>
+<tr>
+<td><code>current() : HeaderInterface</code></td>
+<td>Return the current value for this iterator, lazy loading it if need be.</td>
+</tr>
+<tr>
+<td><code>count() : int</code></td>
+<td>Return the number of headers in this container. If all headers have not been parsed, the actual count could decrease if <code>MultipleHeader</code> instances exist. If you need an exact count, iterate.</td>
+</tr>
+<tr>
+<td><code>toString() : string</code></td>
+<td>Render all headers at once.  This method handles the normal iteration of headers; it is up to the concrete classes to prepend with the appropriate status/request line.</td>
+</tr>
+<tr>
+<td><code>toArray() : array</code></td>
+<td>Return all headers as an associative array.</td>
+</tr>
+<tr>
+<td><code>forceLoading() : bool</code></td>
+<td>By calling this, it will force parsing and loading of all headers, ensuring <code>count()</code> is accurate.</td>
+</tr>
+</tbody>
+</table></div>
+<h2 id="headerinterface-methods">HeaderInterface Methods</h2>
+<p>The following are methods available to all <code>HeaderInterface</code> implementations.</p>
+<div class="table-responsive"><table>
+<thead>
+<tr>
+<th>Method signature</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>static fromString(string $headerLine) : HeaderInterface</code></td>
+<td>Factory to generate a header object from a string.</td>
+</tr>
+<tr>
+<td><code>getFieldName() : string</code></td>
+<td>Retrieve header field name.</td>
+</tr>
+<tr>
+<td><code>getFieldValue() : string</code></td>
+<td>Retrieve header field value.</td>
+</tr>
+<tr>
+<td><code>toString() : string</code></td>
+<td>Cast the header to a well-formed HTTP header line (<code>Name: Value</code>).</td>
+</tr>
+</tbody>
+</table></div>
+<h2 id="abstractaccept-methods">AbstractAccept Methods</h2>
+<p><code>Zend\Http\Header\AbstractAccept</code> defines the following methods in addition to
+those it inherits from the <a href="#headerinterface-methods">HeaderInterface</a>. The
+<code>Accept</code>, <code>AcceptCharset</code>, <code>AcceptEncoding</code>, and <code>AcceptLanguage</code> header types
+inherit from it.</p>
+<p>For brevity, we map the following references to the following classes or
+namespaces:</p>
+<ul>
+<li><code>AcceptFieldValuePart</code>: <code>Zend\Http\Header\Accept\FieldValuePart\AcceptFieldValuePart</code></li>
+<li><code>InvalidArgumentException</code>: <code>Zend\Http\Header\Exception\InvalidArgumentException</code></li>
+</ul>
+<div class="table-responsive"><table>
+<thead>
+<tr>
+<th>Method signature</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>parseHeaderLine(string $headerLine) : void</code></td>
+<td>Parse the given header line and add the values discovered to the instance.</td>
+</tr>
+<tr>
+<td><code>getFieldValuePartsFromHeaderLine(string $headerLine) : array</code></td>
+<td>Parse the field value parts represented by an Accept* header line.  Throws <code>InvalidArgumentException</code> if the header is invalid.</td>
+</tr>
+<tr>
+<td><code>getFieldValue(array|null $values = null) : string</code></td>
+<td>Get field value.</td>
+</tr>
+<tr>
+<td><code>match(array|string $matchAgainst) : bool|AcceptFieldValuePart</code></td>
+<td>Match a media string against this header. Returns the matched value or false.</td>
+</tr>
+<tr>
+<td><code>getPrioritized() : array</code></td>
+<td>Returns all the keys, values and parameters this header represents.</td>
+</tr>
+</tbody>
+</table></div>
+<h2 id="abstractdate-methods">AbstractDate Methods</h2>
+<p><code>Zend\Http\Header\AbstractDate</code> defines the following methods in addition to
+those it inherits from the <a href="#headerinterface-methods">HeaderInterface</a>. The 
+<code>Date</code>, <code>Expires</code>, <code>IfModifiedSince</code>, <code>IfUnmodifiedSince</code>, <code>LastModified</code>, and
+<code>RetryAfter</code> header types inherit from it.</p>
+<p>For brevity, we map the following references to the following classes or
+namespaces:</p>
+<ul>
+<li><code>InvalidArgumentException</code>: <code>Zend\Http\Header\Exception\InvalidArgumentException</code></li>
+</ul>
+<div class="table-responsive"><table>
+<thead>
+<tr>
+<th>Method signature</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>static fromTimestamp(int $time) : AbstractDate</code></td>
+<td>Create date-based header from Unix timestamp.</td>
+</tr>
+<tr>
+<td><code>static fromTimeString(string $time) : AbstractDate</code></td>
+<td>Create date-based header from <code>strtotime()</code>-compatible string.</td>
+</tr>
+<tr>
+<td><code>static setDateFormat(int $format) : void</code></td>
+<td>Set date output format; should be an index from the implementation's <code>$dateFormat</code> static property.</td>
+</tr>
+<tr>
+<td><code>static getDateFormat() : string</code></td>
+<td>Return current date output format.</td>
+</tr>
+<tr>
+<td><code>setDate(string|DateTime $date) : self</code></td>
+<td>Set the date for this header; this can be a string or an instance of <code>DateTime</code>.  Throws <code>InvalidArgumentException</code> if the date is neither a valid string nor an instance of <code>DateTime</code>.</td>
+</tr>
+<tr>
+<td><code>getDate() : string</code></td>
+<td>Return string representation of the date for this header.</td>
+</tr>
+<tr>
+<td><code>compareTo(string|DateTime $date) : int</code></td>
+<td>Compare provided date to date for this header. Returns <code>&lt; 0</code> if date in header is less than <code>$date</code>; <code>&gt; 0</code> if it's greater, and <code>= 0</code> if they are equal. See <a href="http://www.php.net/manual/en/function.strcmp.php">strcmp</a>.</td>
+</tr>
+<tr>
+<td><code>date() | DateTime</code></td>
+<td>Return date for this header as an instance of <code>DateTime</code>.</td>
+</tr>
+</tbody>
+</table></div>
+<h2 id="abstractlocation-methods">AbstractLocation Methods</h2>
+<p><code>Zend\Http\Header\AbstractLocation</code> defines the following methods in addition to
+those it inherits from the <a href="#headerinterface-methods">HeaderInterface</a>. The
+<code>ContentLocation</code>, <code>Location</code>, and <code>Referer</code> header types inherit from it.</p>
+<p>For brevity, we map the following references to the following classes or
+namespaces:</p>
+<ul>
+<li><code>Uri</code>: <code>Zend\Uri\UriInterface</code></li>
+<li><code>InvalidArgumentException</code>: <code>Zend\Http\Header\Exception\InvalidArgumentException</code></li>
+</ul>
+<div class="table-responsive"><table>
+<thead>
+<tr>
+<th>Method signature</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>setUri(string|Uri $uri) : self</code></td>
+<td>Set the URI for this header; throws <code>InvalidArgumentException</code> for invalid <code>$uri</code> arguments.</td>
+</tr>
+<tr>
+<td><code>getUri() : string</code></td>
+<td>Return the URI for this header.</td>
+</tr>
+<tr>
+<td><code>uri() : Uri</code></td>
+<td>Return the <code>Uri</code> instance for this header.</td>
+</tr>
+</tbody>
+</table></div>
+<h2 id="list-of-http-header-types">List of HTTP Header Types</h2>
+<p>Some header classes expose methods for manipulating their value. The following
+list contains all of the classes available in the <code>Zend\Http\Header\*</code>
+namespace, as well as any specific methods they contain. Each class implements
+<code>Zend\Http\Header\HeaderInterface</code>.</p>
+<h3 id="accept">Accept</h3>
+<p>Extends <a href="#abstractaccept-methods">AbstractAccept</a>.</p>
+<div class="table-responsive"><table>
+<thead>
+<tr>
+<th>Method signature</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>addMediaType(string $type, int|float $priority = 1) : self</code></td>
+<td>Add a media type, with the given priority.</td>
+</tr>
+<tr>
+<td><code>hasMediaType(string $type): bool</code></td>
+<td>Does the header have the requested media type?</td>
+</tr>
+</tbody>
+</table></div>
+<h3 id="acceptcharset">AcceptCharset</h3>
+<p>Extends <a href="#abstractaccept-methods">AbstractAccept</a>.</p>
+<div class="table-responsive"><table>
+<thead>
+<tr>
+<th>Method signature</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>addCharset(string $type, int|float $priority = 1) : self</code></td>
+<td>Add a charset, with the given priority.</td>
+</tr>
+<tr>
+<td><code>hasCharset(string $type) : bool</code></td>
+<td>Does the header have the requested charset?</td>
+</tr>
+</tbody>
+</table></div>
+<h3 id="acceptencoding">AcceptEncoding</h3>
+<p>Extends <a href="#abstractaccept-methods">AbstractAccept</a>.</p>
+<div class="table-responsive"><table>
+<thead>
+<tr>
+<th>Method signature</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>addEncoding(string $type, int|float $priority = 1) : self</code></td>
+<td>Add an encoding, with the given priority.</td>
+</tr>
+<tr>
+<td><code>hasEncoding(string $type) : bool</code></td>
+<td>Does the header have the requested encoding?</td>
+</tr>
+</tbody>
+</table></div>
+<h3 id="acceptlanguage">AcceptLanguage</h3>
+<p>Extends <a href="#abstractaccept-methods">AbstractAccept</a>.</p>
+<div class="table-responsive"><table>
+<thead>
+<tr>
+<th>Method signature</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>addLanguage(string $type, int|float $priority = 1): self</code></td>
+<td>Add a language, with the given priority.</td>
+</tr>
+<tr>
+<td><code>hasLanguage(string $type) : bool</code></td>
+<td>Does the header have the requested language?</td>
+</tr>
+</tbody>
+</table></div>
+<h3 id="acceptranges">AcceptRanges</h3>
+<div class="table-responsive"><table>
+<thead>
+<tr>
+<th>Method signature</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>getRangeUnit() : mixed</code></td>
+<td>(unknown)</td>
+</tr>
+<tr>
+<td><code>setRangeUnit(mixed $rangeUnit) : self</code></td>
+<td>(unkown)</td>
+</tr>
+</tbody>
+</table></div>
+<h3 id="age">Age</h3>
+<div class="table-responsive"><table>
+<thead>
+<tr>
+<th>Method signature</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>getDeltaSeconds() : int</code></td>
+<td>Get number of seconds.</td>
+</tr>
+<tr>
+<td><code>setDeltaSeconds(int $seconds) : self</code></td>
+<td>Set number of seconds</td>
+</tr>
+</tbody>
+</table></div>
+<h3 id="allow">Allow</h3>
+<div class="table-responsive"><table>
+<thead>
+<tr>
+<th>Method signature</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>getAllMethods() : string[]</code></td>
+<td>Get list of all defined methods.</td>
+</tr>
+<tr>
+<td><code>getAllowedMethods() : string[]</code></td>
+<td>Get list of allowed methods.</td>
+</tr>
+<tr>
+<td><code>allowMethods(array|string $allowedMethods) : self</code></td>
+<td>Allow methods or list of methods.</td>
+</tr>
+<tr>
+<td><code>disallowMethods(array|string $allowedMethods) self</code></td>
+<td>Disallow methods or list of methods.</td>
+</tr>
+<tr>
+<td><code>denyMethods(array|string $allowedMethods) : self</code></td>
+<td>Convenience alias for <code>disallowMethods()</code>.</td>
+</tr>
+<tr>
+<td><code>isAllowedMethod(string $method) : bool</code></td>
+<td>Check whether method is allowed.</td>
+</tr>
+</tbody>
+</table></div>
+<h3 id="authenticationinfo">AuthenticationInfo</h3>
+<p>No additional methods.</p>
+<h3 id="authorization">Authorization</h3>
+<p>No additional methods.</p>
+<h3 id="cachecontrol">CacheControl</h3>
+<div class="table-responsive"><table>
+<thead>
+<tr>
+<th>Method signature</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>isEmpty(): bool</code></td>
+<td>Checks if the internal directives array is empty.</td>
+</tr>
+<tr>
+<td><code>addDirective(string $key, string|bool $value = true) : self</code></td>
+<td>Add a directive. For directives like <code>max-age=60</code>, call as <code>addDirective('max-age', 60)</code>. For directives like <code>private</code>, use the default <code>$value</code> (<code>true</code>).</td>
+</tr>
+<tr>
+<td><code>hasDirective(string $key) : bool</code></td>
+<td>Check the internal directives array for a directive.</td>
+</tr>
+<tr>
+<td><code>getDirective(string $key) : null|string</code></td>
+<td>Fetch the value of a directive from the internal directive array.</td>
+</tr>
+<tr>
+<td><code>removeDirective(string $key) : self</code></td>
+<td>Remove a directive.</td>
+</tr>
+</tbody>
+</table></div>
+<h3 id="connection">Connection</h3>
+<div class="table-responsive"><table>
+<thead>
+<tr>
+<th>Method signature</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>setValue($value) : self</code></td>
+<td>Set arbitrary header value.  RFC allows any token as value; 'close' and 'keep-alive' are commonly used.</td>
+</tr>
+<tr>
+<td><code>isPersistent() : bool</code></td>
+<td>Whether or not the connection is persistent.</td>
+</tr>
+<tr>
+<td><code>setPersistent(bool $flag) : self</code></td>
+<td>Set Connection header to define persistent connection.</td>
+</tr>
+</tbody>
+</table></div>
+<h3 id="contentdisposition">ContentDisposition</h3>
+<p>No additional methods.</p>
+<h3 id="contentencoding">ContentEncoding</h3>
+<p>No additional methods.</p>
+<h3 id="contentlanguage">ContentLanguage</h3>
+<p>No additional methods.</p>
+<h3 id="contentlength">ContentLength</h3>
+<p>No additional methods.</p>
+<h3 id="contentlocation">ContentLocation</h3>
+<p>See <a href="#abstractlocation-methods">AbstractLocation</a>.</p>
+<h3 id="contentmd5">ContentMD5</h3>
+<p>No additional methods.</p>
+<h3 id="contentrange">ContentRange</h3>
+<p>No additional methods.</p>
+<h3 id="contentsecuritypolicy">ContentSecurityPolicy</h3>
+<div class="table-responsive"><table>
+<thead>
+<tr>
+<th>Method signature</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>getDirectives(): array</code></td>
+<td>Retrieve the defined directives for the policy.</td>
+</tr>
+<tr>
+<td><code>setDirective(string $name, array $sources) : self</code></td>
+<td>Set the directive with the given name to include the sources. See below for an example.</td>
+</tr>
+</tbody>
+</table></div>
+<p>As an example: an auction site wishes to load images from any URI, plugin
+content from a list of trusted media providers (including a content distribution
+network), and scripts only from a server under its control hosting sanitized
+Javacript:</p>
+<pre class="codehilite"><code class="language-php">// http://www.w3.org/TR/2012/CR-CSP-20121115/#sample-policy-definitions
+$csp = new ContentSecurityPolicy();
+$csp-&gt;setDirective('default-src', []); // No sources
+$csp-&gt;setDirective('img-src', ['*']);
+$csp-&gt;setDirective('object-src', ['media1.example.com', 'media2.example.com', '*.cdn.example.com']);
+$csp-&gt;setDirective('script-src', ['trustedscripts.example.com']);</code></pre>
+
+
+<h3 id="contenttransferencoding">ContentTransferEncoding</h3>
+<p>No additional methods.</p>
+<h3 id="contenttype">ContentType</h3>
+<div class="table-responsive"><table>
+<thead>
+<tr>
+<th>Method signature</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>match(array|string $matchAgainst) : bool|string</code></td>
+<td>Determine if the mediatype value in this header matches the provided criteria.</td>
+</tr>
+<tr>
+<td><code>getMediaType() : string</code></td>
+<td>Get the media type.</td>
+</tr>
+<tr>
+<td><code>setMediaType(string $mediaType) : self</code></td>
+<td>Set the media type.</td>
+</tr>
+<tr>
+<td><code>getParameters() : array</code></td>
+<td>Get any additional content-type parameters currently set.</td>
+</tr>
+<tr>
+<td><code>setParameters(array $parameters) : self</code></td>
+<td>Set additional content-type parameters.</td>
+</tr>
+<tr>
+<td><code>getCharset() : null|string</code></td>
+<td>Get the content-type character set encoding, if any.</td>
+</tr>
+<tr>
+<td><code>setCharset(string $charset) : self</code></td>
+<td>Set the content-type character set encoding.</td>
+</tr>
+</tbody>
+</table></div>
+<h3 id="cookie">Cookie</h3>
+<p>Extends <code>ArrayObject</code>.</p>
+<div class="table-responsive"><table>
+<thead>
+<tr>
+<th>Method signature</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>static fromSetCookieArray(array $setCookies) : Cookie</code></td>
+<td>Create an instance from the <code>$_COOKIE</code> array, or one structured like it.</td>
+</tr>
+<tr>
+<td><code>setEncodeValue(bool $encode) : self</code></td>
+<td>Set flag indicating whether or not to <code>urlencode()</code> the cookie values.</td>
+</tr>
+<tr>
+<td><code>getEncodeValue() : bool</code></td>
+<td>Get flag indicating whether or not to <code>urlencode()</code> the cookie values.</td>
+</tr>
+</tbody>
+</table></div>
+<h3 id="date">Date</h3>
+<p>See <a href="#abstractdate-methods">AbstractDate</a>.</p>
+<h3 id="etag">Etag</h3>
+<p>No additional methods.</p>
+<h3 id="expect">Expect</h3>
+<p>No additional methods.</p>
+<h3 id="expires">Expires</h3>
+<p>See <a href="#abstractdate-methods">AbstractDate</a>.</p>
+<h3 id="from">From</h3>
+<p>No additional methods.</p>
+<h3 id="host">Host</h3>
+<p>No additional methods.</p>
+<h3 id="ifmatch">IfMatch</h3>
+<p>No additional methods.</p>
+<h3 id="ifmodifiedsince">IfModifiedSince</h3>
+<p>See <a href="#abstractdate-methods">AbstractDate</a>.</p>
+<h3 id="ifnonematch">IfNoneMatch</h3>
+<p>No additional methods.</p>
+<h3 id="ifrange">IfRange</h3>
+<p>No additional methods.</p>
+<h3 id="ifunmodifiedsince">IfUnmodifiedSince</h3>
+<p>See <a href="#abstractdate-methods">AbstractDate</a>.</p>
+<h3 id="keepalive">KeepAlive</h3>
+<p>No additional methods.</p>
+<h3 id="lastmodified">LastModified</h3>
+<p>See <a href="#abstractdate-methods">AbstractDate</a>.</p>
+<h3 id="location">Location</h3>
+<p>See <a href="#abstractlocation-methods">AbstractLocation</a>.</p>
+<h3 id="maxforwards">MaxForwards</h3>
+<p>No additional methods.</p>
+<h3 id="origin">Origin</h3>
+<p>No additional methods.</p>
+<h3 id="pragma">Pragma</h3>
+<p>No additional methods.</p>
+<h3 id="proxyauthenticate">ProxyAuthenticate</h3>
+<div class="table-responsive"><table>
+<thead>
+<tr>
+<th>Method signature</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>toStringMultipleHeaders(array $headers) : string</code></td>
+<td>Creates a string representation when multiple values are present.</td>
+</tr>
+</tbody>
+</table></div>
+<h3 id="proxyauthorization">ProxyAuthorization</h3>
+<p>No additional methods.</p>
+<h3 id="range">Range</h3>
+<p>No additional methods.</p>
+<h3 id="referer">Referer</h3>
+<p>See <a href="#abstractlocation-methods">AbstractLocation</a>.</p>
+<h3 id="refresh">Refresh</h3>
+<p>No additional methods.</p>
+<h3 id="retryafter">RetryAfter</h3>
+<p>See <a href="#abstractdate-methods">AbstractDate</a>.</p>
+<div class="table-responsive"><table>
+<thead>
+<tr>
+<th>Method signature</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>setDeltaSeconds(int $delta) : self</code></td>
+<td>Set number of seconds.</td>
+</tr>
+<tr>
+<td><code>getDeltaSeconds() : int</code></td>
+<td>Get number of seconds.</td>
+</tr>
+</tbody>
+</table></div>
+<h3 id="server">Server</h3>
+<p>No additional methods.</p>
+<h3 id="setcookie">SetCookie</h3>
+<div class="table-responsive"><table>
+<thead>
+<tr>
+<th>Method signature</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>static matchCookieDomain(string $cookieDomain, string $host) : bool</code></td>
+<td>Check if a cookie's domain matches a host name.</td>
+</tr>
+<tr>
+<td><code>static matchCookiePath(string $cookiePath, string $path) : bool</code></td>
+<td>Check if a cookie's path matches a URL path.</td>
+</tr>
+<tr>
+<td><code>getName() : string</code></td>
+<td>Retrieve the cookie name.</td>
+</tr>
+<tr>
+<td><code>setName(string $name) : self</code></td>
+<td>Set the cookie name.</td>
+</tr>
+<tr>
+<td><code>getValue() : string</code></td>
+<td>Retrieve the cookie value.</td>
+</tr>
+<tr>
+<td><code>setValue(string $value) : self</code></td>
+<td>Set the cookie value.</td>
+</tr>
+<tr>
+<td><code>getExpires() : int</code></td>
+<td>Retrieve the expiration date for the cookie.</td>
+</tr>
+<tr>
+<td><code>setExpires(int|string $expires) : self</code></td>
+<td>Set the cookie expiration timestamp; null indicates a session cookie.</td>
+</tr>
+<tr>
+<td><code>getPath() : string</code></td>
+<td>Retrieve the URI path the cookie is bound to.</td>
+</tr>
+<tr>
+<td><code>setPath(string $path) : self</code></td>
+<td>Set the URI path the cookie is bound to.</td>
+</tr>
+<tr>
+<td><code>getDomain() : string</code></td>
+<td>Retrieve the domain the cookie is bound to.</td>
+</tr>
+<tr>
+<td><code>setDomain(string $domain) : self</code></td>
+<td>Set the domain the cookie is bound to.</td>
+</tr>
+<tr>
+<td><code>getMaxAge() : int</code></td>
+<td>Retrieve the maximum age for the cookie.</td>
+</tr>
+<tr>
+<td><code>setMaxAge(int|string $maxAge) : self</code></td>
+<td>Set the maximum age for the cookie.</td>
+</tr>
+<tr>
+<td><code>getVersion() : int</code></td>
+<td>Retrieve the cookie version.</td>
+</tr>
+<tr>
+<td><code>setVersion(int|string $version) : self</code></td>
+<td>Set the cookie version.</td>
+</tr>
+<tr>
+<td><code>isSecure(): bool</code></td>
+<td>Whether the cookies contains the Secure flag.</td>
+</tr>
+<tr>
+<td><code>setSecure(bool $secure) : self</code></td>
+<td>Set whether the cookies contain the Secure flag.</td>
+</tr>
+<tr>
+<td><code>isHttponly() : bool</code></td>
+<td>Whether the cookies can be accessed via the HTTP protocol only.</td>
+</tr>
+<tr>
+<td><code>setHttponly(bool $httponly) : self</code></td>
+<td>Set whether the cookies can be accessed only via HTTP protocol.</td>
+</tr>
+<tr>
+<td><code>isExpired() : bool</code></td>
+<td>Whether the cookie is expired.</td>
+</tr>
+<tr>
+<td><code>isSessionCookie() : bool</code></td>
+<td>Whether the cookie is a session cookie.</td>
+</tr>
+<tr>
+<td><code>setQuoteFieldValue(bool $quotedValue) : self</code></td>
+<td>Set whether the value for this cookie should be quoted.</td>
+</tr>
+<tr>
+<td><code>hasQuoteFieldValue() : bool</code></td>
+<td>Check whether the value for this cookie should be quoted.</td>
+</tr>
+<tr>
+<td><code>isValidForRequest() : bool</code></td>
+<td>Whether the cookie is valid for a given request domain, path and isSecure.</td>
+</tr>
+<tr>
+<td><code>match(string $uri, bool $matchSessionCookies, int $now) : bool</code></td>
+<td>Checks whether the cookie should be sent or not in a specific scenario.</td>
+</tr>
+<tr>
+<td><code>toStringMultipleHeaders(array $headers) : string</code></td>
+<td>Returns string representation when multiple values are present.</td>
+</tr>
+</tbody>
+</table></div>
+<h3 id="te">TE</h3>
+<p>No additional methods.</p>
+<h3 id="trailer">Trailer</h3>
+<p>No additional methods.</p>
+<h3 id="transferencoding">TransferEncoding</h3>
+<p>No additional methods.</p>
+<h3 id="upgrade">Upgrade</h3>
+<p>No additional methods.</p>
+<h3 id="useragent">UserAgent</h3>
+<p>No additional methods.</p>
+<h3 id="vary">Vary</h3>
+<p>No additional methods.</p>
+<h3 id="via">Via</h3>
+<p>No additional methods.</p>
+<h3 id="warning">Warning</h3>
+<p>No additional methods.</p>
+<h3 id="wwwauthenticate">WWWAuthenticate</h3>
+<p>Defines a <code>toStringMultipleHeaders(array $headers)</code> method for serializing to
+string when multiple values are present.</p>
+<h2 id="examples">Examples</h2>
+<h3 id="retrieving-headers-from-a-headers-object">Retrieving headers from a Headers object</h3>
+<pre class="codehilite"><code class="language-php">// $client is an instance of Zend\Http\Client
+$response = $client-&gt;send();
+$headers = $response-&gt;getHeaders();
+
+// We can check if the Request contains a specific header by
+// using the ``has`` method. Returns boolean ``TRUE`` if at least
+// one matching header found, and ``FALSE`` otherwise
+$headers-&gt;has('Content-Type');
+
+// We can retrieve all instances of a specific header by using
+// the ``get`` method:
+$contentTypeHeaders = $headers-&gt;get('Content-Type');</code></pre>
+
+
+<p>There are three possibilities for the return value of the above call to the <code>get</code> method:</p>
+<ul>
+<li>If no <code>Content-Type</code> header was set in the <code>Request</code>, <code>get</code> will return <code>false</code>.</li>
+<li>If only one <code>Content-Type</code> header was set in the <code>Request</code>, <code>get</code> will return
+  an instance of <code>Zend\Http\Header\ContentType</code>.</li>
+<li>If more than one <code>Content-Type</code> header was set in the <code>Request</code>, <code>get</code> will
+  return an <code>ArrayIterator</code> containing one <code>Zend\Http\Header\ContentType</code>
+  instance per header.</li>
+</ul>
+<h3 id="adding-headers-to-a-headers-object">Adding headers to a Headers object</h3>
+<pre class="codehilite"><code class="language-php">use Zend\Http\Header;
+use Zend\Http\Headers;
+
+$headers = new Headers();
+
+// We can directly add any object that implements Zend\Http\Header\HeaderInterface
+$typeHeader = Header\ContentType::fromString('Content-Type: text/html');
+$headers-&gt;addHeader($typeHeader);
+
+// We can add headers using the raw string representation, either
+// passing the header name and value as separate arguments...
+$headers-&gt;addHeaderLine('Content-Type', 'text/html');
+
+// .. or we can pass the entire header as the only argument
+$headers-&gt;addHeaderLine('Content-Type: text/html');
+
+// We can also add headers in bulk using addHeaders, which accepts
+// an array of individual header definitions that can be in any of
+// the accepted formats outlined below:
+$headers-&gt;addHeaders([
+    // An object implementing Header\HeaderInterface
+    Header\ContentType::fromString('Content-Type: text/html'),
+
+    // A raw header string
+    'Content-Type: text/html',
+
+    // We can also pass the header name as the array key and the
+    // header content as that array key's value
+    'Content-Type' =&gt; 'text/html',
+]);</code></pre>
+
+
+<h3 id="removing-headers-from-a-headers-object">Removing headers from a Headers object</h3>
+<p>We can remove all headers of a specific type using the <code>removeHeader</code> method,
+which accepts a single object implementing <code>Zend\Http\Header\HeaderInterface</code></p>
+<pre class="codehilite"><code class="language-php">use ArrayIterator;
+use Zend\Http\Header\HeaderInterface;
+
+// $headers is a pre-configured instance of Zend\Http\Headers
+
+// We can also delete individual headers or groups of headers
+$matches = $headers-&gt;get('Content-Type');
+
+if ($matches instanceof ArrayIterator) {
+    // If more than one header was found, iterate over the collection
+    // and remove each one individually
+    foreach ($headers as $header) {
+        $headers-&gt;removeHeader($header);
+    }
+} elseif ($matches instanceof HeaderInterface) {
+    // If only a single header was found, remove it directly
+    $headers-&gt;removeHeader($header);
+}
+
+// In addition to this, we can clear all the headers currently stored in
+// the container by calling the clearHeaders() method
+$matches-&gt;clearHeaders();</code></pre>
+
+<hr />
+
+
+<nav>
+  <ul class="pager hidden-print">
+    <li class="previous">
+      <a rel="prev" href="../response/"><i class="fa fa-arrow-left"></i> Previous</a>
+    </li>
+    <li class="next">
+      <a rel="next" href="../client/intro/">Next <i class="fa fa-arrow-right"></i></a>
+    </li>
+  </ul>
+</nav>
+</div>
+        
+    </div>
+    <!-- content:end -->
+
+    <footer class="col-md-12 text-center">
+        <hr>
+        <p>
+        <small>Copyright (c) 2016 <a href="http://www.zend.com/">Zend Technologies USA Inc.</a><br></small>
+        </p>
+        <p><small><a href="http://framework.zend.com">Learn more about Zend Framework</a></small></p>
+    </footer>
+
+    <script src="../js/jquery-1.10.2.min.js"></script>
+    <script src="../js/bootstrap-3.0.3.min.js"></script>
+    <script src="../js/prism-zf.js"></script>
+
+    <script>var base_url = '..';</script>
+    <script data-main="../mkdocs/js/search.js" src="../mkdocs/js/require.js"></script>
+    <script src="../js/base.js"></script>
+
+    <div class="modal" id="mkdocs_search_modal" tabindex="-1" role="dialog" aria-labelledby="Search Modal" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">
+                        <span aria-hidden="true">&times;</span>
+                        <span class="sr-only">Close</span>
+                    </button>
+                    <h4 class="modal-title" id="exampleModalLabel">Search</h4>
+                </div>
+                <div class="modal-body">
+                    <p>
+                        From here you can search these documents. Enter your search terms below.
+                    </p>
+                    <form role="form">
+                        <div class="form-group">
+                            <input type="text" class="form-control" placeholder="Search..." id="mkdocs-search-query">
+                        </div>
+                    </form>
+                    <div id="mkdocs-search-results"></div>
+                </div>
+                <div class="modal-footer">
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="zf-components">
+  <div class="zf-components-grid">
+    <div class="zf-logo">
+      <a href="http://framework.zend.com" data-toggle="tooltip" data-placement="bottom" title="Go to the ZF homepage"><img src="../img/zf-logo-mark.png" alt="Zend Framework" width="250" /></a>
+    </div>
+
+    <div class="component-list"></div>
+
+    <p class="zf-components-rollup"><a href="#">Hide list</a></p>
+  </div>
+</div>
+
+    <script>
+  // Prepare the component list dropdown for display
+  $(function () {
+    var components = $(".zf-components"),
+        componentList = components.find(".component-list"),
+        sidebar = $(".bs-sidebar.affix"),
+        sidebarInitialPos = sidebar.css("position"),
+        hidden,
+        componentToggle = $(".component-toggle"),
+        navbar = $(".navbar-fixed-top"),
+        rollUpLink = $(".zf-components-rollup a");
+
+    // Initial setup on document load
+    components.insertBefore(navbar);
+    $(".zf-logo a").tooltip();
+    componentToggle.tooltip();
+    rollUpLink.attr({ href: "#", alt: "Hide component list" });
+
+    // Cast initial sidebar position value
+    if (undefined === sidebarInitialPos) {
+      sidebarInitialPos = "fixed";
+    }
+
+    // Setup onclick events to toggle list
+    componentToggle.click(toggleComponentList);
+    rollUpLink.click(toggleComponentList);
+
+    // Toggle the component list display
+    function toggleComponentList(event) {
+      event.preventDefault();
+
+      if (hidden === undefined) {
+        // Not loaded yet; load and display.
+        loadComponentList();
+        return;
+      }
+
+      if (hidden) {
+        // Hidden; display.
+        showComponentList();
+        return;
+      }
+
+      // Currently visible; hide
+      hideComponentList();
+    }
+
+    // Show the component list
+    function showComponentList() {
+      navbar.css({position: "relative"});
+      sidebar.css({position: "relative"});
+      components
+        .css({"margin-top": "-" + components.outerHeight() + "px"})
+        .show()
+        .animate({"margin-top": 0}, {
+          complete: function () {
+            componentToggle
+              .data("placement", "top")
+              .attr("data-original-title", "Hide component list");
+            hidden = false;
+          },
+          queue: false
+        });
+    }
+
+    // Hide the component list
+    function hideComponentList() {
+      components.animate({"margin-top": "-" + components.outerHeight() + "px"}, {
+        complete: function () {
+          navbar.css({position: "fixed"});
+          sidebar.css({position: sidebarInitialPos});
+          componentToggle
+            .data("placement", "bottom")
+            .attr("data-original-title", "Show component list");
+          components.hide();
+          hidden = true;
+        },
+        queue: false
+      });
+      sidebar.animate({ top: sidebarInitialTop + "px" }, { queue: false});
+    }
+
+    // Inject a component into the componet list DOM.
+    function injectComponent(index, component) {
+      componentList.append('<div class="component"><h4><a href="' + component.url + '">' + component.name + '</a></h4><p>' + component.description + '</p></div>');
+    }
+
+    // Parse the component list, build the DOM, and display it.
+    function parseComponentList(components) {
+      $.each(components, injectComponent);
+      showComponentList();
+    }
+
+    // Fetch the component list and display it.
+    function loadComponentList () {
+      $.ajax({
+        url: "//zendframework.github.io/zf-mkdoc-theme/scripts/zf-component-list.json",
+        dataType: "text json",
+        success: parseComponentList,
+        error: function (e) {
+          console.log("Error occurred with XHR call", e);
+        }
+      });
+    }
+  });
+</script>
+    </body>
+
+</html>

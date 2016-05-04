@@ -1,0 +1,672 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">  
+    <link rel="shortcut icon" href="../img/favicon.ico">
+
+    <title>Request - zend-http</title>
+
+    <link href="../css/bootstrap-custom.min.css" rel="stylesheet">
+    <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="//cdn.jsdelivr.net/font-hack/2.018/css/hack.min.css">
+    <link href="//fonts.googleapis.com/css?family=PT+Sans:400,400italic,700,700italic&subset=latin-ext,latin" rel="stylesheet" type="text/css">
+    <link href="//fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,700italic,400,300,600,700&subset=latin-ext,latin" rel="stylesheet" type="text/css">
+    <link href="//fonts.googleapis.com/css?family=Libre+Baskerville:400,400italic,700&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+    <link href="../css/base.css" rel="stylesheet">
+    <link href="../css/zf.css" rel="stylesheet">
+    <link href="../css/prism-zf.css" rel="stylesheet">
+
+    <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+            <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+            <script src="https://oss.maxcdn.com/libs/respond.js/1.3.0/respond.min.js"></script>
+        <![endif]-->
+
+    <script src="https://ajax.googleapis.com/ajax/libs/webfont/1.5.18/webfont.js"></script>
+    <script>
+    WebFont.load({
+        google: {
+            families: ['Open Sans', 'PT Sans']
+        }
+    });
+    </script>
+
+    
+</head>
+
+<body>
+
+    <div class="navbar navbar-default navbar-fixed-top" role="navigation">
+    <div class="container">
+
+        <!-- Collapsed navigation -->
+        <div class="navbar-header">
+            
+            <!-- Expander button -->
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            
+
+            <!-- Main title -->
+            <span class="navbar-brand">
+              <a class="logo-link" href="http://framework.zend.com" data-toggle="tooltip" data-placement="bottom" title="Zend Framework"><img src="../img/zf-logo-mark.png" height="28" alt="Zend Framework" /></a>
+              <a href="..">zend-http</a>
+            </span>
+        </div>
+
+        <!-- Expanded navigation -->
+        <div class="navbar-collapse collapse">
+            
+                <!-- Main navigation -->
+                <ul class="nav navbar-nav">
+                
+                
+                    <li >
+                        <a href="..">Home</a>
+                    </li>
+                
+                
+                
+                    <li >
+                        <a href="../intro/">Intro</a>
+                    </li>
+                
+                
+                
+                    <li class="dropdown active">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">Reference <b class="caret"></b></a>
+                        <ul class="dropdown-menu">
+                        
+                            
+<li class="active">
+    <a href="./">Request</a>
+</li>
+
+                        
+                            
+<li >
+    <a href="../response/">Response</a>
+</li>
+
+                        
+                            
+<li >
+    <a href="../headers/">Headers</a>
+</li>
+
+                        
+                            
+  <li class="dropdown-submenu">
+    <a tabindex="-1" href="">Client</a>
+    <ul class="dropdown-menu">
+        
+            
+<li >
+    <a href="../client/intro/">Intro</a>
+</li>
+
+        
+            
+<li >
+    <a href="../client/adapters/">Adapters</a>
+</li>
+
+        
+            
+<li >
+    <a href="../client/static/">Static Client</a>
+</li>
+
+        
+            
+<li >
+    <a href="../client/cookies/">Cookie Persistence</a>
+</li>
+
+        
+            
+<li >
+    <a href="../client/advanced/">Advanced</a>
+</li>
+
+        
+    </ul>
+  </li>
+
+                        
+                        </ul>
+                    </li>
+                
+                
+                </ul>
+            
+
+            <ul class="nav navbar-nav navbar-right">
+                <li>
+                    <a href="#" class="component-toggle" data-toggle="tooltip" data-placement="bottom" title="Show component list">
+                        <i class="fa fa-book"></i> Components
+                    </a>
+                </li>
+
+                <li>
+                    <a href="#" data-toggle="modal" data-target="#mkdocs_search_modal">
+                        <i class="fa fa-search"></i> Search
+                    </a>
+                </li>
+                
+                    <li>
+                        <a href="https://github.com/zendframework/zend-http">
+                            
+                                <i class="fa fa-github"></i>
+                            
+                            GitHub
+                        </a>
+                    </li>
+                
+            </ul>
+        </div>
+    </div>
+</div>
+
+    <!-- content:begin -->
+    <div class="container">
+        
+        <div class="col-md-3"><div class="bs-sidebar hidden-print affix well" role="complementary">
+    <ul class="nav bs-sidenav">
+    
+        <li class="main active"><a href="#the-request-class">The Request Class</a></li>
+        
+            <li><a href="#quick-start">Quick Start</a></li>
+        
+            <li><a href="#configuration-options">Configuration Options</a></li>
+        
+            <li><a href="#available-methods">Available Methods</a></li>
+        
+            <li><a href="#examples">Examples</a></li>
+        
+    
+    </ul>
+
+    
+    <ul class="pager hidden-print">
+      <li class="previous">
+        <a rel="prev" href="../intro/"><i class="fa fa-arrow-left"></i> Previous</a>
+      </li>
+      <li class="next">
+        <a rel="next" href="../response/">Next <i class="fa fa-arrow-right"></i></a>
+      </li>
+    </ul>
+    
+</div></div>
+        <div class="col-md-9" role="main">
+
+<ol class="breadcrumb" role="navigation" aria-label="breadcrumbs navigation">
+  <li><a href="..">Docs</a> &raquo;</li>
+  
+    
+      
+        <li>Reference &raquo;</li>
+      
+    
+  
+  <li class="active">Request</li>
+</ol>
+
+<h1 id="the-request-class">The Request Class</h1>
+<p><code>Zend\Http\Request</code> is responsible for providing a fluent API that allows a
+developer to interact with all the various parts of an HTTP request.</p>
+<p>A typical HTTP request looks like this:</p>
+<pre class="codehilite"><code class="language-text">| METHOD | URI | VERSION |
+|        HEADERS         |
+|         BODY           |</code></pre>
+
+
+<p>In simplified terms, the request consists of a method, URI, and HTTP version
+number; together, they make up the "Request Line." This line is followed by zero
+or more HTTP headers, which is followed by an empty line and then the request
+body; the body is typically used when a client wishes to send data &mdash; which
+could be urlencoded parameters, a JSON document, an XML document, or even one or
+more files &mdash; to the server.  More information on the structure and
+specification of a HTTP request can be found in
+<a href="http://www.w3.org/Protocols/rfc2616/rfc2616-sec5.html">RFC-2616 on the W3.org site</a>.</p>
+<h2 id="quick-start">Quick Start</h2>
+<p>Request objects can either be created from the provided <code>fromString()</code> factory,
+or, if you wish to have a completely empty object to start with, by
+manually instantiating the <code>Zend\Http\Request</code> class with no parameters.</p>
+<pre class="codehilite"><code class="language-php">use Zend\Http\Request;
+
+$request = Request::fromString(&lt;&lt;&lt;EOS
+POST /foo HTTP/1.1
+HeaderField1: header-field-value1
+HeaderField2: header-field-value2
+
+foo=bar
+EOS
+);
+
+// OR, the completely equivalent
+
+$request = new Request();
+$request-&gt;setMethod(Request::METHOD_POST);
+$request-&gt;setUri('/foo');
+$request-&gt;getHeaders()-&gt;addHeaders([
+    'HeaderField1' =&gt; 'header-field-value1',
+    'HeaderField2' =&gt; 'header-field-value2',
+]);
+$request-&gt;getPost()-&gt;set('foo', 'bar');</code></pre>
+
+
+<h2 id="configuration-options">Configuration Options</h2>
+<p>No configuration options are available.</p>
+<h2 id="available-methods">Available Methods</h2>
+<p>The following table details available methods, their signatures, and a brief
+description. Note that the following references refer to the following
+fully qualified class names and/or namespaces:</p>
+<ul>
+<li><code>HeaderInterface</code>: <code>Zend\Http\Header\HeaderInterface</code></li>
+<li><code>Headers</code>: <code>Zend\Http\Headers</code></li>
+<li><code>Header</code>: <code>Zend\Http\Header</code></li>
+<li><code>Parameters</code>: <code>Zend\Stdlib\ParametersInterface</code></li>
+<li><code>Request</code>: <code>Zend\Http\Request</code></li>
+<li><code>Uri</code>: <code>Zend\Uri\Http</code></li>
+</ul>
+<div class="table-responsive"><table>
+<thead>
+<tr>
+<th>Method signature</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>static fromString(string $string) : Request</code></td>
+<td>A factory that produces a <code>Request</code> object from a well-formed HTTP request message string.</td>
+</tr>
+<tr>
+<td><code>setMethod(string $method) : self</code></td>
+<td>Set the method for this request.</td>
+</tr>
+<tr>
+<td><code>getMethod() : string</code></td>
+<td>Return the method for this request.</td>
+</tr>
+<tr>
+<td><code>setUri(string|Uri $uri) : self</code></td>
+<td>Set the URI/URL for this request; this can be a string or an instance of <code>Zend\Uri\Http</code>.</td>
+</tr>
+<tr>
+<td><code>getUri() : Uri</code></td>
+<td>Return the URI for this request object.</td>
+</tr>
+<tr>
+<td><code>getUriString() : string</code></td>
+<td>Return the URI for this request object as a string.</td>
+</tr>
+<tr>
+<td><code>setVersion(string $version) : self</code></td>
+<td>Set the HTTP version for this object, one of 1.0 or 1.1 (<code>Request::VERSION_10</code>, <code>Request::VERSION_11</code>).</td>
+</tr>
+<tr>
+<td><code>getVersion() : string</code></td>
+<td>Return the HTTP version for this request.</td>
+</tr>
+<tr>
+<td><code>setQuery(Parameters $query) : self</code></td>
+<td>Provide an alternate Parameter Container implementation for query parameters in this object. (This is NOT the primary API for value setting; for that, see <code>getQuery()</code>).</td>
+</tr>
+<tr>
+<td><code>getQuery(string|null $name, mixed|null $default) : null|string|Parameters</code></td>
+<td>Return the parameter container responsible for query parameters or a single query parameter based on <code>$name</code>.</td>
+</tr>
+<tr>
+<td><code>setPost(Parameters $post) : self</code></td>
+<td>Provide an alternate Parameter Container implementation for POST parameters in this object. (This is NOT the primary API for value setting; for that, see <code>getPost()</code>).</td>
+</tr>
+<tr>
+<td><code>getPost(string|null $name, mixed|null $default) : null|string|Parameters</code></td>
+<td>Return the parameter container responsible for POST parameters or a single POST parameter, based on <code>$name</code>.</td>
+</tr>
+<tr>
+<td><code>getCookie() : Header\Cookie</code></td>
+<td>Return the Cookie header, this is the same as calling <code>$request-&gt;getHeaders()-&gt;get('Cookie');</code>.</td>
+</tr>
+<tr>
+<td><code>setFiles(Parameters $files) : self</code></td>
+<td>Provide an alternate Parameter Container implementation for file parameters in this object, (This is NOT the primary API for value setting; for that, see <code>getFiles()</code>).</td>
+</tr>
+<tr>
+<td><code>getFiles(string|null $name, mixed|null $default) : null|string|Parameters</code></td>
+<td>Return the parameter container responsible for file parameters or a single file parameter, based on <code>$name</code>.</td>
+</tr>
+<tr>
+<td><code>setHeaders(Headers $headers) : self</code></td>
+<td>Provide an alternate Parameter Container implementation for headers in this object, (this is NOT the primary API for value setting, for that see <code>getHeaders()</code>).</td>
+</tr>
+<tr>
+<td><code>getHeaders(string|null $name, mixed|null $default) : mixed</code></td>
+<td>Return the container responsible for storing HTTP headers. This container exposes the primary API for manipulating headers set in the HTTP request. See the section on <a href="../headers/">Headers</a> for more information. Return value is based on <code>$name</code>; <code>null</code> returns <code>Headers</code>, while a matched header returns a <code>Header\HeaderInterface</code> implementation for single-value headers or an <code>ArrayIterator</code> for multi-value headers.</td>
+</tr>
+<tr>
+<td><code>setMetadata(string|int|array|Traversable $spec, mixed $value) : self</code></td>
+<td>Set message metadata.  Non-destructive setting of message metadata; always adds to the metadata, never overwrites the entire metadata container.</td>
+</tr>
+<tr>
+<td><code>getMetadata(null|string|int $key, null|mixed $default) : mixed</code></td>
+<td>Retrieve all metadata or a single metadatum as specified by key.</td>
+</tr>
+<tr>
+<td><code>setContent(mixed $value) : self</code></td>
+<td>Set request body (content).</td>
+</tr>
+<tr>
+<td><code>getContent() : mixed</code></td>
+<td>Get request body (content).</td>
+</tr>
+<tr>
+<td><code>isOptions() : bool</code></td>
+<td>Is this an OPTIONS method request?</td>
+</tr>
+<tr>
+<td><code>isGet() : bool</code></td>
+<td>Is this a GET method request?</td>
+</tr>
+<tr>
+<td><code>isHead() : bool</code></td>
+<td>Is this a HEAD method request?</td>
+</tr>
+<tr>
+<td><code>isPost() : bool</code></td>
+<td>Is this a POST method request?</td>
+</tr>
+<tr>
+<td><code>isPut() : bool</code></td>
+<td>Is this a PUT method request?</td>
+</tr>
+<tr>
+<td><code>isDelete() : bool</code></td>
+<td>Is this a DELETE method request?</td>
+</tr>
+<tr>
+<td><code>isTrace() : bool</code></td>
+<td>Is this a TRACE method request?</td>
+</tr>
+<tr>
+<td><code>isConnect() : bool</code></td>
+<td>Is this a CONNECT method request?</td>
+</tr>
+<tr>
+<td><code>isPatch() : bool</code></td>
+<td>Is this a PATCH method request?</td>
+</tr>
+<tr>
+<td><code>isXmlHttpRequest() : bool</code></td>
+<td>Is this a Javascript XMLHttpRequest?</td>
+</tr>
+<tr>
+<td><code>isFlashRequest() : bool</code></td>
+<td>Is this a Flash request?</td>
+</tr>
+<tr>
+<td><code>renderRequestLine() : string</code></td>
+<td>Return the formatted request line (first line) for this HTTP request.</td>
+</tr>
+<tr>
+<td><code>toString() : string</code></td>
+<td>Returns string</td>
+</tr>
+<tr>
+<td><code>__toString() : string</code></td>
+<td>Allow PHP casting of this object.</td>
+</tr>
+</tbody>
+</table></div>
+<h2 id="examples">Examples</h2>
+<h3 id="generating-a-request-object-from-a-string">Generating a Request object from a string</h3>
+<pre class="codehilite"><code class="language-php">use Zend\Http\Request;
+
+$string = &quot;GET /foo HTTP/1.1\r\n\r\nSome Content&quot;;
+$request = Request::fromString($string);
+
+$request-&gt;getMethod();    // returns Request::METHOD_GET
+$request-&gt;getUri();       // returns Zend\Uri\Http object
+$request-&gt;getUriString(); // returns '/foo'
+$request-&gt;getVersion();   // returns Request::VERSION_11 or '1.1'
+$request-&gt;getContent();   // returns 'Some Content'</code></pre>
+
+
+<h3 id="retrieving-and-setting-headers">Retrieving and setting headers</h3>
+<pre class="codehilite"><code class="language-php">use Zend\Http\Request;
+use Zend\Http\Header\Cookie;
+
+$request = new Request();
+$request-&gt;getHeaders()-&gt;get('Content-Type'); // return content type
+$request-&gt;getHeaders()-&gt;addHeader(new Cookie(['foo' =&gt; 'bar']));
+foreach ($request-&gt;getHeaders() as $header) {
+    printf(&quot;%s with value %s\n&quot;, $header-&gt;getFieldName(), $header-&gt;getFieldValue());
+}</code></pre>
+
+
+<h3 id="retrieving-and-setting-get-and-post-values">Retrieving and setting GET and POST values</h3>
+<pre class="codehilite"><code class="language-php">use Zend\Http\Request;
+
+$request = new Request();
+
+// getPost() and getQuery() both return, by default, a Parameters object, which
+// extends ArrayObject
+$request-&gt;getPost()-&gt;foo = 'Foo value';
+$request-&gt;getQuery()-&gt;bar = 'Bar value';
+$request-&gt;getPost('foo'); // returns 'Foo value'
+$request-&gt;getQuery()-&gt;offsetGet('bar'); // returns 'Bar value'</code></pre>
+
+
+<h3 id="generating-a-formatted-http-request-from-a-request-object">Generating a formatted HTTP Request from a Request object</h3>
+<pre class="codehilite"><code class="language-php">use Zend\Http\Request;
+
+$request = new Request();
+$request-&gt;setMethod(Request::METHOD_POST);
+$request-&gt;setUri('/foo');
+$request-&gt;getHeaders()-&gt;addHeaders([
+    'HeaderField1' =&gt; 'header-field-value1',
+    'HeaderField2' =&gt; 'header-field-value2',
+]);
+$request-&gt;getPost()-&gt;set('foo', 'bar');
+$request-&gt;setContent($request-&gt;getPost()-&gt;toString());
+echo $request-&gt;toString();
+
+/** Will produce:
+POST /foo HTTP/1.1
+HeaderField1: header-field-value1
+HeaderField2: header-field-value2
+
+foo=bar
+*/</code></pre>
+
+<hr />
+
+
+<nav>
+  <ul class="pager hidden-print">
+    <li class="previous">
+      <a rel="prev" href="../intro/"><i class="fa fa-arrow-left"></i> Previous</a>
+    </li>
+    <li class="next">
+      <a rel="next" href="../response/">Next <i class="fa fa-arrow-right"></i></a>
+    </li>
+  </ul>
+</nav>
+</div>
+        
+    </div>
+    <!-- content:end -->
+
+    <footer class="col-md-12 text-center">
+        <hr>
+        <p>
+        <small>Copyright (c) 2016 <a href="http://www.zend.com/">Zend Technologies USA Inc.</a><br></small>
+        </p>
+        <p><small><a href="http://framework.zend.com">Learn more about Zend Framework</a></small></p>
+    </footer>
+
+    <script src="../js/jquery-1.10.2.min.js"></script>
+    <script src="../js/bootstrap-3.0.3.min.js"></script>
+    <script src="../js/prism-zf.js"></script>
+
+    <script>var base_url = '..';</script>
+    <script data-main="../mkdocs/js/search.js" src="../mkdocs/js/require.js"></script>
+    <script src="../js/base.js"></script>
+
+    <div class="modal" id="mkdocs_search_modal" tabindex="-1" role="dialog" aria-labelledby="Search Modal" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">
+                        <span aria-hidden="true">&times;</span>
+                        <span class="sr-only">Close</span>
+                    </button>
+                    <h4 class="modal-title" id="exampleModalLabel">Search</h4>
+                </div>
+                <div class="modal-body">
+                    <p>
+                        From here you can search these documents. Enter your search terms below.
+                    </p>
+                    <form role="form">
+                        <div class="form-group">
+                            <input type="text" class="form-control" placeholder="Search..." id="mkdocs-search-query">
+                        </div>
+                    </form>
+                    <div id="mkdocs-search-results"></div>
+                </div>
+                <div class="modal-footer">
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="zf-components">
+  <div class="zf-components-grid">
+    <div class="zf-logo">
+      <a href="http://framework.zend.com" data-toggle="tooltip" data-placement="bottom" title="Go to the ZF homepage"><img src="../img/zf-logo-mark.png" alt="Zend Framework" width="250" /></a>
+    </div>
+
+    <div class="component-list"></div>
+
+    <p class="zf-components-rollup"><a href="#">Hide list</a></p>
+  </div>
+</div>
+
+    <script>
+  // Prepare the component list dropdown for display
+  $(function () {
+    var components = $(".zf-components"),
+        componentList = components.find(".component-list"),
+        sidebar = $(".bs-sidebar.affix"),
+        sidebarInitialPos = sidebar.css("position"),
+        hidden,
+        componentToggle = $(".component-toggle"),
+        navbar = $(".navbar-fixed-top"),
+        rollUpLink = $(".zf-components-rollup a");
+
+    // Initial setup on document load
+    components.insertBefore(navbar);
+    $(".zf-logo a").tooltip();
+    componentToggle.tooltip();
+    rollUpLink.attr({ href: "#", alt: "Hide component list" });
+
+    // Cast initial sidebar position value
+    if (undefined === sidebarInitialPos) {
+      sidebarInitialPos = "fixed";
+    }
+
+    // Setup onclick events to toggle list
+    componentToggle.click(toggleComponentList);
+    rollUpLink.click(toggleComponentList);
+
+    // Toggle the component list display
+    function toggleComponentList(event) {
+      event.preventDefault();
+
+      if (hidden === undefined) {
+        // Not loaded yet; load and display.
+        loadComponentList();
+        return;
+      }
+
+      if (hidden) {
+        // Hidden; display.
+        showComponentList();
+        return;
+      }
+
+      // Currently visible; hide
+      hideComponentList();
+    }
+
+    // Show the component list
+    function showComponentList() {
+      navbar.css({position: "relative"});
+      sidebar.css({position: "relative"});
+      components
+        .css({"margin-top": "-" + components.outerHeight() + "px"})
+        .show()
+        .animate({"margin-top": 0}, {
+          complete: function () {
+            componentToggle
+              .data("placement", "top")
+              .attr("data-original-title", "Hide component list");
+            hidden = false;
+          },
+          queue: false
+        });
+    }
+
+    // Hide the component list
+    function hideComponentList() {
+      components.animate({"margin-top": "-" + components.outerHeight() + "px"}, {
+        complete: function () {
+          navbar.css({position: "fixed"});
+          sidebar.css({position: sidebarInitialPos});
+          componentToggle
+            .data("placement", "bottom")
+            .attr("data-original-title", "Show component list");
+          components.hide();
+          hidden = true;
+        },
+        queue: false
+      });
+      sidebar.animate({ top: sidebarInitialTop + "px" }, { queue: false});
+    }
+
+    // Inject a component into the componet list DOM.
+    function injectComponent(index, component) {
+      componentList.append('<div class="component"><h4><a href="' + component.url + '">' + component.name + '</a></h4><p>' + component.description + '</p></div>');
+    }
+
+    // Parse the component list, build the DOM, and display it.
+    function parseComponentList(components) {
+      $.each(components, injectComponent);
+      showComponentList();
+    }
+
+    // Fetch the component list and display it.
+    function loadComponentList () {
+      $.ajax({
+        url: "//zendframework.github.io/zf-mkdoc-theme/scripts/zf-component-list.json",
+        dataType: "text json",
+        success: parseComponentList,
+        error: function (e) {
+          console.log("Error occurred with XHR call", e);
+        }
+      });
+    }
+  });
+</script>
+    </body>
+
+</html>

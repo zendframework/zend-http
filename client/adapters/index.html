@@ -1,0 +1,966 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">  
+    <link rel="shortcut icon" href="../../img/favicon.ico">
+
+    <title>Adapters - zend-http</title>
+
+    <link href="../../css/bootstrap-custom.min.css" rel="stylesheet">
+    <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="//cdn.jsdelivr.net/font-hack/2.018/css/hack.min.css">
+    <link href="//fonts.googleapis.com/css?family=PT+Sans:400,400italic,700,700italic&subset=latin-ext,latin" rel="stylesheet" type="text/css">
+    <link href="//fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,700italic,400,300,600,700&subset=latin-ext,latin" rel="stylesheet" type="text/css">
+    <link href="//fonts.googleapis.com/css?family=Libre+Baskerville:400,400italic,700&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+    <link href="../../css/base.css" rel="stylesheet">
+    <link href="../../css/zf.css" rel="stylesheet">
+    <link href="../../css/prism-zf.css" rel="stylesheet">
+
+    <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+            <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+            <script src="https://oss.maxcdn.com/libs/respond.js/1.3.0/respond.min.js"></script>
+        <![endif]-->
+
+    <script src="https://ajax.googleapis.com/ajax/libs/webfont/1.5.18/webfont.js"></script>
+    <script>
+    WebFont.load({
+        google: {
+            families: ['Open Sans', 'PT Sans']
+        }
+    });
+    </script>
+
+    
+</head>
+
+<body>
+
+    <div class="navbar navbar-default navbar-fixed-top" role="navigation">
+    <div class="container">
+
+        <!-- Collapsed navigation -->
+        <div class="navbar-header">
+            
+            <!-- Expander button -->
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            
+
+            <!-- Main title -->
+            <span class="navbar-brand">
+              <a class="logo-link" href="http://framework.zend.com" data-toggle="tooltip" data-placement="bottom" title="Zend Framework"><img src="../../img/zf-logo-mark.png" height="28" alt="Zend Framework" /></a>
+              <a href="../..">zend-http</a>
+            </span>
+        </div>
+
+        <!-- Expanded navigation -->
+        <div class="navbar-collapse collapse">
+            
+                <!-- Main navigation -->
+                <ul class="nav navbar-nav">
+                
+                
+                    <li >
+                        <a href="../..">Home</a>
+                    </li>
+                
+                
+                
+                    <li >
+                        <a href="../../intro/">Intro</a>
+                    </li>
+                
+                
+                
+                    <li class="dropdown active">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">Reference <b class="caret"></b></a>
+                        <ul class="dropdown-menu">
+                        
+                            
+<li >
+    <a href="../../request/">Request</a>
+</li>
+
+                        
+                            
+<li >
+    <a href="../../response/">Response</a>
+</li>
+
+                        
+                            
+<li >
+    <a href="../../headers/">Headers</a>
+</li>
+
+                        
+                            
+  <li class="dropdown-submenu">
+    <a tabindex="-1" href="">Client</a>
+    <ul class="dropdown-menu">
+        
+            
+<li >
+    <a href="../intro/">Intro</a>
+</li>
+
+        
+            
+<li class="active">
+    <a href="./">Adapters</a>
+</li>
+
+        
+            
+<li >
+    <a href="../static/">Static Client</a>
+</li>
+
+        
+            
+<li >
+    <a href="../cookies/">Cookie Persistence</a>
+</li>
+
+        
+            
+<li >
+    <a href="../advanced/">Advanced</a>
+</li>
+
+        
+    </ul>
+  </li>
+
+                        
+                        </ul>
+                    </li>
+                
+                
+                </ul>
+            
+
+            <ul class="nav navbar-nav navbar-right">
+                <li>
+                    <a href="#" class="component-toggle" data-toggle="tooltip" data-placement="bottom" title="Show component list">
+                        <i class="fa fa-book"></i> Components
+                    </a>
+                </li>
+
+                <li>
+                    <a href="#" data-toggle="modal" data-target="#mkdocs_search_modal">
+                        <i class="fa fa-search"></i> Search
+                    </a>
+                </li>
+                
+                    <li>
+                        <a href="https://github.com/zendframework/zend-http">
+                            
+                                <i class="fa fa-github"></i>
+                            
+                            GitHub
+                        </a>
+                    </li>
+                
+            </ul>
+        </div>
+    </div>
+</div>
+
+    <!-- content:begin -->
+    <div class="container">
+        
+        <div class="col-md-3"><div class="bs-sidebar hidden-print affix well" role="complementary">
+    <ul class="nav bs-sidenav">
+    
+        <li class="main active"><a href="#http-client-connection-adapters">HTTP Client Connection Adapters</a></li>
+        
+            <li><a href="#the-socket-adapter">The Socket adapter</a></li>
+        
+            <li><a href="#the-proxy-adapter">The Proxy adapter</a></li>
+        
+            <li><a href="#the-curl-adapter">The cURL Adapter</a></li>
+        
+            <li><a href="#the-test-adapter">The Test adapter</a></li>
+        
+            <li><a href="#creating-your-own-connection-adapters">Creating your own connection adapters</a></li>
+        
+    
+    </ul>
+
+    
+    <ul class="pager hidden-print">
+      <li class="previous">
+        <a rel="prev" href="../intro/"><i class="fa fa-arrow-left"></i> Previous</a>
+      </li>
+      <li class="next">
+        <a rel="next" href="../static/">Next <i class="fa fa-arrow-right"></i></a>
+      </li>
+    </ul>
+    
+</div></div>
+        <div class="col-md-9" role="main">
+
+<ol class="breadcrumb" role="navigation" aria-label="breadcrumbs navigation">
+  <li><a href="../..">Docs</a> &raquo;</li>
+  
+    
+      
+        <li>Reference &raquo;</li>
+      
+    
+      
+        <li>Client &raquo;</li>
+      
+    
+  
+  <li class="active">Adapters</li>
+</ol>
+
+<h1 id="http-client-connection-adapters">HTTP Client Connection Adapters</h1>
+<p><code>Zend\Http\Client</code> is based on a connection adapter design. The connection adapter is the object in
+charge of performing the actual connection to the server, as well as writing requests and reading
+responses. This connection adapter can be replaced, and you can create and extend the default
+connection adapters to suit your special needs, without the need to extend or replace the entire
+HTTP client class.</p>
+<p>Currently, zend-http provides four built-in client connection adapters:</p>
+<ul>
+<li><code>Zend\Http\Client\Adapter\Socket</code> (default)</li>
+<li><code>Zend\Http\Client\Adapter\Proxy</code></li>
+<li><code>Zend\Http\Client\Adapter\Curl</code></li>
+<li><code>Zend\Http\Client\Adapter\Test</code></li>
+</ul>
+<p>The client can accept an adapter via either its <code>setAdapter()</code> method, or during
+instantiation via its <code>adapter</code> configuration option. When using configuration,
+the value of the <code>adapter</code> option may be one of:</p>
+<ul>
+<li>an adapter instance</li>
+<li>the fully qualified class name of an adapter</li>
+</ul>
+<h2 id="the-socket-adapter">The Socket adapter</h2>
+<p>The default connection adapter used when none is specified is the
+<code>Zend\Http\Client\Adapter\Socket</code> adapter.  The <code>Socket</code> adapter is based on
+PHP's built-in <code>fsockopen()</code> function, and does not require any special
+extensions or compilation flags.</p>
+<p>The <code>Socket</code> adapter allows several extra configuration options that can be set
+via either the client's constructor or <code>setOptions()</code> method:</p>
+<div class="table-responsive"><table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Description</th>
+<th>Expected Type</th>
+<th>Default Value</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>persistent</code></td>
+<td>Whether to use persistent TCP connections</td>
+<td>boolean</td>
+<td><code>FALSE</code></td>
+</tr>
+<tr>
+<td><code>ssltransport</code></td>
+<td>SSL transport layer (eg. <code>sslv2</code>, <code>tls</code>)</td>
+<td>string</td>
+<td><code>ssl</code></td>
+</tr>
+<tr>
+<td><code>sslcert</code></td>
+<td>Path to a PEM encoded SSL certificate</td>
+<td>string</td>
+<td><code>NULL</code></td>
+</tr>
+<tr>
+<td><code>sslpassphrase</code></td>
+<td>Passphrase for the SSL certificate file</td>
+<td>string</td>
+<td><code>NULL</code></td>
+</tr>
+<tr>
+<td><code>sslverifypeer</code></td>
+<td>Whether to verify the SSL peer</td>
+<td>string</td>
+<td><code>TRUE</code></td>
+</tr>
+<tr>
+<td><code>sslcapath</code></td>
+<td>Path to SSL certificate directory</td>
+<td>string</td>
+<td><code>NULL</code></td>
+</tr>
+<tr>
+<td><code>sslallowselfsigned</code></td>
+<td>Whether to allow self-signed certificates</td>
+<td>string</td>
+<td><code>FALSE</code></td>
+</tr>
+<tr>
+<td><code>sslusecontext</code></td>
+<td>Enables proxied connections to use SSL even if the proxy connection itself does not.</td>
+<td>boolean</td>
+<td><code>FALSE</code></td>
+</tr>
+</tbody>
+</table></div>
+<blockquote>
+<h3 id="persistent-tcp-connections">Persistent TCP connections</h3>
+<p>Using persistent TCP connections can potentially speed up HTTP requests, but
+in most use cases, will have little positive effect and might overload the
+HTTP server you are connecting to. It is recommended to use persistent TCP
+connections only if you connect to the same server very frequently, and are
+sure that the server is capable of handling a large number of concurrent
+connections. In any case you are encouraged to benchmark the effect of
+persistent connections on both the client speed and server load before using
+this option.</p>
+<p>Additionally, when using persistent connections, we recommend enabling
+Keep-Alive HTTP requests as described in <a href="../intro/#configuration">the client configuration section</a>;
+otherwise persistent connections might have little or no effect.</p>
+<h3 id="https-ssl-stream-parameters">HTTPS SSL stream parameters</h3>
+<p><code>ssltransport</code>, <code>sslcert</code> and <code>sslpassphrase</code> are only relevant when
+connecting using HTTPS.  While the default SSL/TLS settings should work for
+most applications, you might need to change them if the server you are
+connecting to requires special client setup. If so, please read the
+<a href="http://php.net/transports.inet">PHP manual chapter on SSL and TLS transport options</a>.</p>
+</blockquote>
+<h3 id="changing-the-https-transport-layer">Changing the HTTPS transport layer</h3>
+<pre class="codehilite"><code class="language-php">use Zend\Http\Client;
+
+// Set the configuration parameters
+$config = [
+    'adapter'      =&gt; Client\Adapter\Socket::class,
+    'ssltransport' =&gt; 'tls',
+];
+
+// Instantiate a client object
+$client = new Client('https://www.example.com', $config);
+
+// The following request will be sent over a TLS secure connection.
+$response = $client-&gt;send();</code></pre>
+
+
+<p>The result of the example above will be similar to opening a TCP connection
+using the following PHP command:</p>
+<pre class="codehilite"><code class="language-php">fsockopen('tls://www.example.com', 443);</code></pre>
+
+
+<h3 id="customizing-and-accessing-the-socket-adapter-stream-context">Customizing and accessing the Socket adapter stream context</h3>
+<p><code>Zend\Http\Client\Adapter\Socket</code> provides direct access to the underlying
+<a href="http://php.net/stream.contexts">stream context</a> used to connect to the remote
+server. This allows the user to pass specific options and parameters to the TCP
+stream, and to the SSL wrapper in case of HTTPS connections.</p>
+<p>You can access the stream context using the following methods of
+<code>Zend\Http\Client\Adapter\Socket</code>:</p>
+<ul>
+<li><code>setStreamContext($context)</code>: Sets the stream context to be used by the
+  adapter. Can accept either a stream context resource created using the
+  <a href="http://php.net/stream_context_create">stream_context_create()</a> PHP function,
+  or an array of stream context options, in the same format provided to this
+  function.  Providing an array will create a new stream context using these
+  options, and set it.</li>
+<li><code>getStreamContext()</code>: Get the current stream context of the adapter. If no
+  stream context was set, this method will create a default stream context and
+  return it. You can then set or get the value of different context options
+  using regular PHP stream context functions.</li>
+</ul>
+<h4 id="setting-stream-context-options-for-the-socket-adapter">Setting stream context options for the Socket adapter</h4>
+<pre class="codehilite"><code class="language-php">use Zend\Http\Client;
+
+// Array of options
+$options = [
+    'socket' =&gt; [
+        // Bind local socket side to a specific interface
+        'bindto' =&gt; '10.1.2.3:50505',
+    ],
+    'ssl'    =&gt; [
+        // Verify server side certificate,
+        // do not accept invalid or self-signed SSL certificates
+        'verify_peer'       =&gt; true,
+        'allow_self_signed' =&gt; false,
+
+        // Capture the peer's certificate
+        'capture_peer_cert' =&gt; true,
+    ],
+];
+
+// Create an adapter object and attach it to the HTTP client:
+$adapter = new Client\Adapter\Socket();
+$client  = new Client();
+$client-&gt;setAdapter($adapter);
+
+// Method 1: pass the options array to setStreamContext():
+$adapter-&gt;setStreamContext($options);
+
+// Method 2: create a stream context and pass it to setStreamContext():
+$context = stream_context_create($options);
+$adapter-&gt;setStreamContext($context);
+
+// Method 3: get the default stream context and set the options on it:
+$context = $adapter-&gt;getStreamContext();
+stream_context_set_option($context, $options);
+
+// Now, perform the request:
+$response = $client-&gt;send();
+
+// If everything went well, you can now access the context again:
+$opts = stream_context_get_options($adapter-&gt;getStreamContext());
+echo $opts['ssl']['peer_certificate'];</code></pre>
+
+
+<blockquote>
+<h4 id="set-stream-context-options-prior-to-requests">Set stream context options prior to requests</h4>
+<p>Note that you must set any stream context options before using the adapter to
+perform actual requests. If no context is set before performing HTTP requests
+with the <code>Socket</code> adapter, a default stream context will be created. This
+context resource could be accessed after performing any requests using the
+<code>getStreamContext()</code> method.</p>
+</blockquote>
+<h2 id="the-proxy-adapter">The Proxy adapter</h2>
+<p><code>Zend\Http\Client\Adapter\Proxy</code> is similar to the default <code>Socket</code> adapter; the
+primary difference is that the connection is made through an HTTP proxy server
+instead of a direct connection to the target server. This allows usage of
+<code>Zend\Http\Client</code> behind proxy servers, which is sometimes required for
+security or performance reasons.</p>
+<p>Using the <code>Proxy</code> adapter requires several additional client configuration
+parameters to be set, in addition to the default <code>adapter</code> option:</p>
+<div class="table-responsive"><table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Description</th>
+<th>Expected Type</th>
+<th>Example Value</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>proxy_host</code></td>
+<td>Proxy server address</td>
+<td>string</td>
+<td>'proxy.myhost.com'’ or '10.1.2.3'</td>
+</tr>
+<tr>
+<td><code>proxy_port</code></td>
+<td>Proxy server TCP port</td>
+<td>integer</td>
+<td>8080 (default) or 81</td>
+</tr>
+<tr>
+<td><code>proxy_user</code></td>
+<td>Proxy user name, if required</td>
+<td>string</td>
+<td>'shahar' or '' for none (default)</td>
+</tr>
+<tr>
+<td><code>proxy_pass</code></td>
+<td>Proxy password, if required</td>
+<td>string</td>
+<td>'secret' or '' for none (default)</td>
+</tr>
+<tr>
+<td><code>proxy_auth</code></td>
+<td>Proxy HTTP authentication type</td>
+<td>string</td>
+<td><code>Zend\Http\Client::AUTH_BASIC</code> (default)</td>
+</tr>
+</tbody>
+</table></div>
+<p><code>proxy_host</code> should always be set; if it is not set, the client will fall back
+to a direct connection using <code>Zend\Http\Client\Adapter\Socket</code>. <code>proxy_port</code>
+defaults to '8080'; if your proxy listens on a different port, you must set this
+one as well.</p>
+<p><code>proxy_user</code> and <code>proxy_pass</code> are only required if your proxy server requires
+you to authenticate.  Providing these will add a 'Proxy-Authentication' header
+to the request. If your proxy does not require authentication, you can leave
+these two options out.</p>
+<p><code>proxy_auth</code> sets the proxy authentication type, if your proxy server requires
+authentication.  Possible values are similar to the ones accepted by the
+<code>Zend\Http\Client::setAuth()</code> method. Currently, only basic authentication
+(<code>Zend\Http\Client::AUTH_BASIC</code>) is supported.</p>
+<h3 id="using-zend92http92client-behind-a-proxy-server">Using Zend\Http\Client behind a proxy server</h3>
+<pre class="codehilite"><code class="language-php">use Zend\Http\Client;
+
+// Set the configuration parameters
+$config = [
+    'adapter'    =&gt; Client\Adapter\Proxy::class,
+    'proxy_host' =&gt; 'proxy.int.zend.com',
+    'proxy_port' =&gt; 8000,
+    'proxy_user' =&gt; 'shahar.e',
+    'proxy_pass' =&gt; 'bananashaped',
+];
+
+// Instantiate a client object
+$client = new Client('http://www.example.com', $config);
+
+// Continue working...</code></pre>
+
+
+<p>As mentioned, if <code>proxy_host</code> is not set or is set to a blank string, the
+connection will fall back to a regular direct connection. This allows you to
+write your application in a way that allows a proxy to be used optionally,
+according to a configuration parameter.</p>
+<blockquote>
+<h3 id="access-to-stream-context">Access to stream context</h3>
+<p>Since the proxy adapter inherits from <code>Zend\Http\Client\Adapter\Socket</code>, you
+can use the stream context access method (see
+<a href="#setting-stream-context-options-for-the-socket-adapter">above</a>) to set stream
+context options on <code>Proxy</code> connections.</p>
+</blockquote>
+<h2 id="the-curl-adapter">The cURL Adapter</h2>
+<p>cURL is a standard HTTP client library that is distributed with many operating
+systems and can be used in PHP via the cURL extension. It offers functionality
+for many special cases which can occur for a HTTP client and make it a perfect
+choice for a HTTP adapter. It supports secure connections, proxies, and multiple
+authentication mechanisms. In particular, it is very performant with regards to
+transfering large files.</p>
+<h3 id="setting-curl-options">Setting cURL options</h3>
+<pre class="codehilite"><code class="language-php">use Zend\Http\Client;
+
+$config = [
+    'adapter'     =&gt; Client\Adapter\Curl::class,
+    'curloptions' =&gt; [CURLOPT_FOLLOWLOCATION =&gt; true],
+];
+$client = new Client($uri, $config);</code></pre>
+
+
+<p>By default, the cURL adapter is configured to behave exactly like the <code>Socket</code>
+adapter, and it also accepts the same configuration parameters as the <code>Socket</code>
+and <code>Proxy</code> adapters. You can also change the cURL options by either specifying
+the 'curloptions' key in the constructor of the adapter, or by calling
+<code>setCurlOption($name, $value)</code>; option names correspond to the <code>CURL_*</code>
+constants of the cURL extension. You can get access to the underling cURL handle
+by calling <code>$adapter-&gt;getHandle();</code></p>
+<h3 id="transfering-files-by-handle">Transfering files by handle</h3>
+<p>You can use cURL to transfer very large files over HTTP by filehandle.</p>
+<pre class="codehilite"><code class="language-php">use Zend\Http\Client;
+
+$putFileSize   = filesize('filepath');
+$putFileHandle = fopen('filepath', 'r');
+
+$adapter = new Client\Adapter\Curl();
+$client = new Client();
+$client-&gt;setAdapter($adapter);
+$client-&gt;setMethod('PUT');
+$adapter-&gt;setOptions([
+    'curloptions' =&gt; [
+        CURLOPT_INFILE     =&gt; $putFileHandle,
+        CURLOPT_INFILESIZE =&gt; $putFileSize,
+    ],
+]);
+$client-&gt;send();</code></pre>
+
+
+<h2 id="the-test-adapter">The Test adapter</h2>
+<p>Testing code that relies on HTTP connections poses difficulties.  For example,
+testing an application that pulls an RSS feed from a remote server will require
+a network connection, which is not always available.</p>
+<p><code>Zend\Http\Client\Adapter\Test</code> provides a solution for these situations and
+acts as a mock object for unit tests. You can write your application to use
+<code>Zend\Http\Client</code>, and, when testing (either in your unit test suite, or in
+non-production environments), replace the default adapter with the test adapter,
+allowing you to run tests without actually performing server connections.</p>
+<p><code>Zend\Http\Client\Adapter\Test</code> provides two additional methods, <code>setResponse()</code>
+and <code>addResponse()</code>.  Each takes one parameter, which represents an HTTP
+response as either text or a <code>Zend\Http\Response</code> object. <code>setResponse()</code> sets
+an individual response to always return from any request; <code>addResponse()</code> allows
+aggregating a sequence of responses. In both cases, responses are returned
+without performing actual HTTP requests.</p>
+<h3 id="testing-against-a-single-http-response-stub">Testing against a single HTTP response stub</h3>
+<pre class="codehilite"><code class="language-php">use Zend\Http\Client;
+
+// Instantiate a new adapter and client
+$adapter = new Client\Adapter\Test();
+$client  = new Client(
+    'http://www.example.com',
+    ['adapter' =&gt; $adapter]
+);
+
+// Set the expected response
+$adapter-&gt;setResponse(
+    &quot;HTTP/1.1 200 OK\r\n&quot;
+    . &quot;Content-type: text/xml\r\n&quot;
+    . &quot;\r\n&quot;
+    . '&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;'
+    . '&lt;rss version=&quot;2.0&quot; '
+    . '     xmlns:content=&quot;http://purl.org/rss/1.0/modules/content/&quot;'
+    . '     xmlns:wfw=&quot;http://wellformedweb.org/CommentAPI/&quot;'
+    . '     xmlns:dc=&quot;http://purl.org/dc/elements/1.1/&quot;&gt;'
+    . '  &lt;channel&gt;'
+    . '    &lt;title&gt;Premature Optimization&lt;/title&gt;'
+    // and so on...
+    . '&lt;/rss&gt;'
+);
+
+$response = $client-&gt;send();
+// .. continue parsing $response..</code></pre>
+
+
+<p>The above example shows how you can preset your HTTP client to return the
+response you need. Then, you can continue testing your own code, without being
+dependent on a network connection, the server's response, etc. In this case, the
+test would continue to check how the application parses the XML in the response
+body.</p>
+<p>Sometimes, a single method call to an object can result in that object
+performing multiple HTTP transactions. In this case, it's not possible to use
+<code>setResponse()</code> alone because there's no opportunity to set the next response(s)
+your program might need before returning to the caller.</p>
+<h3 id="testing-against-multiple-http-response-stubs">Testing Against Multiple HTTP Response Stubs</h3>
+<pre class="codehilite"><code class="language-php">use Zend\Http\Client;
+
+// Instantiate a new adapter and client
+$adapter = new Client\Adapter\Test();
+$client = new Client(
+    'http://www.example.com',
+    ['adapter' =&gt; $adapter]
+);
+
+// Set the first expected response
+$adapter-&gt;setResponse(
+    &quot;HTTP/1.1 302 Found\r\n&quot;
+    . &quot;Location: /\r\n&quot;
+    . &quot;Content-Type: text/html\r\n&quot;
+    . &quot;\r\n&quot;
+    . '&lt;html&gt;'
+    . '  &lt;head&gt;&lt;title&gt;Moved&lt;/title&gt;&lt;/head&gt;'
+    . '  &lt;body&gt;&lt;p&gt;This page has moved.&lt;/p&gt;&lt;/body&gt;'
+    . '&lt;/html&gt;'
+);
+
+// Set the next successive response
+$adapter-&gt;addResponse(
+    &quot;HTTP/1.1 200 OK\r\n&quot;
+    . &quot;Content-Type: text/html\r\n&quot;
+    . &quot;\r\n&quot;
+    . '&lt;html&gt;'
+    . '  &lt;head&gt;&lt;title&gt;My Pet Store Home Page&lt;/title&gt;&lt;/head&gt;'
+    . '  &lt;body&gt;&lt;p&gt;...&lt;/p&gt;&lt;/body&gt;'
+    . '&lt;/html&gt;'
+);
+
+// inject the http client object ($client) into your object
+// being tested and then test your object's behavior below</code></pre>
+
+
+<p>The <code>setResponse()</code> method clears any responses in the adapter's buffer and sets
+the first response that will be returned. The <code>addResponse()</code> method will add
+successive responses.</p>
+<p>The responses will be replayed in the order that they were added. If more
+requests are made than the number of responses stored, the responses will cycle
+again in order.</p>
+<p>In the example above, the adapter is configured to test your object's behavior
+when it encounters a 302 redirect. Depending on your application, following a
+redirect may or may not be desired behavior. In our example, we expect that the
+redirect will be followed and we configure the test adapter to help us test
+this. The initial 302 response is set up with the <code>setResponse()</code> method and the
+200 response to be returned next is added with the <code>addResponse()</code> method. After
+configuring the test adapter, inject the HTTP client containing the adapter into
+your object under test and test its behavior.</p>
+<h3 id="forcing-the-adapter-to-fail">Forcing the adapter to fail</h3>
+<p>If you need the adapter to fail on demand you can use
+<code>setNextRequestWillFail($flag)</code>. The method will cause the next call to
+<code>connect()</code> to throw an <code>Zend\Http\Client\Adapter\Exception\RuntimeException</code>.
+This can be useful when our application caches content from an external site (in
+case the site goes down) and you want to test this feature.</p>
+<pre class="codehilite"><code class="language-php">use Zend\Http\Client;
+
+// Instantiate a new adapter and client
+$adapter = new Client\Adapter\Test();
+$client  = new Client(
+    'http://www.example.com',
+    ['adapter' =&gt; $adapter]
+);
+
+// Force the next request to fail with an exception
+$adapter-&gt;setNextRequestWillFail(true);
+
+try {
+    // This call will result in an exception.
+    $client-&gt;send();
+} catch (Client\Adapter\Exception\RuntimeException $e) {
+    // ...
+}
+
+// Further requests will work as expected until
+// you call setNextRequestWillFail(true) again</code></pre>
+
+
+<h2 id="creating-your-own-connection-adapters">Creating your own connection adapters</h2>
+<p><code>Zend\Http\Client</code> has been designed so that you can create and use your own
+connection adapters. You could, for example, create a connection adapter that
+uses persistent sockets, or a connection adapter with caching abilities, and use
+them as needed in your application.</p>
+<p>In order to do so, you must create your own adapter class that implements
+<code>Zend\Http\Client\Adapter\AdapterInterface</code>. The following example shows the
+skeleton of a user-implemented adapter class. All the public functions defined
+in this example must be defined in your adapter as well.</p>
+<pre class="codehilite"><code class="language-php">namespace MyApp\Http\Client\Adapter;
+
+use Zend\Http\Client\Adapter\AdapterInterface;
+
+class BananaProtocol implements AdapterInterface
+{
+    /**
+     * Set Adapter Options
+     *
+     * @param array $config
+     */
+    public function setOptions($config = [])
+    {
+        // This rarely changes - you should usually copy the
+        // implementation in Zend\Http\Client\Adapter\Socket.
+    }
+
+    /**
+     * Connect to the remote server
+     *
+     * @param string  $host
+     * @param int     $port
+     * @param boolean $secure
+     */
+    public function connect($host, $port = 80, $secure = false)
+    {
+        // Set up the connection to the remote server
+    }
+
+    /**
+     * Send request to the remote server
+     *
+     * @param string        $method
+     * @param Zend\Uri\Http $url
+     * @param string        $http_ver
+     * @param array         $headers
+     * @param string        $body
+     * @return string Request as text
+     */
+    public function write(
+        $method,
+        $url,
+        $http_ver = '1.1',
+        $headers = [],
+        $body = ''
+    ) {
+        // Send request to the remote server.
+        // This function is expected to return the full request
+        // (headers and body) as a string
+    }
+
+    /**
+     * Read response from server
+     *
+     * @return string
+     */
+    public function read()
+    {
+        // Read response from remote server and return it as a string
+    }
+
+    /**
+     * Close the connection to the server
+     *
+     */
+    public function close()
+    {
+        // Close the connection to the remote server - called last.
+    }
+}</code></pre>
+
+
+<p>Use the adapter as you would any other:</p>
+<pre class="codehilite"><code class="language-php">use MyApp\Http\Client\Adapter\BananaProtocol;
+use Zend\Http\Client;
+
+$client = new Client([
+    'adapter' =&gt; BananaProtocol::class,
+]);</code></pre>
+
+<hr />
+
+
+<nav>
+  <ul class="pager hidden-print">
+    <li class="previous">
+      <a rel="prev" href="../intro/"><i class="fa fa-arrow-left"></i> Previous</a>
+    </li>
+    <li class="next">
+      <a rel="next" href="../static/">Next <i class="fa fa-arrow-right"></i></a>
+    </li>
+  </ul>
+</nav>
+</div>
+        
+    </div>
+    <!-- content:end -->
+
+    <footer class="col-md-12 text-center">
+        <hr>
+        <p>
+        <small>Copyright (c) 2016 <a href="http://www.zend.com/">Zend Technologies USA Inc.</a><br></small>
+        </p>
+        <p><small><a href="http://framework.zend.com">Learn more about Zend Framework</a></small></p>
+    </footer>
+
+    <script src="../../js/jquery-1.10.2.min.js"></script>
+    <script src="../../js/bootstrap-3.0.3.min.js"></script>
+    <script src="../../js/prism-zf.js"></script>
+
+    <script>var base_url = '../..';</script>
+    <script data-main="../../mkdocs/js/search.js" src="../../mkdocs/js/require.js"></script>
+    <script src="../../js/base.js"></script>
+
+    <div class="modal" id="mkdocs_search_modal" tabindex="-1" role="dialog" aria-labelledby="Search Modal" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">
+                        <span aria-hidden="true">&times;</span>
+                        <span class="sr-only">Close</span>
+                    </button>
+                    <h4 class="modal-title" id="exampleModalLabel">Search</h4>
+                </div>
+                <div class="modal-body">
+                    <p>
+                        From here you can search these documents. Enter your search terms below.
+                    </p>
+                    <form role="form">
+                        <div class="form-group">
+                            <input type="text" class="form-control" placeholder="Search..." id="mkdocs-search-query">
+                        </div>
+                    </form>
+                    <div id="mkdocs-search-results"></div>
+                </div>
+                <div class="modal-footer">
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="zf-components">
+  <div class="zf-components-grid">
+    <div class="zf-logo">
+      <a href="http://framework.zend.com" data-toggle="tooltip" data-placement="bottom" title="Go to the ZF homepage"><img src="../../img/zf-logo-mark.png" alt="Zend Framework" width="250" /></a>
+    </div>
+
+    <div class="component-list"></div>
+
+    <p class="zf-components-rollup"><a href="#">Hide list</a></p>
+  </div>
+</div>
+
+    <script>
+  // Prepare the component list dropdown for display
+  $(function () {
+    var components = $(".zf-components"),
+        componentList = components.find(".component-list"),
+        sidebar = $(".bs-sidebar.affix"),
+        sidebarInitialPos = sidebar.css("position"),
+        hidden,
+        componentToggle = $(".component-toggle"),
+        navbar = $(".navbar-fixed-top"),
+        rollUpLink = $(".zf-components-rollup a");
+
+    // Initial setup on document load
+    components.insertBefore(navbar);
+    $(".zf-logo a").tooltip();
+    componentToggle.tooltip();
+    rollUpLink.attr({ href: "#", alt: "Hide component list" });
+
+    // Cast initial sidebar position value
+    if (undefined === sidebarInitialPos) {
+      sidebarInitialPos = "fixed";
+    }
+
+    // Setup onclick events to toggle list
+    componentToggle.click(toggleComponentList);
+    rollUpLink.click(toggleComponentList);
+
+    // Toggle the component list display
+    function toggleComponentList(event) {
+      event.preventDefault();
+
+      if (hidden === undefined) {
+        // Not loaded yet; load and display.
+        loadComponentList();
+        return;
+      }
+
+      if (hidden) {
+        // Hidden; display.
+        showComponentList();
+        return;
+      }
+
+      // Currently visible; hide
+      hideComponentList();
+    }
+
+    // Show the component list
+    function showComponentList() {
+      navbar.css({position: "relative"});
+      sidebar.css({position: "relative"});
+      components
+        .css({"margin-top": "-" + components.outerHeight() + "px"})
+        .show()
+        .animate({"margin-top": 0}, {
+          complete: function () {
+            componentToggle
+              .data("placement", "top")
+              .attr("data-original-title", "Hide component list");
+            hidden = false;
+          },
+          queue: false
+        });
+    }
+
+    // Hide the component list
+    function hideComponentList() {
+      components.animate({"margin-top": "-" + components.outerHeight() + "px"}, {
+        complete: function () {
+          navbar.css({position: "fixed"});
+          sidebar.css({position: sidebarInitialPos});
+          componentToggle
+            .data("placement", "bottom")
+            .attr("data-original-title", "Show component list");
+          components.hide();
+          hidden = true;
+        },
+        queue: false
+      });
+      sidebar.animate({ top: sidebarInitialTop + "px" }, { queue: false});
+    }
+
+    // Inject a component into the componet list DOM.
+    function injectComponent(index, component) {
+      componentList.append('<div class="component"><h4><a href="' + component.url + '">' + component.name + '</a></h4><p>' + component.description + '</p></div>');
+    }
+
+    // Parse the component list, build the DOM, and display it.
+    function parseComponentList(components) {
+      $.each(components, injectComponent);
+      showComponentList();
+    }
+
+    // Fetch the component list and display it.
+    function loadComponentList () {
+      $.ajax({
+        url: "//zendframework.github.io/zf-mkdoc-theme/scripts/zf-component-list.json",
+        dataType: "text json",
+        success: parseComponentList,
+        error: function (e) {
+          console.log("Error occurred with XHR call", e);
+        }
+      });
+    }
+  });
+</script>
+    </body>
+
+</html>
