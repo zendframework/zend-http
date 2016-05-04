@@ -1,20 +1,19 @@
 # HTTP Client
 
-## Overview
-
-`Zend\Http\Client` provides an easy interface for performing Hyper-Text Transfer Protocol (HTTP)
-requests. `Zend\Http\Client` supports the most simple features expected from an *HTTP* client, as
-well as some more complex features such as *HTTP* authentication and file uploads. Successful
-requests (and most unsuccessful ones too) return a `Zend\Http\Response` object, which provides
-access to the response's headers and body (see this
-section &lt;zend.http.response&gt;).
+`Zend\Http\Client` provides an interface for performing Hyper-Text Transfer
+Protocol (HTTP) requests. `Zend\Http\Client` supports all basic features
+expected from an HTTP client, as well as some more complex features such as HTTP
+authentication and file uploads. Successful requests (and most unsuccessful ones
+too) return a `Zend\Http\Response` object, which provides access to the
+response's headers and body (see the chapter on [Responses](../response.md) for
+more details).
 
 ## Quick Start
 
-The class constructor optionally accepts a URL as its first parameter (can be either a string or a
-`Zend\Uri\Http` object), and an array or `Zend\Config\Config` object containing configuration
-options. The `send()` method is used to submit the request to the remote server, and a
-`Zend\Http\Response` object is returned:
+The class constructor optionally accepts a URL as its first parameter (which can
+be either a string or a `Zend\Uri\Http` object), and an array or `Traversable`
+object containing configuration options. The `send()` method is used to submit
+the request to the remote server, and a `Zend\Http\Response` object is returned:
 
 ```php
 use Zend\Http\Client;
@@ -29,26 +28,24 @@ $client = new Client(
 $response = $client->send();
 ```
 
-Both constructor parameters can be left out, and set later using the setUri() and setConfig()
-methods:
+Both constructor parameters can be left out, and set later using the `setUri()`
+and `setOptions()` methods:
 
 ```php
 use Zend\Http\Client;
 
 $client = new Client();
 $client->setUri('http://example.org');
-$client->setOptions(
-    [
-        'maxredirects' => 0,
-        'timeout'      => 30,
-    ]
-);
+$client->setOptions([
+    'maxredirects' => 0,
+    'timeout'      => 30,
+]);
 $response = $client->send();
 ```
 
-`Zend\Http\Client` can also dispatch requests using a separately configured `request` object (see
-the Zend\\\\Http\\\\Request manual page&lt;zend.http.request&gt; for full details of the methods
-available):
+`Zend\Http\Client` can also dispatch requests using a separately configured
+`request` object (see the [Request](../request.md) manual for full details of
+the methods available):
 
 ```php
 use Zend\Http\Client;
@@ -62,15 +59,17 @@ $client = new Client();
 $response = $client->send($request);
 ```
 
-> ### Note
-`Zend\Http\Client` uses `Zend\Uri\Http` to validate URLs. See the Zend\\\\Uri manual
-page&lt;zend.uri&gt; for more information on the validation process.
+> ### URL validation
+>
+> `Zend\Http\Client` uses `Zend\Uri\Http` to validate URLs. See the
+> [zend-uri](http://framework.zend.com/manual/current/en/index.html#zend-uri)
+> documentation for more information.
 
 ## Configuration
 
-The constructor and setOptions() method accepts an associative array of configuration parameters, or
-a `Zend\Config\Config` object. Setting these parameters is optional, as they all have default
-values.
+The constructor and `setOptions()` method accept an associative array or
+`Traversable` instance containing configuration parameters. Setting these
+parameters is optional, as they all have default values.
 
 Parameter         | Description                                                                                                                                                                          | Expected Values | Default Value
 ------------------|--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|-----------------|--------------
@@ -86,16 +85,16 @@ Parameter         | Description                                                 
 `outputstream`    | Destination for streaming of received data (options: string (filename), true for temp file, false/null to disable streaming)                                                         | boolean         | FALSE
 `rfc3986strict`   | Whether to strictly adhere to RFC 3986 (in practice, this means replacing '+' with '%20')                                                                                            | boolean         | FALSE
 
-The options are also passed to the adapter class upon instantiation, so the same array or
-`Zend\Config\Config` object) can be used for adapter configuration. See the Zend Http Client adapter
-section&lt;zend.http.client.adapters&gt; for more information on the adapter-specific options
-available.
+The options are also passed to the adapter class upon instantiation, so the same
+configuration can be used for adapter configuration. See the
+[adapters](adapters.md) section for more information on the adapter-specific
+options available.
 
 ## Examples
 
-### Performing a Simple GET Request
+### Performing a GET request
 
-Performing simple *HTTP* requests is very easily done:
+GET is the default method used, and requires no special configuration.
 
 ```php
 use Zend\Http\Client;
@@ -104,11 +103,11 @@ $client = new Client('http://example.org');
 $response = $client->send();
 ```
 
-### Using Request Methods Other Than GET
+### Using request methods other than GET
 
-The request method can be set using `setMethod()`. If no method is specified, the method set by the
-last `setMethod()` call is used. If `setMethod()` was never called, the default request method is
-`GET`.
+The request method can be set using `setMethod()`. If no method is specified,
+the method set by the last `setMethod()` call is used. If `setMethod()` was
+never called, the default request method is `GET`.
 
 ```php
 use Zend\Http\Client;
@@ -120,8 +119,9 @@ $client->setMethod('POST');
 $response = $client->send();
 ```
 
-For convenience, `Zend\Http\Request` defines all the request methods as class constants,
-`Zend\Http\Request::METHOD_GET`, `Zend\Http\Request::METHOD_POST` and so on:
+For convenience, `Zend\Http\Request` defines all request methods as class
+constants: `Zend\Http\Request::METHOD_GET`, `Zend\Http\Request::METHOD_POST` and
+so on.
 
 ```php
 use Zend\Http\Client;
@@ -134,11 +134,11 @@ $client->setMethod(Request::METHOD_POST);
 $response = $client->send();
 ```
 
-### Setting GET parameters
+### Setting query parameters
 
-Adding `GET` parameters to an *HTTP* request is quite simple, and can be done either by specifying
-them as part of the URL, or by using the `setParameterGet()` method. This method takes the `GET`
-parameters as an associative array of name =&gt; value `GET` variables.
+Adding query parameters to an HTTP request can be done either by specifying them
+as part of the URL, or by using the `setParameterGet()` method. This method
+takes the query parameters as an associative array of name/value pairs.
 
 ```php
 use Zend\Http\Client;
@@ -148,21 +148,20 @@ $client = new Client();
 $client->setUri('http://example.com/index.php?knight=lancelot');
 
 // Adding several parameters with one call
-$client->setParameterGet(
-    [
-       'first_name'  => 'Bender',
-       'middle_name' => 'Bending',
-       'last_name'   => 'Rodríguez',
-       'made_in'     => 'Mexico',
-   ]
-);
+$client->setParameterGet([
+    'first_name'  => 'Bender',
+    'middle_name' => 'Bending',
+    'last_name'   => 'Rodríguez',
+    'made_in'     => 'Mexico',
+]);
 ```
 
-### Setting POST Parameters
+### Setting form-encoded body parameters
 
-While `GET` parameters can be sent with every request method, `POST` parameters are only sent in the
-body of `POST` requests. Adding `POST` parameters to a request is very similar to adding `GET`
-parameters, and can be done with the `setParameterPost()` method, which is identical to the
+While query parameters can be sent with every request method, other methods can
+accept parameters via the request body. In many cases, these are
+`application/x-www-form-urlencoded` parameters; zend-http allows you to specify
+such parameters usingthe `setParameterPost()` method, which is identical to the
 `setParameterGet()` method in structure.
 
 ```php
@@ -171,24 +170,23 @@ use Zend\Http\Client;
 $client = new Client();
 
 // Setting several POST parameters, one of them with several values
-$client->setParameterPost(
-    [
-        'language'  => 'es',
-        'country'   => 'ar',
-        'selection' => [45, 32, 80],
-    ]
-);
+$client->setParameterPost([
+    'language'  => 'es',
+    'country'   => 'ar',
+    'selection' => [45, 32, 80],
+]);
 ```
 
-Note that when sending `POST` requests, you can set both `GET` and `POST` parameters. On the other
-hand, setting POST parameters on a non-`POST` request will not trigger an error, rendering it
-useless. Unless the request is a `POST` request, `POST` parameters are simply ignored.
+Note that when sending `POST` requests (or an request allowing a request body),
+you can set both query and `POST` parameters. On the other hand, setting POST
+parameters on a `GET` request will not trigger an error, rendering it useless.
 
 ### Connecting to SSL URLs
 
-If you are trying to connect to an SSL (https) URL and are using the default
-(`Zend\Http\Client\Adapter\Socket`) adapter, you may need to set the `sslcapath` configuration
-option in order to allow PHP to validate the SSL certificate:
+If you are trying to connect to an SSL or TLS (https) URL and are using the
+default (`Zend\Http\Client\Adapter\Socket`) adapter, you may need to set the
+`sslcapath` configuration option in order to allow PHP to validate the SSL
+certificate:
 
 ```php
 use Zend\Http\Client;
@@ -202,11 +200,12 @@ $client = new Client(
 $response = $client->send();
 ```
 
-The exact path to use will vary depending on your Operating System. Without this you'll get the
-exception "Unable to enable crypto on TCP connection" when trying to connect.
+The exact path to use will vary depending on your operating system. Without this
+you'll get the exception "Unable to enable crypto on TCP connection" when trying
+to connect.
 
-Alternatively, you could switch to the curl adapter, which negotiates SSL connections more
-transparently:
+Alternatively, you could switch to the curl adapter, which negotiates SSL
+connections more transparently:
 
 ```php
 use Zend\Http\Client;
@@ -220,7 +219,7 @@ $client = new Client(
 $response = $client->send();
 ```
 
-### A Complete Example
+## Complete Example
 
 ```php
 use Zend\Http\Client;
@@ -228,11 +227,9 @@ use Zend\Http\Client;
 $client = new Client();
 $client->setUri('http://www.example.com');
 $client->setMethod('POST');
-$client->setParameterPost(
-    [
-        'foo' => 'bar',
-    ]
-);
+$client->setParameterPost([
+    'foo' => 'bar',
+]);
 
 $response = $client->send();
 
