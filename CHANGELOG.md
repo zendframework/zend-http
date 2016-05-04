@@ -6,7 +6,13 @@ All notable changes to this project will be documented in this file, in reverse 
 
 ### Added
 
-- Nothing.
+- [#44](https://github.com/zendframework/zend-http/pull/44),
+  [#45](https://github.com/zendframework/zend-http/pull/45),
+  [#46](https://github.com/zendframework/zend-http/pull/46),
+  [#47](https://github.com/zendframework/zend-http/pull/47),
+  [#48](https://github.com/zendframework/zend-http/pull/48), and
+  [#49](https://github.com/zendframework/zend-http/pull/49) prepare the
+  documentation for publication at https://zendframework.github.io/zend-http/
 
 ### Deprecated
 
