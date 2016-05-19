@@ -32,6 +32,12 @@ class AcceptCharsetTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('xxx', $acceptCharsetHeader->getFieldValue());
     }
 
+    public function testAcceptCharsetGetFieldValueReturnsProperValueWithTrailingSemicolon()
+    {
+        $acceptCharsetHeader = AcceptCharset::fromString('Accept-Charset: xxx;');
+        $this->assertEquals('xxx', $acceptCharsetHeader->getFieldValue());
+    }
+
     public function testAcceptCharsetGetFieldValueReturnsProperValueWithSemicolonWithoutEqualSign()
     {
         $acceptCharsetHeader = AcceptCharset::fromString('Accept-Charset: xxx;yyy');
