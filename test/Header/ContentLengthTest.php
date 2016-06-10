@@ -13,56 +13,89 @@ use Zend\Http\Header\ContentLength;
 
 class ContentLengthTest extends \PHPUnit_Framework_TestCase
 {
-    public function testContentLengthFromStringCreatesValidContentLengthHeader()
+    public function testFromStringCreatesValidContentLengthHeader()
     {
-        $contentLengthHeader = ContentLength::fromString('Content-Length: xxx');
+        $contentLengthHeader = ContentLength::fromString('Content-Length: 123');
         $this->assertInstanceOf('Zend\Http\Header\HeaderInterface', $contentLengthHeader);
         $this->assertInstanceOf('Zend\Http\Header\ContentLength', $contentLengthHeader);
     }
 
-    public function testContentLengthGetFieldNameReturnsHeaderName()
+    public function testGetFieldNameReturnsHeaderName()
     {
-        $contentLengthHeader = new ContentLength();
+        $contentLengthHeader = new ContentLength('123');
         $this->assertEquals('Content-Length', $contentLengthHeader->getFieldName());
     }
 
-    public function testContentLengthGetFieldValueReturnsProperValue()
+    public function testGetFieldValueReturnsProperValue()
     {
-        $this->markTestIncomplete('ContentLength needs to be completed');
-
-        $contentLengthHeader = new ContentLength();
-        $this->assertEquals('xxx', $contentLengthHeader->getFieldValue());
+        $contentLengthHeader = new ContentLength('123');
+        $this->assertEquals('123', $contentLengthHeader->getFieldValue());
     }
 
-    public function testContentLengthToStringReturnsHeaderFormattedString()
+    public function testToStringReturnsHeaderFormattedString()
     {
-        $this->markTestIncomplete('ContentLength needs to be completed');
-
-        $contentLengthHeader = new ContentLength();
-
-        // @todo set some values, then test output
-        $this->assertEmpty('Content-Length: xxx', $contentLengthHeader->toString());
+        $contentLengthHeader = new ContentLength('12345');
+        $this->assertSame('Content-Length: 12345', $contentLengthHeader->toString());
     }
 
-    /** Implementation specific tests here */
+    public function testCastValueToString()
+    {
+        $contentLengthHeader = new ContentLength(12345);
+        $this->assertEquals('12345', $contentLengthHeader->getFieldValue());
+    }
+
+    public function testAllowZeroValue()
+    {
+        $contentLengthHeader = new ContentLength('0');
+        $this->assertEquals('0', $contentLengthHeader->getFieldValue());
+    }
+
+    public function testAllowBigIntValue()
+    {
+        $power95of2 = '39614081257132168796771975168';
+        $contentLengthHeader = new ContentLength($power95of2);
+        $this->assertEquals($power95of2, $contentLengthHeader->getFieldValue());
+    }
 
     /**
-     * @see http://en.wikipedia.org/wiki/HTTP_response_splitting
-     * @group ZF2015-04
+     * @dataProvider invalidValues
      */
-    public function testPreventsCRLFAttackViaFromString()
+    public function testInvalidValueThrowsExceptionOnConstructor($invalidValue)
     {
         $this->setExpectedException('Zend\Http\Header\Exception\InvalidArgumentException');
-        $header = ContentLength::fromString("Content-Length: xxx\r\n\r\nevilContent");
+        new ContentLength($invalidValue);
     }
 
     /**
-     * @see http://en.wikipedia.org/wiki/HTTP_response_splitting
-     * @group ZF2015-04
+     * @dataProvider invalidValues
      */
-    public function testPreventsCRLFAttackViaConstructor()
+    public function testInvalidValueThrowsExceptionOnSetFieldValue($invalidValue)
     {
         $this->setExpectedException('Zend\Http\Header\Exception\InvalidArgumentException');
-        $header = new ContentLength("Content-Length: xxx\r\n\r\nevilContent");
+        $header = new ContentLength('123');
+        $header->setFieldValue($invalidValue);
+    }
+
+    /**
+     * Data provider of invalid values
+     * @return array
+     */
+    public function invalidValues()
+    {
+        return [
+            // invalid number
+            ['abc'],
+            ['1a1'],
+            ['a1a'],
+
+            // invalid integer
+            ['123.456'],
+            ['0x12'],
+            ['xFF'],
+            [' 1 '],
+
+            // http://en.wikipedia.org/wiki/HTTP_response_splitting
+            ['123\r\n\r\nevilContent'],
+        ];
     }
 }
