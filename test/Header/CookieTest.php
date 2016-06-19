@@ -9,6 +9,7 @@
 
 namespace ZendTest\Http\Header;
 
+use Zend\Http\Cookies;
 use Zend\Http\Header\Cookie;
 use Zend\Http\Header\SetCookie;
 
@@ -96,6 +97,14 @@ class CookieTest extends \PHPUnit_Framework_TestCase
             // Description => [raw value, serialized]
             'CRLF characters' => ["foo=bar\r\n\r\nevilContent", '0=foo%3Dbar%0D%0A%0D%0AevilContent'],
         ];
+    }
+
+    public function testSetExpiredCookie()
+    {
+        $cookies = new Cookies();
+        $cookies->addCookie("Set-Cookie: wpSGCacheBypass=0; expires=Fri, 15-Apr-2016 07:10:31 GMT; Max-Age=-3600; path=/");
+
+        $this->assertEquals(0, count($cookies->getAllCookies()));
     }
 
 //    /**
