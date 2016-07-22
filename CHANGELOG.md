@@ -2,7 +2,31 @@
 
 All notable changes to this project will be documented in this file, in reverse chronological order by release.
 
-## 2.5.4 - TBD
+## 2.5.5 - TBD
+
+### Added
+
+- [#44](https://github.com/zendframework/zend-http/pull/44),
+  [#45](https://github.com/zendframework/zend-http/pull/45),
+  [#46](https://github.com/zendframework/zend-http/pull/46),
+  [#47](https://github.com/zendframework/zend-http/pull/47),
+  [#48](https://github.com/zendframework/zend-http/pull/48), and
+  [#49](https://github.com/zendframework/zend-http/pull/49) prepare the
+  documentation for publication at https://zendframework.github.io/zend-http/
+
+### Deprecated
+
+- Nothing.
+
+### Removed
+
+- Nothing.
+
+### Fixed
+
+- Nothing.
+
+## 2.5.4 - 2016-02-04
 
 ### Added
 
@@ -18,7 +42,9 @@ All notable changes to this project will be documented in this file, in reverse 
 
 ### Fixed
 
-- Nothing.
+- [#42](https://github.com/zendframework/zend-http/pull/42) updates dependencies
+  to ensure it can work with PHP 5.5+ and 7.0+, as well as zend-stdlib
+  2.5+/3.0+.
 
 ## 2.5.3 - 2015-09-14
 
