@@ -465,4 +465,10 @@ class AcceptTest extends \PHPUnit_Framework_TestCase
         $this->setExpectedException('Zend\Http\Header\Exception\InvalidArgumentException');
         $header = Accept::fromString("Accept: application/text\r\n\r\nevilContent");
     }
+
+    public function testGetEmptyFieldValue()
+    {
+        $accept = new Accept();
+        $accept->getFieldValue();
+    }
 }
