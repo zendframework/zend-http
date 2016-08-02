@@ -190,7 +190,7 @@ abstract class AbstractAccept implements HeaderInterface
      */
     public function getFieldValue($values = null)
     {
-        if (!$values) {
+        if ($values === null) {
             return $this->getFieldValue($this->fieldValueParts);
         }
 
