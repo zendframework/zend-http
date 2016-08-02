@@ -466,7 +466,7 @@ class AcceptTest extends \PHPUnit_Framework_TestCase
         $header = Accept::fromString("Accept: application/text\r\n\r\nevilContent");
     }
 
-    public function testEmptyValue()
+    public function testGetEmptyFieldValue()
     {
         $accept = new Accept();
         $accept->getFieldValue();
