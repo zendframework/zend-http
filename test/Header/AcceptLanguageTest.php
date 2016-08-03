@@ -32,6 +32,18 @@ class AcceptLanguageTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('xxx', $acceptLanguageHeader->getFieldValue());
     }
 
+    public function testAcceptLanguageGetFieldValueReturnsProperValueWithTrailingSemicolon()
+    {
+        $acceptLanguageHeader = AcceptLanguage::fromString('Accept-Language: xxx;');
+        $this->assertEquals('xxx', $acceptLanguageHeader->getFieldValue());
+    }
+
+    public function testAcceptLanguageGetFieldValueReturnsProperValueWithSemicolonWithoutEqualSign()
+    {
+        $acceptLanguageHeader = AcceptLanguage::fromString('Accept-Language: xxx;yyy');
+        $this->assertEquals('xxx;yyy', $acceptLanguageHeader->getFieldValue());
+    }
+
     public function testAcceptLanguageToStringReturnsHeaderFormattedString()
     {
         $acceptLanguageHeader = new AcceptLanguage();

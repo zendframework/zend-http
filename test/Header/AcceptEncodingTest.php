@@ -32,6 +32,18 @@ class AcceptEncodingTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('xxx', $acceptEncodingHeader->getFieldValue());
     }
 
+    public function testAcceptEncodingGetFieldValueReturnsProperValueWithTrailingSemicolon()
+    {
+        $acceptEncodingHeader = AcceptEncoding::fromString('Accept-Encoding: xxx;');
+        $this->assertEquals('xxx', $acceptEncodingHeader->getFieldValue());
+    }
+
+    public function testAcceptEncodingGetFieldValueReturnsProperValueWithSemicolonWithoutEqualSign()
+    {
+        $acceptEncodingHeader = AcceptEncoding::fromString('Accept-Encoding: xxx;yyy');
+        $this->assertEquals('xxx;yyy', $acceptEncodingHeader->getFieldValue());
+    }
+
     public function testAcceptEncodingToStringReturnsHeaderFormattedString()
     {
         $acceptEncodingHeader = new AcceptEncoding();
