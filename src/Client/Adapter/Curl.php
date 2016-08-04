@@ -247,6 +247,10 @@ class Curl implements HttpAdapter, StreamInterface
      *     to wrong host, no PUT file defined, unsupported method, or unsupported
      *     cURL option.
      * @throws AdapterException\InvalidArgumentException if $method is currently not supported
+     * @throws AdapterException\TimeoutException when a request exceeds the CURLOPT_TIMEOUT
+     * setting before it completes.
+     * @throws AdapterException\ConnectTimeoutException when a request exceeds the
+     * CURLOPT_CONNECTTIMEOUT setting when trying to connect to a host:port.
      */
     public function write($method, $uri, $httpVersion = 1.1, $headers = [], $body = '')
     {
@@ -425,7 +429,17 @@ class Curl implements HttpAdapter, StreamInterface
         $request .= $body;
 
         if (empty($this->response)) {
-            throw new AdapterException\RuntimeException("Error in cURL request: " . curl_error($this->curl));
+            $errorMessage = "Error in cURL request: " . curl_error($this->curl);
+            preg_match('/: (.*?) timed out/', $errorMessage, $matches);
+            $type = isset($matches[1]) ? $matches[1] : null;
+            switch ($type) {
+                case 'Operation':
+                    throw new AdapterException\TimeoutException($errorMessage);
+                case 'Connection':
+                    throw new AdapterException\ConnectTimeoutException($errorMessage);
+                default:
+                    throw new AdapterException\RuntimeException($errorMessage);
+            }
         }
 
         // separating header from body because it is dangerous to accidentially replace strings in the body
