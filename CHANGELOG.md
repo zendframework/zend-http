@@ -24,7 +24,10 @@ All notable changes to this project will be documented in this file, in reverse 
 
 ### Fixed
 
-- Nothing.
+- [#87](https://github.com/zendframework/zend-http/pull/87) fixes the
+  `ContentLength` constructor to test for a non null value (vs a falsy value)
+  before validating the value; this ensures 0 values may be specified for the
+  length.
 
 ## 2.5.4 - 2016-02-04
 
