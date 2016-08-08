@@ -2,7 +2,25 @@
 
 All notable changes to this project will be documented in this file, in reverse chronological order by release.
 
-## 2.5.5 - TBD
+## 2.5.6 - TBD
+
+### Added
+
+- Nothing.
+
+### Deprecated
+
+- Nothing.
+
+### Removed
+
+- Nothing.
+
+### Fixed
+
+- Nothing.
+
+## 2.5.5 - 2016-08-08
 
 ### Added
 
@@ -28,6 +46,12 @@ All notable changes to this project will be documented in this file, in reverse 
   `ContentLength` constructor to test for a non null value (vs a falsy value)
   before validating the value; this ensures 0 values may be specified for the
   length.
+- [#85](https://github.com/zendframework/zend-http/pull/85) fixes infinite recursion
+  on AbstractAccept. If you create a new Accept and try to call getFieldValue(),
+  an infinite recursion and a fatal error happens.
+- [#58](https://github.com/zendframework/zend-http/pull/58) avoid triggering a notice
+  with special crafted accept headers. In the case the value of an accept header
+  does not contain an equal sign, an "Undefined offset" notice is triggered.
 
 ## 2.5.4 - 2016-02-04
 
