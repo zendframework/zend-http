@@ -397,4 +397,31 @@ class CurlTest extends CommonHttpTests
         $this->client->send();
         $this->assertEquals('foo=bar', $this->client->getResponse()->getBody());
     }
+
+
+    /**
+     * @group ZF-7683
+     * @see https://github.com/zendframework/zend-http/pull/53
+     *
+     * Note: The headers stored in ZF7683-chunked.php are case insensitive
+     */
+    public function testNoCaseSensitiveHeaderName()
+    {
+        $this->client->setUri($this->baseuri . 'ZF7683-chunked.php');
+
+        $adapter = new Adapter\Curl();
+        $adapter->setOptions([
+            'curloptions' => [
+                CURLOPT_ENCODING => '',
+            ],
+        ]);
+        $this->client->setAdapter($adapter);
+        $this->client->setMethod('GET');
+        $this->client->send();
+
+        $headers = $this->client->getResponse()->getHeaders();
+
+        $this->assertFalse($headers->has('Transfer-Encoding'));
+        $this->assertFalse($headers->has('Content-Encoding'));
+    }
 }
