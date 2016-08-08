@@ -65,4 +65,11 @@ class ContentLengthTest extends \PHPUnit_Framework_TestCase
         $this->setExpectedException('Zend\Http\Header\Exception\InvalidArgumentException');
         $header = new ContentLength("Content-Length: xxx\r\n\r\nevilContent");
     }
+
+    public function testZeroValue()
+    {
+        $contentLengthHeader = new ContentLength(0);
+        $this->assertEquals(0, $contentLengthHeader->getFieldValue());
+        $this->assertEquals('Content-Length: 0', $contentLengthHeader->toString());
+    }
 }
