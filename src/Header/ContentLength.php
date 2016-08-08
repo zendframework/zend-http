@@ -38,12 +38,21 @@ class ContentLength implements HeaderInterface
         return $header;
     }
 
-    public function __construct($value = null)
+    public function __construct($value)
     {
-        if ($value) {
-            HeaderValue::assertValid($value);
-            $this->value = $value;
+        $this->setFieldValue($value);
+    }
+
+    public function setFieldValue($value)
+    {
+        $value = (string) $value;
+        if (!HeaderValue::isValid($value) || !preg_match('/^(0|[1-9][0-9]*)$/', $value)) {
+            throw new Exception\InvalidArgumentException(sprintf(
+                'Invalid header value for Content-Length: "%s"',
+                $value
+            ));
         }
+        $this->value = $value;
     }
 
     public function getFieldName()
