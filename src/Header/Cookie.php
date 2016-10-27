@@ -111,8 +111,6 @@ class Cookie extends ArrayObject implements HeaderInterface
             return $result[$prefix] = $data;
         }
 
-        $result = [];
-
         foreach ($data as $key => $value) {
             $key = $prefix ? $prefix . '[' . $key . ']' : $key;
             $this->flattenCookies($result, $value, $key);
