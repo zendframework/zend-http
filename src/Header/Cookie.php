@@ -109,7 +109,6 @@ class Cookie extends ArrayObject implements HeaderInterface
 
     protected function flattenCookies(&$result, $data, $prefix = null)
     {
-        
         if (!is_array($data) && $this !== $data) {
             $result[$prefix] = $data;
             return;
