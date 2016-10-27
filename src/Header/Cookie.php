@@ -99,7 +99,7 @@ class Cookie extends ArrayObject implements HeaderInterface
 
         $cookies = [];
         $this->flattenCookies($cookies, $this);
-        
+
         foreach ($cookies as $name => $value) {
             $nvPairs[] = $name . '=' . (($this->encodeValue) ? urlencode($value) : $value);
         }
