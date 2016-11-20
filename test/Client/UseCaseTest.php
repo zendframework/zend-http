@@ -80,7 +80,7 @@ class UseCaseTest extends \PHPUnit_Framework_TestCase
     public function testHttpGet()
     {
         $this->client->setMethod(Request::METHOD_GET);
-        $response= $this->client->send();
+        $response = $this->client->send();
         $this->assertTrue($response->isSuccess());
     }
 
@@ -92,11 +92,11 @@ class UseCaseTest extends \PHPUnit_Framework_TestCase
 
     public function testRequestHttpGet()
     {
-        $client= new HTTPClient();
-        $request= new Request();
+        $client = new HTTPClient();
+        $request = new Request();
         $request->setUri($this->baseuri);
         $request->setMethod(Request::METHOD_GET);
-        $response= $client->send($request);
+        $response = $client->send($request);
         $this->assertTrue($response->isSuccess());
     }
 }

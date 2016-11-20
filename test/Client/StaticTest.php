@@ -102,8 +102,11 @@ class StaticTest extends \PHPUnit_Framework_TestCase
         $this->_client->setMethod('GET');
         $res = $this->_client->send();
 
-        $this->assertContains($qstr, $this->_client->getLastRawRequest(),
-            'Request is expected to contain the entire query string');
+        $this->assertContains(
+            $qstr,
+            $this->_client->getLastRawRequest(),
+            'Request is expected to contain the entire query string'
+        );
     }
 
     /**
@@ -138,7 +141,8 @@ class StaticTest extends \PHPUnit_Framework_TestCase
     {
         $this->setExpectedException(
             'Zend\Http\Exception\InvalidArgumentException',
-            'Invalid or not supported authentication type: \'SuperStrongAlgo\'');
+            'Invalid or not supported authentication type: \'SuperStrongAlgo\''
+        );
 
         $this->_client->setAuth('shahar', '1234', 'SuperStrongAlgo');
     }
@@ -189,7 +193,8 @@ class StaticTest extends \PHPUnit_Framework_TestCase
     {
         $this->setExpectedException(
             'Zend\Http\Exception\InvalidArgumentException',
-            'Invalid parameter type passed as Cookie');
+            'Invalid parameter type passed as Cookie'
+        );
 
         $this->_client->addCookie('cookie');
     }
@@ -248,7 +253,8 @@ class StaticTest extends \PHPUnit_Framework_TestCase
     {
         $this->setExpectedException(
             'Zend\Http\Client\Exception\InvalidArgumentException',
-            'Config parameter is not valid');
+            'Config parameter is not valid'
+        );
 
         $this->_client->setOptions($config);
     }
@@ -286,16 +292,22 @@ class StaticTest extends \PHPUnit_Framework_TestCase
     public function testGetLastRawResponse()
     {
         // First, make sure we get null before the request
-        $this->assertEquals(null, $this->_client->getLastRawResponse(),
-            'getLastRawResponse() is still expected to return null');
+        $this->assertEquals(
+            null,
+            $this->_client->getLastRawResponse(),
+            'getLastRawResponse() is still expected to return null'
+        );
 
         // Now, test we get a proper response after the request
         $this->_client->setUri('http://example.com/foo/bar');
         $this->_client->setAdapter('Zend\Http\Client\Adapter\Test');
 
         $response = $this->_client->send();
-        $this->assertSame($response, $this->_client->getResponse(),
-            'Response is expected to be identical to the result of getResponse()');
+        $this->assertSame(
+            $response,
+            $this->_client->getResponse(),
+            'Response is expected to be identical to the result of getResponse()'
+        );
     }
 
     /**
@@ -311,8 +323,10 @@ class StaticTest extends \PHPUnit_Framework_TestCase
 
         $response = $this->_client->send();
 
-        $this->assertNull($this->_client->getLastRawResponse(),
-            'getLastRawResponse is expected to be null when not storing');
+        $this->assertNull(
+            $this->_client->getLastRawResponse(),
+            'getLastRawResponse is expected to be null when not storing'
+        );
     }
 
     /**
@@ -322,12 +336,13 @@ class StaticTest extends \PHPUnit_Framework_TestCase
      */
     public function testInvalidPostContentType()
     {
-        if (!getenv('TESTS_ZEND_HTTP_CLIENT_ONLINE')) {
+        if (! getenv('TESTS_ZEND_HTTP_CLIENT_ONLINE')) {
             $this->markTestSkipped('Zend\Http\Client online tests are not enabled');
         }
         $this->setExpectedException(
             'Zend\Http\Exception\RuntimeException',
-            'Cannot handle content type \'x-foo/something-fake\' automatically');
+            'Cannot handle content type \'x-foo/something-fake\' automatically'
+        );
 
         $this->_client->setEncType('x-foo/something-fake');
         $this->_client->setParameterPost(['parameter' => 'value']);
@@ -342,12 +357,13 @@ class StaticTest extends \PHPUnit_Framework_TestCase
      */
     public function testSocketErrorException()
     {
-        if (!getenv('TESTS_ZEND_HTTP_CLIENT_ONLINE')) {
+        if (! getenv('TESTS_ZEND_HTTP_CLIENT_ONLINE')) {
             $this->markTestSkipped('Zend\Http\Client online tests are not enabled');
         }
         $this->setExpectedException(
             'Zend\Http\Client\Adapter\Exception\RuntimeException',
-            'Unable to connect to 255.255.255.255:80');
+            'Unable to connect to 255.255.255.255:80'
+        );
 
         // Try to connect to an invalid host
         $this->_client->setUri('http://255.255.255.255');
@@ -369,7 +385,8 @@ class StaticTest extends \PHPUnit_Framework_TestCase
     {
         $this->setExpectedException(
             'Zend\Http\Exception\InvalidArgumentException',
-            'Invalid HTTP method passed');
+            'Invalid HTTP method passed'
+        );
 
         $this->_client->setMethod($method);
     }
@@ -381,7 +398,7 @@ class StaticTest extends \PHPUnit_Framework_TestCase
      */
     public function testFormDataEncodingWithMultiArrayZF7038()
     {
-        if (!getenv('TESTS_ZEND_HTTP_CLIENT_ONLINE')) {
+        if (! getenv('TESTS_ZEND_HTTP_CLIENT_ONLINE')) {
             $this->markTestSkipped('Zend\Http\Client online tests are not enabled');
         }
         $this->_client->setAdapter('Zend\Http\Client\Adapter\Test');
@@ -427,7 +444,7 @@ class StaticTest extends \PHPUnit_Framework_TestCase
      */
     public function testMultibyteRawPostDataZF2098()
     {
-        if (!getenv('TESTS_ZEND_HTTP_CLIENT_ONLINE')) {
+        if (! getenv('TESTS_ZEND_HTTP_CLIENT_ONLINE')) {
             $this->markTestSkipped('Zend\Http\Client online tests are not enabled');
         }
         $this->_client->setAdapter('Zend\Http\Client\Adapter\Test');
@@ -455,7 +472,7 @@ class StaticTest extends \PHPUnit_Framework_TestCase
      */
     public function testOpenTempStreamWithValidFileDoesntThrowsException()
     {
-        if (!getenv('TESTS_ZEND_HTTP_CLIENT_ONLINE')) {
+        if (! getenv('TESTS_ZEND_HTTP_CLIENT_ONLINE')) {
             $this->markTestSkipped('Zend\Http\Client online tests are not enabled');
         }
         $url = 'http://www.example.com/';
@@ -478,12 +495,13 @@ class StaticTest extends \PHPUnit_Framework_TestCase
      */
     public function testOpenTempStreamWithBogusFileClosesTheConnection()
     {
-        if (!getenv('TESTS_ZEND_HTTP_CLIENT_ONLINE')) {
+        if (! getenv('TESTS_ZEND_HTTP_CLIENT_ONLINE')) {
             $this->markTestSkipped('Zend\Http\Client online tests are not enabled');
         }
         $this->setExpectedException(
             'Zend\Http\Exception\RuntimeException',
-            'Could not open temp file /path/to/bogus/file.ext');
+            'Could not open temp file /path/to/bogus/file.ext'
+        );
 
         $url = 'http://www.example.com';
         $config = [
@@ -501,14 +519,17 @@ class StaticTest extends \PHPUnit_Framework_TestCase
      */
     public function testEncodedCookiesInRequestHeaders()
     {
-        if (!getenv('TESTS_ZEND_HTTP_CLIENT_ONLINE')) {
+        if (! getenv('TESTS_ZEND_HTTP_CLIENT_ONLINE')) {
             $this->markTestSkipped('Zend\Http\Client online tests are not enabled');
         }
         $this->_client->addCookie('foo', 'bar=baz');
         $this->_client->send();
         $cookieValue = 'Cookie: foo='.urlencode('bar=baz');
-        $this->assertContains($cookieValue, $this->_client->getLastRawRequest(),
-            'Request is expected to contain the entire cookie "keyname=encoded_value"');
+        $this->assertContains(
+            $cookieValue,
+            $this->_client->getLastRawRequest(),
+            'Request is expected to contain the entire cookie "keyname=encoded_value"'
+        );
     }
 
     /**
@@ -518,15 +539,18 @@ class StaticTest extends \PHPUnit_Framework_TestCase
      */
     public function testRawCookiesInRequestHeaders()
     {
-        if (!getenv('TESTS_ZEND_HTTP_CLIENT_ONLINE')) {
+        if (! getenv('TESTS_ZEND_HTTP_CLIENT_ONLINE')) {
             $this->markTestSkipped('Zend\Http\Client online tests are not enabled');
         }
         $this->_client->setOptions(['encodecookies' => false]);
         $this->_client->addCookie('foo', 'bar=baz');
         $this->_client->send();
         $cookieValue = 'Cookie: foo=bar=baz';
-        $this->assertContains($cookieValue, $this->_client->getLastRawRequest(),
-            'Request is expected to contain the entire cookie "keyname=raw_value"');
+        $this->assertContains(
+            $cookieValue,
+            $this->_client->getLastRawRequest(),
+            'Request is expected to contain the entire cookie "keyname=raw_value"'
+        );
     }
 
     /**

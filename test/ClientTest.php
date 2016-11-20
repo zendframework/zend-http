@@ -350,13 +350,13 @@ class ClientTest extends \PHPUnit_Framework_TestCase
 
     public function testPrepareHeadersCreateRightHttpField()
     {
-        $body = json_encode(['foofoo'=>'barbar']);
+        $body = json_encode(['foofoo' => 'barbar']);
 
         $client = new Client();
         $prepareHeadersReflection = new \ReflectionMethod($client, 'prepareHeaders');
         $prepareHeadersReflection->setAccessible(true);
 
-        $request= new Request();
+        $request = new Request();
         $request->getHeaders()->addHeaderLine('content-type', 'application/json');
         $request->getHeaders()->addHeaderLine('content-length', strlen($body));
         $client->setRequest($request);
@@ -376,7 +376,7 @@ class ClientTest extends \PHPUnit_Framework_TestCase
 
     public function testPrepareHeadersCurlDigestAuthentication()
     {
-        $body = json_encode(['foofoo'=>'barbar']);
+        $body = json_encode(['foofoo' => 'barbar']);
 
         $client = new Client();
         $prepareHeadersReflection = new \ReflectionMethod($client, 'prepareHeaders');

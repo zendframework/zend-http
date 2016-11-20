@@ -109,7 +109,7 @@ class ContentSecurityPolicy implements HeaderInterface
             $token = trim($token);
             if ($token) {
                 list($directiveName, $directiveValue) = explode(' ', $token, 2);
-                if (!isset($header->directives[$directiveName])) {
+                if (! isset($header->directives[$directiveName])) {
                     $header->setDirective($directiveName, [$directiveValue]);
                 }
             }

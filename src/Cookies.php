@@ -104,10 +104,10 @@ class Cookies extends Headers
         if ($cookie instanceof SetCookie) {
             $domain = $cookie->getDomain();
             $path   = $cookie->getPath();
-            if (!isset($this->cookies[$domain])) {
+            if (! isset($this->cookies[$domain])) {
                 $this->cookies[$domain] = [];
             }
-            if (!isset($this->cookies[$domain][$path])) {
+            if (! isset($this->cookies[$domain][$path])) {
                 $this->cookies[$domain][$path] = [];
             }
             $this->cookies[$domain][$path][$cookie->getName()] = $cookie;
@@ -168,7 +168,7 @@ class Cookies extends Headers
     ) {
         if (is_string($uri)) {
             $uri = Uri\UriFactory::factory($uri, 'http');
-        } elseif (!$uri instanceof Uri\Uri) {
+        } elseif (! $uri instanceof Uri\Uri) {
             throw new Exception\InvalidArgumentException("Invalid URI string or object passed");
         }
 
@@ -208,7 +208,7 @@ class Cookies extends Headers
     {
         if (is_string($uri)) {
             $uri = Uri\UriFactory::factory($uri, 'http');
-        } elseif (!$uri instanceof Uri\Uri) {
+        } elseif (! $uri instanceof Uri\Uri) {
             throw new Exception\InvalidArgumentException('Invalid URI specified');
         }
 

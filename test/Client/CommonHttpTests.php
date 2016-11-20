@@ -303,16 +303,22 @@ abstract class CommonHttpTests extends \PHPUnit_Framework_TestCase
 
         $res = $this->client->send();
 
-        $this->assertContains(serialize($params) . "\n" . serialize($params),
-            $res->getBody(), "returned body does not contain all GET and POST parameters (it should!)");
+        $this->assertContains(
+            serialize($params) . "\n" . serialize($params),
+            $res->getBody(),
+            "returned body does not contain all GET and POST parameters (it should!)"
+        );
 
         $this->client->resetParameters();
         $this->client->setMethod('POST');
         $res = $this->client->send();
 
-        $this->assertNotContains(serialize($params), $res->getBody(),
-            "returned body contains GET or POST parameters (it shouldn't!)");
-        $headerXFoo= $this->client->getHeader("X-Foo");
+        $this->assertNotContains(
+            serialize($params),
+            $res->getBody(),
+            "returned body contains GET or POST parameters (it shouldn't!)"
+        );
+        $headerXFoo = $this->client->getHeader("X-Foo");
         $this->assertEmpty($headerXFoo, "Header not preserved by reset");
     }
 
@@ -418,40 +424,40 @@ abstract class CommonHttpTests extends \PHPUnit_Framework_TestCase
       * Test we can set a set of values for one header
       *
       */
-     public function testMultipleHeader()
-     {
-         $this->client->setUri($this->baseuri . 'testHeaders.php');
-         $headers = [
-            'Accept-encoding' => 'gzip,deflate',
-            'X-baz' => 'Foo',
-            'X-powered-by' => [
-                'A large wooden badger',
-                'My Shiny Metal Ass',
-                'Dark Matter'
-            ],
-            'Cookie' => [
-                'foo=bar',
-                'baz=waka'
-            ]
+    public function testMultipleHeader()
+    {
+        $this->client->setUri($this->baseuri . 'testHeaders.php');
+        $headers = [
+          'Accept-encoding' => 'gzip,deflate',
+          'X-baz' => 'Foo',
+          'X-powered-by' => [
+              'A large wooden badger',
+              'My Shiny Metal Ass',
+              'Dark Matter'
+          ],
+          'Cookie' => [
+              'foo=bar',
+              'baz=waka'
+          ]
         ];
 
-         $this->client->setHeaders($headers);
-         $this->client->setMethod('TRACE');
+        $this->client->setHeaders($headers);
+        $this->client->setMethod('TRACE');
 
-         $res = $this->client->send();
-         if ($res->getStatusCode() == 405 || $res->getStatusCode() == 501) {
-             $this->markTestSkipped("Server does not allow the TRACE method");
-         }
-         $body = strtolower($res->getBody());
+        $res = $this->client->send();
+        if ($res->getStatusCode() == 405 || $res->getStatusCode() == 501) {
+            $this->markTestSkipped("Server does not allow the TRACE method");
+        }
+        $body = strtolower($res->getBody());
 
-         foreach ($headers as $key => $val) {
-             if (is_array($val)) {
-                 $val = implode(', ', $val);
-             }
+        foreach ($headers as $key => $val) {
+            if (is_array($val)) {
+                $val = implode(', ', $val);
+            }
 
-             $this->assertContains(strtolower("$key: $val"), $body);
-         }
-     }
+            $this->assertContains(strtolower("$key: $val"), $body);
+        }
+    }
 
      /**
       * Redirection tests
@@ -558,16 +564,20 @@ abstract class CommonHttpTests extends \PHPUnit_Framework_TestCase
 
         $this->client->setMethod('POST');
         $res = $this->client->send();
-        $this->assertTrue($res->isRedirect(),
-            "Last response was not a redirection as expected. Response code: {$res->getStatusCode()}. Redirections counter: {$this->client->getRedirectionsCount()} (when strict redirects are on)");
+        $this->assertTrue(
+            $res->isRedirect(),
+            "Last response was not a redirection as expected. Response code: {$res->getStatusCode()}. Redirections counter: {$this->client->getRedirectionsCount()} (when strict redirects are on)"
+        );
 
         // Then try with normal redirections
         $this->client->setParameterGet(['redirection' => '0']);
         $this->client->setOptions(['strictredirects' => false]);
         $this->client->setMethod('POST');
         $res = $this->client->send();
-        $this->assertTrue($res->isRedirect(),
-            "Last response was not a redirection as expected. Response code: {$res->getStatusCode()}. Redirections counter: {$this->client->getRedirectionsCount()} (when strict redirects are off)");
+        $this->assertTrue(
+            $res->isRedirect(),
+            "Last response was not a redirection as expected. Response code: {$res->getStatusCode()}. Redirections counter: {$this->client->getRedirectionsCount()} (when strict redirects are off)"
+        );
     }
 
     /**
@@ -586,8 +596,11 @@ abstract class CommonHttpTests extends \PHPUnit_Framework_TestCase
 
         $res = $this->client->send();
 
-        $this->assertEquals("{$uri}/path/to/fake/file.ext?redirect=abpath", $this->client->getUri()->toString(),
-            "The new location is not as expected: {$this->client->getUri()->toString()}");
+        $this->assertEquals(
+            "{$uri}/path/to/fake/file.ext?redirect=abpath",
+            $this->client->getUri()->toString(),
+            "The new location is not as expected: {$this->client->getUri()->toString()}"
+        );
     }
 
     /**
@@ -607,8 +620,11 @@ abstract class CommonHttpTests extends \PHPUnit_Framework_TestCase
 
         $res = $this->client->send();
 
-        $this->assertEquals("{$uri}?redirect=relpath", $this->client->getUri()->toString(),
-            "The new location is not as expected: {$this->client->getUri()->toString()}");
+        $this->assertEquals(
+            "{$uri}?redirect=relpath",
+            $this->client->getUri()->toString(),
+            "The new location is not as expected: {$this->client->getUri()->toString()}"
+        );
     }
 
     /**
@@ -746,7 +762,7 @@ abstract class CommonHttpTests extends \PHPUnit_Framework_TestCase
      */
     public function testUploadRawData()
     {
-        if (!ini_get('file_uploads')) {
+        if (! ini_get('file_uploads')) {
             $this->markTestSkipped('File uploads disabled.');
         }
 
@@ -767,7 +783,7 @@ abstract class CommonHttpTests extends \PHPUnit_Framework_TestCase
      */
     public function testUploadLocalFile()
     {
-        if (!ini_get('file_uploads')) {
+        if (! ini_get('file_uploads')) {
             $this->markTestSkipped('File uploads disabled.');
         }
 
@@ -784,7 +800,7 @@ abstract class CommonHttpTests extends \PHPUnit_Framework_TestCase
 
     public function testUploadLocalDetectMime()
     {
-        if (!ini_get('file_uploads')) {
+        if (! ini_get('file_uploads')) {
             $this->markTestSkipped('File uploads disabled.');
         }
 
@@ -818,7 +834,7 @@ abstract class CommonHttpTests extends \PHPUnit_Framework_TestCase
 
     public function testUploadNameWithSpecialChars()
     {
-        if (!ini_get('file_uploads')) {
+        if (! ini_get('file_uploads')) {
             $this->markTestSkipped('File uploads disabled.');
         }
 
@@ -851,7 +867,7 @@ abstract class CommonHttpTests extends \PHPUnit_Framework_TestCase
      */
     public function testMutipleFilesWithSameFormNameZF5744()
     {
-        if (!ini_get('file_uploads')) {
+        if (! ini_get('file_uploads')) {
             $this->markTestSkipped('File uploads disabled.');
         }
 
@@ -890,7 +906,7 @@ abstract class CommonHttpTests extends \PHPUnit_Framework_TestCase
 
     public function testStreamResponse()
     {
-        if (!($this->client->getAdapter() instanceof Adapter\StreamInterface)) {
+        if (! ($this->client->getAdapter() instanceof Adapter\StreamInterface)) {
             $this->markTestSkipped('Current adapter does not support streaming');
             return;
         }
@@ -917,7 +933,7 @@ abstract class CommonHttpTests extends \PHPUnit_Framework_TestCase
     {
         $this->markTestSkipped('To check with the new ZF2 implementation');
 
-        if (!($this->client->getAdapter() instanceof Adapter\StreamInterface)) {
+        if (! ($this->client->getAdapter() instanceof Adapter\StreamInterface)) {
             $this->markTestSkipped('Current adapter does not support streaming');
             return;
         }
@@ -937,7 +953,7 @@ abstract class CommonHttpTests extends \PHPUnit_Framework_TestCase
 
     public function testStreamResponseNamed()
     {
-        if (!($this->client->getAdapter() instanceof Adapter\StreamInterface)) {
+        if (! ($this->client->getAdapter() instanceof Adapter\StreamInterface)) {
             $this->markTestSkipped('Current adapter does not support streaming');
             return;
         }
@@ -963,7 +979,7 @@ abstract class CommonHttpTests extends \PHPUnit_Framework_TestCase
 
     public function testStreamRequest()
     {
-        if (!($this->client->getAdapter() instanceof Adapter\StreamInterface)) {
+        if (! ($this->client->getAdapter() instanceof Adapter\StreamInterface)) {
             $this->markTestSkipped('Current adapter does not support streaming');
             return;
         }
@@ -1019,8 +1035,10 @@ abstract class CommonHttpTests extends \PHPUnit_Framework_TestCase
 
         $this->client->send();
         $request = Request::fromString($this->client->getLastRawRequest());
-        $this->assertEquals($content_type,
-                            $request->getHeaders()->get('Content-Type')->getFieldValue());
+        $this->assertEquals(
+            $content_type,
+            $request->getHeaders()->get('Content-Type')->getFieldValue()
+        );
     }
 
     /**
