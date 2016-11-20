@@ -252,8 +252,10 @@ class Cookies extends Headers
      * @param int $retAs What value to return
      * @return array|string
      */
+    // @codingStandardsIgnoreStart
     protected function _flattenCookiesArray($ptr, $retAs = self::COOKIE_OBJECT)
     {
+        // @codingStandardsIgnoreEnd
         if (is_array($ptr)) {
             $ret = ($retAs == self::COOKIE_STRING_CONCAT ? '' : []);
             foreach ($ptr as $item) {
@@ -287,8 +289,10 @@ class Cookies extends Headers
      * @param string $domain
      * @return array
      */
+    // @codingStandardsIgnoreStart
     protected function _matchDomain($domain)
     {
+        // @codingStandardsIgnoreEnd
         $ret = [];
 
         foreach (array_keys($this->cookies) as $cdom) {
@@ -307,8 +311,10 @@ class Cookies extends Headers
      * @param string $path
      * @return array
      */
+    // @codingStandardsIgnoreStart
     protected function _matchPath($domains, $path)
     {
+        // @codingStandardsIgnoreEnd
         $ret = [];
 
         foreach ($domains as $dom => $pathsArray) {

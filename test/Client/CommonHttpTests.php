@@ -50,12 +50,14 @@ abstract class CommonHttpTests extends \PHPUnit_Framework_TestCase
      */
     protected $client = null;
 
+    // @codingStandardsIgnoreStart
     /**
      * Common HTTP client adapter
      *
      * @var \Zend\Http\Client\Adapter\AdapterInterface
      */
     protected $_adapter = null;
+    // @codingStandardsIgnoreEnd
 
     /**
      * Configuration array
@@ -151,7 +153,11 @@ abstract class CommonHttpTests extends \PHPUnit_Framework_TestCase
             $this->markTestSkipped("Server does not allow the TRACE method");
         }
 
-        $this->assertEquals($this->client->getLastRawRequest(), $res->getBody(), 'Response body should be exactly like the last request');
+        $this->assertEquals(
+            $this->client->getLastRawRequest(),
+            $res->getBody(),
+            'Response body should be exactly like the last request'
+        );
     }
 
     /**
@@ -566,7 +572,8 @@ abstract class CommonHttpTests extends \PHPUnit_Framework_TestCase
         $res = $this->client->send();
         $this->assertTrue(
             $res->isRedirect(),
-            "Last response was not a redirection as expected. Response code: {$res->getStatusCode()}. Redirections counter: {$this->client->getRedirectionsCount()} (when strict redirects are on)"
+            "Last response was not a redirection as expected. Response code: {$res->getStatusCode()}. "
+            . "Redirections counter: {$this->client->getRedirectionsCount()} (when strict redirects are on)"
         );
 
         // Then try with normal redirections
@@ -576,7 +583,8 @@ abstract class CommonHttpTests extends \PHPUnit_Framework_TestCase
         $res = $this->client->send();
         $this->assertTrue(
             $res->isRedirect(),
-            "Last response was not a redirection as expected. Response code: {$res->getStatusCode()}. Redirections counter: {$this->client->getRedirectionsCount()} (when strict redirects are off)"
+            "Last response was not a redirection as expected. Response code: {$res->getStatusCode()}. "
+            . "Redirections counter: {$this->client->getRedirectionsCount()} (when strict redirects are off)"
         );
     }
 
@@ -706,7 +714,11 @@ abstract class CommonHttpTests extends \PHPUnit_Framework_TestCase
 
         $res = $this->client->send();
 
-        $this->assertEquals($res->getBody(), serialize($cookies), 'Response body does not contain the expected cookies');
+        $this->assertEquals(
+            $res->getBody(),
+            serialize($cookies),
+            'Response body does not contain the expected cookies'
+        );
     }
 
 
@@ -728,7 +740,11 @@ abstract class CommonHttpTests extends \PHPUnit_Framework_TestCase
         $this->client->setCookies($cookies);
 
         $res = $this->client->send();
-        $this->assertEquals($res->getBody(), serialize($cookies), 'Response body does not contain the expected cookies');
+        $this->assertEquals(
+            $res->getBody(),
+            serialize($cookies),
+            'Response body does not contain the expected cookies'
+        );
     }
 
     /**
@@ -748,7 +764,11 @@ abstract class CommonHttpTests extends \PHPUnit_Framework_TestCase
         $this->client->setCookies($cookies);
 
         $res = $this->client->send();
-        $this->assertEquals($res->getBody(), serialize($cookies), 'Response body does not contain the expected cookies');
+        $this->assertEquals(
+            $res->getBody(),
+            serialize($cookies),
+            'Response body does not contain the expected cookies'
+        );
     }
 
     /**
@@ -817,7 +837,9 @@ abstract class CommonHttpTests extends \PHPUnit_Framework_TestCase
         }
 
         if (! $detect) {
-            $this->markTestSkipped('No MIME type detection capability (fileinfo or mime_magic extensions) is available');
+            $this->markTestSkipped(
+                'No MIME type detection capability (fileinfo or mime_magic extensions) is available'
+            );
         }
 
         $file = dirname(realpath(__FILE__)) . DIRECTORY_SEPARATOR . '_files' . DIRECTORY_SEPARATOR . 'staticFile.jpg';
@@ -829,7 +851,11 @@ abstract class CommonHttpTests extends \PHPUnit_Framework_TestCase
 
         $size = filesize($file);
         $body = "uploadfile " . basename($file) . " image/jpeg $size\n";
-        $this->assertEquals($body, $res->getBody(), 'Response body does not include expected upload parameters (detect: ' . $detect . ')');
+        $this->assertEquals(
+            $body,
+            $res->getBody(),
+            'Response body does not include expected upload parameters (detect: ' . $detect . ')'
+        );
     }
 
     public function testUploadNameWithSpecialChars()
@@ -886,7 +912,11 @@ abstract class CommonHttpTests extends \PHPUnit_Framework_TestCase
 
         $res = $this->client->send();
 
-        $this->assertEquals($expectedBody, $res->getBody(), 'Response body does not include expected upload parameters');
+        $this->assertEquals(
+            $expectedBody,
+            $res->getBody(),
+            'Response body does not include expected upload parameters'
+        );
     }
 
     /**
@@ -983,7 +1013,8 @@ abstract class CommonHttpTests extends \PHPUnit_Framework_TestCase
             $this->markTestSkipped('Current adapter does not support streaming');
             return;
         }
-        $data = fopen(dirname(realpath(__FILE__)) . DIRECTORY_SEPARATOR . '_files' . DIRECTORY_SEPARATOR . 'staticFile.jpg', "r");
+        $data = fopen(dirname(realpath(__FILE__)) . DIRECTORY_SEPARATOR . '_files' . DIRECTORY_SEPARATOR
+            . 'staticFile.jpg', "r");
         $this->client->setRawBody($data);
         $this->client->setEncType('image/jpeg');
         $this->client->setMethod('PUT');
@@ -1000,7 +1031,8 @@ abstract class CommonHttpTests extends \PHPUnit_Framework_TestCase
     public function testZF9404DoubleContentLengthHeader()
     {
         $this->client->setUri($this->baseuri . 'ZF9404-doubleContentLength.php');
-        $expect = filesize(dirname(realpath(__FILE__)) . DIRECTORY_SEPARATOR . '_files' . DIRECTORY_SEPARATOR . 'ZF9404-doubleContentLength.php');
+        $expect = filesize(dirname(realpath(__FILE__)) . DIRECTORY_SEPARATOR . '_files' . DIRECTORY_SEPARATOR
+            . 'ZF9404-doubleContentLength.php');
 
         $response = $this->client->send();
         if (! $response->isSuccess()) {
@@ -1062,8 +1094,10 @@ abstract class CommonHttpTests extends \PHPUnit_Framework_TestCase
      * @param  string $file
      * @return string
      */
+    // @codingStandardsIgnoreStart
     protected function _getTestFileContents($file)
     {
+        // @codingStandardsIgnoreEnd
         return file_get_contents(dirname(realpath(__FILE__)) . DIRECTORY_SEPARATOR .
            '_files' . DIRECTORY_SEPARATOR . $file);
     }

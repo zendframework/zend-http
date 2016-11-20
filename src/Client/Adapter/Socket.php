@@ -217,7 +217,12 @@ class Socket implements HttpAdapter, StreamInterface
                 }
 
                 if ($this->config['sslallowselfsigned'] !== null) {
-                    if (! stream_context_set_option($context, 'ssl', 'allow_self_signed', $this->config['sslallowselfsigned'])) {
+                    if (! stream_context_set_option(
+                        $context,
+                        'ssl',
+                        'allow_self_signed',
+                        $this->config['sslallowselfsigned']
+                    )) {
                         throw new AdapterException\RuntimeException('Unable to set sslallowselfsigned option');
                     }
                 }
@@ -293,11 +298,13 @@ class Socket implements HttpAdapter, StreamInterface
                     if ((! $errorString) && $this->config['sslverifypeer']) {
                         // There's good chance our error is due to sslcapath not being properly set
                         if (! ($this->config['sslcafile'] || $this->config['sslcapath'])) {
-                            $errorString = 'make sure the "sslcafile" or "sslcapath" option are properly set for the environment.';
+                            $errorString = 'make sure the "sslcafile" or "sslcapath" option are properly set for the '
+                                . 'environment.';
                         } elseif ($this->config['sslcafile'] && ! is_file($this->config['sslcafile'])) {
                             $errorString = 'make sure the "sslcafile" option points to a valid SSL certificate file';
                         } elseif ($this->config['sslcapath'] && ! is_dir($this->config['sslcapath'])) {
-                            $errorString = 'make sure the "sslcapath" option points to a valid SSL certificate directory';
+                            $errorString = 'make sure the "sslcapath" option points to a valid SSL certificate '
+                                . 'directory';
                         }
                     }
 
@@ -590,8 +597,10 @@ class Socket implements HttpAdapter, StreamInterface
      *
      * @throws AdapterException\TimeoutException with READ_TIMEOUT code
      */
+    // @codingStandardsIgnoreStart
     protected function _checkSocketReadTimeout()
     {
+        // @codingStandardsIgnoreEnd
         if ($this->socket) {
             $info = stream_get_meta_data($this->socket);
             $timedout = $info['timed_out'];

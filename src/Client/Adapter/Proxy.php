@@ -130,7 +130,9 @@ class Proxy extends Socket
         $port = $this->config['proxy_port'];
 
         if ($this->connectedTo[0] != "tcp://$host" || $this->connectedTo[1] != $port) {
-            throw new AdapterException\RuntimeException("Trying to write but we are connected to the wrong proxy server");
+            throw new AdapterException\RuntimeException(
+                "Trying to write but we are connected to the wrong proxy server"
+            );
         }
 
         // Add Proxy-Authorization header
@@ -247,7 +249,9 @@ class Proxy extends Socket
 
         // Check that the response from the proxy is 200
         if (Response::fromString($response)->getStatusCode() != 200) {
-            throw new AdapterException\RuntimeException("Unable to connect to HTTPS proxy. Server response: " . $response);
+            throw new AdapterException\RuntimeException(
+                "Unable to connect to HTTPS proxy. Server response: " . $response
+            );
         }
 
         // If all is good, switch socket to secure mode. We have to fall back

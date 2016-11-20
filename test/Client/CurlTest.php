@@ -365,7 +365,11 @@ class CurlTest extends CommonHttpTests
         $res = $this->client->send();
 
         $curlInfo = curl_getinfo($adapter->getHandle());
-        $this->assertArrayHasKey('request_header', $curlInfo, 'Expecting request_header in curl_getinfo() return value');
+        $this->assertArrayHasKey(
+            'request_header',
+            $curlInfo,
+            'Expecting request_header in curl_getinfo() return value'
+        );
 
         $this->assertContains($header, $curlInfo['request_header'], 'Expecting valid basic authorization header');
     }

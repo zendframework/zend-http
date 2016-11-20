@@ -97,7 +97,7 @@ class CookieTest extends \PHPUnit_Framework_TestCase
             'CRLF characters' => ["foo=bar\r\n\r\nevilContent", '0=foo%3Dbar%0D%0A%0D%0AevilContent'],
         ];
     }
-
+// @codingStandardsIgnoreStart
 //    /**
 //     * Cookie creation and data accessors tests
 //     */
@@ -666,4 +666,5 @@ class CookieTest extends \PHPUnit_Framework_TestCase
 //            // array('cookie=foo;domain=example.com;expires=Fri, 06-Jun-1966 00:19:21 GMT', true),
 //        );
 //    }
+// @codingStandardsIgnoreEnd
 }

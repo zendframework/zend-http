@@ -11,8 +11,8 @@ namespace ZendTest\Http\Client;
 
 use Zend\Uri\Http as UriHttp;
 use Zend\Http\Client as HTTPClient;
-use Zend\Http;
-use Zend\Http\Request;
+use ZendTest\Http\Client\TestAsset\MockAdapter;
+use ZendTest\Http\Client\TestAsset\MockClient;
 
 /**
  * This Testsuite includes all Zend_Http_Client tests that do not rely
@@ -25,12 +25,14 @@ use Zend\Http\Request;
  */
 class StaticTest extends \PHPUnit_Framework_TestCase
 {
+    // @codingStandardsIgnoreStart
     /**
      * Common HTTP client
      *
      * @var \Zend\Http\Client
      */
     protected $_client = null;
+    // @codingStandardsIgnoreEnd
 
     /**
      * Set up the test suite before each test
@@ -69,7 +71,11 @@ class StaticTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($uri->__toString(), $uristr, 'Returned Uri object does not hold the expected URI');
 
         $uri = $this->_client->getUri()->toString();
-        $this->assertInternalType('string', $uri, 'Returned value expected to be a string, ' . gettype($uri) . ' returned');
+        $this->assertInternalType(
+            'string',
+            $uri,
+            'Returned value expected to be a string, ' . gettype($uri) . ' returned'
+        );
         $this->assertEquals($uri, $uristr, 'Returned string is not the expected URI');
     }
 
@@ -124,8 +130,16 @@ class StaticTest extends \PHPUnit_Framework_TestCase
             'Accept-language' => 'en,de,*',
         ]);
 
-        $this->assertEquals($this->_client->getHeader('Accept-encoding'), 'gzip, deflate', 'Returned value of header is not as expected');
-        $this->assertEquals($this->_client->getHeader('X-Fake-Header'), null, 'Non-existing header should not return a value');
+        $this->assertEquals(
+            $this->_client->getHeader('Accept-encoding'),
+            'gzip, deflate',
+            'Returned value of header is not as expected'
+        );
+        $this->assertEquals(
+            $this->_client->getHeader('X-Fake-Header'),
+            null,
+            'Non-existing header should not return a value'
+        );
     }
 
     /**
@@ -604,26 +618,4 @@ class StaticTest extends \PHPUnit_Framework_TestCase
             [55]
         ];
     }
-}
-
-class MockClient extends HTTPClient
-{
-    public $config = [
-        'maxredirects'    => 5,
-        'strictredirects' => false,
-        'useragent'       => 'Zend_Http_Client',
-        'timeout'         => 10,
-        'adapter'         => 'Zend\\Http\\Client\\Adapter\\Socket',
-        'httpversion'     => Request::VERSION_11,
-        'keepalive'       => false,
-        'storeresponse'   => true,
-        'strict'          => true,
-        'outputstream'   => false,
-        'encodecookies'   => true,
-    ];
-}
-
-class MockAdapter extends \Zend\Http\Client\Adapter\Test
-{
-    public $config = [];
 }

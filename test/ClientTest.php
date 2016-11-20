@@ -28,7 +28,9 @@ class ClientTest extends \PHPUnit_Framework_TestCase
             new SetCookie('bar', 'biz', null, '/', 'www.domain.com')
         ];
 
+        // @codingStandardsIgnoreStart
         $requestString = "GET http://www.domain.com/index.php HTTP/1.1\r\nHost: domain.com\r\nUser-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.7; rv:16.0) Gecko/20100101 Firefox/16.0\r\nAccept: */*\r\nAccept-Language: en-US,en;q=0.5\r\nAccept-Encoding: gzip, deflate\r\nConnection: keep-alive\r\n";
+        // @codingStandardsIgnoreEnd
         $request = Request::fromString($requestString);
 
         $client = new Client('http://www.domain.com/');
@@ -36,7 +38,9 @@ class ClientTest extends \PHPUnit_Framework_TestCase
         $client->addCookie($initialCookies);
 
         $cookies = new Cookies($client->getRequest()->getHeaders());
+        // @codingStandardsIgnoreStart
         $rawHeaders = "HTTP/1.1 200 OK\r\nAccess-Control-Allow-Origin: *\r\nContent-Encoding: gzip\r\nContent-Type: application/javascript\r\nDate: Sun, 18 Nov 2012 16:16:08 GMT\r\nServer: nginx/1.1.19\r\nSet-Cookie: baz=bah; domain=www.domain.com; path=/\r\nSet-Cookie: joe=test; domain=www.domain.com; path=/\r\nVary: Accept-Encoding\r\nX-Powered-By: PHP/5.3.10-1ubuntu3.4\r\nConnection: keep-alive\r\n";
+        // @codingStandardsIgnoreEnd
         $response = Response::fromString($rawHeaders);
         $client->setResponse($response);
 
@@ -59,7 +63,9 @@ class ClientTest extends \PHPUnit_Framework_TestCase
         $method = new \ReflectionMethod('\Zend\Http\Client', 'prepareHeaders');
         $method->setAccessible(true);
 
+        // @codingStandardsIgnoreStart
         $requestString = "GET http://www.domain.com/index.php HTTP/1.1\r\nHost: domain.com\r\nUser-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.7; rv:16.0) Gecko/20100101 Firefox/16.0\r\nAccept: */*\r\nAccept-Language: en-US,en;q=0.5\r\nAccept-Encoding: gzip, deflate\r\nConnection: keep-alive\r\n";
+        // @codingStandardsIgnoreEnd
         $request = Request::fromString($requestString);
 
         $adapter = new \Zend\Http\Client\Adapter\Test();
@@ -68,7 +74,9 @@ class ClientTest extends \PHPUnit_Framework_TestCase
         $client->setAdapter($adapter);
         $client->setRequest($request);
 
+        // @codingStandardsIgnoreStart
         $rawHeaders = "HTTP/1.1 200 OK\r\nAccess-Control-Allow-Origin: *\r\nContent-Encoding: gzip, deflate\r\nContent-Type: application/javascript\r\nDate: Sun, 18 Nov 2012 16:16:08 GMT\r\nServer: nginx/1.1.19\r\nVary: Accept-Encoding\r\nX-Powered-By: PHP/5.3.10-1ubuntu3.4\r\nConnection: keep-alive\r\n";
+        // @codingStandardsIgnoreEnd
         $response = Response::fromString($rawHeaders);
         $client->getAdapter()->setResponse($response);
 

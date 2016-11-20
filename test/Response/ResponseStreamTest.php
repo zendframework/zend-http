@@ -88,7 +88,8 @@ class ResponseStreamTest extends \PHPUnit_Framework_TestCase
      */
     protected function readResponse($response)
     {
-        $stream = fopen(__DIR__ . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . '_files' . DIRECTORY_SEPARATOR . $response, 'rb');
+        $stream = fopen(__DIR__ . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . '_files' . DIRECTORY_SEPARATOR
+            . $response, 'rb');
 
         $data = '';
         while (false !== ($newLine = fgets($stream))) {
