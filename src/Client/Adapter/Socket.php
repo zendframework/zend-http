@@ -247,12 +247,19 @@ class Socket implements HttpAdapter, StreamInterface
                 $flags |= STREAM_CLIENT_PERSISTENT;
             }
 
+            if (isset($this->config['connecttimeout'])) {
+                $connectTimeout = $this->config['connecttimeout'];
+            } elseif (isset($this->config['timeout'])) {
+                $connectTimeout = $this->config['timeout'];
+            } else {
+                $connectTimeout = @ini_get('default_socket_timeout');
+            }
             ErrorHandler::start();
             $this->socket = stream_socket_client(
                 $host . ':' . $port,
                 $errno,
                 $errstr,
-                (int) $this->config['timeout'],
+                (int) $connectTimeout,
                 $flags,
                 $context
             );
@@ -273,7 +280,15 @@ class Socket implements HttpAdapter, StreamInterface
             }
 
             // Set the stream timeout
-            if (!stream_set_timeout($this->socket, (int) $this->config['timeout'])) {
+            if (isset($this->config['executetimeout'])) {
+                $executeTimeout = $this->config['executetimeout'];
+            } elseif (isset($this->config['timeout'])) {
+                $executeTimeout = $this->config['timeout'];
+            } else {
+                $executeTimeout = @ini_get('default_socket_timeout');
+            }
+            
+            if (!stream_set_timeout($this->socket, (int) $executeTimeout)) {
                 throw new AdapterException\RuntimeException('Unable to set the connection timeout');
             }
 
@@ -604,8 +619,16 @@ class Socket implements HttpAdapter, StreamInterface
             $timedout = $info['timed_out'];
             if ($timedout) {
                 $this->close();
+                if (isset($this->config['executetimeout'])) {
+                    $executeTimeout = $this->config['executetimeout'];
+                } elseif (isset($this->config['timeout'])) {
+                    $executeTimeout = $this->config['timeout'];
+                } else {
+                    $executeTimeout = @ini_get('default_socket_timeout');
+                }
+                $executeTimeout = (int) $executeTimeout;
                 throw new AdapterException\TimeoutException(
-                    "Read timed out after {$this->config['timeout']} seconds",
+                    "Read timed out after $executeTimeout seconds",
                     AdapterException\TimeoutException::READ_TIMEOUT
                 );
             }
