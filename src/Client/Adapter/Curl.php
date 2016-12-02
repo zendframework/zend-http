@@ -195,17 +195,33 @@ class Curl implements HttpAdapter, StreamInterface
             curl_setopt($this->curl, CURLOPT_PORT, intval($port));
         }
 
-        if (isset($this->config['timeout'])) {
+        if (isset($this->config['connecttimeout'])) {
+            $connectTimeout = $this->config['connecttimeout'];
+        } elseif (isset($this->config['timeout'])) {
+            $connectTimeout = $this->config['timeout'];
+        } else {
+            $connectTimeout = null;
+        }
+        if ($connectTimeout !== null) {
             if (defined('CURLOPT_CONNECTTIMEOUT_MS')) {
-                curl_setopt($this->curl, CURLOPT_CONNECTTIMEOUT_MS, $this->config['timeout'] * 1000);
+                curl_setopt($this->curl, CURLOPT_CONNECTTIMEOUT_MS, $connectTimeout * 1000);
             } else {
-                curl_setopt($this->curl, CURLOPT_CONNECTTIMEOUT, $this->config['timeout']);
+                curl_setopt($this->curl, CURLOPT_CONNECTTIMEOUT, $connectTimeout);
             }
+        }
 
+        if (isset($this->config['executetimeout'])) {
+            $executeTimeout = $this->config['executetimeout'];
+        } elseif (isset($this->config['timeout'])) {
+            $executeTimeout = $this->config['timeout'];
+        } else {
+            $executeTimeout = null;
+        }
+        if ($executeTimeout !== null) {
             if (defined('CURLOPT_TIMEOUT_MS')) {
-                curl_setopt($this->curl, CURLOPT_TIMEOUT_MS, $this->config['timeout'] * 1000);
+                curl_setopt($this->curl, CURLOPT_TIMEOUT_MS, $executeTimeout * 1000);
             } else {
-                curl_setopt($this->curl, CURLOPT_TIMEOUT, $this->config['timeout']);
+                curl_setopt($this->curl, CURLOPT_TIMEOUT, $executeTimeout);
             }
         }
 
