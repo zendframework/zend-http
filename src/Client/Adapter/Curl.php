@@ -424,7 +424,7 @@ class Curl implements HttpAdapter, StreamInterface
         $request  = curl_getinfo($this->curl, CURLINFO_HEADER_OUT);
         $request .= $body;
 
-        if (empty($this->response)) {
+        if ($response === false || empty($this->response)) {
             throw new AdapterException\RuntimeException("Error in cURL request: " . curl_error($this->curl));
         }
 
