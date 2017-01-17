@@ -210,18 +210,11 @@ class Curl implements HttpAdapter, StreamInterface
             }
         }
 
-        if (isset($this->config['executetimeout'])) {
-            $executeTimeout = $this->config['executetimeout'];
-        } elseif (isset($this->config['timeout'])) {
-            $executeTimeout = $this->config['timeout'];
-        } else {
-            $executeTimeout = null;
-        }
-        if ($executeTimeout !== null) {
+        if (isset($this->config['timeout'])) {
             if (defined('CURLOPT_TIMEOUT_MS')) {
-                curl_setopt($this->curl, CURLOPT_TIMEOUT_MS, $executeTimeout * 1000);
+                curl_setopt($this->curl, CURLOPT_TIMEOUT_MS, $this->config['timeout'] * 1000);
             } else {
-                curl_setopt($this->curl, CURLOPT_TIMEOUT, $executeTimeout);
+                curl_setopt($this->curl, CURLOPT_TIMEOUT, $this->config['timeout']);
             }
         }
 

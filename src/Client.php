@@ -104,7 +104,6 @@ class Client implements Stdlib\DispatchableInterface
         'useragent'       => 'Zend\Http\Client',
         'timeout'         => 10,
         'connecttimeout'  => null,
-        'executetimeout'  => null,
         'adapter'         => 'Zend\Http\Client\Adapter\Socket',
         'httpversion'     => Request::VERSION_11,
         'storeresponse'   => true,
