@@ -1147,7 +1147,7 @@ abstract class CommonHttpTests extends \PHPUnit_Framework_TestCase
         }
         $endTime = microtime(true);
         if ($timeoutException === null) {
-            $this->markTestSkipped("There's something responding at $notRespondingUri");
+            $this->markTestSkipped("There's something responding at ".$this->getNotRespondingUri());
         }
         $deltaTime = ceil($endTime - $startTime);
         $this->assertGreaterThanOrEqual($connectTimeout, $deltaTime);
@@ -1176,9 +1176,7 @@ abstract class CommonHttpTests extends \PHPUnit_Framework_TestCase
             $timeoutException = $x;
         }
         $endTime = microtime(true);
-        if ($timeoutException === null) {
-            $this->markTestSkipped("There's something responding at $notRespondingUri");
-        }
+        $this->assertNotNull($timeoutException, 'The request should timeout');
         $deltaTime = ceil($endTime - $startTime);
         $this->assertGreaterThanOrEqual($executeTimeout, $deltaTime);
     }
