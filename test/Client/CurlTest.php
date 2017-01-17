@@ -11,6 +11,7 @@ namespace ZendTest\Http\Client;
 
 use Zend\Config\Config;
 use Zend\Http\Client\Adapter;
+use Zend\Http\Client\Adapter\Exception\TimeoutException;
 
 /**
  * This Testsuite includes all Zend_Http_Client that require a working web
@@ -423,5 +424,24 @@ class CurlTest extends CommonHttpTests
 
         $this->assertFalse($headers->has('Transfer-Encoding'));
         $this->assertFalse($headers->has('Content-Encoding'));
+    }
+
+    public function testTimeout()
+    {
+        $this->client
+            ->setUri($this->baseuri . 'testTimeout.php')
+            ->setOptions([
+                'timeout' => 1,
+            ]);
+        $adapter = new Adapter\Curl();
+        $this->client->setAdapter($adapter);
+        $this->client->setMethod('GET');
+        $timeoutException = null;
+        try {
+            $this->client->send();
+        } catch (TimeoutException $x) {
+            $timeoutException = $x;
+        }
+        $this->assertNotNull($timeoutException);
     }
 }
