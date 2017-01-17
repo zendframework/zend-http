@@ -278,7 +278,7 @@ class Socket implements HttpAdapter, StreamInterface
             }
 
             // Set the stream timeout
-            if (!stream_set_timeout($this->socket, (int) (int) $this->config['timeout'])) {
+            if (!stream_set_timeout($this->socket, (int) $this->config['timeout'])) {
                 throw new AdapterException\RuntimeException('Unable to set the connection timeout');
             }
 
