@@ -1138,6 +1138,7 @@ abstract class CommonHttpTests extends \PHPUnit_Framework_TestCase
                 'connecttimeout' => $connectTimeout,
                 'timeout' => $executeTimeout,
             ]);
+        $timeoutException = null;
         $startTime = microtime(true);
         try {
             $this->client->send();
@@ -1167,6 +1168,7 @@ abstract class CommonHttpTests extends \PHPUnit_Framework_TestCase
                 'connecttimeout' => $connectTimeout,
                 'timeout' => $executeTimeout,
             ]);
+        $timeoutException = null;
         $startTime = microtime(true);
         try {
             $this->client->send();
