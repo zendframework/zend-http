@@ -18,7 +18,8 @@ All notable changes to this project will be documented in this file, in reverse 
 
 ### Fixed
 
-- Nothing.
+- [#34](https://github.com/zendframework/zend-http/issues/33) fixes the
+  standard separator (&) for application/x-www-form-urlencoded.
 
 ## 2.5.5 - 2016-08-08
 
