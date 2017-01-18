@@ -478,4 +478,22 @@ class ClientTest extends \PHPUnit_Framework_TestCase
         $client->setEncType(null);
         $this->assertNull($client->getEncType());
     }
+
+    /**
+     * @see https://github.com/zendframework/zend-http/issues/33
+     */
+    public function testFormUrlEncodeSeparator()
+    {
+        $client = new Client;
+        $client->setEncType('application/x-www-form-urlencoded');
+        $request = new Request;
+        $request->setMethod(Request::METHOD_POST);
+        $request->getPost()->set('foo', 'bar');
+        $request->getPost()->set('baz', 'foo');
+        ini_set('arg_separator.output', '$');
+        $client->setAdapter('Zend\Http\Client\Adapter\Test');
+        $client->send($request);
+        $rawRequest = $client->getLastRawRequest();
+        $this->assertContains('foo=bar&baz=foo', $rawRequest);
+    }
 }
