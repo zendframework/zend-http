@@ -1228,7 +1228,7 @@ class Client implements Stdlib\DispatchableInterface
                 $body .= "--{$boundary}--\r\n";
             } elseif (stripos($this->getEncType(), self::ENC_URLENCODED) === 0) {
                 // Encode body as application/x-www-form-urlencoded
-                $body = http_build_query($this->getRequest()->getPost()->toArray());
+                $body = http_build_query($this->getRequest()->getPost()->toArray(), null, '&');
             } else {
                 throw new Client\Exception\RuntimeException("Cannot handle content type '{$this->encType}' automatically");
             }
