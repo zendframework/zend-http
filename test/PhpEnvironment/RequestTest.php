@@ -168,7 +168,7 @@ class RequestTest extends TestCase
                     'REQUEST_URI'     => '/~username/public/',
                     'PHP_SELF'        => '/~username/public/index.php',
                     'SCRIPT_FILENAME' => '/Users/username/Sites/public/index.php',
-                    'ORIG_SCRIPT_NAME'=> null
+                    'ORIG_SCRIPT_NAME' => null
                 ],
                 '/~username/public',
                 '/~username/public'
@@ -180,7 +180,7 @@ class RequestTest extends TestCase
                     'REQUEST_URI'     => '/zf2tut/',
                     'PHP_SELF'        => '/zf2tut/index.php',
                     'SCRIPT_FILENAME' => 'c:/ZF2Tutorial/public/index.php',
-                    'ORIG_SCRIPT_NAME'=> null
+                    'ORIG_SCRIPT_NAME' => null
                 ],
                 '/zf2tut',
                 '/zf2tut'

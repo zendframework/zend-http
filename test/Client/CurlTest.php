@@ -44,7 +44,7 @@ class CurlTest extends CommonHttpTests
 
     protected function setUp()
     {
-        if (!extension_loaded('curl')) {
+        if (! extension_loaded('curl')) {
             $this->markTestSkipped('cURL is not installed, marking all Http Client Curl Adapter tests skipped.');
         }
         parent::setUp();
@@ -103,7 +103,8 @@ class CurlTest extends CommonHttpTests
     {
         $this->setExpectedException(
             'Zend\Http\Client\Adapter\Exception\InvalidArgumentException',
-            'Array or Traversable object expected');
+            'Array or Traversable object expected'
+        );
 
         $this->_adapter->setOptions($config);
     }
@@ -129,7 +130,7 @@ class CurlTest extends CommonHttpTests
         $this->setExpectedException(
             'Zend\Http\Client\Adapter\Exception\RuntimeException',
             'Unknown or erroreous cURL option'
-            );
+        );
         $this->client->send();
     }
 
@@ -167,8 +168,7 @@ class CurlTest extends CommonHttpTests
             'curloptions' => [
                 CURLOPT_FOLLOWLOCATION => true,
                 CURLOPT_TIMEOUT => 1,
-            ]]
-        );
+            ]]);
 
         $this->client->setUri($this->baseuri . 'testRedirections.php');
 
@@ -178,7 +178,8 @@ class CurlTest extends CommonHttpTests
         $this->client->setMethod('POST');
         $this->setExpectedException(
             'Zend\Http\Client\Adapter\Exception\RuntimeException',
-            'Error in cURL request: Operation timed out after 1000 milliseconds with 0 bytes received');
+            'Error in cURL request: Operation timed out after 1000 milliseconds with 0 bytes received'
+        );
         $this->client->send();
     }
 
@@ -228,8 +229,10 @@ class CurlTest extends CommonHttpTests
     public function testWritingAndNotConnectedWithCurlHandleThrowsException()
     {
         $adapter = new Adapter\Curl();
-        $this->setExpectedException('Zend\Http\Client\Adapter\Exception\RuntimeException',
-                                    'Trying to write but we are not connected');
+        $this->setExpectedException(
+            'Zend\Http\Client\Adapter\Exception\RuntimeException',
+            'Trying to write but we are not connected'
+        );
         $adapter->write("GET", "someUri");
     }
 
@@ -296,7 +299,8 @@ class CurlTest extends CommonHttpTests
         ];
 
         $this->assertEquals(
-            $expected, $this->readAttribute($adapter, 'config')
+            $expected,
+            $this->readAttribute($adapter, 'config')
         );
     }
 
@@ -314,7 +318,8 @@ class CurlTest extends CommonHttpTests
         ];
 
         $this->assertEquals(
-            $expected, $this->readAttribute($adapter, 'config')
+            $expected,
+            $this->readAttribute($adapter, 'config')
         );
     }
 
@@ -360,7 +365,11 @@ class CurlTest extends CommonHttpTests
         $res = $this->client->send();
 
         $curlInfo = curl_getinfo($adapter->getHandle());
-        $this->assertArrayHasKey('request_header', $curlInfo, 'Expecting request_header in curl_getinfo() return value');
+        $this->assertArrayHasKey(
+            'request_header',
+            $curlInfo,
+            'Expecting request_header in curl_getinfo() return value'
+        );
 
         $this->assertContains($header, $curlInfo['request_header'], 'Expecting valid basic authorization header');
     }

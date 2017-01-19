@@ -81,10 +81,12 @@ class StaticClientTest extends \PHPUnit_Framework_TestCase
     {
         $getBody = 'baz';
 
-        $response = HTTPClient::get($this->baseuri . 'testRawGetData.php',
-                                   ['foo' => 'bar'],
-                                   [],
-                                   $getBody);
+        $response = HTTPClient::get(
+            $this->baseuri . 'testRawGetData.php',
+            ['foo' => 'bar'],
+            [],
+            $getBody
+        );
 
         $this->assertTrue($response->isSuccess());
         $this->assertContains('foo', $response->getBody());
@@ -108,9 +110,11 @@ class StaticClientTest extends \PHPUnit_Framework_TestCase
      */
     public function testHttpPostContentType()
     {
-        $response = HTTPClient::post($this->baseuri . 'testPostData.php',
-                                    ['foo' => 'bar'],
-                                    ['Content-Type' => Client::ENC_URLENCODED]);
+        $response = HTTPClient::post(
+            $this->baseuri . 'testPostData.php',
+            ['foo' => 'bar'],
+            ['Content-Type' => Client::ENC_URLENCODED]
+        );
         $this->assertTrue($response->isSuccess());
         $this->assertContains('foo', $response->getBody());
         $this->assertContains('bar', $response->getBody());
@@ -123,10 +127,12 @@ class StaticClientTest extends \PHPUnit_Framework_TestCase
     {
         $postBody = 'foo';
 
-        $response = HTTPClient::post($this->baseuri . 'testRawPostData.php',
-                                    ['foo' => 'bar'],
-                                    ['Content-Type' => Client::ENC_URLENCODED],
-                                    $postBody);
+        $response = HTTPClient::post(
+            $this->baseuri . 'testRawPostData.php',
+            ['foo' => 'bar'],
+            ['Content-Type' => Client::ENC_URLENCODED],
+            $postBody
+        );
 
         $this->assertTrue($response->isSuccess());
         $this->assertContains($postBody, $response->getBody());

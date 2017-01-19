@@ -46,7 +46,7 @@ class ResponseStreamTest extends \PHPUnit_Framework_TestCase
         $stream = fopen(__DIR__ . '/../_files/response_gzip', 'rb');
 
         $headers = '';
-        while (false!== ($newLine = fgets($stream))) {
+        while (false !== ($newLine = fgets($stream))) {
             $headers .= $newLine;
             if ($headers == "\n" || $headers == "\r\n") {
                 break;
@@ -88,10 +88,11 @@ class ResponseStreamTest extends \PHPUnit_Framework_TestCase
      */
     protected function readResponse($response)
     {
-        $stream = fopen(__DIR__ . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . '_files' . DIRECTORY_SEPARATOR . $response, 'rb');
+        $stream = fopen(__DIR__ . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . '_files' . DIRECTORY_SEPARATOR
+            . $response, 'rb');
 
         $data = '';
-        while (false!== ($newLine = fgets($stream))) {
+        while (false !== ($newLine = fgets($stream))) {
             $data .= $newLine;
             if ($newLine == "\n" || $newLine == "\r\n") {
                 break;
