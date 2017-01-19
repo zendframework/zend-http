@@ -73,6 +73,12 @@ class ContentSecurityPolicy implements HeaderInterface
             ));
         }
         if (empty($sources)) {
+            if ('report-uri' === $name) {
+                if (isset($this->directives[$name])) {
+                    unset($this->directives[$name]);
+                }
+                return $this;
+            }
             $this->directives[$name] = "'none'";
             return $this;
         }
