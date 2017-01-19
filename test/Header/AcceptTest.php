@@ -144,7 +144,7 @@ class AcceptTest extends \PHPUnit_Framework_TestCase
         foreach ($values as $prio => $shouldPass) {
             try {
                 $header->addMediaType('text/html', $prio);
-                if (!$shouldPass) {
+                if (! $shouldPass) {
                     $this->fail('Exception expected');
                 }
             } catch (\Zend\Http\Header\Exception\InvalidArgumentException $e) {

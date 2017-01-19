@@ -71,7 +71,7 @@ class Curl implements HttpAdapter, StreamInterface
      */
     public function __construct()
     {
-        if (!extension_loaded('curl')) {
+        if (! extension_loaded('curl')) {
             throw new AdapterException\InitializationException(
                 'cURL extension has to be loaded to use this Zend\Http\Client adapter'
             );
@@ -104,7 +104,7 @@ class Curl implements HttpAdapter, StreamInterface
         if ($options instanceof Traversable) {
             $options = ArrayUtils::iteratorToArray($options);
         }
-        if (!is_array($options)) {
+        if (! is_array($options)) {
             throw new AdapterException\InvalidArgumentException(
                 'Array or Traversable object expected, got ' . gettype($options)
             );
@@ -166,7 +166,7 @@ class Curl implements HttpAdapter, StreamInterface
      */
     public function setCurlOption($option, $value)
     {
-        if (!isset($this->config['curloptions'])) {
+        if (! isset($this->config['curloptions'])) {
             $this->config['curloptions'] = [];
         }
         $this->config['curloptions'][$option] = $value;
@@ -214,7 +214,7 @@ class Curl implements HttpAdapter, StreamInterface
             curl_setopt($this->curl, CURLOPT_MAXREDIRS, $this->config['maxredirects']);
         }
 
-        if (!$this->curl) {
+        if (! $this->curl) {
             $this->close();
 
             throw new AdapterException\RuntimeException('Unable to Connect to ' . $host . ':' . $port);
@@ -251,7 +251,7 @@ class Curl implements HttpAdapter, StreamInterface
     public function write($method, $uri, $httpVersion = 1.1, $headers = [], $body = '')
     {
         // Make sure we're properly connected
-        if (!$this->curl) {
+        if (! $this->curl) {
             throw new AdapterException\RuntimeException("Trying to write but we are not connected");
         }
 
@@ -282,8 +282,8 @@ class Curl implements HttpAdapter, StreamInterface
                 if (isset($this->config['curloptions'][CURLOPT_INFILE])) {
                     // Now we will probably already have Content-Length set, so that we have to delete it
                     // from $headers at this point:
-                    if (!isset($headers['Content-Length'])
-                        && !isset($this->config['curloptions'][CURLOPT_INFILESIZE])
+                    if (! isset($headers['Content-Length'])
+                        && ! isset($this->config['curloptions'][CURLOPT_INFILESIZE])
                     ) {
                         throw new AdapterException\RuntimeException(
                             'Cannot set a file-handle for cURL option CURLOPT_INFILE'
@@ -373,7 +373,7 @@ class Curl implements HttpAdapter, StreamInterface
         }
 
         // set additional headers
-        if (!isset($headers['Accept'])) {
+        if (! isset($headers['Accept'])) {
             $headers['Accept'] = '';
         }
         $curlHeaders = [];
@@ -402,7 +402,7 @@ class Curl implements HttpAdapter, StreamInterface
         // set additional curl options
         if (isset($this->config['curloptions'])) {
             foreach ((array) $this->config['curloptions'] as $k => $v) {
-                if (!in_array($k, $this->invalidOverwritableCurlOptions)) {
+                if (! in_array($k, $this->invalidOverwritableCurlOptions)) {
                     if (curl_setopt($this->curl, $k, $v) == false) {
                         throw new AdapterException\RuntimeException(sprintf(
                             'Unknown or erroreous cURL option "%s" set',
@@ -417,7 +417,7 @@ class Curl implements HttpAdapter, StreamInterface
 
         $response = curl_exec($this->curl);
         // if we used streaming, headers are already there
-        if (!is_resource($this->outputStream)) {
+        if (! is_resource($this->outputStream)) {
             $this->response = $response;
         }
 

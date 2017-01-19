@@ -7,7 +7,9 @@
  * @license   http://framework.zend.com/license/new-bsd New BSD License
  */
 
-if (! isset($_GET['redirect'])) $_GET['redirect'] = null;
+if (! isset($_GET['redirect'])) {
+    $_GET['redirect'] = null;
+}
 
 switch ($_GET['redirect']) {
     case 'abpath':
