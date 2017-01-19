@@ -20,6 +20,8 @@ All notable changes to this project will be documented in this file, in reverse 
 
 - [#34](https://github.com/zendframework/zend-http/issues/33) fixes the
   standard separator (&) for application/x-www-form-urlencoded.
+- [#93](https://github.com/zendframework/zend-http/pull/93) fixes CSP report-uri
+  directive defaulting to 'none' when empty value provided.
 
 ## 2.5.5 - 2016-08-08
 
