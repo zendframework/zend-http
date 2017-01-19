@@ -170,7 +170,7 @@ class Response extends AbstractMessage implements ResponseInterface
     public static function fromString($string)
     {
         $lines = explode("\r\n", $string);
-        if (!is_array($lines) || count($lines) === 1) {
+        if (! is_array($lines) || count($lines) === 1) {
             $lines = explode("\n", $string);
         }
 
@@ -180,7 +180,7 @@ class Response extends AbstractMessage implements ResponseInterface
 
         $regex   = '/^HTTP\/(?P<version>1\.[01]) (?P<status>\d{3})(?:[ ]+(?P<reason>.*))?$/';
         $matches = [];
-        if (!preg_match($regex, $firstLine, $matches)) {
+        if (! preg_match($regex, $firstLine, $matches)) {
             throw new Exception\InvalidArgumentException(
                 'A valid response status line was not found in the provided string'
             );
@@ -249,7 +249,7 @@ class Response extends AbstractMessage implements ResponseInterface
     public function setStatusCode($code)
     {
         $const = get_class($this) . '::STATUS_CODE_' . $code;
-        if (!is_numeric($code) || !defined($const)) {
+        if (! is_numeric($code) || ! defined($const)) {
             $code = is_scalar($code) ? $code : gettype($code);
             throw new Exception\InvalidArgumentException(sprintf(
                 'Invalid status code provided: "%s"',
@@ -279,7 +279,7 @@ class Response extends AbstractMessage implements ResponseInterface
      */
     public function setCustomStatusCode($code)
     {
-        if (!is_numeric($code)) {
+        if (! is_numeric($code)) {
             $code = is_scalar($code) ? $code : gettype($code);
             throw new Exception\InvalidArgumentException(sprintf(
                 'Invalid status code provided: "%s"',
@@ -337,7 +337,7 @@ class Response extends AbstractMessage implements ResponseInterface
 
         $transferEncoding = $this->getHeaders()->get('Transfer-Encoding');
 
-        if (!empty($transferEncoding)) {
+        if (! empty($transferEncoding)) {
             if (strtolower($transferEncoding->getFieldValue()) === 'chunked') {
                 $body = $this->decodeChunkedBody($body);
             }
@@ -345,7 +345,7 @@ class Response extends AbstractMessage implements ResponseInterface
 
         $contentEncoding = $this->getHeaders()->get('Content-Encoding');
 
-        if (!empty($contentEncoding)) {
+        if (! empty($contentEncoding)) {
             $contentEncoding = $contentEncoding->getFieldValue();
             if ($contentEncoding === 'gzip') {
                 $body = $this->decodeGzip($body);
@@ -510,7 +510,7 @@ class Response extends AbstractMessage implements ResponseInterface
      */
     protected function decodeGzip($body)
     {
-        if (!function_exists('gzinflate')) {
+        if (! function_exists('gzinflate')) {
             throw new Exception\RuntimeException(
                 'zlib extension is required in order to decode "gzip" encoding'
             );
@@ -540,7 +540,7 @@ class Response extends AbstractMessage implements ResponseInterface
      */
     protected function decodeDeflate($body)
     {
-        if (!function_exists('gzuncompress')) {
+        if (! function_exists('gzuncompress')) {
             throw new Exception\RuntimeException(
                 'zlib extension is required in order to decode "deflate" encoding'
             );

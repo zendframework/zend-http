@@ -184,7 +184,11 @@ class ResponseTest extends \PHPUnit_Framework_TestCase
         $response_text_crlf = $this->readResponse('response_crlf');
         $res_crlf = Response::fromString($response_text_crlf);
 
-        $this->assertEquals($res_lf->getHeaders()->toString(), $res_crlf->getHeaders()->toString(), 'Responses headers do not match');
+        $this->assertEquals(
+            $res_lf->getHeaders()->toString(),
+            $res_crlf->getHeaders()->toString(),
+            'Responses headers do not match'
+        );
 
         $this->markTestIncomplete('Something is fishy with the response bodies in the test responses');
         $this->assertEquals($res_lf->getBody(), $res_crlf->getBody(), 'Response bodies do not match');
@@ -276,7 +280,11 @@ class ResponseTest extends \PHPUnit_Framework_TestCase
         $response = Response::fromString($this->readResponse('response_403_nomessage'));
 
         $this->assertEquals(403, $response->getStatusCode(), 'Response status is expected to be 403, but it isn\'t');
-        $this->assertEquals('Forbidden', $response->getReasonPhrase(), 'Response is 403, but message is not "Forbidden" as expected');
+        $this->assertEquals(
+            'Forbidden',
+            $response->getReasonPhrase(),
+            'Response is 403, but message is not "Forbidden" as expected'
+        );
 
         // While we're here, make sure it's classified as error...
         $this->assertTrue($response->isClientError(), 'Response is an error, but isClientError() returned false');
@@ -294,8 +302,16 @@ class ResponseTest extends \PHPUnit_Framework_TestCase
         $response_str = $this->readResponse('response_404');
         $response = Response::fromString($response_str);
 
-        $this->assertEquals(strtolower(str_replace("\n", "\r\n", $response_str)), strtolower($response->toString()), 'Response convertion to string does not match original string');
-        $this->assertEquals(strtolower(str_replace("\n", "\r\n", $response_str)), strtolower((string)$response), 'Response convertion to string does not match original string');
+        $this->assertEquals(
+            strtolower(str_replace("\n", "\r\n", $response_str)),
+            strtolower($response->toString()),
+            'Response convertion to string does not match original string'
+        );
+        $this->assertEquals(
+            strtolower(str_replace("\n", "\r\n", $response_str)),
+            strtolower((string)$response),
+            'Response convertion to string does not match original string'
+        );
     }
 
     public function testToStringGzip()
@@ -303,8 +319,16 @@ class ResponseTest extends \PHPUnit_Framework_TestCase
         $response_str = $this->readResponse('response_gzip');
         $response = Response::fromString($response_str);
 
-        $this->assertEquals(strtolower($response_str), strtolower($response->toString()), 'Response convertion to string does not match original string');
-        $this->assertEquals(strtolower($response_str), strtolower((string)$response), 'Response convertion to string does not match original string');
+        $this->assertEquals(
+            strtolower($response_str),
+            strtolower($response->toString()),
+            'Response convertion to string does not match original string'
+        );
+        $this->assertEquals(
+            strtolower($response_str),
+            strtolower((string)$response),
+            'Response convertion to string does not match original string'
+        );
     }
 
     public function testGetHeaders()
@@ -314,7 +338,11 @@ class ResponseTest extends \PHPUnit_Framework_TestCase
 
         $this->assertEquals(8, count($headers), 'Header count is not as expected');
         $this->assertEquals('Apache', $headers->get('Server')->getFieldValue(), 'Server header is not as expected');
-        $this->assertEquals('deflate', $headers->get('Content-encoding')->getFieldValue(), 'Content-type header is not as expected');
+        $this->assertEquals(
+            'deflate',
+            $headers->get('Content-encoding')->getFieldValue(),
+            'Content-type header is not as expected'
+        );
     }
 
     public function testGetVersion()
@@ -339,7 +367,11 @@ class ResponseTest extends \PHPUnit_Framework_TestCase
     public function testLeadingWhitespaceBody()
     {
         $response = Response::fromString($this->readResponse('response_leadingws'));
-        $this->assertEquals($response->getContent(), "\r\n\t  \n\r\tx", 'Extracted body is not identical to expected body');
+        $this->assertEquals(
+            $response->getContent(),
+            "\r\n\t  \n\r\tx",
+            'Extracted body is not identical to expected body'
+        );
     }
 
     /**

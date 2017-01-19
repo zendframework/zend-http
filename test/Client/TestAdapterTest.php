@@ -50,7 +50,8 @@ class TestAdapterTest extends \PHPUnit_Framework_TestCase
     {
         $this->setExpectedException(
             'Zend\Http\Client\Adapter\Exception\InvalidArgumentException',
-            'Array or Traversable object expected');
+            'Array or Traversable object expected'
+        );
 
         $this->adapter->setOptions('foo');
     }
