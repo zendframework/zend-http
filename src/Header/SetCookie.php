@@ -349,7 +349,7 @@ class SetCookie implements MultipleHeaderInterface
      */
     public function setMaxAge($maxAge)
     {
-        if ($maxAge !== null && (!is_int($maxAge) || ($maxAge < 0))) {
+        if ($maxAge !== null && !is_int($maxAge)) {
             throw new Exception\InvalidArgumentException('Invalid Max-Age number specified');
         }
         $this->maxAge = $maxAge;

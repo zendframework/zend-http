@@ -102,6 +102,10 @@ class Cookies extends Headers
         }
 
         if ($cookie instanceof SetCookie) {
+            if ($cookie->getMaxAge() < 0) {
+                return;
+            }
+
             $domain = $cookie->getDomain();
             $path   = $cookie->getPath();
             if (!isset($this->cookies[$domain])) {
