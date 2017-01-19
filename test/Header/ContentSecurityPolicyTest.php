@@ -110,4 +110,30 @@ class ContentSecurityPolicyTest extends \PHPUnit_Framework_TestCase
         $this->setExpectedException('Zend\Http\Header\Exception\InvalidArgumentException');
         $header->setDirective('default-src', ["\rsome\r\nCRLF\ninjection"]);
     }
+
+    public function testContentSecurityPolicySetDirectiveWithEmptyReportUriDefaultsToUnset()
+    {
+        $csp = new ContentSecurityPolicy();
+        $csp->setDirective('report-uri', []);
+        $this->assertEquals(
+            "Content-Security-Policy: ",
+            $csp->toString()
+        );
+    }
+
+    public function testContentSecurityPolicySetDirectiveWithEmptyReportUriRemovesExistingValue()
+    {
+        $csp = new ContentSecurityPolicy();
+        $csp->setDirective('report-uri', ['csp-error']);
+        $this->assertEquals(
+            "Content-Security-Policy: report-uri csp-error;",
+            $csp->toString()
+        );
+
+        $csp->setDirective('report-uri', []);
+        $this->assertEquals(
+            "Content-Security-Policy: ",
+            $csp->toString()
+        );
+    }
 }
