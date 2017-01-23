@@ -209,6 +209,13 @@ class Curl implements HttpAdapter, StreamInterface
             }
         }
 
+        if (isset($this->config['sslcafile']) && $this->config['sslcafile']) {
+            curl_setopt($this->curl, CURLOPT_CAINFO, $this->config['sslcafile']);
+        }
+        if (isset($this->config['sslcapath']) && $this->config['sslcapath']) {
+            curl_setopt($this->curl, CURLOPT_CAPATH, $this->config['sslcapath']);
+        }
+
         if (isset($this->config['maxredirects'])) {
             // Set Max redirects
             curl_setopt($this->curl, CURLOPT_MAXREDIRS, $this->config['maxredirects']);
