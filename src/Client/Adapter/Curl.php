@@ -21,6 +21,13 @@ use Zend\Stdlib\ArrayUtils;
 class Curl implements HttpAdapter, StreamInterface
 {
     /**
+     * Operation timeout.
+     *
+     * @var int
+     */
+    const ERROR_OPERATION_TIMEDOUT = 28;
+
+    /**
      * Parameters array
      *
      * @var array
@@ -263,6 +270,7 @@ class Curl implements HttpAdapter, StreamInterface
      *     to wrong host, no PUT file defined, unsupported method, or unsupported
      *     cURL option.
      * @throws AdapterException\InvalidArgumentException if $method is currently not supported
+     * @throws AdapterException\TimeoutException if connection timed out
      */
     public function write($method, $uri, $httpVersion = 1.1, $headers = [], $body = '')
     {
@@ -441,6 +449,12 @@ class Curl implements HttpAdapter, StreamInterface
         $request .= $body;
 
         if (empty($this->response)) {
+            if (curl_errno($this->curl) === static::ERROR_OPERATION_TIMEDOUT) {
+                throw new AdapterException\TimeoutException(
+                    "Read timed out",
+                    AdapterException\TimeoutException::READ_TIMEOUT
+                );
+            }
             throw new AdapterException\RuntimeException("Error in cURL request: " . curl_error($this->curl));
         }
 
