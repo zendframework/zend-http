@@ -433,4 +433,18 @@ class CurlTest extends CommonHttpTests
         $this->assertFalse($headers->has('Transfer-Encoding'));
         $this->assertFalse($headers->has('Content-Encoding'));
     }
+
+    public function testSslCaPathAndFileConfig()
+    {
+        $adapter = new Adapter\Curl();
+        $options = [
+            'sslcapath' => __DIR__ . DIRECTORY_SEPARATOR . '/_files',
+            'sslcafile' => 'ca-bundle.crt'
+        ];
+        $adapter->setOptions($options);
+
+        $config = $this->readAttribute($adapter, 'config');
+        $this->assertEquals($options['sslcapath'], $config['sslcapath']);
+        $this->assertEquals($options['sslcafile'], $config['sslcafile']);
+    }
 }
