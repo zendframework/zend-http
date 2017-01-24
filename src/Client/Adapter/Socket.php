@@ -252,12 +252,17 @@ class Socket implements HttpAdapter, StreamInterface
                 $flags |= STREAM_CLIENT_PERSISTENT;
             }
 
+            if (isset($this->config['connecttimeout'])) {
+                $connectTimeout = $this->config['connecttimeout'];
+            } else {
+                $connectTimeout = $this->config['timeout'];
+            }
             ErrorHandler::start();
             $this->socket = stream_socket_client(
                 $host . ':' . $port,
                 $errno,
                 $errstr,
-                (int) $this->config['timeout'],
+                (int) $connectTimeout,
                 $flags,
                 $context
             );
