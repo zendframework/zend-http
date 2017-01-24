@@ -110,7 +110,9 @@ class Client implements Stdlib\DispatchableInterface
         'outputstream'    => false,
         'encodecookies'   => true,
         'argseparator'    => null,
-        'rfc3986strict'   => false
+        'rfc3986strict'   => false,
+        'sslcafile'       => null,
+        'sslcapath'       => null,
     ];
 
     /**
