@@ -241,7 +241,12 @@ class Socket implements HttpAdapter, StreamInterface
                 }
 
                 if ($this->config['sslverifypeername'] !== null) {
-                    if (!stream_context_set_option($context, 'ssl', 'verify_peer_name', $this->config['sslverifypeername'])) {
+                    if (! stream_context_set_option(
+                        $context,
+                        'ssl',
+                        'verify_peer_name',
+                        $this->config['sslverifypeername']
+                    )) {
                         throw new AdapterException\RuntimeException('Unable to set sslverifypeername option');
                     }
                 }

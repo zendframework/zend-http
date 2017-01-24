@@ -1168,7 +1168,7 @@ abstract class CommonHttpTests extends \PHPUnit_Framework_TestCase
     protected function getNotRespondingUri()
     {
         $notRespondingUri = getenv('TESTS_ZEND_HTTP_CLIENT_NOTRESPONDINGURI');
-        if (!$notRespondingUri) {
+        if (! $notRespondingUri) {
             $notRespondingUri = 'http://192.168.10.250:65530/';
         }
 
