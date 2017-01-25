@@ -47,7 +47,6 @@ class CookiesTest extends \PHPUnit_Framework_TestCase
 
     public function testRequestCanHaveArrayCookies()
     {
-        // this happens wich cookie header: "test[a]=value_a&test[b]=value_b"
         $_COOKIE = [
             'test' => [
                 'a' => 'value_a',
@@ -55,9 +54,23 @@ class CookiesTest extends \PHPUnit_Framework_TestCase
             ]
         ];
         $request = new Request();
-
         $fieldValue = $request->getCookie('test')->getFieldValue();
-
         $this->assertSame('test[a]=value_a; test[b]=value_b', $fieldValue);
+
+        $_COOKIE = [
+            'test' => [
+                'a' => [
+                    'a1' => 'va1',
+                    'a2' => 'va2'
+                ],
+                'b' => [
+                    'b1' => 'vb1',
+                    'b2' => 'vb2'
+                ],
+            ]
+        ];
+        $request = new Request();
+        $fieldValue = $request->getCookie('test')->getFieldValue();
+        $this->assertSame('test[a][a1]=va1; test[a][a2]=va2; test[b][b1]=vb1; test[b][b2]=vb2', $fieldValue);
     }
 }
