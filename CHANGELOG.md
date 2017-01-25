@@ -18,7 +18,9 @@ All notable changes to this project will be documented in this file, in reverse 
 
 ### Fixed
 
-- Nothing.
+- [#107](https://github.com/zendframework/zend-http/pull/107) fixes the
+  `Expires` header to allow values of `0` or `'0'`; these now resolve
+  to the start of the unix epoch (1970-01-01).
 
 ## 2.5.5 - 2016-08-08
 
