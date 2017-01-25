@@ -424,4 +424,26 @@ class CurlTest extends CommonHttpTests
         $this->assertFalse($headers->has('Transfer-Encoding'));
         $this->assertFalse($headers->has('Content-Encoding'));
     }
+
+    public function testTimeoutDetection()
+    {
+        $uriToBigResource = getenv('TESTS_ZEND_HTTP_CLIENT_BIGRESOURCE_URI');
+        if (!$uriToBigResource) {
+            $uriToBigResource = 'http://de.releases.ubuntu.com/16.04.1/ubuntu-16.04.1-server-i386.iso';
+        }
+        $this->client
+            ->setOptions([
+                'timeout' => 1,
+            ])
+            ->setStream(true)
+            ->setMethod('GET')
+            ->setUri($uriToBigResource);
+        $error = null;
+        try {
+            $this->client->send();
+        } catch (\Exception $x) {
+            $error = $x;
+        }
+        $this->assertNotNull($error, 'Failed to detect timeout in cURL adapter');
+    }
 }
