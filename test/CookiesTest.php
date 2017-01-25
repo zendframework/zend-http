@@ -13,6 +13,7 @@ use Zend\Http\Header\SetCookie;
 use Zend\Http\Response;
 use Zend\Http\Headers;
 use Zend\Http\Cookies;
+use Zend\Http\PhpEnvironment\Request;
 
 class CookiesTest extends \PHPUnit_Framework_TestCase
 {
@@ -42,5 +43,21 @@ class CookiesTest extends \PHPUnit_Framework_TestCase
 
         $response = Cookies::fromResponse($response, "http://www.zend.com");
         $this->assertSame($header, $response->getCookie('http://www.zend.com', 'foo'));
+    }
+
+    public function testRequestCanHaveArrayCookies()
+    {
+        // this happens wich cookie header: "test[a]=value_a&test[b]=value_b"
+        $_COOKIE = [
+            'test' => [
+                'a' => 'value_a',
+                'b' => 'value_b'
+            ]
+        ];
+        $request = new Request();
+
+        $fieldValue = $request->getCookie('test')->getFieldValue();
+
+        $this->assertSame('test[a]=value_a; test[b]=value_b', $fieldValue);
     }
 }
