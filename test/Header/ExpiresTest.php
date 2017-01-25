@@ -63,5 +63,9 @@ class ExpiresTest extends \PHPUnit_Framework_TestCase
         $expires = new Expires();
         $expires->setDate('0');
         $this->assertEquals('Expires: Thu, 01 Jan 1970 00:00:00 GMT', $expires->toString());
+
+        $expires = new Expires();
+        $expires->setDate(0);
+        $this->assertEquals('Expires: Thu, 01 Jan 1970 00:00:00 GMT', $expires->toString());
     }
 }
