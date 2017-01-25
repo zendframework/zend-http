@@ -97,27 +97,26 @@ class Cookie extends ArrayObject implements HeaderInterface
     {
         $nvPairs = [];
 
-        $cookies = [];
-        $this->flattenCookies($cookies, $this);
-
-        foreach ($cookies as $name => $value) {
+        foreach ($this->flattenCookies($this) as $name => $value) {
             $nvPairs[] = $name . '=' . (($this->encodeValue) ? urlencode($value) : $value);
         }
 
         return implode('; ', $nvPairs);
     }
 
-    protected function flattenCookies(&$result, $data, $prefix = null)
+    protected function flattenCookies($data, $prefix = null)
     {
-        if (!is_array($data) && $this !== $data) {
-            $result[$prefix] = $data;
-            return;
-        }
-
+        $result = [];
         foreach ($data as $key => $value) {
             $key = $prefix ? $prefix . '[' . $key . ']' : $key;
-            $this->flattenCookies($result, $value, $key);
+            if (is_array($value)) {
+                $result = array_merge($result, $this->flattenCookies($value, $key));
+            } else {
+                $result[$key] = $value;
+            }
         }
+
+        return $result;
     }
 
     public function toString()
