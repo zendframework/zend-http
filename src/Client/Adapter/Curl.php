@@ -448,7 +448,7 @@ class Curl implements HttpAdapter, StreamInterface
         $request  = curl_getinfo($this->curl, CURLINFO_HEADER_OUT);
         $request .= $body;
 
-        if (empty($this->response)) {
+        if ($response === false || empty($this->response)) {
             if (curl_errno($this->curl) === static::ERROR_OPERATION_TIMEDOUT) {
                 throw new AdapterException\TimeoutException(
                     "Read timed out",
