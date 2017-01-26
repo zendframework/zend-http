@@ -58,7 +58,7 @@ class UseCaseTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         if (getenv('TESTS_ZEND_HTTP_CLIENT_BASEURI')
-            && (getenv('TESTS_ZEND_HTTP_CLIENT_BASEURI') != false)
+            && (filter_var(getenv('TESTS_ZEND_HTTP_CLIENT_BASEURI'), FILTER_VALIDATE_BOOLEAN) != false)
         ) {
             $this->baseuri = getenv('TESTS_ZEND_HTTP_CLIENT_BASEURI');
             $this->client  = new HTTPClient($this->baseuri);
