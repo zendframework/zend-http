@@ -76,7 +76,7 @@ abstract class CommonHttpTests extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         if (getenv('TESTS_ZEND_HTTP_CLIENT_BASEURI')
-            && (getenv('TESTS_ZEND_HTTP_CLIENT_BASEURI') != false)) {
+            && (filter_var(getenv('TESTS_ZEND_HTTP_CLIENT_BASEURI'), FILTER_VALIDATE_BOOLEAN) != false)) {
             $this->baseuri = getenv('TESTS_ZEND_HTTP_CLIENT_BASEURI');
             if (substr($this->baseuri, -1) != '/') {
                 $this->baseuri .= '/';

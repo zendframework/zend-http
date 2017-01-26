@@ -35,7 +35,7 @@ class ProxyAdapterTest extends SocketTest
     protected function setUp()
     {
         if (getenv('TESTS_ZEND_HTTP_CLIENT_HTTP_PROXY') &&
-              getenv('TESTS_ZEND_HTTP_CLIENT_HTTP_PROXY')) {
+              filter_var(getenv('TESTS_ZEND_HTTP_CLIENT_BASEURI'), FILTER_VALIDATE_BOOLEAN)) {
             list($host, $port) = explode(':', getenv('TESTS_ZEND_HTTP_CLIENT_HTTP_PROXY'), 2);
 
             if (! $host) {
