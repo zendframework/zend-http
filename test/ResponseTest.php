@@ -204,6 +204,24 @@ class ResponseTest extends \PHPUnit_Framework_TestCase
         $this->assertFalse($response->isForbidden(), 'Response is an error, but isForbidden() returned true');
         $this->assertFalse($response->isInformational(), 'Response is an error, but isInformational() returned true');
         $this->assertTrue($response->isNotFound(), 'Response is an error, but isNotFound() returned false');
+        $this->assertFalse($response->isGone(), 'Response is an error, but isGone() returned true');
+        $this->assertFalse($response->isOk(), 'Response is an error, but isOk() returned true');
+        $this->assertFalse($response->isServerError(), 'Response is an error, but isServerError() returned true');
+        $this->assertFalse($response->isRedirect(), 'Response is an error, but isRedirect() returned true');
+        $this->assertFalse($response->isSuccess(), 'Response is an error, but isSuccess() returned true');
+    }
+
+    public function test410IsGone()
+    {
+        $response_text = $this->readResponse('response_410');
+        $response = Response::fromString($response_text);
+
+        $this->assertEquals(410, $response->getStatusCode(), 'Response code is expected to be 410, but it\'s not.');
+        $this->assertTrue($response->isClientError(), 'Response is an error, but isClientError() returned false');
+        $this->assertFalse($response->isForbidden(), 'Response is an error, but isForbidden() returned true');
+        $this->assertFalse($response->isInformational(), 'Response is an error, but isInformational() returned true');
+        $this->assertFalse($response->isNotFound(), 'Response is an error, but isNotFound() returned true');
+        $this->assertTrue($response->isGone(), 'Response is an error, but isGone() returned false');
         $this->assertFalse($response->isOk(), 'Response is an error, but isOk() returned true');
         $this->assertFalse($response->isServerError(), 'Response is an error, but isServerError() returned true');
         $this->assertFalse($response->isRedirect(), 'Response is an error, but isRedirect() returned true');
@@ -220,6 +238,7 @@ class ResponseTest extends \PHPUnit_Framework_TestCase
         $this->assertFalse($response->isForbidden(), 'Response is an error, but isForbidden() returned true');
         $this->assertFalse($response->isInformational(), 'Response is an error, but isInformational() returned true');
         $this->assertFalse($response->isNotFound(), 'Response is an error, but isNotFound() returned true');
+        $this->assertFalse($response->isGone(), 'Response is an error, but isGone() returned true');
         $this->assertFalse($response->isOk(), 'Response is an error, but isOk() returned true');
         $this->assertTrue($response->isServerError(), 'Response is an error, but isServerError() returned false');
         $this->assertFalse($response->isRedirect(), 'Response is an error, but isRedirect() returned true');
@@ -249,6 +268,7 @@ class ResponseTest extends \PHPUnit_Framework_TestCase
         $this->assertFalse($response->isForbidden(), 'Response is an error, but isForbidden() returned true');
         $this->assertFalse($response->isInformational(), 'Response is an error, but isInformational() returned true');
         $this->assertFalse($response->isNotFound(), 'Response is an error, but isNotFound() returned true');
+        $this->assertFalse($response->isGone(), 'Response is an error, but isGone() returned true');
         $this->assertFalse($response->isOk(), 'Response is an error, but isOk() returned true');
         $this->assertFalse($response->isServerError(), 'Response is an error, but isServerError() returned true');
         $this->assertTrue($response->isRedirect(), 'Response is an error, but isRedirect() returned false');
@@ -264,6 +284,7 @@ class ResponseTest extends \PHPUnit_Framework_TestCase
         $this->assertFalse($response->isForbidden(), 'Response is an error, but isForbidden() returned true');
         $this->assertFalse($response->isInformational(), 'Response is an error, but isInformational() returned true');
         $this->assertFalse($response->isNotFound(), 'Response is an error, but isNotFound() returned true');
+        $this->assertFalse($response->isGone(), 'Response is an error, but isGone() returned true');
         $this->assertTrue($response->isOk(), 'Response is an error, but isOk() returned false');
         $this->assertFalse($response->isServerError(), 'Response is an error, but isServerError() returned true');
         $this->assertFalse($response->isRedirect(), 'Response is an error, but isRedirect() returned true');
@@ -291,6 +312,7 @@ class ResponseTest extends \PHPUnit_Framework_TestCase
         $this->assertTrue($response->isForbidden(), 'Response is an error, but isForbidden() returned false');
         $this->assertFalse($response->isInformational(), 'Response is an error, but isInformational() returned true');
         $this->assertFalse($response->isNotFound(), 'Response is an error, but isNotFound() returned true');
+        $this->assertFalse($response->isGone(), 'Response is an error, but isGone() returned true');
         $this->assertFalse($response->isOk(), 'Response is an error, but isOk() returned true');
         $this->assertFalse($response->isServerError(), 'Response is an error, but isServerError() returned true');
         $this->assertFalse($response->isRedirect(), 'Response is an error, but isRedirect() returned true');

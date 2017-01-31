@@ -103,6 +103,7 @@ class Client implements Stdlib\DispatchableInterface
         'strictredirects' => false,
         'useragent'       => 'Zend\Http\Client',
         'timeout'         => 10,
+        'connecttimeout'  => null,
         'adapter'         => 'Zend\Http\Client\Adapter\Socket',
         'httpversion'     => Request::VERSION_11,
         'storeresponse'   => true,
@@ -110,7 +111,9 @@ class Client implements Stdlib\DispatchableInterface
         'outputstream'    => false,
         'encodecookies'   => true,
         'argseparator'    => null,
-        'rfc3986strict'   => false
+        'rfc3986strict'   => false,
+        'sslcafile'       => null,
+        'sslcapath'       => null,
     ];
 
     /**

@@ -70,6 +70,7 @@ class Response extends AbstractMessage implements ResponseInterface
     const STATUS_CODE_428 = 428;
     const STATUS_CODE_429 = 429;
     const STATUS_CODE_431 = 431;
+    const STATUS_CODE_451 = 451;
     const STATUS_CODE_500 = 500;
     const STATUS_CODE_501 = 501;
     const STATUS_CODE_502 = 502;
@@ -137,6 +138,7 @@ class Response extends AbstractMessage implements ResponseInterface
         428 => 'Precondition Required',
         429 => 'Too Many Requests',
         431 => 'Request Header Fields Too Large',
+        451 => 'Unavailable For Legal Reasons',
         // SERVER ERROR
         500 => 'Internal Server Error',
         501 => 'Not Implemented',
@@ -397,6 +399,16 @@ class Response extends AbstractMessage implements ResponseInterface
     public function isNotFound()
     {
         return (404 === $this->getStatusCode());
+    }
+
+    /**
+     * Does the status code indicate the resource is gone?
+     *
+     * @return bool
+     */
+    public function isGone()
+    {
+        return (410 === $this->getStatusCode());
     }
 
     /**

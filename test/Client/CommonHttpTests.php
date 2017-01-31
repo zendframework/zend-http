@@ -16,6 +16,7 @@ use Zend\Http\Client\Adapter\Exception as AdapterException;
 use Zend\Http\Request;
 use Zend\Http\Response;
 use Zend\Stdlib\Parameters;
+use Exception;
 
 /**
  * This Testsuite includes all Zend_Http_Client that require a working web
@@ -1157,5 +1158,78 @@ abstract class CommonHttpTests extends \PHPUnit_Framework_TestCase
             [new \stdClass],
             [55]
         ];
+    }
+
+    /**
+     * Get an URI that does not accept HTTP connections.
+     *
+     * @return string
+     */
+    protected function getNotRespondingUri()
+    {
+        $notRespondingUri = getenv('TESTS_ZEND_HTTP_CLIENT_NOTRESPONDINGURI');
+        if (! $notRespondingUri) {
+            $notRespondingUri = 'http://192.168.10.250:65530/';
+        }
+
+        return $notRespondingUri;
+    }
+
+
+    /**
+     * Check connecttimeout/timeout: invalid URIs should timeout after 'connecttimeout' seconds.
+     */
+    public function testConnectTimeout1()
+    {
+        $connectTimeout = 1;
+        $executeTimeout = 5;
+        $this->client
+            ->setUri($this->getNotRespondingUri())
+            ->setMethod('GET')
+            ->setOptions([
+                'connecttimeout' => $connectTimeout,
+                'timeout' => $executeTimeout,
+            ]);
+        $timeoutException = null;
+        $startTime = microtime(true);
+        try {
+            $this->client->send();
+        } catch (Exception $x) {
+            $timeoutException = $x;
+        }
+        $endTime = microtime(true);
+        if ($timeoutException === null) {
+            $this->markTestSkipped("There's something responding at ".$this->getNotRespondingUri());
+        }
+        $deltaTime = ceil($endTime - $startTime);
+        $this->assertGreaterThanOrEqual($connectTimeout, $deltaTime);
+        $this->assertLessThan($executeTimeout, $deltaTime);
+    }
+
+    /**
+     * Check connecttimeout/timeout: valid but slow URIs should timeout after 'timeout' seconds.
+     */
+    public function testConnectTimeout2()
+    {
+        $connectTimeout = 1;
+        $executeTimeout = 2;
+        $this->client
+            ->setUri($this->baseuri . 'testConnectTimeout.php')
+            ->setMethod('GET')
+            ->setOptions([
+                'connecttimeout' => $connectTimeout,
+                'timeout' => $executeTimeout,
+            ]);
+        $timeoutException = null;
+        $startTime = microtime(true);
+        try {
+            $this->client->send();
+        } catch (Exception $x) {
+            $timeoutException = $x;
+        }
+        $endTime = microtime(true);
+        $this->assertNotNull($timeoutException, 'The request should timeout');
+        $deltaTime = ceil($endTime - $startTime);
+        $this->assertGreaterThanOrEqual($executeTimeout, $deltaTime);
     }
 }

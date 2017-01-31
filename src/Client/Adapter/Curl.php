@@ -21,6 +21,13 @@ use Zend\Stdlib\ArrayUtils;
 class Curl implements HttpAdapter, StreamInterface
 {
     /**
+     * Operation timeout.
+     *
+     * @var int
+     */
+    const ERROR_OPERATION_TIMEDOUT = 28;
+
+    /**
      * Parameters array
      *
      * @var array
@@ -195,18 +202,34 @@ class Curl implements HttpAdapter, StreamInterface
             curl_setopt($this->curl, CURLOPT_PORT, intval($port));
         }
 
-        if (isset($this->config['timeout'])) {
+        if (isset($this->config['connecttimeout'])) {
+            $connectTimeout = $this->config['connecttimeout'];
+        } elseif (isset($this->config['timeout'])) {
+            $connectTimeout = $this->config['timeout'];
+        } else {
+            $connectTimeout = null;
+        }
+        if ($connectTimeout !== null) {
             if (defined('CURLOPT_CONNECTTIMEOUT_MS')) {
-                curl_setopt($this->curl, CURLOPT_CONNECTTIMEOUT_MS, $this->config['timeout'] * 1000);
+                curl_setopt($this->curl, CURLOPT_CONNECTTIMEOUT_MS, $connectTimeout * 1000);
             } else {
-                curl_setopt($this->curl, CURLOPT_CONNECTTIMEOUT, $this->config['timeout']);
+                curl_setopt($this->curl, CURLOPT_CONNECTTIMEOUT, $connectTimeout);
             }
+        }
 
+        if (isset($this->config['timeout'])) {
             if (defined('CURLOPT_TIMEOUT_MS')) {
                 curl_setopt($this->curl, CURLOPT_TIMEOUT_MS, $this->config['timeout'] * 1000);
             } else {
                 curl_setopt($this->curl, CURLOPT_TIMEOUT, $this->config['timeout']);
             }
+        }
+
+        if (isset($this->config['sslcafile']) && $this->config['sslcafile']) {
+            curl_setopt($this->curl, CURLOPT_CAINFO, $this->config['sslcafile']);
+        }
+        if (isset($this->config['sslcapath']) && $this->config['sslcapath']) {
+            curl_setopt($this->curl, CURLOPT_CAPATH, $this->config['sslcapath']);
         }
 
         if (isset($this->config['maxredirects'])) {
@@ -247,6 +270,7 @@ class Curl implements HttpAdapter, StreamInterface
      *     to wrong host, no PUT file defined, unsupported method, or unsupported
      *     cURL option.
      * @throws AdapterException\InvalidArgumentException if $method is currently not supported
+     * @throws AdapterException\TimeoutException if connection timed out
      */
     public function write($method, $uri, $httpVersion = 1.1, $headers = [], $body = '')
     {
@@ -425,6 +449,12 @@ class Curl implements HttpAdapter, StreamInterface
         $request .= $body;
 
         if ($response === false || empty($this->response)) {
+            if (curl_errno($this->curl) === static::ERROR_OPERATION_TIMEDOUT) {
+                throw new AdapterException\TimeoutException(
+                    "Read timed out",
+                    AdapterException\TimeoutException::READ_TIMEOUT
+                );
+            }
             throw new AdapterException\RuntimeException("Error in cURL request: " . curl_error($this->curl));
         }
 

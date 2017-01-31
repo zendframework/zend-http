@@ -70,6 +70,7 @@ class Socket implements HttpAdapter, StreamInterface
         'sslcapath'             => null,
         'sslallowselfsigned'    => false,
         'sslusecontext'         => false,
+        'sslverifypeername'     => true,
     ];
 
     /**
@@ -238,6 +239,17 @@ class Socket implements HttpAdapter, StreamInterface
                         throw new AdapterException\RuntimeException('Unable to set sslpassphrase option');
                     }
                 }
+
+                if ($this->config['sslverifypeername'] !== null) {
+                    if (! stream_context_set_option(
+                        $context,
+                        'ssl',
+                        'verify_peer_name',
+                        $this->config['sslverifypeername']
+                    )) {
+                        throw new AdapterException\RuntimeException('Unable to set sslverifypeername option');
+                    }
+                }
             }
 
             $flags = STREAM_CLIENT_CONNECT;
@@ -245,12 +257,17 @@ class Socket implements HttpAdapter, StreamInterface
                 $flags |= STREAM_CLIENT_PERSISTENT;
             }
 
+            if (isset($this->config['connecttimeout'])) {
+                $connectTimeout = $this->config['connecttimeout'];
+            } else {
+                $connectTimeout = $this->config['timeout'];
+            }
             ErrorHandler::start();
             $this->socket = stream_socket_client(
                 $host . ':' . $port,
                 $errno,
                 $errstr,
-                (int) $this->config['timeout'],
+                (int) $connectTimeout,
                 $flags,
                 $context
             );

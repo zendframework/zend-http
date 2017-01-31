@@ -11,6 +11,7 @@ namespace ZendTest\Http\Client;
 
 use Zend\Config\Config;
 use Zend\Http\Client\Adapter;
+use Zend\Http\Client\Adapter\Exception\TimeoutException;
 
 /**
  * This Testsuite includes all Zend_Http_Client that require a working web
@@ -434,7 +435,40 @@ class CurlTest extends CommonHttpTests
         $this->assertFalse($headers->has('Content-Encoding'));
     }
 
-    public function testTimeoutDetection()
+    public function testSslCaPathAndFileConfig()
+    {
+        $adapter = new Adapter\Curl();
+        $options = [
+            'sslcapath' => __DIR__ . DIRECTORY_SEPARATOR . '/_files',
+            'sslcafile' => 'ca-bundle.crt'
+        ];
+        $adapter->setOptions($options);
+
+        $config = $this->readAttribute($adapter, 'config');
+        $this->assertEquals($options['sslcapath'], $config['sslcapath']);
+        $this->assertEquals($options['sslcafile'], $config['sslcafile']);
+    }
+
+    public function testTimeout()
+    {
+        $this->client
+            ->setUri($this->baseuri . 'testTimeout.php')
+            ->setOptions([
+                'timeout' => 1,
+            ]);
+        $adapter = new Adapter\Curl();
+        $this->client->setAdapter($adapter);
+        $this->client->setMethod('GET');
+        $timeoutException = null;
+        try {
+            $this->client->send();
+        } catch (TimeoutException $x) {
+            $timeoutException = $x;
+        }
+        $this->assertNotNull($timeoutException);
+    }
+
+    public function testTimeoutWithStream()
     {
         $this->client
             ->setOptions([
