@@ -70,6 +70,7 @@ class Socket implements HttpAdapter, StreamInterface
         'sslcapath'             => null,
         'sslallowselfsigned'    => false,
         'sslusecontext'         => false,
+        'sslverifypeername'     => true,
     ];
 
     /**
@@ -236,6 +237,12 @@ class Socket implements HttpAdapter, StreamInterface
                 if ($this->config['sslpassphrase'] !== null) {
                     if (! stream_context_set_option($context, 'ssl', 'passphrase', $this->config['sslpassphrase'])) {
                         throw new AdapterException\RuntimeException('Unable to set sslpassphrase option');
+                    }
+                }
+
+                if ($this->config['sslverifypeername'] !== null) {
+                    if (!stream_context_set_option($context, 'ssl', 'verify_peer_name', $this->config['sslverifypeername'])) {
+                        throw new AdapterException\RuntimeException('Unable to set sslverifypeername option');
                     }
                 }
             }

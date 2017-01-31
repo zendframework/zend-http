@@ -67,6 +67,7 @@ class SocketTest extends CommonHttpTests
         $config = $this->_adapter->getConfig();
         $this->assertEquals(true, $config['sslverifypeer']);
         $this->assertEquals(false, $config['sslallowselfsigned']);
+        $this->assertEquals(true, $config['sslverifypeername']);
     }
 
     public function testConnectingViaSslEnforcesDefaultSslOptionsOnContext()
@@ -83,6 +84,29 @@ class SocketTest extends CommonHttpTests
         $options = stream_context_get_options($context);
         $this->assertTrue($options['ssl']['verify_peer']);
         $this->assertFalse($options['ssl']['allow_self_signed']);
+        $this->assertTrue($options['ssl']['verify_peer_name']);
+    }
+
+    public function testConnectingViaSslWithCustomSslOptionsOnContext()
+    {
+        $config = [
+            'timeout' => 30,
+            'sslverifypeer' => false,
+            'sslallowselfsigned' => true,
+            'sslverifypeername' => false,
+        ];
+        $this->_adapter->setOptions($config);
+        try {
+            $this->_adapter->connect('localhost', 443, true);
+        } catch (\Zend\Http\Client\Adapter\Exception\RuntimeException $e) {
+            // Test is designed to allow connect failure because we're interested
+            // only in the stream context state created within that method.
+        }
+        $context = $this->_adapter->getStreamContext();
+        $options = stream_context_get_options($context);
+        $this->assertFalse($options['ssl']['verify_peer']);
+        $this->assertTrue($options['ssl']['allow_self_signed']);
+        $this->assertFalse($options['ssl']['verify_peer_name']);
     }
 
 
@@ -180,7 +204,8 @@ class SocketTest extends CommonHttpTests
             'ssl' => [
                 'capath'            => null,
                 'verify_peer'       => true,
-                'allow_self_signed' => false
+                'allow_self_signed' => false,
+                'verify_peer_name'  => true
             ]
         ];
 
