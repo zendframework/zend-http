@@ -539,6 +539,50 @@ the 'curloptions' key in the constructor of the adapter, or by calling
 <code>setCurlOption($name, $value)</code>; option names correspond to the <code>CURL_*</code>
 constants of the cURL extension. You can get access to the underling cURL handle
 by calling <code>$adapter-&gt;getHandle();</code></p>
+<p>The cURL configuration options that can be set via <code>setCurlOption($name, $value)</code>
+method are:</p>
+<div class="table-responsive"><table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Description</th>
+<th>Expected Type</th>
+<th>Default Value</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>proxyuser</code></td>
+<td>Whether to use persistent TCP connections</td>
+<td>boolean</td>
+<td><code>FALSE</code></td>
+</tr>
+<tr>
+<td><code>proxypass</code></td>
+<td>SSL transport layer (eg. <code>sslv2</code>, <code>tls</code>)</td>
+<td>string</td>
+<td><code>ssl</code></td>
+</tr>
+<tr>
+<td><code>proxyhost</code></td>
+<td>Path to a PEM encoded SSL certificate</td>
+<td>string</td>
+<td><code>NULL</code></td>
+</tr>
+<tr>
+<td><code>proxyport</code></td>
+<td>Passphrase for the SSL certificate file</td>
+<td>string</td>
+<td><code>NULL</code></td>
+</tr>
+<tr>
+<td><code>sslverifypeer</code></td>
+<td>Whether to verify the SSL peer</td>
+<td>string</td>
+<td><code>TRUE</code></td>
+</tr>
+</tbody>
+</table></div>
 <h3 id="transfering-files-by-handle">Transfering files by handle</h3>
 <p>You can use cURL to transfer very large files over HTTP by filehandle.</p>
 <pre class="codehilite"><code class="language-php">use Zend\Http\Client;
