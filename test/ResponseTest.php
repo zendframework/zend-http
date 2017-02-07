@@ -13,6 +13,7 @@ use Zend\Http\Exception\RuntimeException;
 use Zend\Http\Header\GenericHeader;
 use Zend\Http\Headers;
 use Zend\Http\Response;
+use Zend\Http\Headers;
 
 class ResponseTest extends TestCase
 {
@@ -177,6 +178,44 @@ class ResponseTest extends TestCase
         $this->assertEquals('chunked', strtolower($res->getHeaders()->get('Transfer-encoding')->getFieldValue()));
         $this->assertEquals('0b13cb193de9450aa70a6403e2c9902f', md5($res->getBody()));
         $this->assertEquals('c0cc9d44790fa2a58078059bab1902a9', md5($res->getContent()));
+    }
+
+    /**
+     * @small
+     */
+    public function testChunkedResponsePerformance () {
+        $response = new Response();
+
+        $headers = file_get_contents(__DIR__ . '/_files/response_chunked_head');
+        $response->setHeaders(Headers::fromString($headers));
+
+        // create a http chunk with the corresponding size
+        $makeChunk = function($chunksize) {
+            $chunkdata = str_repeat("W", $chunksize);
+            return "$chunksize\r\n$chunkdata\r\n";
+        };
+
+        // measures the time for getBody
+        $getTimeForResponse = function($response) {
+            $time_start = microtime(true);
+            $response->getBody();
+            return microtime(true) - $time_start;
+        };
+
+        // *** craft a special 'worst case' response, where 1000 1 Byte chunks are followed by a 1 MB Chunk ***
+
+        // Get baseline for timing: 1000 x 1 Byte chunks
+        $responseData = str_repeat($makeChunk(1), 1000);
+        $response->setContent($responseData);
+        $time1 = $getTimeForResponse($response);
+
+        // Get baseline for timing: 1000 x 1 Byte chunks
+        $responseData2 = $responseData . $makeChunk(1000000);
+        $response->setContent($responseData2);
+        $time2 = $getTimeForResponse($response);
+
+        // Make sure that the worst case packet will have an equal timing as the baseline
+        $this->assertTrue(1.5 > ($time2 / $time1), "Chunked response is not parsing large packets efficiently: " . ($time2 / $time1));
     }
 
     public function testLineBreaksCompatibility()
