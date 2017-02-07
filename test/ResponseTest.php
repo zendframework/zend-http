@@ -181,6 +181,25 @@ class ResponseTest extends TestCase
     }
 
     /**
+     * @param number $chunksize the data size of the chunk to create
+     * @return string a chunk of data for embedding inside a chunked response
+     */
+    private function makeChunk ($chunksize) {
+        $chunkdata = str_repeat("W", $chunksize);
+        return "$chunksize\r\n$chunkdata\r\n";
+    }
+
+    /**
+     * @param Response $response
+     * @return the time that calling the getBody function took on the response
+     */
+    private function getTimeForGetBody (Response $response) {
+        $time_start = microtime(true);
+        $response->getBody();
+        return microtime(true) - $time_start;
+    }
+
+    /**
      * @small
      */
     public function testChunkedResponsePerformance () {
@@ -189,33 +208,20 @@ class ResponseTest extends TestCase
         $headers = file_get_contents(__DIR__ . '/_files/response_chunked_head');
         $response->setHeaders(Headers::fromString($headers));
 
-        // create a http chunk with the corresponding size
-        $makeChunk = function($chunksize) {
-            $chunkdata = str_repeat("W", $chunksize);
-            return "$chunksize\r\n$chunkdata\r\n";
-        };
-
-        // measures the time for getBody
-        $getTimeForResponse = function($response) {
-            $time_start = microtime(true);
-            $response->getBody();
-            return microtime(true) - $time_start;
-        };
-
         // *** craft a special 'worst case' response, where 1000 1 Byte chunks are followed by a 1 MB Chunk ***
 
         // Get baseline for timing: 1000 x 1 Byte chunks
-        $responseData = str_repeat($makeChunk(1), 1000);
+        $responseData = str_repeat($this->makeChunk(1), 1000);
         $response->setContent($responseData);
-        $time1 = $getTimeForResponse($response);
+        $time1 = $this->getTimeForGetBody($response);
 
         // Get baseline for timing: 1000 x 1 Byte chunks
-        $responseData2 = $responseData . $makeChunk(1000000);
+        $responseData2 = $responseData . $this->makeChunk(1000000);
         $response->setContent($responseData2);
-        $time2 = $getTimeForResponse($response);
+        $time2 = $this->getTimeForGetBody($response);
 
         // Make sure that the worst case packet will have an equal timing as the baseline
-        $this->assertTrue(1.5 > ($time2 / $time1), "Chunked response is not parsing large packets efficiently: " . ($time2 / $time1));
+        $this->assertTrue(2 > ($time2 / $time1), "Chunked response is not parsing large packets efficiently: " . ($time2 / $time1));
     }
 
     public function testLineBreaksCompatibility()
