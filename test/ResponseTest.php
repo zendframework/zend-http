@@ -184,7 +184,8 @@ class ResponseTest extends TestCase
      * @param number $chunksize the data size of the chunk to create
      * @return string a chunk of data for embedding inside a chunked response
      */
-    private function makeChunk ($chunksize) {
+    private function makeChunk($chunksize)
+    {
         $chunkdata = str_repeat("W", $chunksize);
         return "$chunksize\r\n$chunkdata\r\n";
     }
@@ -193,7 +194,8 @@ class ResponseTest extends TestCase
      * @param Response $response
      * @return the time that calling the getBody function took on the response
      */
-    private function getTimeForGetBody (Response $response) {
+    private function getTimeForGetBody(Response $response)
+    {
         $time_start = microtime(true);
         $response->getBody();
         return microtime(true) - $time_start;
@@ -202,7 +204,8 @@ class ResponseTest extends TestCase
     /**
      * @small
      */
-    public function testChunkedResponsePerformance () {
+    public function testChunkedResponsePerformance()
+    {
         $response = new Response();
 
         $headers = file_get_contents(__DIR__ . '/_files/response_chunked_head');
@@ -221,7 +224,8 @@ class ResponseTest extends TestCase
         $time2 = $this->getTimeForGetBody($response);
 
         // Make sure that the worst case packet will have an equal timing as the baseline
-        $this->assertTrue(2 > ($time2 / $time1), "Chunked response is not parsing large packets efficiently: " . ($time2 / $time1));
+        $errMsg = "Chunked response is not parsing large packets efficiently: " . ($time2 / $time1);
+        $this->assertTrue(2 > ($time2 / $time1), $errMsg);
     }
 
     public function testLineBreaksCompatibility()
