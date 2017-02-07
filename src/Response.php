@@ -528,15 +528,14 @@ class Response extends AbstractMessage implements ResponseInterface
 
         while (true) {
             if (! preg_match("/^([\da-fA-F]+)[^\r\n]*\r\n/sm", $body, $m, 0, $offset)) {
-                if (! empty(trim(substr($body, $offset)))) {
+                if (trim(substr($body, $offset))) {
                     // Message was not consumed completely!
                     throw new Exception\RuntimeException(
-                        "Error parsing body - doesn't seem to be a chunked message"
+                        'Error parsing body - doesn\'t seem to be a chunked message'
                     );
-                } else {
-                    // Message was consumed completely
-                    break;
                 }
+                // Message was consumed completely
+                break;
             }
 
             $length   = hexdec(trim($m[1]));
