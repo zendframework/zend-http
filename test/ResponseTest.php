@@ -1,7 +1,7 @@
 <?php
 /**
  * @see       https://github.com/zendframework/zend-http for the canonical source repository
- * @copyright Copyright (c) 2005-2017 Zend Technologies USA Inc. (http://www.zend.com)
+ * @copyright Copyright (c) 2005-2018 Zend Technologies USA Inc. (http://www.zend.com)
  * @license   https://github.com/zendframework/zend-http/blob/master/LICENSE.md New BSD License
  */
 
@@ -13,7 +13,6 @@ use Zend\Http\Exception\RuntimeException;
 use Zend\Http\Header\GenericHeader;
 use Zend\Http\Headers;
 use Zend\Http\Response;
-use Zend\Http\Headers;
 
 class ResponseTest extends TestCase
 {
@@ -181,24 +180,24 @@ class ResponseTest extends TestCase
     }
 
     /**
-     * @param number $chunksize the data size of the chunk to create
+     * @param int $chunksize the data size of the chunk to create
      * @return string a chunk of data for embedding inside a chunked response
      */
     private function makeChunk($chunksize)
     {
-        $chunkdata = str_repeat("W", $chunksize);
-        return "$chunksize\r\n$chunkdata\r\n";
+        $chunkdata = str_repeat('W', $chunksize);
+        return sprintf("%d\r\n%s\r\n", $chunksize, $chunkdata);
     }
 
     /**
      * @param Response $response
-     * @return the time that calling the getBody function took on the response
+     * @return float the time that calling the getBody function took on the response
      */
     private function getTimeForGetBody(Response $response)
     {
-        $time_start = microtime(true);
+        $timeStart = microtime(true);
         $response->getBody();
-        return microtime(true) - $time_start;
+        return microtime(true) - $timeStart;
     }
 
     /**
@@ -211,21 +210,20 @@ class ResponseTest extends TestCase
         $headers = file_get_contents(__DIR__ . '/_files/response_chunked_head');
         $response->setHeaders(Headers::fromString($headers));
 
-        // *** craft a special 'worst case' response, where 1000 1 Byte chunks are followed by a 1 MB Chunk ***
 
-        // Get baseline for timing: 1000 x 1 Byte chunks
+        // get baseline for timing: 1000 x 1 Byte chunks
         $responseData = str_repeat($this->makeChunk(1), 1000);
         $response->setContent($responseData);
         $time1 = $this->getTimeForGetBody($response);
 
-        // Get baseline for timing: 1000 x 1 Byte chunks
+        // 'worst case' response, where 1000 1 Byte chunks are followed by a 1 MB Chunk
         $responseData2 = $responseData . $this->makeChunk(1000000);
         $response->setContent($responseData2);
         $time2 = $this->getTimeForGetBody($response);
 
-        // Make sure that the worst case packet will have an equal timing as the baseline
-        $errMsg = "Chunked response is not parsing large packets efficiently: " . ($time2 / $time1);
-        $this->assertTrue(2 > ($time2 / $time1), $errMsg);
+        // make sure that the worst case packet will have an equal timing as the baseline
+        $errMsg = 'Chunked response is not parsing large packets efficiently!';
+        $this->assertLessThan(2, floor($time2 / $time1), $errMsg);
     }
 
     public function testLineBreaksCompatibility()
