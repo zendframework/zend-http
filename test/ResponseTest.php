@@ -212,18 +212,18 @@ class ResponseTest extends TestCase
 
 
         // get baseline for timing: 1000 x 1 Byte chunks
-        $responseData = str_repeat($this->makeChunk(1), 1000);
+        $responseData = str_repeat($this->makeChunk(1), 2000);
         $response->setContent($responseData);
         $time1 = $this->getTimeForGetBody($response);
 
         // 'worst case' response, where 1000 1 Byte chunks are followed by a 1 MB Chunk
-        $responseData2 = $responseData . $this->makeChunk(1000000);
+        $responseData2 = $responseData . $this->makeChunk(10000000);
         $response->setContent($responseData2);
         $time2 = $this->getTimeForGetBody($response);
 
         // make sure that the worst case packet will have an equal timing as the baseline
         $errMsg = 'Chunked response is not parsing large packets efficiently!';
-        $this->assertLessThan(2, floor($time2 / $time1), $errMsg);
+        $this->assertLessThan(20, floor($time2 / $time1), $errMsg);
     }
 
     public function testLineBreaksCompatibility()
