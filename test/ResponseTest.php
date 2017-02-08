@@ -211,7 +211,7 @@ class ResponseTest extends TestCase
         $response->setHeaders(Headers::fromString($headers));
 
         // avoid flakiness, repeat test
-        $timings = array(); 
+        $timings = [];
         for ($i = 0; $i < 4; $i++) {
             // get baseline for timing: 2000 x 1 Byte chunks
             $responseData = str_repeat($this->makeChunk(1), 2000);
@@ -223,9 +223,10 @@ class ResponseTest extends TestCase
             $response->setContent($responseData2);
             $time2 = $this->getTimeForGetBody($response);
 
-            // do not count the first iteration
-            if ($i) $timings[] = floor($time2 / $time1);
+            $timings[] = floor($time2 / $time1);
         }
+
+        array_shift($timings); // do not measure first iteration
 
         // make sure that the worst case packet will have an equal timing as the baseline
         $errMsg = 'Chunked response is not parsing large packets efficiently! Timings:';
