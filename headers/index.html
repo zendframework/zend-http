@@ -244,7 +244,7 @@ header type.</p>
 <h2 id="quick-start">Quick Start</h2>
 <p>The quickest way to get started interacting with header objects is by retrieving
 an already populated <code>Headers</code> container from a request or response instance.</p>
-<pre class="codehilite"><code class="language-php">// $client is an instance of Zend\Http\Client
+<pre class="codehilite"><code class="language-php linenums">// $client is an instance of Zend\Http\Client
 
 // You can retrieve the request headers by first retrieving
 // the Request object and then calling getHeaders on it
@@ -253,9 +253,8 @@ $requestHeaders  = $client-&gt;getRequest()-&gt;getHeaders();
 // The same method also works for retrieving Response headers
 $responseHeaders = $client-&gt;getResponse()-&gt;getHeaders();</code></pre>
 
-
 <p><code>Zend\Http\Headers</code> can also extract headers from a string:</p>
-<pre class="codehilite"><code class="language-php">use Zend\Http\Headers;
+<pre class="codehilite"><code class="language-php linenums">use Zend\Http\Headers;
 
 $headerString = &lt;&lt;&lt;EOB
 Host: www.example.com
@@ -268,7 +267,6 @@ $headers = Headers::fromString($headerString);
 //   (1) Zend\Http\Header\Host
 //   (2) Zend\Http\Header\ContentType
 //   (3) Zend\Http\Header\ContentLength</code></pre>
-
 
 <p>Now that you have an instance of <code>Zend\Http\Headers</code>, you can manipulate the
 individual headers it contains using the provided public API methods outlined in
@@ -775,13 +773,12 @@ namespace, as well as any specific methods they contain. Each class implements
 content from a list of trusted media providers (including a content distribution
 network), and scripts only from a server under its control hosting sanitized
 Javacript:</p>
-<pre class="codehilite"><code class="language-php">// http://www.w3.org/TR/2012/CR-CSP-20121115/#sample-policy-definitions
+<pre class="codehilite"><code class="language-php linenums">// http://www.w3.org/TR/2012/CR-CSP-20121115/#sample-policy-definitions
 $csp = new ContentSecurityPolicy();
 $csp-&gt;setDirective('default-src', []); // No sources
 $csp-&gt;setDirective('img-src', ['*']);
 $csp-&gt;setDirective('object-src', ['media1.example.com', 'media2.example.com', '*.cdn.example.com']);
 $csp-&gt;setDirective('script-src', ['trustedscripts.example.com']);</code></pre>
-
 
 <h3 id="contenttransferencoding">ContentTransferEncoding</h3>
 <p>No additional methods.</p>
@@ -1067,7 +1064,7 @@ $csp-&gt;setDirective('script-src', ['trustedscripts.example.com']);</code></pre
 string when multiple values are present.</p>
 <h2 id="examples">Examples</h2>
 <h3 id="retrieving-headers-from-a-headers-object">Retrieving headers from a Headers object</h3>
-<pre class="codehilite"><code class="language-php">// $client is an instance of Zend\Http\Client
+<pre class="codehilite"><code class="language-php linenums">// $client is an instance of Zend\Http\Client
 $response = $client-&gt;send();
 $headers = $response-&gt;getHeaders();
 
@@ -1080,7 +1077,6 @@ $headers-&gt;has('Content-Type');
 // the ``get`` method:
 $contentTypeHeaders = $headers-&gt;get('Content-Type');</code></pre>
 
-
 <p>There are three possibilities for the return value of the above call to the <code>get</code> method:</p>
 <ul>
 <li>If no <code>Content-Type</code> header was set in the <code>Request</code>, <code>get</code> will return <code>false</code>.</li>
@@ -1091,7 +1087,7 @@ $contentTypeHeaders = $headers-&gt;get('Content-Type');</code></pre>
   instance per header.</li>
 </ul>
 <h3 id="adding-headers-to-a-headers-object">Adding headers to a Headers object</h3>
-<pre class="codehilite"><code class="language-php">use Zend\Http\Header;
+<pre class="codehilite"><code class="language-php linenums">use Zend\Http\Header;
 use Zend\Http\Headers;
 
 $headers = new Headers();
@@ -1122,11 +1118,10 @@ $headers-&gt;addHeaders([
     'Content-Type' =&gt; 'text/html',
 ]);</code></pre>
 
-
 <h3 id="removing-headers-from-a-headers-object">Removing headers from a Headers object</h3>
 <p>We can remove all headers of a specific type using the <code>removeHeader</code> method,
 which accepts a single object implementing <code>Zend\Http\Header\HeaderInterface</code></p>
-<pre class="codehilite"><code class="language-php">use ArrayIterator;
+<pre class="codehilite"><code class="language-php linenums">use ArrayIterator;
 use Zend\Http\Header\HeaderInterface;
 
 // $headers is a pre-configured instance of Zend\Http\Headers

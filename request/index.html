@@ -223,10 +223,9 @@
 <p><code>Zend\Http\Request</code> is responsible for providing a fluent API that allows a
 developer to interact with all the various parts of an HTTP request.</p>
 <p>A typical HTTP request looks like this:</p>
-<pre class="codehilite"><code class="language-text">| METHOD | URI | VERSION |
+<pre class="codehilite"><code class="language-text linenums">| METHOD | URI | VERSION |
 |        HEADERS         |
 |         BODY           |</code></pre>
-
 
 <p>In simplified terms, the request consists of a method, URI, and HTTP version
 number; together, they make up the "Request Line." This line is followed by zero
@@ -240,7 +239,7 @@ specification of a HTTP request can be found in
 <p>Request objects can either be created from the provided <code>fromString()</code> factory,
 or, if you wish to have a completely empty object to start with, by
 manually instantiating the <code>Zend\Http\Request</code> class with no parameters.</p>
-<pre class="codehilite"><code class="language-php">use Zend\Http\Request;
+<pre class="codehilite"><code class="language-php linenums">use Zend\Http\Request;
 
 $request = Request::fromString(&lt;&lt;&lt;EOS
 POST /foo HTTP/1.1
@@ -261,7 +260,6 @@ $request-&gt;getHeaders()-&gt;addHeaders([
     'HeaderField2' =&gt; 'header-field-value2',
 ]);
 $request-&gt;getPost()-&gt;set('foo', 'bar');</code></pre>
-
 
 <h2 id="configuration-options">Configuration Options</h2>
 <p>No configuration options are available.</p>
@@ -429,7 +427,7 @@ fully qualified class names and/or namespaces:</p>
 </table></div>
 <h2 id="examples">Examples</h2>
 <h3 id="generating-a-request-object-from-a-string">Generating a Request object from a string</h3>
-<pre class="codehilite"><code class="language-php">use Zend\Http\Request;
+<pre class="codehilite"><code class="language-php linenums">use Zend\Http\Request;
 
 $string = &quot;GET /foo HTTP/1.1\r\n\r\nSome Content&quot;;
 $request = Request::fromString($string);
@@ -440,9 +438,8 @@ $request-&gt;getUriString(); // returns '/foo'
 $request-&gt;getVersion();   // returns Request::VERSION_11 or '1.1'
 $request-&gt;getContent();   // returns 'Some Content'</code></pre>
 
-
 <h3 id="retrieving-and-setting-headers">Retrieving and setting headers</h3>
-<pre class="codehilite"><code class="language-php">use Zend\Http\Request;
+<pre class="codehilite"><code class="language-php linenums">use Zend\Http\Request;
 use Zend\Http\Header\Cookie;
 
 $request = new Request();
@@ -452,9 +449,8 @@ foreach ($request-&gt;getHeaders() as $header) {
     printf(&quot;%s with value %s\n&quot;, $header-&gt;getFieldName(), $header-&gt;getFieldValue());
 }</code></pre>
 
-
 <h3 id="retrieving-and-setting-get-and-post-values">Retrieving and setting GET and POST values</h3>
-<pre class="codehilite"><code class="language-php">use Zend\Http\Request;
+<pre class="codehilite"><code class="language-php linenums">use Zend\Http\Request;
 
 $request = new Request();
 
@@ -465,9 +461,8 @@ $request-&gt;getQuery()-&gt;bar = 'Bar value';
 $request-&gt;getPost('foo'); // returns 'Foo value'
 $request-&gt;getQuery()-&gt;offsetGet('bar'); // returns 'Bar value'</code></pre>
 
-
 <h3 id="generating-a-formatted-http-request-from-a-request-object">Generating a formatted HTTP Request from a Request object</h3>
-<pre class="codehilite"><code class="language-php">use Zend\Http\Request;
+<pre class="codehilite"><code class="language-php linenums">use Zend\Http\Request;
 
 $request = new Request();
 $request-&gt;setMethod(Request::METHOD_POST);

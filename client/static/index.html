@@ -224,7 +224,7 @@
 static HTTP client which exposes a simplified API for quickly performing one-off <code>GET</code>
 and <code>POST</code> operations.</p>
 <h2 id="quick-start">Quick Start</h2>
-<pre class="codehilite"><code class="language-php">use Zend\Http\ClientStatic;
+<pre class="codehilite"><code class="language-php linenums">use Zend\Http\ClientStatic;
 
 // Simple GET request
 $response = ClientStatic::get('http://example.org');
@@ -247,10 +247,9 @@ $response = ClientStatic::post(
     ]
 );</code></pre>
 
-
 <h2 id="available-methods">Available Methods</h2>
 <h3 id="get">get()</h3>
-<pre class="codehilite"><code class="language-php">get(
+<pre class="codehilite"><code class="language-php linenums">get(
     string $url,
     array $query = [],
     array $headers = [],
@@ -258,19 +257,17 @@ $response = ClientStatic::post(
     $clientOptions = null
 ) : Response</code></pre>
 
-
 <p>Perform an HTTP <code>GET</code> request using the provided URL, query string variables,
 headers, and request body. The fifth parameter can be used to pass configuration
 options to the HTTP client instance.</p>
 <h3 id="post">post()</h3>
-<pre class="codehilite"><code class="language-php">post(
+<pre class="codehilite"><code class="language-php linenums">post(
     string $url,
     array $params,
     array $headers = [],
     mixed $body = null,
     $clientOptions = null
 ) : Response</code></pre>
-
 
 <p>Perform an HTTP <code>POST</code> request using the provided URL, parameters, headers, and
 request body. The fifth parameter can be used to pass configuration options to

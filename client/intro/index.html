@@ -236,7 +236,7 @@ more details).</p>
 be either a string or a <code>Zend\Uri\Http</code> object), and an array or <code>Traversable</code>
 object containing configuration options. The <code>send()</code> method is used to submit
 the request to the remote server, and a <code>Zend\Http\Response</code> object is returned:</p>
-<pre class="codehilite"><code class="language-php">use Zend\Http\Client;
+<pre class="codehilite"><code class="language-php linenums">use Zend\Http\Client;
 
 $client = new Client(
     'http://example.org',
@@ -247,10 +247,9 @@ $client = new Client(
 );
 $response = $client-&gt;send();</code></pre>
 
-
 <p>Both constructor parameters can be left out, and set later using the <code>setUri()</code>
 and <code>setOptions()</code> methods:</p>
-<pre class="codehilite"><code class="language-php">use Zend\Http\Client;
+<pre class="codehilite"><code class="language-php linenums">use Zend\Http\Client;
 
 $client = new Client();
 $client-&gt;setUri('http://example.org');
@@ -260,11 +259,10 @@ $client-&gt;setOptions([
 ]);
 $response = $client-&gt;send();</code></pre>
 
-
 <p><code>Zend\Http\Client</code> can also dispatch requests using a separately configured
 <code>request</code> object (see the <a href="../../request/">Request</a> manual for full details of
 the methods available):</p>
-<pre class="codehilite"><code class="language-php">use Zend\Http\Client;
+<pre class="codehilite"><code class="language-php linenums">use Zend\Http\Client;
 use Zend\Http\Request;
 
 $request = new Request();
@@ -273,7 +271,6 @@ $request-&gt;setUri('http://example.org');
 $client = new Client();
 
 $response = $client-&gt;send($request);</code></pre>
-
 
 <blockquote>
 <h3 id="url-validation">URL validation</h3>
@@ -382,17 +379,16 @@ options available.</p>
 <h2 id="examples">Examples</h2>
 <h3 id="performing-a-get-request">Performing a GET request</h3>
 <p>GET is the default method used, and requires no special configuration.</p>
-<pre class="codehilite"><code class="language-php">use Zend\Http\Client;
+<pre class="codehilite"><code class="language-php linenums">use Zend\Http\Client;
 
 $client = new Client('http://example.org');
 $response = $client-&gt;send();</code></pre>
-
 
 <h3 id="using-request-methods-other-than-get">Using request methods other than GET</h3>
 <p>The request method can be set using <code>setMethod()</code>. If no method is specified,
 the method set by the last <code>setMethod()</code> call is used. If <code>setMethod()</code> was
 never called, the default request method is <code>GET</code>.</p>
-<pre class="codehilite"><code class="language-php">use Zend\Http\Client;
+<pre class="codehilite"><code class="language-php linenums">use Zend\Http\Client;
 
 $client = new Client('http://example.org');
 
@@ -400,11 +396,10 @@ $client = new Client('http://example.org');
 $client-&gt;setMethod('POST');
 $response = $client-&gt;send();</code></pre>
 
-
 <p>For convenience, <code>Zend\Http\Request</code> defines all request methods as class
 constants: <code>Zend\Http\Request::METHOD_GET</code>, <code>Zend\Http\Request::METHOD_POST</code> and
 so on.</p>
-<pre class="codehilite"><code class="language-php">use Zend\Http\Client;
+<pre class="codehilite"><code class="language-php linenums">use Zend\Http\Client;
 use Zend\Http\Request;
 
 $client = new Client('http://example.org');
@@ -413,12 +408,11 @@ $client = new Client('http://example.org');
 $client-&gt;setMethod(Request::METHOD_POST);
 $response = $client-&gt;send();</code></pre>
 
-
 <h3 id="setting-query-parameters">Setting query parameters</h3>
 <p>Adding query parameters to an HTTP request can be done either by specifying them
 as part of the URL, or by using the <code>setParameterGet()</code> method. This method
 takes the query parameters as an associative array of name/value pairs.</p>
-<pre class="codehilite"><code class="language-php">use Zend\Http\Client;
+<pre class="codehilite"><code class="language-php linenums">use Zend\Http\Client;
 $client = new Client();
 
 // This is equivalent to setting a URL in the Client's constructor:
@@ -432,14 +426,13 @@ $client-&gt;setParameterGet([
     'made_in'     =&gt; 'Mexico',
 ]);</code></pre>
 
-
 <h3 id="setting-form-encoded-body-parameters">Setting form-encoded body parameters</h3>
 <p>While query parameters can be sent with every request method, other methods can
 accept parameters via the request body. In many cases, these are
 <code>application/x-www-form-urlencoded</code> parameters; zend-http allows you to specify
 such parameters usingthe <code>setParameterPost()</code> method, which is identical to the
 <code>setParameterGet()</code> method in structure.</p>
-<pre class="codehilite"><code class="language-php">use Zend\Http\Client;
+<pre class="codehilite"><code class="language-php linenums">use Zend\Http\Client;
 
 $client = new Client();
 
@@ -450,7 +443,6 @@ $client-&gt;setParameterPost([
     'selection' =&gt; [45, 32, 80],
 ]);</code></pre>
 
-
 <p>Note that when sending <code>POST</code> requests (or an request allowing a request body),
 you can set both query and <code>POST</code> parameters. On the other hand, setting POST
 parameters on a <code>GET</code> request will not trigger an error, rendering it useless.</p>
@@ -459,7 +451,7 @@ parameters on a <code>GET</code> request will not trigger an error, rendering it
 default (<code>Zend\Http\Client\Adapter\Socket</code>) adapter, you may need to set the
 <code>sslcapath</code> configuration option in order to allow PHP to validate the SSL
 certificate:</p>
-<pre class="codehilite"><code class="language-php">use Zend\Http\Client;
+<pre class="codehilite"><code class="language-php linenums">use Zend\Http\Client;
 
 $client = new Client(
     'https://example.org',
@@ -469,13 +461,12 @@ $client = new Client(
 );
 $response = $client-&gt;send();</code></pre>
 
-
 <p>The exact path to use will vary depending on your operating system. Without this
 you'll get the exception "Unable to enable crypto on TCP connection" when trying
 to connect.</p>
 <p>Alternatively, you could switch to the curl adapter, which negotiates SSL
 connections more transparently:</p>
-<pre class="codehilite"><code class="language-php">use Zend\Http\Client;
+<pre class="codehilite"><code class="language-php linenums">use Zend\Http\Client;
 
 $client = new Client(
     'https://example.org',
@@ -485,9 +476,8 @@ $client = new Client(
 );
 $response = $client-&gt;send();</code></pre>
 
-
 <h2 id="complete-example">Complete Example</h2>
-<pre class="codehilite"><code class="language-php">use Zend\Http\Client;
+<pre class="codehilite"><code class="language-php linenums">use Zend\Http\Client;
 
 $client = new Client();
 $client-&gt;setUri('http://www.example.com');
@@ -502,9 +492,8 @@ if ($response-&gt;isSuccess()) {
     // the POST was successful
 }</code></pre>
 
-
 <p>or the same thing, using a request object:</p>
-<pre class="codehilite"><code class="language-php">use Zend\Http\Client;
+<pre class="codehilite"><code class="language-php linenums">use Zend\Http\Client;
 use Zend\Http\Request;
 
 $request = new Request();
