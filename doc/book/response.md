@@ -73,7 +73,7 @@ fully qualified class names and/or namespaces:
 
 Method signature                                                       | Description
 ---------------------------------------------------------------------- | -----------
-`stati fromString(string $string) : Response`                          | Populate object from string.
+`static fromString(string $string) : Response`                         | Populate object from string.
 `renderStatusLine() : string`                                          | Render the status line header
 `setHeaders(Headers $headers) : self`                                  | Provide an alternate Parameter Container implementation for headers in this object. (This is NOT the primary API for value setting; for that, see `getHeaders()`.)
 `getHeaders() : Headers`                                               | Return the container responsible for storing HTTP headers. This container exposes the primary API for manipulating headers set in the HTTP response. See the section on [Headers](headers.md) for more information.
