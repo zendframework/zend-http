@@ -6,7 +6,9 @@ All notable changes to this project will be documented in this file, in reverse 
 
 ### Added
 
-- Nothing.
+- [#110](https://github.com/zendframework/zend-http/pull/110) Adds status
+  codes 226, 308, 444, 499, 510, 599 with their corresponding constants and
+  reason phrases.
 
 ### Deprecated
 
