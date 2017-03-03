@@ -31,19 +31,21 @@ class Proxy extends Socket
      * @var array
      */
     protected $config = [
+        'persistent'         => false,
         'ssltransport'       => 'ssl',
         'sslcert'            => null,
         'sslpassphrase'      => null,
         'sslverifypeer'      => true,
+        'sslcafile'          => null,
         'sslcapath'          => null,
         'sslallowselfsigned' => false,
         'sslusecontext'      => false,
+        'sslverifypeername'  => true,
         'proxy_host'         => '',
         'proxy_port'         => 8080,
         'proxy_user'         => '',
         'proxy_pass'         => '',
         'proxy_auth'         => Client::AUTH_BASIC,
-        'persistent'         => false
     ];
 
     /**
