@@ -132,4 +132,19 @@ class ProxyAdapterTest extends SocketTest
         $this->assertSame($this->host, $adapterHost);
         $this->assertSame($this->port, $adapterPort);
     }
+
+    public function testProxyHasAllSocketConfigs()
+    {
+        $socket = new \Zend\Http\Client\Adapter\Socket();
+        $socketConfig = $socket->getConfig();
+        $proxy = new \Zend\Http\Client\Adapter\Proxy();
+        $proxyConfig = $proxy->getConfig();
+        foreach (array_keys($socketConfig) as $socketConfigKey) {
+            $this->assertArrayHasKey(
+                $socketConfigKey,
+                $proxyConfig,
+                "Proxy adapter should have all the Socket configuration keys"
+            );
+        }
+    }
 }
