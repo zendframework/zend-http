@@ -11,6 +11,7 @@ use PHPUnit\Framework\TestCase;
 use Zend\Http\Header\Date;
 use DateTime;
 use DateTimeZone;
+use Zend\Http\Header\Exception\InvalidArgumentException;
 
 class DateTest extends TestCase
 {
@@ -19,7 +20,6 @@ class DateTest extends TestCase
         // set to RFC default date format
         Date::setDateFormat(Date::DATE_RFC1123);
     }
-
 
     public function testDateFromStringCreatesValidDateHeader()
     {
@@ -138,10 +138,10 @@ class DateTest extends TestCase
     /**
      * @see http://en.wikipedia.org/wiki/HTTP_response_splitting
      * @group ZF2015-04
-     * @expectedException Zend\Http\Header\Exception\InvalidArgumentException
      */
     public function testPreventsCRLFAttackViaFromString()
     {
-        $header = Date::fromString("Date: Sun, 06 Nov 1994 08:49:37 GMT\r\n\r\nevilContent");
+        $this->expectException(InvalidArgumentException::class);
+        Date::fromString("Date: Sun, 06 Nov 1994 08:49:37 GMT\r\n\r\nevilContent");
     }
 }

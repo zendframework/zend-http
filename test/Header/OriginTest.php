@@ -9,6 +9,7 @@ namespace ZendTest\Http\Header;
 
 use PHPUnit\Framework\TestCase;
 use Zend\Http\Header\Origin;
+use Zend\Uri\Exception\InvalidUriPartException;
 
 class OriginTest extends TestCase
 {
@@ -44,11 +45,11 @@ class OriginTest extends TestCase
     /**
      * @see http://en.wikipedia.org/wiki/HTTP_response_splitting
      * @group ZF2015-04
-     * @expectedException Zend\Uri\Exception\InvalidUriPartException
      */
     public function testPreventsCRLFAttackViaFromString()
     {
-        $header = Origin::fromString("Origin: http://zend.org\r\n\r\nevilContent");
+        $this->expectException(InvalidUriPartException::class);
+        Origin::fromString("Origin: http://zend.org\r\n\r\nevilContent");
     }
 
     /**

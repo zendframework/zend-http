@@ -8,6 +8,7 @@
 namespace ZendTest\Http\Header;
 
 use PHPUnit\Framework\TestCase;
+use Zend\Http\Header\Exception\InvalidArgumentException;
 use Zend\Http\Header\IfUnmodifiedSince;
 
 class IfUnmodifiedSinceTest extends TestCase
@@ -47,11 +48,11 @@ class IfUnmodifiedSinceTest extends TestCase
     /**
      * @see http://en.wikipedia.org/wiki/HTTP_response_splitting
      * @group ZF2015-04
-     * @expectedException Zend\Http\Header\Exception\InvalidArgumentException
      */
     public function testCRLFAttack()
     {
-        $header = IfUnmodifiedSince::fromString(
+        $this->expectException(InvalidArgumentException::class);
+        IfUnmodifiedSince::fromString(
             "If-Unmodified-Since: Sun, 06 Nov 1994 08:49:37 GMT\r\n\r\nevilContent"
         );
     }

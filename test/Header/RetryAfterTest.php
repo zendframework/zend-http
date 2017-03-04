@@ -8,6 +8,7 @@
 namespace ZendTest\Http\Header;
 
 use PHPUnit\Framework\TestCase;
+use Zend\Http\Header\Exception\InvalidArgumentException;
 use Zend\Http\Header\RetryAfter;
 
 class RetryAfterTest extends TestCase
@@ -55,10 +56,10 @@ class RetryAfterTest extends TestCase
     /**
      * @see http://en.wikipedia.org/wiki/HTTP_response_splitting
      * @group ZF2015-04
-     * @expectedException Zend\Http\Header\Exception\InvalidArgumentException
      */
     public function testPreventsCRLFAttackViaFromString()
     {
-        $header = RetryAfter::fromString("Retry-After: 10\r\n\r\nevilContent");
+        $this->expectException(InvalidArgumentException::class);
+        RetryAfter::fromString("Retry-After: 10\r\n\r\nevilContent");
     }
 }

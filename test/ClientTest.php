@@ -9,6 +9,8 @@ namespace ZendTest\Http;
 
 use PHPUnit\Framework\TestCase;
 use Zend\Http\Client\Adapter\AdapterInterface;
+use Zend\Http\Client\Exception as ClientException;
+use Zend\Http\Exception as HttpException;
 use Zend\Uri\Http;
 use Zend\Http\Client;
 use Zend\Http\Cookies;
@@ -92,13 +94,12 @@ class ClientTest extends TestCase
         $client->addCookie("test3", false);
     }
 
-    /**
-    * @expectedException Zend\Http\Exception\InvalidArgumentException
-    */
     public function testIfNullValueCookiesThrowsException()
     {
         $client = new Client();
-        $client->addCookie("test", null);
+
+        $this->expectException(HttpException\InvalidArgumentException::class);
+        $client->addCookie('test', null);
     }
 
     public function testIfCookieHeaderCanBeSet()
@@ -190,19 +191,15 @@ class ClientTest extends TestCase
         $this->assertEquals('Basic ' . base64_encode('test:test'), $encoded);
     }
 
-    /**
-     * @expectedException Zend\Http\Client\Exception\InvalidArgumentException
-     */
     public function testEncodeAuthHeaderThrowsExceptionWhenUsernameContainsSemiColon()
     {
+        $this->expectException(ClientException\InvalidArgumentException::class);
         Client::encodeAuthHeader('test:', 'test');
     }
 
-    /**
-     * @expectedException Zend\Http\Client\Exception\InvalidArgumentException
-     */
     public function testEncodeAuthHeaderThrowsExceptionWhenInvalidAuthTypeIsUsed()
     {
+        $this->expectException(ClientException\InvalidArgumentException::class);
         Client::encodeAuthHeader('test', 'test', 'test');
     }
 

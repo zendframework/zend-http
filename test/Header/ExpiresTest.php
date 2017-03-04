@@ -8,6 +8,7 @@
 namespace ZendTest\Http\Header;
 
 use PHPUnit\Framework\TestCase;
+use Zend\Http\Header\Exception\InvalidArgumentException;
 use Zend\Http\Header\Expires;
 
 class ExpiresTest extends TestCase
@@ -47,16 +48,16 @@ class ExpiresTest extends TestCase
     /**
      * @see http://en.wikipedia.org/wiki/HTTP_response_splitting
      * @group ZF2015-04
-     * @expectedException Zend\Http\Header\Exception\InvalidArgumentException
      */
     public function testPreventsCRLFAttackViaFromString()
     {
-        $header = Expires::fromString("Expires: Sun, 06 Nov 1994 08:49:37 GMT\r\n\r\nevilContent");
+        $this->expectException(InvalidArgumentException::class);
+        Expires::fromString("Expires: Sun, 06 Nov 1994 08:49:37 GMT\r\n\r\nevilContent");
     }
 
     public function testExpiresSetToZero()
     {
-        $expires = Expires::fromString("Expires: 0");
+        $expires = Expires::fromString('Expires: 0');
         $this->assertEquals('Expires: Thu, 01 Jan 1970 00:00:00 GMT', $expires->toString());
 
         $expires = new Expires();
