@@ -7,7 +7,7 @@
 
 $clength = filesize(__FILE__);
 
-header("Content-length: $clength");
-header("Content-length: $clength", false);
+header(sprintf('Content-length: %s', $clength));
+header(sprintf('Content-length: %s', $clength), false);
 
 readfile(__FILE__);
