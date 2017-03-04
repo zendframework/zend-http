@@ -15,16 +15,16 @@
     },
     "require": {
         "php": "^5.6 || ^7.0",
-        "zendframework/zend-loader": "^2.5",
-        "zendframework/zend-stdlib": "^2.5 || ^3.0",
-        "zendframework/zend-uri": "^2.5",
-        "zendframework/zend-validator": "^2.5"
+        "zendframework/zend-loader": "^2.5.1",
+        "zendframework/zend-stdlib": "^3.1 || ^2.7.7",
+        "zendframework/zend-uri": "^2.5.2",
+        "zendframework/zend-validator": "^2.8.2"
     },
     "require-dev": {
         "malukenho/docheader": "^0.1.5",
-        "zendframework/zend-config": "^2.5",
+        "phpunit/phpunit": "^6.0.8 || ^5.7.15",
         "zendframework/zend-coding-standard": "~1.0.0",
-        "phpunit/phpunit": "^6.0.8 || ^5.7.15"
+        "zendframework/zend-config": "^3.1 || ^2.6"
     },
     "autoload": {
         "psr-4": {
