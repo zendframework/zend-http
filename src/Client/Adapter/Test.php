@@ -91,7 +91,21 @@ class Test implements AdapterInterface
         }
 
         foreach ($options as $k => $v) {
-            $this->config[strtolower($k)] = $v;
+            $option = strtolower($k);
+            switch ($option) {
+                case 'next_request_will_fail':
+                    $this->setNextRequestWillFail($v);
+                    break;
+                case 'response':
+                    $this->setResponse($v);
+                    break;
+                case 'response_index':
+                    $this->setResponseIndex($v);
+                    break;
+                default:
+                    $this->config[$option] = $v;
+                    break;
+            }
         }
     }
 
