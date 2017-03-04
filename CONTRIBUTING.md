@@ -97,6 +97,18 @@ $ composer cs-fix
 If you allow `phpcbf` to fix CS issues, please re-run the tests to ensure
 they pass, and make sure you add and commit the changes after verification.
 
+## Running License Checks
+
+File-level docblocks should follow the format demonstrated in `.docheader`. To
+check for conformity, use:
+
+```console
+$ composer license-check
+```
+
+This will flag files that are incorrect, which you can then update. Re-run the
+tool to verify your changes.
+
 ## Recommended Workflow for Contributions
 
 Your first step is to establish a public repository from which we can

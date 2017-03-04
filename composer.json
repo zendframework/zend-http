@@ -21,6 +21,7 @@
         "zendframework/zend-validator": "^2.5"
     },
     "require-dev": {
+        "malukenho/docheader": "^0.1.5",
         "zendframework/zend-config": "^2.5",
         "zendframework/zend-coding-standard": "~1.0.0",
         "phpunit/phpunit": "^6.0.8 || ^5.7.15"
@@ -37,6 +38,7 @@
     },
     "scripts": {
         "check": [
+            "@license-check",
             "@cs-check",
             "@test"
         ],
@@ -44,6 +46,7 @@
         "cs-fix": "phpcbf",
         "test": "phpunit --colors=always",
         "test-coverage": "phpunit --colors=always --coverage-clover clover.xml",
+        "license-check": "vendor/bin/docheader check src/",
         "upload-coverage": "coveralls -v"
     }
 }
