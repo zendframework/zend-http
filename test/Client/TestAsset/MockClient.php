@@ -21,7 +21,7 @@ class MockClient extends \Zend\Http\Client
         'keepalive'       => false,
         'storeresponse'   => true,
         'strict'          => true,
-        'outputstream'   => false,
+        'outputstream'    => false,
         'encodecookies'   => true,
     ];
 }
