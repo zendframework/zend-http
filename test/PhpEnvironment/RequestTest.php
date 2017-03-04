@@ -766,7 +766,7 @@ class RequestTest extends TestCase
         $this->expectException('Zend\Http\Exception\InvalidArgumentException');
         $this->expectExceptionMessage('Invalid HTTP method passed');
 
-        $request = new Request(false);
+        new Request(false);
     }
 
     /**

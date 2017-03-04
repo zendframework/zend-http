@@ -105,7 +105,7 @@ class StaticTest extends TestCase
         $this->_client->setUri('http://example.com/test/?' . $qstr);
         $this->_client->setAdapter('\\Zend\\Http\\Client\\Adapter\\Test');
         $this->_client->setMethod('GET');
-        $res = $this->_client->send();
+        $this->_client->send();
 
         $this->assertContains(
             $qstr,
@@ -328,7 +328,7 @@ class StaticTest extends TestCase
         $this->_client->setAdapter('Zend\Http\Client\Adapter\Test');
         $this->_client->setOptions(['storeresponse' => false]);
 
-        $response = $this->_client->send();
+        $this->_client->send();
 
         $this->assertNull(
             $this->_client->getLastRawResponse(),

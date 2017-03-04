@@ -73,7 +73,7 @@ class CookieTest extends TestCase
     public function testPreventsCRLFAttackViaFromString()
     {
         $this->expectException('Zend\Http\Header\Exception\InvalidArgumentException');
-        $header = Cookie::fromString("Cookie: foo=bar\r\n\r\nevilContent");
+        Cookie::fromString("Cookie: foo=bar\r\n\r\nevilContent");
     }
 
     /**

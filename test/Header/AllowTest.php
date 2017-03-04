@@ -91,7 +91,7 @@ class AllowTest extends TestCase
         $this->expectException('Zend\Http\Header\Exception\InvalidArgumentException');
         $this->expectExceptionMessage('Invalid header value detected');
 
-        $header = Allow::fromString("Allow: GET\r\n\r\nevilContent");
+        Allow::fromString("Allow: GET\r\n\r\nevilContent");
     }
 
     public function injectionMethods()

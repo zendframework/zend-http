@@ -195,7 +195,7 @@ class ClientTest extends TestCase
      */
     public function testEncodeAuthHeaderThrowsExceptionWhenUsernameContainsSemiColon()
     {
-        $encoded = Client::encodeAuthHeader('test:', 'test');
+        Client::encodeAuthHeader('test:', 'test');
     }
 
     /**
@@ -203,7 +203,7 @@ class ClientTest extends TestCase
      */
     public function testEncodeAuthHeaderThrowsExceptionWhenInvalidAuthTypeIsUsed()
     {
-        $encoded = Client::encodeAuthHeader('test', 'test', 'test');
+        Client::encodeAuthHeader('test', 'test', 'test');
     }
 
     public function testIfMaxredirectWorksCorrectly()
@@ -299,7 +299,7 @@ class ClientTest extends TestCase
         // set auth and do request
         $client->setUri('http://example.org/part1')
             ->setAuth($user, $password, Client::AUTH_BASIC);
-        $response = $client->setMethod('GET')->send();
+        $client->setMethod('GET')->send();
 
         // the last request should NOT contain the Authorization header,
         // because example.com is different from example.org
@@ -319,7 +319,7 @@ class ClientTest extends TestCase
         // set auth and do request
         $client->setUri('http://example.org/part1')
             ->setAuth($user, $password, Client::AUTH_BASIC);
-        $response = $client->setMethod('GET')->send();
+        $client->setMethod('GET')->send();
 
         // the last request should contain the Authorization header,
         // because sub.example.org is a subdomain unter example.org
@@ -339,7 +339,7 @@ class ClientTest extends TestCase
         // set auth and do request
         $client->setUri('http://sub.example.org/part1')
             ->setAuth($user, $password, Client::AUTH_BASIC);
-        $response = $client->setMethod('GET')->send();
+        $client->setMethod('GET')->send();
 
         // the last request should NOT contain the Authorization header,
         // because example.org is not a subdomain unter sub.example.org

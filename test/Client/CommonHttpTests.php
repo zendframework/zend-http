@@ -625,7 +625,7 @@ abstract class CommonHttpTests extends TestCase
         $uri->setPath(rtrim(dirname($uri->getPath()), '/') . '/path/to/fake/file.ext');
         $uri = $uri->__toString();
 
-        $res = $this->client->send();
+        $this->client->send();
 
         $this->assertEquals(
             "{$uri}?redirect=relpath",
