@@ -29,7 +29,7 @@ abstract class AbstractLocation implements HeaderInterface
      *
      * @var UriInterface
      */
-    protected $uri = null;
+    protected $uri;
 
     /**
      * Create location-based header from string

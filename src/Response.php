@@ -170,7 +170,7 @@ class Response extends AbstractMessage implements ResponseInterface
     /**
      * @var string|null Null means it will be looked up from the $reasonPhrase list above
      */
-    protected $reasonPhrase = null;
+    protected $reasonPhrase;
 
     /**
      * Populate object from string

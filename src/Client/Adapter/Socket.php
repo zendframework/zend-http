@@ -37,7 +37,7 @@ class Socket implements HttpAdapter, StreamInterface
      *
      * @var resource|null
      */
-    protected $socket = null;
+    protected $socket;
 
     /**
      * What host/port are we connected to?
@@ -51,7 +51,7 @@ class Socket implements HttpAdapter, StreamInterface
      *
      * @var resource
      */
-    protected $outStream = null;
+    protected $outStream;
 
     /**
      * Parameters array
@@ -76,14 +76,14 @@ class Socket implements HttpAdapter, StreamInterface
      *
      * @var string
      */
-    protected $method = null;
+    protected $method;
 
     /**
      * Stream context
      *
      * @var resource
      */
-    protected $context = null;
+    protected $context;
 
     /**
      * Adapter constructor, currently empty. Config is set using setOptions()

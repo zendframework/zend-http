@@ -64,7 +64,7 @@ class Cookies extends Headers
     /**
      * @var \Zend\Http\Headers
      */
-    protected $headers = null;
+    protected $headers;
 
     /**
      * @var array

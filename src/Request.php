@@ -48,22 +48,22 @@ class Request extends AbstractMessage implements RequestInterface
     /**
      * @var string|HttpUri
      */
-    protected $uri = null;
+    protected $uri;
 
     /**
      * @var ParametersInterface
      */
-    protected $queryParams = null;
+    protected $queryParams;
 
     /**
      * @var ParametersInterface
      */
-    protected $postParams = null;
+    protected $postParams;
 
     /**
      * @var ParametersInterface
      */
-    protected $fileParams = null;
+    protected $fileParams;
 
     /**
      * A factory that produces a Request object from a well-formed Http Request string

@@ -22,56 +22,56 @@ class SetCookie implements MultipleHeaderInterface
      *
      * @var string|null
      */
-    protected $name = null;
+    protected $name;
 
     /**
      * Cookie value
      *
      * @var string|null
      */
-    protected $value = null;
+    protected $value;
 
     /**
      * Version
      *
      * @var int|null
      */
-    protected $version = null;
+    protected $version;
 
     /**
      * Max Age
      *
      * @var int|null
      */
-    protected $maxAge = null;
+    protected $maxAge;
 
     /**
      * Cookie expiry date
      *
      * @var int|null
      */
-    protected $expires = null;
+    protected $expires;
 
     /**
      * Cookie domain
      *
      * @var string|null
      */
-    protected $domain = null;
+    protected $domain;
 
     /**
      * Cookie path
      *
      * @var string|null
      */
-    protected $path = null;
+    protected $path;
 
     /**
      * Whether the cookie is secure or not
      *
      * @var bool|null
      */
-    protected $secure = null;
+    protected $secure;
 
     /**
      * If the value need to be quoted or not
@@ -83,7 +83,7 @@ class SetCookie implements MultipleHeaderInterface
     /**
      * @var bool|null
      */
-    protected $httponly = null;
+    protected $httponly;
 
     /**
      * @static

@@ -45,14 +45,14 @@ class Request extends HttpRequest
      *
      * @var ParametersInterface
      */
-    protected $serverParams = null;
+    protected $serverParams;
 
     /**
      * PHP environment params ($_ENV)
      *
      * @var ParametersInterface
      */
-    protected $envParams = null;
+    protected $envParams;
 
     /**
      * Construct

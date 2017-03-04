@@ -39,7 +39,7 @@ abstract class AbstractDate implements HeaderInterface
      *
      * @var DateTime
      */
-    protected $date = null;
+    protected $date;
 
     /**
      * Date output format

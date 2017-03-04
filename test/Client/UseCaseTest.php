@@ -33,14 +33,14 @@ class UseCaseTest extends TestCase
      *
      * @var \Zend\Http\Client
      */
-    protected $client = null;
+    protected $client;
 
     /**
      * Common HTTP client adapter
      *
      * @var \Zend\Http\Client\Adapter\AdapterInterface
      */
-    protected $adapter = null;
+    protected $adapter;
 
     /**
      * Configuration array

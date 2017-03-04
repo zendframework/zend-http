@@ -24,7 +24,7 @@ class Headers implements Countable, Iterator
     /**
      * @var PluginClassLocator
      */
-    protected $pluginClassLoader = null;
+    protected $pluginClassLoader;
 
     /**
      * @var array key names for $headers array

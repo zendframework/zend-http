@@ -64,7 +64,7 @@ class Client implements Stdlib\DispatchableInterface
     /**
      * @var string
      */
-    protected $streamName = null;
+    protected $streamName;
 
     /**
      * @var array of Header\SetCookie
@@ -79,12 +79,12 @@ class Client implements Stdlib\DispatchableInterface
     /**
      * @var Request
      */
-    protected $lastRawRequest = null;
+    protected $lastRawRequest;
 
     /**
      * @var Response
      */
-    protected $lastRawResponse = null;
+    protected $lastRawResponse;
 
     /**
      * @var int
@@ -122,7 +122,7 @@ class Client implements Stdlib\DispatchableInterface
      *
      * @var resource
      */
-    protected static $fileInfoDb = null;
+    protected static $fileInfoDb;
 
     /**
      * Constructor

@@ -30,7 +30,7 @@ class StaticTest extends TestCase
      *
      * @var \Zend\Http\Client
      */
-    protected $_client = null;
+    protected $_client;
     // @codingStandardsIgnoreEnd
 
     /**

@@ -31,7 +31,7 @@ abstract class AbstractMessage extends Message
     /**
      * @var Headers|null
      */
-    protected $headers = null;
+    protected $headers;
 
     /**
      * Set the HTTP version for this object, one of 1.0 or 1.1

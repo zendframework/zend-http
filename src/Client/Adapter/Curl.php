@@ -44,7 +44,7 @@ class Curl implements HttpAdapter, StreamInterface
      *
      * @var resource|null
      */
-    protected $curl = null;
+    protected $curl;
 
     /**
      * List of cURL options that should never be overwritten
@@ -58,7 +58,7 @@ class Curl implements HttpAdapter, StreamInterface
      *
      * @var string
      */
-    protected $response = null;
+    protected $response;
 
     /**
      * Stream for storing output

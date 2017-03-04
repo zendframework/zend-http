@@ -16,12 +16,12 @@ class GenericHeader implements HeaderInterface
     /**
      * @var string
      */
-    protected $fieldName = null;
+    protected $fieldName;
 
     /**
      * @var string
      */
-    protected $fieldValue = null;
+    protected $fieldValue;
 
     /**
      * Factory to generate a header object from a string

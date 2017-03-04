@@ -48,7 +48,7 @@ abstract class CommonHttpTests extends TestCase
      *
      * @var \Zend\Http\Client
      */
-    protected $client = null;
+    protected $client;
 
     // @codingStandardsIgnoreStart
     /**
@@ -56,7 +56,7 @@ abstract class CommonHttpTests extends TestCase
      *
      * @var \Zend\Http\Client\Adapter\AdapterInterface
      */
-    protected $_adapter = null;
+    protected $_adapter;
     // @codingStandardsIgnoreEnd
 
     /**
