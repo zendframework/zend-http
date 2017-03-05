@@ -40,7 +40,7 @@ class ContentLocationTest extends TestCase
         $this->assertEquals('Content-Location: http://www.example.com/path?query', $contentLocationHeader->toString());
     }
 
-    /** Implementation specific tests  */
+    /** Implementation specific tests here */
 
     public function testContentLocationCanSetAndAccessAbsoluteUri()
     {

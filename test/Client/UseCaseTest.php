@@ -73,7 +73,6 @@ class UseCaseTest extends TestCase
 
     /**
      * Clean up the test environment
-     *
      */
     protected function tearDown()
     {

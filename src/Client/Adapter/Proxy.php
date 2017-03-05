@@ -279,7 +279,6 @@ class Proxy extends Socket
 
     /**
      * Close the connection to the server
-     *
      */
     public function close()
     {
@@ -289,7 +288,6 @@ class Proxy extends Socket
 
     /**
      * Destructor: make sure the socket is disconnected
-     *
      */
     public function __destruct()
     {

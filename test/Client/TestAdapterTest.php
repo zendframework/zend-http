@@ -31,7 +31,6 @@ class TestAdapterTest extends TestCase
 
     /**
      * Set up the test adapter before running the test
-     *
      */
     public function setUp()
     {
@@ -40,7 +39,6 @@ class TestAdapterTest extends TestCase
 
     /**
      * Tear down the test adapter after running the test
-     *
      */
     public function tearDown()
     {
@@ -48,8 +46,7 @@ class TestAdapterTest extends TestCase
     }
 
     /**
-     * Make sure an exception is thrown on invalid cofiguration
-     *
+     * Make sure an exception is thrown on invalid configuration
      */
     public function testSetConfigThrowsOnInvalidConfig()
     {
@@ -119,6 +116,8 @@ class TestAdapterTest extends TestCase
      * Test that responses could be added as strings
      *
      * @dataProvider validHttpResponseProvider
+     *
+     * @param string $testResponse
      */
     public function testAddResponseAsString($testResponse)
     {
@@ -132,7 +131,10 @@ class TestAdapterTest extends TestCase
      * Test that responses could be added as objects (ZF-7009)
      *
      * @link http://framework.zend.com/issues/browse/ZF-7009
+     *
      * @dataProvider validHttpResponseProvider
+     *
+     * @param string $testResponse
      */
     public function testAddResponseAsObject($testResponse)
     {

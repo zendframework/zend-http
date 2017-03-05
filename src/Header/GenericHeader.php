@@ -9,8 +9,7 @@ namespace Zend\Http\Header;
 
 /**
  * Content-Location Header
- *
-  */
+ */
 class GenericHeader implements HeaderInterface
 {
     /**

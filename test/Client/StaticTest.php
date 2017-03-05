@@ -43,7 +43,6 @@ class StaticTest extends TestCase
 
     /**
      * Set up the test suite before each test
-     *
      */
     public function setUp()
     {
@@ -52,7 +51,6 @@ class StaticTest extends TestCase
 
     /**
      * Clean up after running a test
-     *
      */
     public function tearDown()
     {
@@ -65,7 +63,6 @@ class StaticTest extends TestCase
 
     /**
      * Test we can SET and GET a URI as string
-     *
      */
     public function testSetGetUriString()
     {
@@ -88,7 +85,6 @@ class StaticTest extends TestCase
 
     /**
      * Test we can SET and GET a URI as object
-     *
      */
     public function testSetGetUriObject()
     {
@@ -104,7 +100,6 @@ class StaticTest extends TestCase
     /**
      * Test that setting the same parameter twice in the query string does not
      * get reduced to a single value only.
-     *
      */
     public function testDoubleGetParameter()
     {
@@ -128,7 +123,6 @@ class StaticTest extends TestCase
 
     /**
      * Test we can get already set headers
-     *
      */
     public function testGetHeader()
     {
@@ -156,7 +150,6 @@ class StaticTest extends TestCase
     /**
      * Test setAuth (dynamic method) fails when trying to use an unsupported
      * authentication scheme
-     *
      */
     public function testExceptUnsupportedAuthDynamic()
     {
@@ -172,7 +165,6 @@ class StaticTest extends TestCase
 
     /**
      * Test we can properly set a new cookies
-     *
      */
     public function testSetNewCookies()
     {
@@ -188,7 +180,6 @@ class StaticTest extends TestCase
 
     /**
      * Test we can unset a cookie jar
-     *
      */
     public function testUnsetCookies()
     {
@@ -206,7 +197,6 @@ class StaticTest extends TestCase
 
     /**
      * Make sure using an invalid cookie jar object throws an exception
-     *
      */
     public function testSetInvalidCookies()
     {
@@ -222,7 +212,6 @@ class StaticTest extends TestCase
 
     /**
      * Test that we can set a valid configuration array with some options
-     *
      */
     public function testConfigSetAsArray()
     {
@@ -264,7 +253,9 @@ class StaticTest extends TestCase
     /**
      * Test that passing invalid variables to setConfig() causes an exception
      *
-     * @dataProvider      invalidConfigProvider
+     * @dataProvider invalidConfigProvider
+     *
+     * @param mixed $config
      */
     public function testConfigSetInvalid($config)
     {
@@ -302,7 +293,6 @@ class StaticTest extends TestCase
 
     /**
      * Test the getLastRawResponse() method actually returns the last response
-     *
      */
     public function testGetLastRawResponse()
     {
@@ -327,7 +317,6 @@ class StaticTest extends TestCase
 
     /**
      * Test that getLastRawResponse returns null when not storing
-     *
      */
     public function testGetLastRawResponseWhenNotStoring()
     {
@@ -347,7 +336,6 @@ class StaticTest extends TestCase
     /**
      * Check we get an exception when trying to send a POST request with an
      * invalid content-type header
-     *
      */
     public function testInvalidPostContentType()
     {
@@ -369,7 +357,6 @@ class StaticTest extends TestCase
 
     /**
      * Check we get an exception if there's an error in the socket
-     *
      */
     public function testSocketErrorException()
     {
@@ -397,6 +384,8 @@ class StaticTest extends TestCase
      * the request method.
      *
      * @dataProvider invalidMethodProvider
+     *
+     * @param string $method
      */
     public function testSettingInvalidMethodThrowsException($method)
     {
@@ -409,7 +398,6 @@ class StaticTest extends TestCase
     /**
      * Test that POST data with multi-dimentional array is properly encoded as
      * multipart/form-data
-     *
      */
     public function testFormDataEncodingWithMultiArrayZF7038()
     {

@@ -73,7 +73,6 @@ abstract class CommonHttpTests extends TestCase
 
     /**
      * Set up the test case
-     *
      */
     protected function setUp()
     {
@@ -132,6 +131,8 @@ abstract class CommonHttpTests extends TestCase
      * Test simple requests
      *
      * @dataProvider methodProvider
+     *
+     * @param string $method
      */
     public function testSimpleRequests($method)
     {
@@ -142,7 +143,6 @@ abstract class CommonHttpTests extends TestCase
 
     /**
      * Test we can get the last request as string
-     *
      */
     public function testGetLastRawRequest()
     {
@@ -173,6 +173,8 @@ abstract class CommonHttpTests extends TestCase
      * Test we can properly send GET parameters
      *
      * @dataProvider parameterArrayProvider
+     *
+     * @param array $params
      */
     public function testGetData($params)
     {
@@ -187,6 +189,8 @@ abstract class CommonHttpTests extends TestCase
      * application/x-www-form-urlencoded content type
      *
      * @dataProvider parameterArrayProvider
+     *
+     * @param array $params
      */
     public function testPostDataUrlEncoded($params)
     {
@@ -206,6 +210,8 @@ abstract class CommonHttpTests extends TestCase
      * application/x-www-form-urlencoded content type
      *
      * @dataProvider parameterArrayProvider
+     *
+     * @param array $params
      */
     public function testPatchData($params)
     {
@@ -226,6 +232,8 @@ abstract class CommonHttpTests extends TestCase
      * application/x-www-form-urlencoded content type
      *
      * @dataProvider parameterArrayProvider
+     *
+     * @param array $params
      */
     public function testDeleteData($params)
     {
@@ -246,6 +254,8 @@ abstract class CommonHttpTests extends TestCase
      * application/x-www-form-urlencoded content type
      *
      * @dataProvider parameterArrayProvider
+     *
+     * @param array $params
      */
     public function testOptionsData($params)
     {
@@ -266,6 +276,8 @@ abstract class CommonHttpTests extends TestCase
      * multipart/form-data content type
      *
      * @dataProvider parameterArrayProvider
+     *
+     * @param array $params
      */
     public function testPostDataMultipart($params)
     {
@@ -279,7 +291,6 @@ abstract class CommonHttpTests extends TestCase
 
     /**
      * Test using raw HTTP POST data
-     *
      */
     public function testRawPostData()
     {
@@ -294,7 +305,6 @@ abstract class CommonHttpTests extends TestCase
 
     /**
      * Make sure we can reset the parameters between consecutive requests
-     *
      */
     public function testResetParameters()
     {
@@ -335,7 +345,6 @@ abstract class CommonHttpTests extends TestCase
 
     /**
      * Test parameters get reset when we unset them
-     *
      */
     public function testParameterUnset()
     {
@@ -369,7 +378,6 @@ abstract class CommonHttpTests extends TestCase
 
     /**
      * Make sure we can set a single header
-     *
      */
     public function testHeadersSingle()
     {
@@ -399,7 +407,6 @@ abstract class CommonHttpTests extends TestCase
 
     /**
      * Test we can set an array of headers
-     *
      */
     public function testHeadersArray()
     {
@@ -431,10 +438,9 @@ abstract class CommonHttpTests extends TestCase
         }
     }
 
-     /**
-      * Test we can set a set of values for one header
-      *
-      */
+    /**
+     * Test we can set a set of values for one header
+     */
     public function testMultipleHeader()
     {
         $this->client->setUri($this->baseuri . 'testHeaders.php');
@@ -470,14 +476,13 @@ abstract class CommonHttpTests extends TestCase
         }
     }
 
-     /**
-      * Redirection tests
-      */
+    /**
+     * Redirection tests
+     */
 
-     /**
-      * Test the client properly redirects in default mode
-      *
-      */
+    /**
+     * Test the client properly redirects in default mode
+     */
     public function testRedirectDefault()
     {
         $this->client->setUri($this->baseuri . 'testRedirections.php');
@@ -533,7 +538,6 @@ abstract class CommonHttpTests extends TestCase
 
     /**
      * Make sure the client properly redirects in strict mode
-     *
      */
     public function testRedirectStrict()
     {
@@ -559,7 +563,6 @@ abstract class CommonHttpTests extends TestCase
 
     /**
      * Make sure redirections stop when limit is exceeded
-     *
      */
     public function testMaxRedirectsExceeded()
     {
@@ -595,7 +598,6 @@ abstract class CommonHttpTests extends TestCase
 
     /**
      * Test we can properly redirect to an absolute path (not full URI)
-     *
      */
     public function testAbsolutePathRedirect()
     {
@@ -618,7 +620,6 @@ abstract class CommonHttpTests extends TestCase
 
     /**
      * Test we can properly redirect to a relative path
-     *
      */
     public function testRelativePathRedirect()
     {
@@ -642,12 +643,10 @@ abstract class CommonHttpTests extends TestCase
 
     /**
      * HTTP Authentication Tests
-     *
      */
 
     /**
      * Test we can properly use Basic HTTP authentication
-     *
      */
     public function testHttpAuthBasic()
     {
@@ -672,7 +671,6 @@ abstract class CommonHttpTests extends TestCase
     /**
      * Test that we can properly use Basic HTTP authentication by specifying username and password
      * in the URI
-     *
      */
     public function testHttpAuthBasicWithCredentialsInUri()
     {
@@ -699,12 +697,10 @@ abstract class CommonHttpTests extends TestCase
 
     /**
      * Cookie and Cookies Tests
-     *
      */
 
     /**
      * Test we can set string cookies with no jar
-     *
      */
     public function testCookiesStringNoJar()
     {
@@ -729,7 +725,6 @@ abstract class CommonHttpTests extends TestCase
 
     /**
      * Make sure we can set an array of object cookies
-     *
      */
     public function testSetCookieObjectArray()
     {
@@ -754,7 +749,6 @@ abstract class CommonHttpTests extends TestCase
 
     /**
      * Make sure we can set an array of string cookies
-     *
      */
     public function testSetCookieStringArray()
     {
@@ -778,12 +772,10 @@ abstract class CommonHttpTests extends TestCase
 
     /**
      * File Upload Tests
-     *
      */
 
     /**
      * Test we can upload raw data as a file
-     *
      */
     public function testUploadRawData()
     {
@@ -804,7 +796,6 @@ abstract class CommonHttpTests extends TestCase
 
     /**
      * Test we can upload an existing file
-     *
      */
     public function testUploadLocalFile()
     {
@@ -1056,7 +1047,10 @@ abstract class CommonHttpTests extends TestCase
 
     /**
      * @group ZF2-78
+     *
      * @dataProvider parameterArrayProvider
+     *
+     * @param array $params
      */
     public function testContentTypeAdditionlInfo($params)
     {
@@ -1094,7 +1088,7 @@ abstract class CommonHttpTests extends TestCase
     }
 
     /**
-     * Internal helpder function to get the contents of test files
+     * Internal helper function to get the contents of test files
      *
      * @param  string $file
      * @return string

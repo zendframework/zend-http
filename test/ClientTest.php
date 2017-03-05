@@ -304,7 +304,7 @@ class ClientTest extends TestCase
         // because example.com is different from example.org
         $this->assertNotContains($encoded, $client->getLastRawRequest());
 
-        // set up two responses that simulate a rediration from example.org to sub.example.org
+        // set up two responses that simulate a redirection from example.org to sub.example.org
         $testAdapter->setResponse(
             "HTTP/1.1 303 See Other\r\n"
             . "Location: http://sub.example.org/part2\r\n\r\n"

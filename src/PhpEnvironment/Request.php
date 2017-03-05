@@ -483,7 +483,6 @@ class Request extends HttpRequest
      * Uses a variety of criteria in order to detect the base URL of the request
      * (i.e., anything additional to the document root).
      *
-     *
      * @return string
      */
     protected function detectBaseUrl()

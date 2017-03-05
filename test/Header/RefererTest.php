@@ -41,7 +41,7 @@ class RefererTest extends TestCase
         $this->assertEquals('Referer: http://www.example.com/path?query', $refererHeader->toString());
     }
 
-    /** Implementation specific tests  */
+    /** Implementation specific tests here */
 
     public function testRefererCanSetAndAccessAbsoluteUri()
     {

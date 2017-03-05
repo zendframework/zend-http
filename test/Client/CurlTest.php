@@ -59,7 +59,6 @@ class CurlTest extends CommonHttpTests
 
     /**
      * Test that we can set a valid configuration array with some options
-     *
      */
     public function testConfigSetAsArray()
     {
@@ -101,6 +100,8 @@ class CurlTest extends CommonHttpTests
      * Check that an exception is thrown when trying to set invalid config
      *
      * @dataProvider invalidConfigProvider
+     *
+     * @param mixed $config
      */
     public function testSetConfigInvalidConfig($config)
     {
@@ -157,7 +158,6 @@ class CurlTest extends CommonHttpTests
      *
      * Set CURLOPT_FOLLOWLOCATION = false for this type of request and let the Zend_Http_Client handle redirects
      * in his own loop.
-     *
      */
     public function testRedirectPostToGetWithCurlFollowLocationOptionLeadsToTimeout()
     {

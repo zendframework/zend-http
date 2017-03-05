@@ -18,7 +18,6 @@ use Zend\Http\Header\GenericMultiHeader;
 use Zend\Http\Header\HeaderInterface;
 use Zend\Http\HeaderLoader;
 use Zend\Http\Headers;
-use Zend\Loader\PluginClassLoader;
 
 class HeadersTest extends TestCase
 {
@@ -94,7 +93,6 @@ class HeadersTest extends TestCase
     public function testHeadersFromStringMultiHeaderWillAggregateLazyLoadedHeaders()
     {
         $headers = new Headers();
-        /* @var $pcl PluginClassLoader */
         $pcl = $headers->getPluginClassLoader();
         $pcl->registerPlugin('foo', GenericMultiHeader::class);
         $headers->addHeaderLine('foo: bar1,bar2,bar3');

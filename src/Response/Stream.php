@@ -184,7 +184,7 @@ class Stream extends Response
             throw new Exception\OutOfRangeException('End of header not found');
         }
 
-        /** @var Stream $response  */
+        /** @var Stream $response */
         $response = static::fromString($headersString);
 
         if (is_resource($stream)) {

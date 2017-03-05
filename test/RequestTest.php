@@ -138,6 +138,8 @@ class RequestTest extends TestCase
 
     /**
      * @dataProvider uriDataProvider
+     *
+     * @param string $uri
      */
     public function testRequestCanSetAndRetrieveUri($uri)
     {
@@ -186,6 +188,8 @@ class RequestTest extends TestCase
 
     /**
      * @dataProvider getMethods
+     *
+     * @param string $methodName
      */
     public function testRequestMethodCheckWorksForAllMethods($methodName)
     {
@@ -245,10 +249,8 @@ class RequestTest extends TestCase
     }
 
     /**
-     * PHPUNIT DATA PROVIDER
-     *
-     * @param $providerContext
-     * @param null $trueMethod
+     * @param bool $providerContext
+     * @param null|string $trueMethod
      * @return array
      */
     public function getMethods($providerContext, $trueMethod = null)

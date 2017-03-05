@@ -34,8 +34,12 @@ class HeaderValueTest extends TestCase
     }
 
     /**
-     * @dataProvider getFilterValues
      * @group ZF2015-04
+     *
+     * @dataProvider getFilterValues
+     *
+     * @param string $value
+     * @param string $expected
      */
     public function testFiltersValuesPerRfc7230($value, $expected)
     {
@@ -60,8 +64,12 @@ class HeaderValueTest extends TestCase
     }
 
     /**
-     * @dataProvider validateValues
      * @group ZF2015-04
+     *
+     * @dataProvider validateValues
+     *
+     * @param string $value
+     * @param string $assertion
      */
     public function testValidatesValuesPerRfc7230($value, $assertion)
     {
@@ -85,8 +93,11 @@ class HeaderValueTest extends TestCase
     }
 
     /**
-     * @dataProvider assertValues
      * @group ZF2015-04
+     *
+     * @dataProvider assertValues
+     *
+     * @param string $value
      */
     public function testAssertValidRaisesExceptionForInvalidValue($value)
     {

@@ -203,8 +203,7 @@ class RequestTest extends TestCase
                 '/html/index.php',
                 '/html'
             ],
-
-            //Test when url quert contains a full http url
+            // Test when url quert contains a full http url
             [
                 [
                     'REQUEST_URI' => '/html/index.php?url=http://test.example.com/path/&foo=bar',
@@ -219,6 +218,7 @@ class RequestTest extends TestCase
 
     /**
      * @dataProvider baseUrlAndPathProvider
+     *
      * @param array  $server
      * @param string $baseUrl
      * @param string $basePath
@@ -292,6 +292,7 @@ class RequestTest extends TestCase
 
     /**
      * @dataProvider serverHeaderProvider
+     *
      * @param array  $server
      * @param string $name
      * @param string $value
@@ -309,6 +310,7 @@ class RequestTest extends TestCase
 
     /**
      * @dataProvider serverHeaderProvider
+     *
      * @param array  $server
      * @param string $name
      */
@@ -375,7 +377,7 @@ class RequestTest extends TestCase
                 '80',
                 '/news',
             ],
-               // Test for broken $_SERVER implementation from Windows-Safari
+            // Test for broken $_SERVER implementation from Windows-Safari
             [
                 [
                     'SERVER_NAME' => '[1:2:3:4:5:6:]',
@@ -420,8 +422,7 @@ class RequestTest extends TestCase
                 '443',
                 '/news',
             ],
-
-            //Test when url quert contains a full http url
+            // Test when url query contains a full http url
             [
                 [
                     'SERVER_NAME' => 'test.example.com',
@@ -437,9 +438,11 @@ class RequestTest extends TestCase
 
     /**
      * @dataProvider serverHostnameProvider
-     * @param array  $server
-     * @param string $name
-     * @param string $value
+     *
+     * @param array $server
+     * @param string $expectedHost
+     * @param string $expectedPort
+     * @param string $expectedRequestUri
      */
     public function testServerHostnameProvider(array $server, $expectedHost, $expectedPort, $expectedRequestUri)
     {
@@ -684,9 +687,10 @@ class RequestTest extends TestCase
     }
 
     /**
+     * @dataProvider filesProvider
+     *
      * @param array $files
      * @param array $expectedFiles
-     * @dataProvider filesProvider
      */
     public function testRequestMapsPhpFies(array $files, array $expectedFiles)
     {

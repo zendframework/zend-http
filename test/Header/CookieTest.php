@@ -82,7 +82,9 @@ class CookieTest extends TestCase
     /**
      * @see http://en.wikipedia.org/wiki/HTTP_response_splitting
      * @group ZF2015-04
+     *
      * @dataProvider valuesProvider
+     *
      * @param mixed $value
      * @param string $serialized
      */
@@ -108,6 +110,8 @@ class CookieTest extends TestCase
 //     * Make sure we can't set invalid names
 //     *
 //     * @dataProvider invalidCookieNameCharProvider
+//     *
+//     * @param string $char
 //     */
 //    public function testSetInvalidName($char)
 //    {
@@ -121,6 +125,9 @@ class CookieTest extends TestCase
 //     * Test we get the cookie name properly
 //     *
 //     * @dataProvider validCookieWithInfoProvider
+//     *
+//     * @param string $cStr
+//     * @param array $cInfo
 //     */
 //    public function testGetName($cStr, $cInfo)
 //    {
@@ -137,8 +144,9 @@ class CookieTest extends TestCase
 //    /**
 //     * Make sure we get the correct value if it was set through the constructor
 //     *
-//     * @param        string $value
 //     * @dataProvider validCookieValueProvider
+//     *
+//     * @param string $value
 //     */
 //    public function testGetValueConstructor($val)
 //    {
@@ -149,8 +157,9 @@ class CookieTest extends TestCase
 //    /**
 //     * Make sure we get the correct value if it was set through fromString()
 //     *
-//     * @param        string $value
 //     * @dataProvider validCookieValueProvider
+//     *
+//     * @param string $value
 //     */
 //    public function testGetValueFromString($val)
 //    {
@@ -161,8 +170,9 @@ class CookieTest extends TestCase
 //    /**
 //     * Make sure we get the correct value if it was set through fromString()
 //     *
-//     * @param        string $value
 //     * @dataProvider validCookieValueProvider
+//     *
+//     * @param string $value
 //     */
 //    public function testGetRawValueFromString($val)
 //    {
@@ -175,8 +185,9 @@ class CookieTest extends TestCase
 //    /**
 //     * Make sure we get the correct value if it was set through fromString()
 //     *
-//     * @param        string $value
 //     * @dataProvider validCookieValueProvider
+//     *
+//     * @param string $value
 //     */
 //    public function testGetRawValueFromStringToString($val)
 //    {
@@ -189,8 +200,9 @@ class CookieTest extends TestCase
 //    /**
 //     * Make sure we get the correct value if it was set through fromString()
 //     *
-//     * @param        string $value
 //     * @dataProvider validCookieValueProvider
+//     *
+//     * @param string $value
 //     */
 //    public function testGetValueFromStringEncodedToString($val)
 //    {
@@ -204,6 +216,9 @@ class CookieTest extends TestCase
 //     * Make sure we get the correct domain when it's set in the cookie string
 //     *
 //     * @dataProvider validCookieWithInfoProvider
+//     *
+//     * @param string $cStr
+//     * @param array $cInfo
 //     */
 //    public function testGetDomainInStr($cStr, $cInfo)
 //    {
@@ -221,6 +236,8 @@ class CookieTest extends TestCase
 //     * Make sure we get the correct domain when it's set in a reference URL
 //     *
 //     * @dataProvider refUrlProvider
+//     *
+//     * @param Uri\Uri $uri
 //     */
 //    public function testGetDomainInRefUrl(Uri\Uri $uri)
 //    {
@@ -237,6 +254,9 @@ class CookieTest extends TestCase
 //     * Make sure we get the correct path when it's set in the cookie string
 //     *
 //     * @dataProvider validCookieWithInfoProvider
+//     *
+//     * @param string $cStr
+//     * @param array $cInfo
 //     */
 //    public function testGetPathInStr($cStr, $cInfo)
 //    {
@@ -254,6 +274,8 @@ class CookieTest extends TestCase
 //     * Make sure we get the correct path when it's set a reference URL
 //     *
 //     * @dataProvider refUrlProvider
+//     *
+//     * @param Uri\Uri $uri
 //     */
 //    public function testGetPathInRefUrl(Uri\Uri $uri)
 //    {
@@ -276,6 +298,9 @@ class CookieTest extends TestCase
 //     * Test we get the correct expiry time
 //     *
 //     * @dataProvider validCookieWithInfoProvider
+//     *
+//     * @param string $cStr
+//     * @param array $cInfo
 //     */
 //    public function testGetExpiryTime($cStr, $cInfo)
 //    {
@@ -293,6 +318,9 @@ class CookieTest extends TestCase
 //     * Make sure the "is secure" flag is correctly set
 //     *
 //     * @dataProvider validCookieWithInfoProvider
+//     *
+//     * @param string $cStr
+//     * @param array $cInfo
 //     */
 //    public function testIsSecure($cStr, $cInfo)
 //    {
@@ -314,6 +342,9 @@ class CookieTest extends TestCase
 //     * Make sure we get the correct value for 'isExpired'
 //     *
 //     * @dataProvider cookieWithExpiredFlagProvider
+//     *
+//     * @param string $cStr
+//     * @param bool $expired
 //     */
 //    public function testIsExpired($cStr, $expired)
 //    {
@@ -358,6 +389,9 @@ class CookieTest extends TestCase
 //     * Test we can properly check if a cookie is a session cookie (has no expiry time)
 //     *
 //     * @dataProvider validCookieWithInfoProvider
+//     *
+//     * @param string $cStr
+//     * @param array $cInfo
 //     */
 //    public function testIsSessionCookie($cStr, $cInfo)
 //    {
@@ -376,6 +410,9 @@ class CookieTest extends TestCase
 //     * Make sure cookies are properly converted back to strings
 //     *
 //     * @dataProvider validCookieWithInfoProvider
+//     *
+//     * @param string $cStr
+//     * @param array $cInfo
 //     */
 //    public function testToString($cStr, $cInfo)
 //    {
@@ -409,6 +446,10 @@ class CookieTest extends TestCase
 //     * Test the match() method against a domain
 //     *
 //     * @dataProvider domainMatchTestProvider
+//     *
+//     * @param string $cookieStr
+//     * @param Uri\Uri|string $uri
+//     * @param bool $match
 //     */
 //    public function testMatchDomain($cookieStr, $uri, $match)
 //    {

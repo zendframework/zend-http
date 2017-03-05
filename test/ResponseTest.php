@@ -388,7 +388,6 @@ class ResponseTest extends TestCase
     /**
      * Make sure a response with some leading whitespace in the response body
      * does not get modified (see ZF-1924)
-     *
      */
     public function testLeadingWhitespaceBody()
     {
@@ -405,7 +404,6 @@ class ResponseTest extends TestCase
      *
      * This can potentially fail on different PHP environments - for example
      * when mbstring.func_overload is set to overload strlen().
-     *
      */
     public function testMultibyteChunkedResponse()
     {

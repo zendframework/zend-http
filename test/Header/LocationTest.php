@@ -20,8 +20,9 @@ use Zend\Uri\UriFactory;
 class LocationTest extends TestCase
 {
     /**
-     * @param  string $uri The URL to redirect to
      * @dataProvider locationFromStringCreatesValidLocationHeaderProvider
+     *
+     * @param string $uri The URL to redirect to
      */
     public function testLocationFromStringCreatesValidLocationHeader($uri)
     {
@@ -43,10 +44,10 @@ class LocationTest extends TestCase
     /**
      * Test that we can set a redirect to different URI-Schemes
      *
+     * @dataProvider locationCanSetDifferentSchemeUrisProvider
+     *
      * @param string $uri
      * @param string $expectedClass
-     *
-     * @dataProvider locationCanSetDifferentSchemeUrisProvider
      */
     public function testLocationCanSetDifferentSchemeUris($uri, $expectedClass)
     {
@@ -58,10 +59,10 @@ class LocationTest extends TestCase
     /**
      * Test that we can set a redirect to different URI-schemes via a class
      *
+     * @dataProvider locationCanSetDifferentSchemeUrisProvider
+     *
      * @param string $uri
      * @param string $expectedClass
-     *
-     * @dataProvider locationCanSetDifferentSchemeUrisProvider
      */
     public function testLocationCanSetDifferentSchemeUriObjects($uri, $expectedClass)
     {
@@ -104,7 +105,7 @@ class LocationTest extends TestCase
         $this->assertEquals('Location: http://www.example.com/path?query', $locationHeader->toString());
     }
 
-    /** Implementation specific tests  */
+    /** Implementation specific tests here */
 
     public function testLocationCanSetAndAccessAbsoluteUri()
     {

@@ -33,19 +33,16 @@ class Cookies extends Headers
 {
     /**
      * Return cookie(s) as a Zend\Http\Cookie object
-     *
      */
     const COOKIE_OBJECT = 0;
 
     /**
      * Return cookie(s) as a string (suitable for sending in an HTTP request)
-     *
      */
     const COOKIE_STRING_ARRAY = 1;
 
     /**
      * Return all cookies as one long string (suitable for sending in an HTTP request)
-     *
      */
     const COOKIE_STRING_CONCAT = 2;
 

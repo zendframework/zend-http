@@ -541,7 +541,7 @@ class Request extends AbstractMessage implements RequestInterface
     }
 
     /**
-     * @return boolean
+     * @return bool
      */
     public function getAllowCustomMethods()
     {
@@ -549,7 +549,7 @@ class Request extends AbstractMessage implements RequestInterface
     }
 
     /**
-     * @param boolean $strictMethods
+     * @param bool $strictMethods
      */
     public function setAllowCustomMethods($strictMethods)
     {

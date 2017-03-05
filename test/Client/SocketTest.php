@@ -161,6 +161,8 @@ class SocketTest extends CommonHttpTests
      * Check that an exception is thrown when trying to set invalid config
      *
      * @dataProvider invalidConfigProvider
+     *
+     * @param mixed $config
      */
     public function testSetConfigInvalidConfig($config)
     {
@@ -218,7 +220,9 @@ class SocketTest extends CommonHttpTests
     /**
      * Test that setting invalid options / context causes an exception
      *
-     * @dataProvider      invalidContextProvider
+     * @dataProvider invalidContextProvider
+     *
+     * @param mixed $invalid
      */
     public function testSetInvalidContextOptions($invalid)
     {

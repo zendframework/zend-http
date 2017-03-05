@@ -53,7 +53,7 @@ class ResponseStreamTest extends TestCase
         }
 
 
-        $headers .= fread($stream, 100); //Should accept also part of body as text
+        $headers .= fread($stream, 100); // Should accept also part of body as text
 
         $res = Stream::fromStream($headers, $stream);
 
@@ -99,7 +99,7 @@ class ResponseStreamTest extends TestCase
         }
 
 
-        $data .= fread($stream, 100); //Should accept also part of body as text
+        $data .= fread($stream, 100); // Should accept also part of body as text
 
         $return = [];
         $return['stream'] = $stream;

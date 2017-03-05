@@ -64,6 +64,8 @@ class ContentTypeTest extends TestCase
 
     /**
      * @dataProvider wildcardMatches
+     *
+     * @param string $matchAgainst
      */
     public function testMatchWildCard($matchAgainst)
     {
@@ -87,6 +89,8 @@ class ContentTypeTest extends TestCase
 
     /**
      * @dataProvider invalidMatches
+     *
+     * @param string $matchAgainst
      */
     public function testFailedMatches($matchAgainst)
     {
@@ -111,6 +115,8 @@ class ContentTypeTest extends TestCase
 
     /**
      * @dataProvider multipleCriteria
+     *
+     * @param array|string $criteria
      */
     public function testReturnsMatchingMediaTypeOfFirstCriteriaToValidate($criteria)
     {
@@ -131,6 +137,9 @@ class ContentTypeTest extends TestCase
 
     /**
      * @dataProvider contentTypeParameterExamples
+     *
+     * @param string $headerString
+     * @param string $expectedParameterValue
      */
     public function testContentTypeParsesParametersCorrectly($headerString, $expectedParameterValue)
     {

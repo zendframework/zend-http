@@ -106,8 +106,11 @@ class AllowTest extends TestCase
 
     /**
      * @see http://en.wikipedia.org/wiki/HTTP_response_splitting
-     * @dataProvider injectionMethods
      * @group ZF2015-04
+     *
+     * @dataProvider injectionMethods
+     *
+     * @param array|string $methods
      */
     public function testPreventsCRLFAttackViaAllowMethods($methods)
     {
@@ -120,8 +123,11 @@ class AllowTest extends TestCase
 
     /**
      * @see http://en.wikipedia.org/wiki/HTTP_response_splitting
-     * @dataProvider injectionMethods
      * @group ZF2015-04
+     *
+     * @dataProvider injectionMethods
+     *
+     * @param array|string $methods
      */
     public function testPreventsCRLFAttackViaDisallowMethods($methods)
     {

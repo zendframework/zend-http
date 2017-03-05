@@ -14,8 +14,9 @@ use Zend\Http\Header\GenericHeader;
 class GenericHeaderTest extends TestCase
 {
     /**
-     * @param string $name
      * @dataProvider validFieldNameChars
+     *
+     * @param string $name
      */
     public function testValidFieldName($name)
     {
@@ -31,8 +32,9 @@ class GenericHeaderTest extends TestCase
     }
 
     /**
-     * @param string $name
      * @dataProvider invalidFieldNameChars
+     *
+     * @param string $name
      */
     public function testInvalidFieldName($name)
     {

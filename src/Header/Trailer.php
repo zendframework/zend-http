@@ -15,7 +15,7 @@ class Trailer implements HeaderInterface
 {
     /**
      * @var string
-    */
+     */
     protected $value;
 
     public static function fromString($headerLine)

@@ -289,9 +289,14 @@ class AcceptTest extends TestCase
 
     /**
      * @group 3740
-     * @dataProvider provideParamRanges
      * @covers Zend\Http\Header\AbstractAccept::matchAcceptParams()
      * @covers Zend\Http\Header\AbstractAccept::getParametersFromFieldValuePart()
+     *
+     * @dataProvider provideParamRanges
+     *
+     * @param string $range
+     * @param string $input
+     * @param bool $success
      */
     public function testParamRangesSupportDevStage($range, $input, $success)
     {

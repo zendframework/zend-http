@@ -25,7 +25,7 @@ class Connection implements HeaderInterface
     protected $value = self::CONNECTION_KEEP_ALIVE;
 
     /**
-     * @param $headerLine
+     * @param string $headerLine
      * @return Connection
      * @throws Exception\InvalidArgumentException
      */

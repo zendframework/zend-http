@@ -358,6 +358,10 @@ class SetCookieTest extends TestCase
 
     /**
      * @dataProvider validCookieWithInfoProvider
+     *
+     * @param string $cStr
+     * @param array $info
+     * @param string $expected
      */
     public function testGetFieldValue($cStr, $info, $expected)
     {
@@ -371,6 +375,10 @@ class SetCookieTest extends TestCase
 
     /**
      * @dataProvider validCookieWithInfoProvider
+     *
+     * @param string $cStr
+     * @param array $info
+     * @param string $expected
      */
     public function testToString($cStr, $info, $expected)
     {
@@ -459,9 +467,13 @@ class SetCookieTest extends TestCase
     }
 
     /**
-     * @dataProvider setterInjections
      * @see http://en.wikipedia.org/wiki/HTTP_response_splitting
      * @group ZF2015-04
+     *
+     * @dataProvider setterInjections
+     *
+     * @param string $method
+     * @param string $value
      */
     public function testPreventsCRLFAttackViaSetters($method, $value)
     {

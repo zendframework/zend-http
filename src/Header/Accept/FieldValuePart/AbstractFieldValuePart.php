@@ -27,7 +27,6 @@ abstract class AbstractFieldValuePart
     protected $matchedAgainst;
 
     /**
-     *
      * @param object $internalValues
      */
     public function __construct($internalValues)
@@ -58,7 +57,6 @@ abstract class AbstractFieldValuePart
     }
 
     /**
-     *
      * @return object
      */
     protected function getInternalValues()
@@ -99,8 +97,7 @@ abstract class AbstractFieldValuePart
     }
 
     /**
-     *
-     * @param mixed
+     * @param mixed $key
      * @return mixed
      */
     public function __get($key)

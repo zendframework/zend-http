@@ -15,7 +15,7 @@ class TransferEncoding implements HeaderInterface
 {
     /**
      * @var string
-    */
+     */
     protected $value;
 
     public static function fromString($headerLine)

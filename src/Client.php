@@ -1455,8 +1455,8 @@ class Client implements Stdlib\DispatchableInterface
 
             //case self::AUTH_DIGEST:
                 /**
-                * @todo Implement digest authentication
-                */
+                 * @todo Implement digest authentication
+                 */
                 //    break;
 
             default:

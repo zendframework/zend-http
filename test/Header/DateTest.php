@@ -87,7 +87,7 @@ class DateTest extends TestCase
         $this->assertEquals('Date: Sun, 06 Nov 1994 08:49:37 GMT', $dateHeader->toString());
     }
 
-    /** Implementation specific tests */
+    /** Implementation specific tests here */
 
     public function testDateReturnsDateTimeObject()
     {

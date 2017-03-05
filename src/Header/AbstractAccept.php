@@ -37,7 +37,6 @@ use stdClass;
 abstract class AbstractAccept implements HeaderInterface
 {
     /**
-     *
      * @var stdClass[]
      */
     protected $fieldValueParts = [];
@@ -410,7 +409,7 @@ abstract class AbstractAccept implements HeaderInterface
     protected function sortFieldValueParts()
     {
         $sort = function ($a, $b) {
- // If A has higher precedence than B, return -1.
+            // If A has higher precedence than B, return -1.
             if ($a->priority > $b->priority) {
                 return -1;
             } elseif ($a->priority < $b->priority) {
@@ -433,7 +432,7 @@ abstract class AbstractAccept implements HeaderInterface
                 return 1;
             }
 
-            //@todo count number of dots in case of type==application in subtype
+            // @todo count number of dots in case of type==application in subtype
 
             // So far they're still the same. Longest string length may be more specific
             if (strlen($a->raw) == strlen($b->raw)) {
