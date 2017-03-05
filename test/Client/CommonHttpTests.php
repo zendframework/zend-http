@@ -614,7 +614,7 @@ abstract class CommonHttpTests extends TestCase
         $this->client->setOptions(['maxredirects' => 1]);
 
         // Get the host and port part of our baseuri
-        $port = ($this->client->getUri()->getPort() == 80) ? '' : ':' .$this->client->getUri()->getPort();
+        $port = $this->client->getUri()->getPort() == 80 ? '' : ':' . $this->client->getUri()->getPort();
         $uri = $this->client->getUri()->getScheme() . '://' . $this->client->getUri()->getHost() . $port;
 
         $res = $this->client->send();
@@ -940,7 +940,7 @@ abstract class CommonHttpTests extends TestCase
 
     public function testStreamResponse()
     {
-        if (! ($this->client->getAdapter() instanceof Adapter\StreamInterface)) {
+        if (! $this->client->getAdapter() instanceof Adapter\StreamInterface) {
             $this->markTestSkipped('Current adapter does not support streaming');
             return;
         }
@@ -967,7 +967,7 @@ abstract class CommonHttpTests extends TestCase
     {
         $this->markTestSkipped('To check with the new ZF2 implementation');
 
-        if (! ($this->client->getAdapter() instanceof Adapter\StreamInterface)) {
+        if (! $this->client->getAdapter() instanceof Adapter\StreamInterface) {
             $this->markTestSkipped('Current adapter does not support streaming');
             return;
         }
@@ -987,7 +987,7 @@ abstract class CommonHttpTests extends TestCase
 
     public function testStreamResponseNamed()
     {
-        if (! ($this->client->getAdapter() instanceof Adapter\StreamInterface)) {
+        if (! $this->client->getAdapter() instanceof Adapter\StreamInterface) {
             $this->markTestSkipped('Current adapter does not support streaming');
             return;
         }
@@ -1013,7 +1013,7 @@ abstract class CommonHttpTests extends TestCase
 
     public function testStreamRequest()
     {
-        if (! ($this->client->getAdapter() instanceof Adapter\StreamInterface)) {
+        if (! $this->client->getAdapter() instanceof Adapter\StreamInterface) {
             $this->markTestSkipped('Current adapter does not support streaming');
             return;
         }

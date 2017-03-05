@@ -262,7 +262,7 @@ class RequestTest extends TestCase
                 if ($providerContext) {
                     $return[] = [$cValue];
                 } else {
-                    $return[strtolower($cValue)] = ($trueMethod == $cValue);
+                    $return[strtolower($cValue)] = $trueMethod == $cValue;
                 }
             }
         }

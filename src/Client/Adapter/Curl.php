@@ -368,7 +368,7 @@ class Curl implements HttpAdapter, StreamInterface
         }
 
         // get http version to use
-        $curlHttp = ($httpVersion == 1.1) ? CURL_HTTP_VERSION_1_1 : CURL_HTTP_VERSION_1_0;
+        $curlHttp = $httpVersion == 1.1 ? CURL_HTTP_VERSION_1_1 : CURL_HTTP_VERSION_1_0;
 
         // mark as HTTP request and set HTTP method
         curl_setopt($this->curl, CURLOPT_HTTP_VERSION, $curlHttp);
