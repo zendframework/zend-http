@@ -514,8 +514,6 @@ class StaticTest extends TestCase
                 HTTPClient::class
             ));
         }
-        $this->expectException(RuntimeException::class);
-        $this->expectExceptionMessage('Could not open temp file /path/to/bogus/file.ext');
 
         $url = 'http://www.example.com';
         $config = [
@@ -523,7 +521,10 @@ class StaticTest extends TestCase
         ];
         $client = new HTTPClient($url, $config);
         $client->setMethod('GET');
-        $result = $client->send();
+
+        $this->expectException(RuntimeException::class);
+        $this->expectExceptionMessage('Could not open temp file /path/to/bogus/file.ext');
+        $client->send();
     }
 
     /**
