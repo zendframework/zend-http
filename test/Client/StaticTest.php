@@ -619,7 +619,8 @@ class StaticTest extends TestCase
     {
         return [
             [false],
-            ['foo => bar'],
+            ['foobar'],
+            ['foo' => 'bar'],
             [null],
             [new stdClass()],
             [55],
