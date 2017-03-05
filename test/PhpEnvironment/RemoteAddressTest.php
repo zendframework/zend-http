@@ -20,6 +20,11 @@ class RemoteAddressTest extends TestCase
     protected $originalEnvironment;
 
     /**
+     * @var RemoteAddr
+     */
+    protected $remoteAddress;
+
+    /**
      * Save the original environment and set up a clean one.
      */
     public function setUp()
