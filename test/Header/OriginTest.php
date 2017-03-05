@@ -27,21 +27,21 @@ class OriginTest extends TestCase
 
     public function testOriginFromStringCreatesValidOriginHeader()
     {
-        $OriginHeader = Origin::fromString('Origin: http://zend.org');
-        $this->assertInstanceOf(HeaderInterface::class, $OriginHeader);
-        $this->assertInstanceOf(Origin::class, $OriginHeader);
+        $originHeader = Origin::fromString('Origin: http://zend.org');
+        $this->assertInstanceOf(HeaderInterface::class, $originHeader);
+        $this->assertInstanceOf(Origin::class, $originHeader);
     }
 
     public function testOriginGetFieldNameReturnsHeaderName()
     {
-        $OriginHeader = new Origin();
-        $this->assertEquals('Origin', $OriginHeader->getFieldName());
+        $originHeader = new Origin();
+        $this->assertEquals('Origin', $originHeader->getFieldName());
     }
 
     public function testOriginGetFieldValueReturnsProperValue()
     {
-        $OriginHeader = Origin::fromString('Origin: http://zend.org');
-        $this->assertEquals('http://zend.org', $OriginHeader->getFieldValue());
+        $originHeader = Origin::fromString('Origin: http://zend.org');
+        $this->assertEquals('http://zend.org', $originHeader->getFieldValue());
     }
 
     /**

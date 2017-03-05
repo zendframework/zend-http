@@ -944,15 +944,15 @@ abstract class CommonHttpTests extends TestCase
         $this->assertInstanceOf(Stream::class, $response, 'Request did not return stream response!');
         $this->assertInternalType('resource', $response->getStream(), 'Request does not contain stream!');
 
-        $stream_name = $response->getStreamName();
+        $streamName = $response->getStreamName();
 
-        $stream_read = stream_get_contents($response->getStream());
-        $file_read = file_get_contents($stream_name);
+        $streamRead = stream_get_contents($response->getStream());
+        $fileRead = file_get_contents($streamName);
 
         $expected = $this->_getTestFileContents('staticFile.jpg');
 
-        $this->assertEquals($expected, $stream_read, 'Downloaded stream does not seem to match!');
-        $this->assertEquals($expected, $file_read, 'Downloaded file does not seem to match!');
+        $this->assertEquals($expected, $streamRead, 'Downloaded stream does not seem to match!');
+        $this->assertEquals($expected, $fileRead, 'Downloaded file does not seem to match!');
     }
 
     public function testStreamResponseBody()
@@ -994,13 +994,13 @@ abstract class CommonHttpTests extends TestCase
 
         $this->assertEquals($outfile, $response->getStreamName());
 
-        $stream_read = stream_get_contents($response->getStream());
-        $file_read = file_get_contents($outfile);
+        $streamRead = stream_get_contents($response->getStream());
+        $fileRead = file_get_contents($outfile);
 
         $expected = $this->_getTestFileContents('staticFile.jpg');
 
-        $this->assertEquals($expected, $stream_read, 'Downloaded stream does not seem to match!');
-        $this->assertEquals($expected, $file_read, 'Downloaded file does not seem to match!');
+        $this->assertEquals($expected, $streamRead, 'Downloaded stream does not seem to match!');
+        $this->assertEquals($expected, $fileRead, 'Downloaded file does not seem to match!');
     }
 
     public function testStreamRequest()
@@ -1054,11 +1054,11 @@ abstract class CommonHttpTests extends TestCase
      */
     public function testContentTypeAdditionlInfo(array $params)
     {
-        $content_type = 'application/x-www-form-urlencoded; charset=UTF-8';
+        $contentType = 'application/x-www-form-urlencoded; charset=UTF-8';
 
         $this->client->setUri($this->baseuri . 'testPostData.php');
         $this->client->setHeaders([
-            'Content-Type' => $content_type
+            'Content-Type' => $contentType,
         ]);
         $this->client->setMethod(Request::METHOD_POST);
 
@@ -1067,7 +1067,7 @@ abstract class CommonHttpTests extends TestCase
         $this->client->send();
         $request = Request::fromString($this->client->getLastRawRequest());
         $this->assertEquals(
-            $content_type,
+            $contentType,
             $request->getHeaders()->get('Content-Type')->getFieldValue()
         );
     }
