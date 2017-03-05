@@ -499,7 +499,6 @@ class StaticTest extends TestCase
 
         // we can safely return until we can verify link is still active
         // @todo verify link is still active
-        return;
     }
 
     /**
