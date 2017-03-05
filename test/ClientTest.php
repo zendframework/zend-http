@@ -57,7 +57,7 @@ class ClientTest extends TestCase
 
     public function testClientRetrievesUppercaseHttpMethodFromRequestObject()
     {
-        $client = new Client;
+        $client = new Client();
         $client->setMethod('post');
         $this->assertEquals(Client::ENC_URLENCODED, $client->getEncType());
     }
@@ -460,11 +460,11 @@ class ClientTest extends TestCase
      */
     public function testClientRequestMethod()
     {
-        $request = new Request;
+        $request = new Request();
         $request->setMethod(Request::METHOD_POST);
         $request->getPost()->set('data', 'random');
 
-        $client = new Client;
+        $client = new Client();
         $client->setAdapter(Test::class);
         $client->send($request);
 
@@ -490,9 +490,9 @@ class ClientTest extends TestCase
      */
     public function testFormUrlEncodeSeparator()
     {
-        $client = new Client;
+        $client = new Client();
         $client->setEncType('application/x-www-form-urlencoded');
-        $request = new Request;
+        $request = new Request();
         $request->setMethod(Request::METHOD_POST);
         $request->getPost()->set('foo', 'bar');
         $request->getPost()->set('baz', 'foo');

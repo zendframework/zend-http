@@ -26,7 +26,7 @@ class ResponseTest extends TestCase
 
     public function testResponseCanRenderStatusLine()
     {
-        $response = new Response;
+        $response = new Response();
         $response->setVersion(1.1);
         $response->setStatusCode(Response::STATUS_CODE_404);
         $this->assertEquals('HTTP/1.1 404 Not Found', $response->renderStatusLine());
@@ -53,7 +53,7 @@ class ResponseTest extends TestCase
 
     public function testResponseCanSetStatusCode()
     {
-        $response = new Response;
+        $response = new Response();
         $this->assertEquals(200, $response->getStatusCode());
         $response->setStatusCode('303');
         $this->assertEquals(303, $response->getStatusCode());
@@ -61,7 +61,7 @@ class ResponseTest extends TestCase
 
     public function testResponseSetStatusCodeThrowsExceptionOnInvalidCode()
     {
-        $response = new Response;
+        $response = new Response();
         $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessage('Invalid status code');
         $response->setStatusCode(606);
@@ -69,14 +69,14 @@ class ResponseTest extends TestCase
 
     public function testResponseGetReasonPhraseWillReturnEmptyPhraseAsDefault()
     {
-        $response = new Response;
+        $response = new Response();
         $response->setCustomStatusCode(998);
         $this->assertSame('HTTP/1.1 998' . "\r\n\r\n", (string) $response);
     }
 
     public function testResponseCanSetCustomStatusCode()
     {
-        $response = new Response;
+        $response = new Response();
         $this->assertEquals(200, $response->getStatusCode());
         $response->setCustomStatusCode('999');
         $this->assertEquals(999, $response->getStatusCode());
@@ -84,7 +84,7 @@ class ResponseTest extends TestCase
 
     public function testResponseSetCustomStatusCodeThrowsExceptionOnInvalidCode()
     {
-        $response = new Response;
+        $response = new Response();
         $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessage('Invalid status code provided: "foo"');
 

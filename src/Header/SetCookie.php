@@ -99,7 +99,7 @@ class SetCookie implements MultipleHeaderInterface
         if ($setCookieProcessor === null) {
             $setCookieClass = get_called_class();
             $setCookieProcessor = function ($headerLine) use ($setCookieClass) {
-                $header = new $setCookieClass;
+                $header = new $setCookieClass();
                 $keyValuePairs = preg_split('#;\s*#', $headerLine);
 
                 foreach ($keyValuePairs as $keyValue) {

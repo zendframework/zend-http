@@ -50,7 +50,7 @@ class LocationTest extends TestCase
      */
     public function testLocationCanSetDifferentSchemeUris($uri, $expectedClass)
     {
-        $locationHeader = new Location;
+        $locationHeader = new Location();
         $locationHeader->setUri($uri);
         $this->assertAttributeInstanceOf($expectedClass, 'uri', $locationHeader);
     }
@@ -66,7 +66,7 @@ class LocationTest extends TestCase
     public function testLocationCanSetDifferentSchemeUriObjects($uri, $expectedClass)
     {
         $uri = UriFactory::factory($uri);
-        $locationHeader = new Location;
+        $locationHeader = new Location();
         $locationHeader->setUri($uri);
         $this->assertAttributeInstanceOf($expectedClass, 'uri', $locationHeader);
     }

@@ -177,7 +177,7 @@ class SocketTest extends CommonHttpTests
     public function testGetNewStreamContext()
     {
         $adapterClass = $this->config['adapter'];
-        $adapter = new $adapterClass;
+        $adapter = new $adapterClass();
         $context = $adapter->getStreamContext();
 
         $this->assertEquals('stream-context', get_resource_type($context));
@@ -186,7 +186,7 @@ class SocketTest extends CommonHttpTests
     public function testSetNewStreamContextResource()
     {
         $adapterClass = $this->config['adapter'];
-        $adapter = new $adapterClass;
+        $adapter = new $adapterClass();
         $context = stream_context_create();
 
         $adapter->setStreamContext($context);
@@ -197,7 +197,7 @@ class SocketTest extends CommonHttpTests
     public function testSetNewStreamContextOptions()
     {
         $adapterClass = $this->config['adapter'];
-        $adapter = new $adapterClass;
+        $adapter = new $adapterClass();
         $options = [
             'socket' => [
                 'bindto' => '1.2.3.4:0'
@@ -226,7 +226,7 @@ class SocketTest extends CommonHttpTests
         $this->expectExceptionMessage('Expecting either a stream context resource or array');
 
         $adapterClass = $this->config['adapter'];
-        $adapter = new $adapterClass;
+        $adapter = new $adapterClass();
         $adapter->setStreamContext($invalid);
     }
 
@@ -237,7 +237,7 @@ class SocketTest extends CommonHttpTests
         }
 
         $adapterClass = $this->config['adapter'];
-        $adapter = new $adapterClass;
+        $adapter = new $adapterClass();
         $adapter->setStreamContext([
             'ssl' => [
                 'capture_peer_cert' => true,

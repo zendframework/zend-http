@@ -91,7 +91,7 @@ abstract class CommonHttpTests extends TestCase
 
             $uri = $this->baseuri . $name . '.php';
 
-            $this->_adapter = new $this->config['adapter'];
+            $this->_adapter = new $this->config['adapter']();
             $this->client = new HTTPClient($uri, $this->config);
             $this->client->setAdapter($this->_adapter);
         } else {

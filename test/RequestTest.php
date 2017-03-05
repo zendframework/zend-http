@@ -189,7 +189,7 @@ class RequestTest extends TestCase
      */
     public function testRequestMethodCheckWorksForAllMethods($methodName)
     {
-        $request = new Request;
+        $request = new Request();
         $request->setMethod($methodName);
 
         foreach ($this->getMethods(false, $methodName) as $testMethodName => $testMethodValue) {
