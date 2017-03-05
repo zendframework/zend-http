@@ -896,7 +896,7 @@ abstract class CommonHttpTests extends TestCase
      *
      * @link http://framework.zend.com/issues/browse/ZF-5744
      */
-    public function testMutipleFilesWithSameFormNameZF5744()
+    public function testMultipleFilesWithSameFormNameZF5744()
     {
         if (! ini_get('file_uploads')) {
             $this->markTestSkipped('File uploads disabled.');
