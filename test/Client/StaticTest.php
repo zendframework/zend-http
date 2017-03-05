@@ -432,8 +432,9 @@ class StaticTest extends TestCase
 
         $this->assertEquals(count($expectedLines), count($gotLines));
 
-        while (($expected = array_shift($expectedLines)) &&
-               ($got = array_shift($gotLines))) {
+        while (($expected = array_shift($expectedLines))
+            && ($got = array_shift($gotLines))
+        ) {
             $expected = trim($expected);
             $got = trim($got);
             $this->assertRegExp(sprintf('/^%s$/', $expected), $got);

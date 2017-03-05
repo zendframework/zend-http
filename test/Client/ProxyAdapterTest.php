@@ -34,8 +34,9 @@ class ProxyAdapterTest extends SocketTest
      */
     protected function setUp()
     {
-        if (getenv('TESTS_ZEND_HTTP_CLIENT_HTTP_PROXY') &&
-              filter_var(getenv('TESTS_ZEND_HTTP_CLIENT_BASEURI'), FILTER_VALIDATE_BOOLEAN)) {
+        if (getenv('TESTS_ZEND_HTTP_CLIENT_HTTP_PROXY')
+            && filter_var(getenv('TESTS_ZEND_HTTP_CLIENT_BASEURI'), FILTER_VALIDATE_BOOLEAN)
+        ) {
             list($host, $port) = explode(':', getenv('TESTS_ZEND_HTTP_CLIENT_HTTP_PROXY'), 2);
 
             if (! $host) {
@@ -60,13 +61,15 @@ class ProxyAdapterTest extends SocketTest
 
             $user = '';
             $pass = '';
-            if (getenv('TESTS_ZEND_HTTP_CLIENT_HTTP_PROXY_USER') &&
-                getenv('TESTS_ZEND_HTTP_CLIENT_HTTP_PROXY_USER')) {
+            if (getenv('TESTS_ZEND_HTTP_CLIENT_HTTP_PROXY_USER')
+                && getenv('TESTS_ZEND_HTTP_CLIENT_HTTP_PROXY_USER')
+            ) {
                 $user = getenv('TESTS_ZEND_HTTP_CLIENT_HTTP_PROXY_USER');
             }
 
-            if (getenv('TESTS_ZEND_HTTP_CLIENT_HTTP_PROXY_PASS') &&
-                getenv('TESTS_ZEND_HTTP_CLIENT_HTTP_PROXY_PASS')) {
+            if (getenv('TESTS_ZEND_HTTP_CLIENT_HTTP_PROXY_PASS')
+                && getenv('TESTS_ZEND_HTTP_CLIENT_HTTP_PROXY_PASS')
+            ) {
                 $pass = getenv('TESTS_ZEND_HTTP_CLIENT_HTTP_PROXY_PASS');
             }
 

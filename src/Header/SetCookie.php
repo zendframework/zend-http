@@ -632,8 +632,8 @@ class SetCookie implements MultipleHeaderInterface
         $cookieDomain = strtolower($cookieDomain);
         $host = strtolower($host);
         // Check for either exact match or suffix match
-        return ($cookieDomain == $host ||
-                preg_match('/' . preg_quote($cookieDomain) . '$/', $host));
+        return $cookieDomain == $host
+            || preg_match('/' . preg_quote($cookieDomain) . '$/', $host);
     }
 
     /**

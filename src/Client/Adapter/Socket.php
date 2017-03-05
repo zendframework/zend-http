@@ -10,6 +10,7 @@ namespace Zend\Http\Client\Adapter;
 use Traversable;
 use Zend\Http\Client\Adapter\AdapterInterface as HttpAdapter;
 use Zend\Http\Client\Adapter\Exception as AdapterException;
+use Zend\Http\Request;
 use Zend\Http\Response;
 use Zend\Stdlib\ArrayUtils;
 use Zend\Stdlib\ErrorHandler;
@@ -450,8 +451,10 @@ class Socket implements HttpAdapter, StreamInterface
          * Responses to HEAD requests and 204 or 304 responses are not expected
          * to have a body - stop reading here
          */
-        if ($statusCode == 304 || $statusCode == 204 ||
-            $this->method == \Zend\Http\Request::METHOD_HEAD) {
+        if ($statusCode == 304
+            || $statusCode == 204
+            || $this->method == Request::METHOD_HEAD
+        ) {
             // Close the connection if requested to do so by the server
             $connection = $headers->get('connection');
             if ($connection && $connection->getFieldValue() == 'close') {

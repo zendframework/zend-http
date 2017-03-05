@@ -311,8 +311,8 @@ abstract class AbstractAccept implements HeaderInterface
                 }
 
                 if ($left->type == $right->type) {
-                    if (($left->subtype == $right->subtype || ($right->subtype == '*' || $left->subtype == '*')) &&
-                        ($left->format == $right->format || $right->format == '*' || $left->format == '*')
+                    if (($left->subtype == $right->subtype || ($right->subtype == '*' || $left->subtype == '*'))
+                        && ($left->format == $right->format || $right->format == '*' || $left->format == '*')
                     ) {
                         if ($this->matchAcceptParams($left, $right)) {
                             $left->setMatchedAgainst($right);
@@ -345,10 +345,9 @@ abstract class AbstractAccept implements HeaderInterface
                         $pieces
                     );
 
-                    if (count($pieces) == 3 &&
-                        (version_compare($pieces[1], $match1->params[$key], '<=')  xor
-                         version_compare($pieces[2], $match1->params[$key], '>=')
-                        )
+                    if (count($pieces) == 3
+                        && (version_compare($pieces[1], $match1->params[$key], '<=')
+                            xor version_compare($pieces[2], $match1->params[$key], '>='))
                     ) {
                         return false;
                     }
