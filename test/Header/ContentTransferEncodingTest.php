@@ -9,14 +9,16 @@ namespace ZendTest\Http\Header;
 
 use PHPUnit\Framework\TestCase;
 use Zend\Http\Header\ContentTransferEncoding;
+use Zend\Http\Header\Exception\InvalidArgumentException;
+use Zend\Http\Header\HeaderInterface;
 
 class ContentTransferEncodingTest extends TestCase
 {
     public function testContentTransferEncodingFromStringCreatesValidContentTransferEncodingHeader()
     {
         $contentTransferEncodingHeader = ContentTransferEncoding::fromString('Content-Transfer-Encoding: xxx');
-        $this->assertInstanceOf('Zend\Http\Header\HeaderInterface', $contentTransferEncodingHeader);
-        $this->assertInstanceOf('Zend\Http\Header\ContentTransferEncoding', $contentTransferEncodingHeader);
+        $this->assertInstanceOf(HeaderInterface::class, $contentTransferEncodingHeader);
+        $this->assertInstanceOf(ContentTransferEncoding::class, $contentTransferEncodingHeader);
     }
 
     public function testContentTransferEncodingGetFieldNameReturnsHeaderName()
@@ -51,8 +53,8 @@ class ContentTransferEncodingTest extends TestCase
      */
     public function testPreventsCRLFAttackViaFromString()
     {
-        $this->expectException('Zend\Http\Header\Exception\InvalidArgumentException');
-        $header = ContentTransferEncoding::fromString("Content-Transfer-Encoding: xxx\r\n\r\nevilContent");
+        $this->expectException(InvalidArgumentException::class);
+        ContentTransferEncoding::fromString("Content-Transfer-Encoding: xxx\r\n\r\nevilContent");
     }
 
     /**
@@ -61,7 +63,7 @@ class ContentTransferEncodingTest extends TestCase
      */
     public function testPreventsCRLFAttackViaConstructor()
     {
-        $this->expectException('Zend\Http\Header\Exception\InvalidArgumentException');
-        $header = new ContentTransferEncoding("xxx\r\n\r\nevilContent");
+        $this->expectException(InvalidArgumentException::class);
+        new ContentTransferEncoding("xxx\r\n\r\nevilContent");
     }
 }

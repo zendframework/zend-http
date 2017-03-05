@@ -9,14 +9,16 @@ namespace ZendTest\Http\Header;
 
 use PHPUnit\Framework\TestCase;
 use Zend\Http\Header\AcceptRanges;
+use Zend\Http\Header\Exception\InvalidArgumentException;
+use Zend\Http\Header\HeaderInterface;
 
 class AcceptRangesTest extends TestCase
 {
     public function testAcceptRangesFromStringCreatesValidAcceptRangesHeader()
     {
         $acceptRangesHeader = AcceptRanges::fromString('Accept-Ranges: bytes');
-        $this->assertInstanceOf('Zend\Http\Header\HeaderInterface', $acceptRangesHeader);
-        $this->assertInstanceOf('Zend\Http\Header\AcceptRanges', $acceptRangesHeader);
+        $this->assertInstanceOf(HeaderInterface::class, $acceptRangesHeader);
+        $this->assertInstanceOf(AcceptRanges::class, $acceptRangesHeader);
     }
 
     public function testAcceptRangesGetFieldNameReturnsHeaderName()
@@ -49,7 +51,7 @@ class AcceptRangesTest extends TestCase
      */
     public function testPreventsCRLFAttackViaFromString()
     {
-        $this->expectException('Zend\Http\Header\Exception\InvalidArgumentException');
+        $this->expectException(InvalidArgumentException::class);
         $header = AcceptRanges::fromString("Accept-Ranges: bytes;\r\n\r\nevilContent");
     }
 
@@ -59,7 +61,7 @@ class AcceptRangesTest extends TestCase
      */
     public function testPreventsCRLFAttackViaConstructor()
     {
-        $this->expectException('Zend\Http\Header\Exception\InvalidArgumentException');
+        $this->expectException(InvalidArgumentException::class);
         $header = new AcceptRanges("bytes;\r\n\r\nevilContent");
     }
 }

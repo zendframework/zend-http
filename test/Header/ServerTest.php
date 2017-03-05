@@ -8,6 +8,8 @@
 namespace ZendTest\Http\Header;
 
 use PHPUnit\Framework\TestCase;
+use Zend\Http\Header\Exception\InvalidArgumentException;
+use Zend\Http\Header\HeaderInterface;
 use Zend\Http\Header\Server;
 
 class ServerTest extends TestCase
@@ -15,8 +17,8 @@ class ServerTest extends TestCase
     public function testServerFromStringCreatesValidServerHeader()
     {
         $serverHeader = Server::fromString('Server: xxx');
-        $this->assertInstanceOf('Zend\Http\Header\HeaderInterface', $serverHeader);
-        $this->assertInstanceOf('Zend\Http\Header\Server', $serverHeader);
+        $this->assertInstanceOf(HeaderInterface::class, $serverHeader);
+        $this->assertInstanceOf(Server::class, $serverHeader);
     }
 
     public function testServerGetFieldNameReturnsHeaderName()
@@ -51,8 +53,8 @@ class ServerTest extends TestCase
      */
     public function testPreventsCRLFAttackViaFromString()
     {
-        $this->expectException('Zend\Http\Header\Exception\InvalidArgumentException');
-        $header = Server::fromString("Server: xxx\r\n\r\nevilContent");
+        $this->expectException(InvalidArgumentException::class);
+        Server::fromString("Server: xxx\r\n\r\nevilContent");
     }
 
     /**
@@ -61,7 +63,7 @@ class ServerTest extends TestCase
      */
     public function testPreventsCRLFAttackViaConstructor()
     {
-        $this->expectException('Zend\Http\Header\Exception\InvalidArgumentException');
-        $header = new Server("xxx\r\n\r\nevilContent");
+        $this->expectException(InvalidArgumentException::class);
+        new Server("xxx\r\n\r\nevilContent");
     }
 }

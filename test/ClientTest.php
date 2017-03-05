@@ -7,18 +7,20 @@
 
 namespace ZendTest\Http;
 
+use ArrayIterator;
 use PHPUnit\Framework\TestCase;
-use Zend\Http\Client\Adapter\AdapterInterface;
-use Zend\Http\Client\Exception as ClientException;
-use Zend\Http\Exception as HttpException;
-use Zend\Uri\Http;
+use ReflectionMethod;
 use Zend\Http\Client;
+use Zend\Http\Client\Adapter\AdapterInterface;
+use Zend\Http\Client\Adapter\Test;
+use Zend\Http\Client\Exception as ClientException;
 use Zend\Http\Cookies;
+use Zend\Http\Exception as HttpException;
 use Zend\Http\Header\AcceptEncoding;
 use Zend\Http\Header\SetCookie;
 use Zend\Http\Request;
 use Zend\Http\Response;
-use Zend\Http\Client\Adapter\Test;
+use Zend\Uri\Http;
 use ZendTest\Http\TestAsset\ExtendedClient;
 
 class ClientTest extends TestCase
@@ -62,7 +64,7 @@ class ClientTest extends TestCase
 
     public function testAcceptEncodingHeaderWorksProperly()
     {
-        $method = new \ReflectionMethod('\Zend\Http\Client', 'prepareHeaders');
+        $method = new ReflectionMethod(Client::class, 'prepareHeaders');
         $method->setAccessible(true);
 
         // @codingStandardsIgnoreStart
@@ -70,9 +72,9 @@ class ClientTest extends TestCase
         // @codingStandardsIgnoreEnd
         $request = Request::fromString($requestString);
 
-        $adapter = new \Zend\Http\Client\Adapter\Test();
+        $adapter = new Test();
 
-        $client = new \Zend\Http\Client('http://www.domain.com/');
+        $client = new Client('http://www.domain.com/');
         $client->setAdapter($adapter);
         $client->setRequest($request);
 
@@ -89,9 +91,9 @@ class ClientTest extends TestCase
     public function testIfZeroValueCookiesCanBeSet()
     {
         $client = new Client();
-        $client->addCookie("test", 0);
-        $client->addCookie("test2", "0");
-        $client->addCookie("test3", false);
+        $client->addCookie('test', 0);
+        $client->addCookie('test2', '0');
+        $client->addCookie('test3', false);
     }
 
     public function testIfNullValueCookiesThrowsException()
@@ -129,7 +131,7 @@ class ClientTest extends TestCase
 
     public function testIfArrayIteratorOfHeadersCanBeSet()
     {
-        $headers = new \ArrayIterator([
+        $headers = new ArrayIterator([
             new SetCookie('foo'),
             new SetCookie('bar')
         ]);
@@ -167,7 +169,7 @@ class ClientTest extends TestCase
     {
         $client = new Client();
 
-        $client->setAdapter('Zend\Http\Client\Adapter\Test');
+        $client->setAdapter(Test::class);
 
         $request = $client->getRequest();
 
@@ -358,7 +360,7 @@ class ClientTest extends TestCase
         $body = json_encode(['foofoo' => 'barbar']);
 
         $client = new Client();
-        $prepareHeadersReflection = new \ReflectionMethod($client, 'prepareHeaders');
+        $prepareHeadersReflection = new ReflectionMethod($client, 'prepareHeaders');
         $prepareHeadersReflection->setAccessible(true);
 
         $request = new Request();
@@ -384,7 +386,7 @@ class ClientTest extends TestCase
         $body = json_encode(['foofoo' => 'barbar']);
 
         $client = new Client();
-        $prepareHeadersReflection = new \ReflectionMethod($client, 'prepareHeaders');
+        $prepareHeadersReflection = new ReflectionMethod($client, 'prepareHeaders');
         $prepareHeadersReflection->setAccessible(true);
 
         $request = new Request();
@@ -463,7 +465,7 @@ class ClientTest extends TestCase
         $request->getPost()->set('data', 'random');
 
         $client = new Client;
-        $client->setAdapter('Zend\Http\Client\Adapter\Test');
+        $client->setAdapter(Test::class);
         $client->send($request);
 
         $this->assertSame(Client::ENC_URLENCODED, $client->getEncType());
@@ -495,7 +497,7 @@ class ClientTest extends TestCase
         $request->getPost()->set('foo', 'bar');
         $request->getPost()->set('baz', 'foo');
         ini_set('arg_separator.output', '$');
-        $client->setAdapter('Zend\Http\Client\Adapter\Test');
+        $client->setAdapter(Test::class);
         $client->send($request);
         $rawRequest = $client->getLastRawRequest();
         $this->assertContains('foo=bar&baz=foo', $rawRequest);

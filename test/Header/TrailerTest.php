@@ -8,6 +8,8 @@
 namespace ZendTest\Http\Header;
 
 use PHPUnit\Framework\TestCase;
+use Zend\Http\Header\Exception\InvalidArgumentException;
+use Zend\Http\Header\HeaderInterface;
 use Zend\Http\Header\Trailer;
 
 class TrailerTest extends TestCase
@@ -15,8 +17,8 @@ class TrailerTest extends TestCase
     public function testTrailerFromStringCreatesValidTrailerHeader()
     {
         $trailerHeader = Trailer::fromString('Trailer: xxx');
-        $this->assertInstanceOf('Zend\Http\Header\HeaderInterface', $trailerHeader);
-        $this->assertInstanceOf('Zend\Http\Header\Trailer', $trailerHeader);
+        $this->assertInstanceOf(HeaderInterface::class, $trailerHeader);
+        $this->assertInstanceOf(Trailer::class, $trailerHeader);
     }
 
     public function testTrailerGetFieldNameReturnsHeaderName()
@@ -51,8 +53,8 @@ class TrailerTest extends TestCase
      */
     public function testPreventsCRLFAttackViaFromString()
     {
-        $this->expectException('Zend\Http\Header\Exception\InvalidArgumentException');
-        $header = Trailer::fromString("Trailer: xxx\r\n\r\nevilContent");
+        $this->expectException(InvalidArgumentException::class);
+        Trailer::fromString("Trailer: xxx\r\n\r\nevilContent");
     }
 
     /**
@@ -61,7 +63,7 @@ class TrailerTest extends TestCase
      */
     public function testPreventsCRLFAttackViaConstructor()
     {
-        $this->expectException('Zend\Http\Header\Exception\InvalidArgumentException');
-        $header = new Trailer("xxx\r\n\r\nevilContent");
+        $this->expectException(InvalidArgumentException::class);
+        new Trailer("xxx\r\n\r\nevilContent");
     }
 }

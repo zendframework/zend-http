@@ -8,15 +8,17 @@
 namespace ZendTest\Http\Header;
 
 use PHPUnit\Framework\TestCase;
+use Zend\Http\Header\Exception\InvalidArgumentException;
 use Zend\Http\Header\From;
+use Zend\Http\Header\HeaderInterface;
 
 class FromTest extends TestCase
 {
     public function testFromFromStringCreatesValidFromHeader()
     {
         $fromHeader = From::fromString('From: xxx');
-        $this->assertInstanceOf('Zend\Http\Header\HeaderInterface', $fromHeader);
-        $this->assertInstanceOf('Zend\Http\Header\From', $fromHeader);
+        $this->assertInstanceOf(HeaderInterface::class, $fromHeader);
+        $this->assertInstanceOf(From::class, $fromHeader);
     }
 
     public function testFromGetFieldNameReturnsHeaderName()
@@ -51,8 +53,8 @@ class FromTest extends TestCase
      */
     public function testPreventsCRLFAttackViaFromString()
     {
-        $this->expectException('Zend\Http\Header\Exception\InvalidArgumentException');
-        $header = From::fromString("From: xxx\r\n\r\nevilContent");
+        $this->expectException(InvalidArgumentException::class);
+        From::fromString("From: xxx\r\n\r\nevilContent");
     }
 
     /**
@@ -61,7 +63,7 @@ class FromTest extends TestCase
      */
     public function testPreventsCRLFAttackViaConstructor()
     {
-        $this->expectException('Zend\Http\Header\Exception\InvalidArgumentException');
-        $header = new From("xxx\r\n\r\nevilContent");
+        $this->expectException(InvalidArgumentException::class);
+        new From("xxx\r\n\r\nevilContent");
     }
 }

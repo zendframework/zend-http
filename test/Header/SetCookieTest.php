@@ -7,7 +7,11 @@
 
 namespace ZendTest\Http\Header;
 
+use DateTime;
 use PHPUnit\Framework\TestCase;
+use Zend\Http\Header\Exception\InvalidArgumentException;
+use Zend\Http\Header\HeaderInterface;
+use Zend\Http\Header\MultipleHeaderInterface;
 use Zend\Http\Header\SetCookie;
 
 class SetCookieTest extends TestCase
@@ -49,15 +53,15 @@ class SetCookieTest extends TestCase
     public function testSetCookieFromStringCreatesValidSetCookieHeader()
     {
         $setCookieHeader = SetCookie::fromString('Set-Cookie: xxx');
-        $this->assertInstanceOf('Zend\Http\Header\MultipleHeaderInterface', $setCookieHeader);
-        $this->assertInstanceOf('Zend\Http\Header\HeaderInterface', $setCookieHeader);
-        $this->assertInstanceOf('Zend\Http\Header\SetCookie', $setCookieHeader);
+        $this->assertInstanceOf(MultipleHeaderInterface::class, $setCookieHeader);
+        $this->assertInstanceOf(HeaderInterface::class, $setCookieHeader);
+        $this->assertInstanceOf(SetCookie::class, $setCookieHeader);
     }
 
     public function testSetCookieFromStringCanCreateSingleHeader()
     {
         $setCookieHeader = SetCookie::fromString('Set-Cookie: myname=myvalue');
-        $this->assertInstanceOf('Zend\Http\Header\HeaderInterface', $setCookieHeader);
+        $this->assertInstanceOf(HeaderInterface::class, $setCookieHeader);
         $this->assertEquals('myname', $setCookieHeader->getName());
         $this->assertEquals('myvalue', $setCookieHeader->getValue());
 
@@ -65,7 +69,7 @@ class SetCookieTest extends TestCase
             'set-cookie: myname=myvalue; Domain=docs.foo.com; Path=/accounts;'
             . 'Expires=Wed, 13-Jan-2021 22:23:01 GMT; Secure; HttpOnly'
         );
-        $this->assertInstanceOf('Zend\Http\Header\MultipleHeaderInterface', $setCookieHeader);
+        $this->assertInstanceOf(MultipleHeaderInterface::class, $setCookieHeader);
         $this->assertEquals('myname', $setCookieHeader->getName());
         $this->assertEquals('myvalue', $setCookieHeader->getValue());
         $this->assertEquals('docs.foo.com', $setCookieHeader->getDomain());
@@ -86,12 +90,12 @@ class SetCookieTest extends TestCase
         $this->assertInternalType('array', $setCookieHeaders);
 
         $setCookieHeader = $setCookieHeaders[0];
-        $this->assertInstanceOf('Zend\Http\Header\MultipleHeaderInterface', $setCookieHeader);
+        $this->assertInstanceOf(MultipleHeaderInterface::class, $setCookieHeader);
         $this->assertEquals('myname', $setCookieHeader->getName());
         $this->assertEquals('myvalue', $setCookieHeader->getValue());
 
         $setCookieHeader = $setCookieHeaders[1];
-        $this->assertInstanceOf('Zend\Http\Header\MultipleHeaderInterface', $setCookieHeader);
+        $this->assertInstanceOf(MultipleHeaderInterface::class, $setCookieHeader);
         $this->assertEquals('someothername', $setCookieHeader->getName());
         $this->assertEquals('someothervalue', $setCookieHeader->getValue());
         $this->assertEquals('Wed, 13-Jan-2021 22:23:01 GMT', $setCookieHeader->getExpires());
@@ -134,7 +138,7 @@ class SetCookieTest extends TestCase
         $setCookieHeader = new SetCookie();
         $setCookieHeader->setName('myname');
         $setCookieHeader->setValue('myvalue');
-        $setCookieHeader->setExpires(new \DateTime('Wed, 13-Jan-2021 22:23:01 GMT'));
+        $setCookieHeader->setExpires(new DateTime('Wed, 13-Jan-2021 22:23:01 GMT'));
         $setCookieHeader->setDomain('docs.foo.com');
         $setCookieHeader->setPath('/accounts');
         $setCookieHeader->setSecure(true);
@@ -424,8 +428,8 @@ class SetCookieTest extends TestCase
      */
     public function testPreventsCRLFAttackViaFromString()
     {
-        $this->expectException('Zend\Http\Header\Exception\InvalidArgumentException');
-        $header = SetCookie::fromString("Set-Cookie: leo_auth_token=example;\r\n\r\nevilContent");
+        $this->expectException(InvalidArgumentException::class);
+        SetCookie::fromString("Set-Cookie: leo_auth_token=example;\r\n\r\nevilContent");
     }
 
     /**
@@ -462,7 +466,7 @@ class SetCookieTest extends TestCase
     public function testPreventsCRLFAttackViaSetters($method, $value)
     {
         $header = new SetCookie();
-        $this->expectException('Zend\Http\Header\Exception\InvalidArgumentException');
+        $this->expectException(InvalidArgumentException::class);
         $header->{$method}($value);
     }
 

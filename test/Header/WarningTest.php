@@ -8,6 +8,8 @@
 namespace ZendTest\Http\Header;
 
 use PHPUnit\Framework\TestCase;
+use Zend\Http\Header\Exception\InvalidArgumentException;
+use Zend\Http\Header\HeaderInterface;
 use Zend\Http\Header\Warning;
 
 class WarningTest extends TestCase
@@ -15,8 +17,8 @@ class WarningTest extends TestCase
     public function testWarningFromStringCreatesValidWarningHeader()
     {
         $warningHeader = Warning::fromString('Warning: xxx');
-        $this->assertInstanceOf('Zend\Http\Header\HeaderInterface', $warningHeader);
-        $this->assertInstanceOf('Zend\Http\Header\Warning', $warningHeader);
+        $this->assertInstanceOf(HeaderInterface::class, $warningHeader);
+        $this->assertInstanceOf(Warning::class, $warningHeader);
     }
 
     public function testWarningGetFieldNameReturnsHeaderName()
@@ -51,8 +53,8 @@ class WarningTest extends TestCase
      */
     public function testPreventsCRLFAttackViaFromString()
     {
-        $this->expectException('Zend\Http\Header\Exception\InvalidArgumentException');
-        $header = Warning::fromString("Warning: xxx\r\n\r\nevilContent");
+        $this->expectException(InvalidArgumentException::class);
+        Warning::fromString("Warning: xxx\r\n\r\nevilContent");
     }
 
     /**
@@ -61,7 +63,7 @@ class WarningTest extends TestCase
      */
     public function testPreventsCRLFAttackViaConstructor()
     {
-        $this->expectException('Zend\Http\Header\Exception\InvalidArgumentException');
-        $header = new Warning("xxx\r\n\r\nevilContent");
+        $this->expectException(InvalidArgumentException::class);
+        new Warning("xxx\r\n\r\nevilContent");
     }
 }

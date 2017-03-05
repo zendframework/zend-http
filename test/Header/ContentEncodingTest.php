@@ -9,14 +9,16 @@ namespace ZendTest\Http\Header;
 
 use PHPUnit\Framework\TestCase;
 use Zend\Http\Header\ContentEncoding;
+use Zend\Http\Header\Exception\InvalidArgumentException;
+use Zend\Http\Header\HeaderInterface;
 
 class ContentEncodingTest extends TestCase
 {
     public function testContentEncodingFromStringCreatesValidContentEncodingHeader()
     {
         $contentEncodingHeader = ContentEncoding::fromString('Content-Encoding: xxx');
-        $this->assertInstanceOf('Zend\Http\Header\HeaderInterface', $contentEncodingHeader);
-        $this->assertInstanceOf('Zend\Http\Header\ContentEncoding', $contentEncodingHeader);
+        $this->assertInstanceOf(HeaderInterface::class, $contentEncodingHeader);
+        $this->assertInstanceOf(ContentEncoding::class, $contentEncodingHeader);
     }
 
     public function testContentEncodingGetFieldNameReturnsHeaderName()
@@ -51,8 +53,8 @@ class ContentEncodingTest extends TestCase
      */
     public function testPreventsCRLFAttackViaFromString()
     {
-        $this->expectException('Zend\Http\Header\Exception\InvalidArgumentException');
-        $header = ContentEncoding::fromString("Content-Encoding: xxx\r\n\r\nevilContent");
+        $this->expectException(InvalidArgumentException::class);
+        ContentEncoding::fromString("Content-Encoding: xxx\r\n\r\nevilContent");
     }
 
     /**
@@ -61,7 +63,7 @@ class ContentEncodingTest extends TestCase
      */
     public function testPreventsCRLFAttackViaConstructor()
     {
-        $this->expectException('Zend\Http\Header\Exception\InvalidArgumentException');
-        $header = new ContentEncoding("xxx\r\n\r\nevilContent");
+        $this->expectException(InvalidArgumentException::class);
+        new ContentEncoding("xxx\r\n\r\nevilContent");
     }
 }

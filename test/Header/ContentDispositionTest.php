@@ -9,14 +9,16 @@ namespace ZendTest\Http\Header;
 
 use PHPUnit\Framework\TestCase;
 use Zend\Http\Header\ContentDisposition;
+use Zend\Http\Header\Exception\InvalidArgumentException;
+use Zend\Http\Header\HeaderInterface;
 
 class ContentDispositionTest extends TestCase
 {
     public function testContentDispositionFromStringCreatesValidContentDispositionHeader()
     {
         $contentDispositionHeader = ContentDisposition::fromString('Content-Disposition: xxx');
-        $this->assertInstanceOf('Zend\Http\Header\HeaderInterface', $contentDispositionHeader);
-        $this->assertInstanceOf('Zend\Http\Header\ContentDisposition', $contentDispositionHeader);
+        $this->assertInstanceOf(HeaderInterface::class, $contentDispositionHeader);
+        $this->assertInstanceOf(ContentDisposition::class, $contentDispositionHeader);
     }
 
     public function testContentDispositionGetFieldNameReturnsHeaderName()
@@ -51,8 +53,8 @@ class ContentDispositionTest extends TestCase
      */
     public function testPreventsCRLFAttackViaFromString()
     {
-        $this->expectException('Zend\Http\Header\Exception\InvalidArgumentException');
-        $header = ContentDisposition::fromString("Content-Disposition: xxx\r\n\r\nevilContent");
+        $this->expectException(InvalidArgumentException::class);
+        ContentDisposition::fromString("Content-Disposition: xxx\r\n\r\nevilContent");
     }
 
     /**
@@ -61,7 +63,7 @@ class ContentDispositionTest extends TestCase
      */
     public function testPreventsCRLFAttackViaConstructor()
     {
-        $this->expectException('Zend\Http\Header\Exception\InvalidArgumentException');
-        $header = new ContentDisposition("xxx\r\n\r\nevilContent");
+        $this->expectException(InvalidArgumentException::class);
+        new ContentDisposition("xxx\r\n\r\nevilContent");
     }
 }

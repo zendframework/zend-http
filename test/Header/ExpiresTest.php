@@ -10,14 +10,15 @@ namespace ZendTest\Http\Header;
 use PHPUnit\Framework\TestCase;
 use Zend\Http\Header\Exception\InvalidArgumentException;
 use Zend\Http\Header\Expires;
+use Zend\Http\Header\HeaderInterface;
 
 class ExpiresTest extends TestCase
 {
     public function testExpiresFromStringCreatesValidExpiresHeader()
     {
         $expiresHeader = Expires::fromString('Expires: Sun, 06 Nov 1994 08:49:37 GMT');
-        $this->assertInstanceOf('Zend\Http\Header\HeaderInterface', $expiresHeader);
-        $this->assertInstanceOf('Zend\Http\Header\Expires', $expiresHeader);
+        $this->assertInstanceOf(HeaderInterface::class, $expiresHeader);
+        $this->assertInstanceOf(Expires::class, $expiresHeader);
     }
 
     public function testExpiresGetFieldNameReturnsHeaderName()

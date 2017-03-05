@@ -8,6 +8,8 @@
 namespace ZendTest\Http\Header;
 
 use PHPUnit\Framework\TestCase;
+use Zend\Http\Header\Exception\InvalidArgumentException;
+use Zend\Http\Header\HeaderInterface;
 use Zend\Http\Header\Range;
 
 class RangeTest extends TestCase
@@ -15,8 +17,8 @@ class RangeTest extends TestCase
     public function testRangeFromStringCreatesValidRangeHeader()
     {
         $rangeHeader = Range::fromString('Range: xxx');
-        $this->assertInstanceOf('Zend\Http\Header\HeaderInterface', $rangeHeader);
-        $this->assertInstanceOf('Zend\Http\Header\Range', $rangeHeader);
+        $this->assertInstanceOf(HeaderInterface::class, $rangeHeader);
+        $this->assertInstanceOf(Range::class, $rangeHeader);
     }
 
     public function testRangeGetFieldNameReturnsHeaderName()
@@ -51,8 +53,8 @@ class RangeTest extends TestCase
      */
     public function testPreventsCRLFAttackViaFromString()
     {
-        $this->expectException('Zend\Http\Header\Exception\InvalidArgumentException');
-        $header = Range::fromString("Range: xxx\r\n\r\nevilContent");
+        $this->expectException(InvalidArgumentException::class);
+        Range::fromString("Range: xxx\r\n\r\nevilContent");
     }
 
     /**
@@ -61,7 +63,7 @@ class RangeTest extends TestCase
      */
     public function testPreventsCRLFAttackViaConstructorValue()
     {
-        $this->expectException('Zend\Http\Header\Exception\InvalidArgumentException');
-        $header = new Range("xxx\r\n\r\nevilContent");
+        $this->expectException(InvalidArgumentException::class);
+        new Range("xxx\r\n\r\nevilContent");
     }
 }

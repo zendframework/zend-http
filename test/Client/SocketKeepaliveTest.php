@@ -23,6 +23,8 @@ namespace ZendTest\Http\Client;
  * @group      Zend_Http
  * @group      Zend_Http_Client
  */
+use Zend\Http\Client\Adapter\Socket;
+
 class SocketKeepaliveTest extends SocketTest
 {
     /**
@@ -31,7 +33,7 @@ class SocketKeepaliveTest extends SocketTest
      * @var array
      */
     protected $config = [
-        'adapter'     => 'Zend\Http\Client\Adapter\Socket',
-        'keepalive'   => true
+        'adapter'   => Socket::class,
+        'keepalive' => true,
     ];
 }

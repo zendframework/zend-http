@@ -8,6 +8,8 @@
 namespace ZendTest\Http\Header;
 
 use PHPUnit\Framework\TestCase;
+use Zend\Http\Header\Exception\InvalidArgumentException;
+use Zend\Http\Header\HeaderInterface;
 use Zend\Http\Header\Origin;
 use Zend\Uri\Exception\InvalidUriPartException;
 
@@ -26,8 +28,8 @@ class OriginTest extends TestCase
     public function testOriginFromStringCreatesValidOriginHeader()
     {
         $OriginHeader = Origin::fromString('Origin: http://zend.org');
-        $this->assertInstanceOf('Zend\Http\Header\HeaderInterface', $OriginHeader);
-        $this->assertInstanceOf('Zend\Http\Header\Origin', $OriginHeader);
+        $this->assertInstanceOf(HeaderInterface::class, $OriginHeader);
+        $this->assertInstanceOf(Origin::class, $OriginHeader);
     }
 
     public function testOriginGetFieldNameReturnsHeaderName()
@@ -57,7 +59,7 @@ class OriginTest extends TestCase
      */
     public function testPreventsCRLFAttackViaConstructor()
     {
-        $this->expectException('Zend\Http\Header\Exception\InvalidArgumentException');
-        $header = new Origin("http://zend.org\r\n\r\nevilContent");
+        $this->expectException(InvalidArgumentException::class);
+        new Origin("http://zend.org\r\n\r\nevilContent");
     }
 }

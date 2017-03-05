@@ -9,14 +9,16 @@ namespace ZendTest\Http\Header;
 
 use PHPUnit\Framework\TestCase;
 use Zend\Http\Header\AcceptLanguage;
+use Zend\Http\Header\Exception\InvalidArgumentException;
+use Zend\Http\Header\HeaderInterface;
 
 class AcceptLanguageTest extends TestCase
 {
     public function testAcceptLanguageFromStringCreatesValidAcceptLanguageHeader()
     {
         $acceptLanguageHeader = AcceptLanguage::fromString('Accept-Language: xxx');
-        $this->assertInstanceOf('Zend\Http\Header\HeaderInterface', $acceptLanguageHeader);
-        $this->assertInstanceOf('Zend\Http\Header\AcceptLanguage', $acceptLanguageHeader);
+        $this->assertInstanceOf(HeaderInterface::class, $acceptLanguageHeader);
+        $this->assertInstanceOf(AcceptLanguage::class, $acceptLanguageHeader);
     }
 
     public function testAcceptLanguageGetFieldNameReturnsHeaderName()
@@ -109,7 +111,7 @@ class AcceptLanguageTest extends TestCase
      */
     public function testPreventsCRLFAttackViaFromString()
     {
-        $this->expectException('Zend\Http\Header\Exception\InvalidArgumentException');
+        $this->expectException(InvalidArgumentException::class);
         $header = AcceptLanguage::fromString("Accept-Language: da\r\n\r\nevilContent");
     }
 
@@ -120,7 +122,7 @@ class AcceptLanguageTest extends TestCase
     public function testPreventsCRLFAttackViaSetters()
     {
         $header = new AcceptLanguage();
-        $this->expectException('Zend\Http\Header\Exception\InvalidArgumentException');
+        $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessage('valid type');
 
         $header->addLanguage("\nen\r-\r\nus");

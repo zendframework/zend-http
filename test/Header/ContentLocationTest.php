@@ -9,14 +9,17 @@ namespace ZendTest\Http\Header;
 
 use PHPUnit\Framework\TestCase;
 use Zend\Http\Header\ContentLocation;
+use Zend\Http\Header\Exception\InvalidArgumentException;
+use Zend\Http\Header\HeaderInterface;
+use Zend\Uri\UriInterface;
 
 class ContentLocationTest extends TestCase
 {
     public function testContentLocationFromStringCreatesValidLocationHeader()
     {
         $contentLocationHeader = ContentLocation::fromString('Content-Location: http://www.example.com/');
-        $this->assertInstanceOf('Zend\Http\Header\HeaderInterface', $contentLocationHeader);
-        $this->assertInstanceOf('Zend\Http\Header\ContentLocation', $contentLocationHeader);
+        $this->assertInstanceOf(HeaderInterface::class, $contentLocationHeader);
+        $this->assertInstanceOf(ContentLocation::class, $contentLocationHeader);
     }
 
     public function testContentLocationGetFieldValueReturnsProperValue()
@@ -43,7 +46,7 @@ class ContentLocationTest extends TestCase
     {
         $contentLocationHeader = ContentLocation::fromString('Content-Location: http://www.example.com/path');
         $uri = $contentLocationHeader->uri();
-        $this->assertInstanceOf('Zend\Uri\UriInterface', $uri);
+        $this->assertInstanceOf(UriInterface::class, $uri);
         $this->assertTrue($uri->isAbsolute());
         $this->assertEquals('http://www.example.com/path', $contentLocationHeader->getUri());
     }
@@ -52,7 +55,7 @@ class ContentLocationTest extends TestCase
     {
         $contentLocationHeader = ContentLocation::fromString('Content-Location: /path/to');
         $uri = $contentLocationHeader->uri();
-        $this->assertInstanceOf('Zend\Uri\UriInterface', $uri);
+        $this->assertInstanceOf(UriInterface::class, $uri);
         $this->assertFalse($uri->isAbsolute());
         $this->assertEquals('/path/to', $contentLocationHeader->getUri());
     }
@@ -63,7 +66,7 @@ class ContentLocationTest extends TestCase
      */
     public function testPreventsCRLFAttackViaFromString()
     {
-        $this->expectException('Zend\Http\Header\Exception\InvalidArgumentException');
-        $header = ContentLocation::fromString("Content-Location: /path/to\r\n\r\nevilContent");
+        $this->expectException(InvalidArgumentException::class);
+        ContentLocation::fromString("Content-Location: /path/to\r\n\r\nevilContent");
     }
 }

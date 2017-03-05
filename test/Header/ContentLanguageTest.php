@@ -9,14 +9,16 @@ namespace ZendTest\Http\Header;
 
 use PHPUnit\Framework\TestCase;
 use Zend\Http\Header\ContentLanguage;
+use Zend\Http\Header\Exception\InvalidArgumentException;
+use Zend\Http\Header\HeaderInterface;
 
 class ContentLanguageTest extends TestCase
 {
     public function testContentLanguageFromStringCreatesValidContentLanguageHeader()
     {
         $contentLanguageHeader = ContentLanguage::fromString('Content-Language: xxx');
-        $this->assertInstanceOf('Zend\Http\Header\HeaderInterface', $contentLanguageHeader);
-        $this->assertInstanceOf('Zend\Http\Header\ContentLanguage', $contentLanguageHeader);
+        $this->assertInstanceOf(HeaderInterface::class, $contentLanguageHeader);
+        $this->assertInstanceOf(ContentLanguage::class, $contentLanguageHeader);
     }
 
     public function testContentLanguageGetFieldNameReturnsHeaderName()
@@ -51,8 +53,8 @@ class ContentLanguageTest extends TestCase
      */
     public function testPreventsCRLFAttackViaFromString()
     {
-        $this->expectException('Zend\Http\Header\Exception\InvalidArgumentException');
-        $header = ContentLanguage::fromString("Content-Language: xxx\r\n\r\nevilContent");
+        $this->expectException(InvalidArgumentException::class);
+        ContentLanguage::fromString("Content-Language: xxx\r\n\r\nevilContent");
     }
 
     /**
@@ -61,7 +63,7 @@ class ContentLanguageTest extends TestCase
      */
     public function testPreventsCRLFAttackViaConstructor()
     {
-        $this->expectException('Zend\Http\Header\Exception\InvalidArgumentException');
-        $header = new ContentLanguage("xxx\r\n\r\nevilContent");
+        $this->expectException(InvalidArgumentException::class);
+        new ContentLanguage("xxx\r\n\r\nevilContent");
     }
 }

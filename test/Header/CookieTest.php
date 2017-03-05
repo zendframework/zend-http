@@ -7,10 +7,12 @@
 
 namespace ZendTest\Http\Header;
 
+use ArrayObject;
 use PHPUnit\Framework\TestCase;
 use Zend\Http\Header\Cookie;
-use Zend\Http\Header\SetCookie;
 use Zend\Http\Header\Exception\InvalidArgumentException;
+use Zend\Http\Header\HeaderInterface;
+use Zend\Http\Header\SetCookie;
 
 /**
  * Zend_Http_Cookie unit tests
@@ -23,9 +25,9 @@ class CookieTest extends TestCase
     public function testCookieFromStringCreatesValidCookieHeader()
     {
         $cookieHeader = Cookie::fromString('Cookie: name=value');
-        $this->assertInstanceOf('Zend\Http\Header\HeaderInterface', $cookieHeader);
-        $this->assertInstanceOf('ArrayObject', $cookieHeader);
-        $this->assertInstanceOf('Zend\Http\Header\Cookie', $cookieHeader);
+        $this->assertInstanceOf(HeaderInterface::class, $cookieHeader);
+        $this->assertInstanceOf(ArrayObject::class, $cookieHeader);
+        $this->assertInstanceOf(Cookie::class, $cookieHeader);
     }
 
     public function testCookieFromStringCreatesValidCookieHeadersWithMultipleValues()

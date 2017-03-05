@@ -8,15 +8,19 @@
 namespace ZendTest\Http\Header;
 
 use PHPUnit\Framework\TestCase;
+use Zend\Http\Header\Exception\InvalidArgumentException;
+use Zend\Http\Header\HeaderInterface;
 use Zend\Http\Header\Referer;
+use Zend\Uri\Http;
+use Zend\Uri\Uri;
 
 class RefererTest extends TestCase
 {
     public function testRefererFromStringCreatesValidLocationHeader()
     {
         $refererHeader = Referer::fromString('Referer: http://www.example.com/');
-        $this->assertInstanceOf('Zend\Http\Header\HeaderInterface', $refererHeader);
-        $this->assertInstanceOf('Zend\Http\Header\Referer', $refererHeader);
+        $this->assertInstanceOf(HeaderInterface::class, $refererHeader);
+        $this->assertInstanceOf(Referer::class, $refererHeader);
     }
 
     public function testRefererGetFieldValueReturnsProperValue()
@@ -43,7 +47,7 @@ class RefererTest extends TestCase
     {
         $refererHeader = Referer::fromString('Referer: http://www.example.com/path');
         $uri = $refererHeader->uri();
-        $this->assertInstanceOf('Zend\Uri\Http', $uri);
+        $this->assertInstanceOf(Http::class, $uri);
         $this->assertTrue($uri->isAbsolute());
         $this->assertEquals('http://www.example.com/path', $refererHeader->getUri());
     }
@@ -52,7 +56,7 @@ class RefererTest extends TestCase
     {
         $refererHeader = Referer::fromString('Referer: /path/to');
         $uri = $refererHeader->uri();
-        $this->assertInstanceOf('Zend\Uri\Uri', $uri);
+        $this->assertInstanceOf(Uri::class, $uri);
         $this->assertFalse($uri->isAbsolute());
         $this->assertEquals('/path/to', $refererHeader->getUri());
     }
@@ -70,7 +74,7 @@ class RefererTest extends TestCase
      */
     public function testCRLFAttack()
     {
-        $this->expectException('Zend\Http\Header\Exception\InvalidArgumentException');
-        $header = Referer::fromString("Referer: http://www.example.com/\r\n\r\nevilContent");
+        $this->expectException(InvalidArgumentException::class);
+        Referer::fromString("Referer: http://www.example.com/\r\n\r\nevilContent");
     }
 }

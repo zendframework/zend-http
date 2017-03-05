@@ -8,6 +8,8 @@
 namespace ZendTest\Http\Header;
 
 use PHPUnit\Framework\TestCase;
+use Zend\Http\Header\Exception\InvalidArgumentException;
+use Zend\Http\Header\HeaderInterface;
 use Zend\Http\Header\ProxyAuthorization;
 
 class ProxyAuthorizationTest extends TestCase
@@ -15,8 +17,8 @@ class ProxyAuthorizationTest extends TestCase
     public function testProxyAuthorizationFromStringCreatesValidProxyAuthorizationHeader()
     {
         $proxyAuthorizationHeader = ProxyAuthorization::fromString('Proxy-Authorization: xxx');
-        $this->assertInstanceOf('Zend\Http\Header\HeaderInterface', $proxyAuthorizationHeader);
-        $this->assertInstanceOf('Zend\Http\Header\ProxyAuthorization', $proxyAuthorizationHeader);
+        $this->assertInstanceOf(HeaderInterface::class, $proxyAuthorizationHeader);
+        $this->assertInstanceOf(ProxyAuthorization::class, $proxyAuthorizationHeader);
     }
 
     public function testProxyAuthorizationGetFieldNameReturnsHeaderName()
@@ -51,8 +53,8 @@ class ProxyAuthorizationTest extends TestCase
      */
     public function testPreventsCRLFAttackViaFromString()
     {
-        $this->expectException('Zend\Http\Header\Exception\InvalidArgumentException');
-        $header = ProxyAuthorization::fromString("Proxy-Authorization: xxx\r\n\r\nevilContent");
+        $this->expectException(InvalidArgumentException::class);
+        ProxyAuthorization::fromString("Proxy-Authorization: xxx\r\n\r\nevilContent");
     }
 
     /**
@@ -61,7 +63,7 @@ class ProxyAuthorizationTest extends TestCase
      */
     public function testPreventsCRLFAttackViaConstructor()
     {
-        $this->expectException('Zend\Http\Header\Exception\InvalidArgumentException');
-        $header = new ProxyAuthorization("xxx\r\n\r\nevilContent");
+        $this->expectException(InvalidArgumentException::class);
+        new ProxyAuthorization("xxx\r\n\r\nevilContent");
     }
 }

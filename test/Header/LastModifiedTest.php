@@ -9,6 +9,7 @@ namespace ZendTest\Http\Header;
 
 use PHPUnit\Framework\TestCase;
 use Zend\Http\Header\Exception\InvalidArgumentException;
+use Zend\Http\Header\HeaderInterface;
 use Zend\Http\Header\LastModified;
 
 class LastModifiedTest extends TestCase
@@ -16,8 +17,8 @@ class LastModifiedTest extends TestCase
     public function testExpiresFromStringCreatesValidLastModifiedHeader()
     {
         $lastModifiedHeader = LastModified::fromString('Last-Modified: Sun, 06 Nov 1994 08:49:37 GMT');
-        $this->assertInstanceOf('Zend\Http\Header\HeaderInterface', $lastModifiedHeader);
-        $this->assertInstanceOf('Zend\Http\Header\LastModified', $lastModifiedHeader);
+        $this->assertInstanceOf(HeaderInterface::class, $lastModifiedHeader);
+        $this->assertInstanceOf(LastModified::class, $lastModifiedHeader);
     }
 
     public function testLastModifiedGetFieldNameReturnsHeaderName()

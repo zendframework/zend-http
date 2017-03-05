@@ -9,14 +9,16 @@ namespace ZendTest\Http\Header;
 
 use PHPUnit\Framework\TestCase;
 use Zend\Http\Header\AcceptCharset;
+use Zend\Http\Header\Exception\InvalidArgumentException;
+use Zend\Http\Header\HeaderInterface;
 
 class AcceptCharsetTest extends TestCase
 {
     public function testAcceptCharsetFromStringCreatesValidAcceptCharsetHeader()
     {
         $acceptCharsetHeader = AcceptCharset::fromString('Accept-Charset: xxx');
-        $this->assertInstanceOf('Zend\Http\Header\HeaderInterface', $acceptCharsetHeader);
-        $this->assertInstanceOf('Zend\Http\Header\AcceptCharset', $acceptCharsetHeader);
+        $this->assertInstanceOf(HeaderInterface::class, $acceptCharsetHeader);
+        $this->assertInstanceOf(AcceptCharset::class, $acceptCharsetHeader);
     }
 
     public function testAcceptCharsetGetFieldNameReturnsHeaderName()
@@ -70,7 +72,6 @@ class AcceptCharsetTest extends TestCase
             '*'
         ];
 
-        $test = [];
         foreach ($header->getPrioritized() as $type) {
             $this->assertEquals(array_shift($expected), $type->getCharset());
         }
@@ -93,8 +94,8 @@ class AcceptCharsetTest extends TestCase
      */
     public function testPreventsCRLFAttackViaFromString()
     {
-        $this->expectException('Zend\Http\Header\Exception\InvalidArgumentException');
-        $header = AcceptCharset::fromString("Accept-Charset: iso-8859-5\r\n\r\nevilContent");
+        $this->expectException(InvalidArgumentException::class);
+        AcceptCharset::fromString("Accept-Charset: iso-8859-5\r\n\r\nevilContent");
     }
 
     /**
@@ -104,7 +105,7 @@ class AcceptCharsetTest extends TestCase
     public function testPreventsCRLFAttackViaSetters()
     {
         $header = new AcceptCharset();
-        $this->expectException('Zend\Http\Header\Exception\InvalidArgumentException');
+        $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessage('valid type');
         $header->addCharset("\niso\r-8859-\r\n5");
     }

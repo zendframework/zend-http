@@ -7,15 +7,18 @@
 
 namespace ZendTest\Http\Client;
 
-use PHPUnit\Framework\TestCase;
-use Zend\Http\Client as HTTPClient;
-use Zend\Http;
-use Zend\Http\Client\Adapter;
-use Zend\Http\Client\Adapter\Exception as AdapterException;
-use Zend\Http\Request;
-use Zend\Http\Response;
-use Zend\Stdlib\Parameters;
 use Exception;
+use PHPUnit\Framework\TestCase;
+use stdClass;
+use Zend\Http\Client;
+use Zend\Http\Client as HTTPClient;
+use Zend\Http\Client\Adapter;
+use Zend\Http\Client\Adapter\AdapterInterface;
+use Zend\Http\Client\Adapter\Exception as AdapterException;
+use Zend\Http\Client\Adapter\Socket;
+use Zend\Http\Request;
+use Zend\Http\Response\Stream;
+use Zend\Stdlib\Parameters;
 
 /**
  * This Testsuite includes all Zend_Http_Client that require a working web
@@ -46,7 +49,7 @@ abstract class CommonHttpTests extends TestCase
     /**
      * Common HTTP client
      *
-     * @var \Zend\Http\Client
+     * @var Client
      */
     protected $client;
 
@@ -54,7 +57,7 @@ abstract class CommonHttpTests extends TestCase
     /**
      * Common HTTP client adapter
      *
-     * @var \Zend\Http\Client\Adapter\AdapterInterface
+     * @var AdapterInterface
      */
     protected $_adapter;
     // @codingStandardsIgnoreEnd
@@ -65,7 +68,7 @@ abstract class CommonHttpTests extends TestCase
      * @var array
      */
     protected $config = [
-        'adapter'     => 'Zend\Http\Client\Adapter\Socket'
+        'adapter' => Socket::class,
     ];
 
     /**
@@ -93,7 +96,10 @@ abstract class CommonHttpTests extends TestCase
             $this->client->setAdapter($this->_adapter);
         } else {
             // Skip tests
-            $this->markTestSkipped("Zend_Http_Client dynamic tests are not enabled in phpunit.xml");
+            $this->markTestSkipped(sprintf(
+                '%s dynamic tests are not enabled in phpunit.xml',
+                HTTPClient::class
+            ));
         }
     }
 
@@ -944,7 +950,7 @@ abstract class CommonHttpTests extends TestCase
 
         $response = $this->client->send();
 
-        $this->assertInstanceOf('Zend\Http\Response\Stream', $response, 'Request did not return stream response!');
+        $this->assertInstanceOf(Stream::class, $response, 'Request did not return stream response!');
         $this->assertInternalType('resource', $response->getStream(), 'Request does not contain stream!');
 
         $stream_name = $response->getStreamName();
@@ -971,7 +977,7 @@ abstract class CommonHttpTests extends TestCase
 
         $response = $this->client->send();
 
-        $this->assertInstanceOf('Zend\Http\Response\Stream', $response, 'Request did not return stream response!');
+        $this->assertInstanceOf(Stream::class, $response, 'Request did not return stream response!');
         $this->assertInternalType('resource', $response->getStream(), 'Request does not contain stream!');
 
         $body = $response->getBody();
@@ -987,12 +993,12 @@ abstract class CommonHttpTests extends TestCase
             return;
         }
         $this->client->setUri($this->baseuri . 'staticFile.jpg');
-        $outfile = tempnam(sys_get_temp_dir(), "outstream");
+        $outfile = tempnam(sys_get_temp_dir(), 'outstream');
         $this->client->setStream($outfile);
 
         $response = $this->client->send();
 
-        $this->assertInstanceOf('Zend\Http\Response\Stream', $response, 'Request did not return stream response!');
+        $this->assertInstanceOf(Stream::class, $response, 'Request did not return stream response!');
         $this->assertInternalType('resource', $response->getStream(), 'Request does not contain stream!');
 
         $this->assertEquals($outfile, $response->getStreamName());
@@ -1060,7 +1066,7 @@ abstract class CommonHttpTests extends TestCase
         $this->client->setHeaders([
             'Content-Type' => $content_type
         ]);
-        $this->client->setMethod(\Zend\Http\Request::METHOD_POST);
+        $this->client->setMethod(Request::METHOD_POST);
 
         $this->client->setParameterPost($params);
 
@@ -1153,7 +1159,7 @@ abstract class CommonHttpTests extends TestCase
             [false],
             ['foo => bar'],
             [null],
-            [new \stdClass],
+            [new stdClass()],
             [55]
         ];
     }

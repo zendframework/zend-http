@@ -8,6 +8,10 @@
 namespace ZendTest\Http;
 
 use PHPUnit\Framework\TestCase;
+use Zend\Http\Exception\InvalidArgumentException;
+use Zend\Http\Exception\RuntimeException;
+use Zend\Http\Header\GenericHeader;
+use Zend\Http\Headers;
 use Zend\Http\Response;
 
 class ResponseTest extends TestCase
@@ -34,16 +38,16 @@ class ResponseTest extends TestCase
     public function testResponseUsesHeadersContainerByDefault()
     {
         $response = new Response();
-        $this->assertInstanceOf('Zend\Http\Headers', $response->getHeaders());
+        $this->assertInstanceOf(Headers::class, $response->getHeaders());
     }
 
     public function testRequestCanSetHeaders()
     {
         $response = new Response();
-        $headers = new \Zend\Http\Headers();
+        $headers = new Headers();
 
         $ret = $response->setHeaders($headers);
-        $this->assertInstanceOf('Zend\Http\Response', $ret);
+        $this->assertInstanceOf(Response::class, $ret);
         $this->assertSame($headers, $response->getHeaders());
     }
 
@@ -58,7 +62,7 @@ class ResponseTest extends TestCase
     public function testResponseSetStatusCodeThrowsExceptionOnInvalidCode()
     {
         $response = new Response;
-        $this->expectException('Zend\Http\Exception\InvalidArgumentException');
+        $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessage('Invalid status code');
         $response->setStatusCode(606);
     }
@@ -81,7 +85,7 @@ class ResponseTest extends TestCase
     public function testResponseSetCustomStatusCodeThrowsExceptionOnInvalidCode()
     {
         $response = new Response;
-        $this->expectException('Zend\Http\Exception\InvalidArgumentException');
+        $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessage('Invalid status code provided: "foo"');
 
         $response->setStatusCode('foo');
@@ -375,7 +379,7 @@ class ResponseTest extends TestCase
     public function testUnknownCode()
     {
         $response_str = $this->readResponse('response_unknown');
-        $this->expectException('InvalidArgumentException');
+        $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessage('Invalid status code provided: "550"');
         $response = Response::fromString($response_str);
         $this->assertEquals(550, $response->getStatusCode());
@@ -432,7 +436,7 @@ class ResponseTest extends TestCase
         $this->assertEquals(1, $headers->count());
 
         $header = $headers->get('fake');
-        $this->assertInstanceOf('Zend\Http\Header\GenericHeader', $header);
+        $this->assertInstanceOf(GenericHeader::class, $header);
         $this->assertEquals('Fake', $header->getFieldName());
         $this->assertEquals('foo-bar', $header->getFieldValue());
     }
@@ -443,8 +447,8 @@ class ResponseTest extends TestCase
      */
     public function testPreventsCRLFAttackWhenDeserializing()
     {
-        $this->expectException('Zend\Http\Exception\RuntimeException');
-        $response = Response::fromString(
+        $this->expectException(RuntimeException::class);
+        Response::fromString(
             "HTTP/1.1 200 OK\r\nAllow: POST\r\nX-Foo: This\ris\r\n\r\nCRLF\nInjection"
         );
     }

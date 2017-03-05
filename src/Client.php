@@ -9,6 +9,7 @@ namespace Zend\Http;
 
 use ArrayIterator;
 use Traversable;
+use Zend\Http\Client\Adapter\Socket;
 use Zend\Stdlib;
 use Zend\Stdlib\ArrayUtils;
 use Zend\Stdlib\ErrorHandler;
@@ -99,10 +100,10 @@ class Client implements Stdlib\DispatchableInterface
     protected $config = [
         'maxredirects'    => 5,
         'strictredirects' => false,
-        'useragent'       => 'Zend\Http\Client',
+        'useragent'       => Client::class,
         'timeout'         => 10,
         'connecttimeout'  => null,
-        'adapter'         => 'Zend\Http\Client\Adapter\Socket',
+        'adapter'         => Socket::class,
         'httpversion'     => Request::VERSION_11,
         'storeresponse'   => true,
         'keepalive'       => false,
@@ -712,7 +713,7 @@ class Client implements Stdlib\DispatchableInterface
             // If name is not given, create temp name
             $this->streamName = tempnam(
                 isset($this->config['streamtmpdir']) ? $this->config['streamtmpdir'] : sys_get_temp_dir(),
-                'Zend\Http\Client'
+                Client::class
             );
         }
 

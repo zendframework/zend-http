@@ -8,6 +8,8 @@
 namespace ZendTest\Http\Header;
 
 use PHPUnit\Framework\TestCase;
+use Zend\Http\Header\Exception\InvalidArgumentException;
+use Zend\Http\Header\HeaderInterface;
 use Zend\Http\Header\IfRange;
 
 class IfRangeTest extends TestCase
@@ -15,8 +17,8 @@ class IfRangeTest extends TestCase
     public function testIfRangeFromStringCreatesValidIfRangeHeader()
     {
         $ifRangeHeader = IfRange::fromString('If-Range: xxx');
-        $this->assertInstanceOf('Zend\Http\Header\HeaderInterface', $ifRangeHeader);
-        $this->assertInstanceOf('Zend\Http\Header\IfRange', $ifRangeHeader);
+        $this->assertInstanceOf(HeaderInterface::class, $ifRangeHeader);
+        $this->assertInstanceOf(IfRange::class, $ifRangeHeader);
     }
 
     public function testIfRangeGetFieldNameReturnsHeaderName()
@@ -51,8 +53,8 @@ class IfRangeTest extends TestCase
      */
     public function testPreventsCRLFAttackViaFromString()
     {
-        $this->expectException('Zend\Http\Header\Exception\InvalidArgumentException');
-        $header = IfRange::fromString("If-Range: xxx\r\n\r\nevilContent");
+        $this->expectException(InvalidArgumentException::class);
+        IfRange::fromString("If-Range: xxx\r\n\r\nevilContent");
     }
 
     /**
@@ -61,7 +63,7 @@ class IfRangeTest extends TestCase
      */
     public function testPreventsCRLFAttackViaConstructor()
     {
-        $this->expectException('Zend\Http\Header\Exception\InvalidArgumentException');
-        $header = new IfRange("xxx\r\n\r\nevilContent");
+        $this->expectException(InvalidArgumentException::class);
+        new IfRange("xxx\r\n\r\nevilContent");
     }
 }

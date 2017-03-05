@@ -7,7 +7,12 @@
 
 namespace ZendTest\Http\Client;
 
+use stdClass;
+use Zend\Config\Config;
 use Zend\Http\Client\Adapter;
+use Zend\Http\Client\Adapter\Exception\InvalidArgumentException;
+use Zend\Http\Client\Adapter\Exception\RuntimeException;
+use Zend\Http\Client\Adapter\Socket;
 use Zend\Uri\Uri;
 
 /**
@@ -34,7 +39,7 @@ class SocketTest extends CommonHttpTests
      * @var array
      */
     protected $config = [
-        'adapter' => 'Zend\Http\Client\Adapter\Socket'
+        'adapter' => Socket::class,
     ];
 
     /**
@@ -74,7 +79,7 @@ class SocketTest extends CommonHttpTests
         $this->_adapter->setOptions($config);
         try {
             $this->_adapter->connect('localhost', 443, true);
-        } catch (\Zend\Http\Client\Adapter\Exception\RuntimeException $e) {
+        } catch (RuntimeException $e) {
             // Test is designed to allow connect failure because we're interested
             // only in the stream context state created within that method.
         }
@@ -96,7 +101,7 @@ class SocketTest extends CommonHttpTests
         $this->_adapter->setOptions($config);
         try {
             $this->_adapter->connect('localhost', 443, true);
-        } catch (\Zend\Http\Client\Adapter\Exception\RuntimeException $e) {
+        } catch (RuntimeException $e) {
             // Test is designed to allow connect failure because we're interested
             // only in the stream context state created within that method.
         }
@@ -122,7 +127,7 @@ class SocketTest extends CommonHttpTests
         $this->_adapter->setOptions($config);
         try {
             $this->_adapter->connect('localhost', 443, true);
-        } catch (\Zend\Http\Client\Adapter\Exception\RuntimeException $e) {
+        } catch (RuntimeException $e) {
             // Test is designed to allow connect failure because we're interested
             // only in the stream context state created within that method.
         }
@@ -138,11 +143,11 @@ class SocketTest extends CommonHttpTests
      */
     public function testConfigSetAsZendConfig()
     {
-        $config = new \Zend\Config\Config([
+        $config = new Config([
             'timeout'  => 400,
             'nested'   => [
                 'item' => 'value',
-            ]
+            ],
         ]);
 
         $this->_adapter->setOptions($config);
@@ -159,7 +164,7 @@ class SocketTest extends CommonHttpTests
      */
     public function testSetConfigInvalidConfig($config)
     {
-        $this->expectException('Zend\Http\Client\Adapter\Exception\InvalidArgumentException');
+        $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessage('Array or Zend\Config object expected');
 
         $this->_adapter->setOptions($config);
@@ -217,7 +222,7 @@ class SocketTest extends CommonHttpTests
      */
     public function testSetInvalidContextOptions($invalid)
     {
-        $this->expectException('Zend\Http\Client\Adapter\Exception\InvalidArgumentException');
+        $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessage('Expecting either a stream context resource or array');
 
         $adapterClass = $this->config['adapter'];
@@ -313,7 +318,7 @@ class SocketTest extends CommonHttpTests
     public static function invalidContextProvider()
     {
         return [
-            [new \stdClass()],
+            [new stdClass()],
             [fopen('data://text/plain,', 'r')],
             [false],
             [null]

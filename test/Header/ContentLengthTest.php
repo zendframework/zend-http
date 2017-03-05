@@ -9,14 +9,16 @@ namespace ZendTest\Http\Header;
 
 use PHPUnit\Framework\TestCase;
 use Zend\Http\Header\ContentLength;
+use Zend\Http\Header\Exception\InvalidArgumentException;
+use Zend\Http\Header\HeaderInterface;
 
 class ContentLengthTest extends TestCase
 {
     public function testContentLengthFromStringCreatesValidContentLengthHeader()
     {
         $contentLengthHeader = ContentLength::fromString('Content-Length: xxx');
-        $this->assertInstanceOf('Zend\Http\Header\HeaderInterface', $contentLengthHeader);
-        $this->assertInstanceOf('Zend\Http\Header\ContentLength', $contentLengthHeader);
+        $this->assertInstanceOf(HeaderInterface::class, $contentLengthHeader);
+        $this->assertInstanceOf(ContentLength::class, $contentLengthHeader);
     }
 
     public function testContentLengthGetFieldNameReturnsHeaderName()
@@ -51,8 +53,8 @@ class ContentLengthTest extends TestCase
      */
     public function testPreventsCRLFAttackViaFromString()
     {
-        $this->expectException('Zend\Http\Header\Exception\InvalidArgumentException');
-        $header = ContentLength::fromString("Content-Length: xxx\r\n\r\nevilContent");
+        $this->expectException(InvalidArgumentException::class);
+        ContentLength::fromString("Content-Length: xxx\r\n\r\nevilContent");
     }
 
     /**
@@ -61,8 +63,8 @@ class ContentLengthTest extends TestCase
      */
     public function testPreventsCRLFAttackViaConstructor()
     {
-        $this->expectException('Zend\Http\Header\Exception\InvalidArgumentException');
-        $header = new ContentLength("Content-Length: xxx\r\n\r\nevilContent");
+        $this->expectException(InvalidArgumentException::class);
+        new ContentLength("Content-Length: xxx\r\n\r\nevilContent");
     }
 
     public function testZeroValue()

@@ -9,6 +9,7 @@ namespace ZendTest\Http\Header;
 
 use PHPUnit\Framework\TestCase;
 use Zend\Http\Header\Exception\InvalidArgumentException;
+use Zend\Http\Header\HeaderInterface;
 use Zend\Http\Header\IfModifiedSince;
 
 class IfModifiedSinceTest extends TestCase
@@ -16,8 +17,8 @@ class IfModifiedSinceTest extends TestCase
     public function testIfModifiedSinceFromStringCreatesValidIfModifiedSinceHeader()
     {
         $ifModifiedSinceHeader = IfModifiedSince::fromString('If-Modified-Since: Sun, 06 Nov 1994 08:49:37 GMT');
-        $this->assertInstanceOf('Zend\Http\Header\HeaderInterface', $ifModifiedSinceHeader);
-        $this->assertInstanceOf('Zend\Http\Header\IfModifiedSince', $ifModifiedSinceHeader);
+        $this->assertInstanceOf(HeaderInterface::class, $ifModifiedSinceHeader);
+        $this->assertInstanceOf(IfModifiedSince::class, $ifModifiedSinceHeader);
     }
 
     public function testIfModifiedSinceGetFieldNameReturnsHeaderName()

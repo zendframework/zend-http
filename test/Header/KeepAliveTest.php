@@ -8,6 +8,8 @@
 namespace ZendTest\Http\Header;
 
 use PHPUnit\Framework\TestCase;
+use Zend\Http\Header\Exception\InvalidArgumentException;
+use Zend\Http\Header\HeaderInterface;
 use Zend\Http\Header\KeepAlive;
 
 class KeepAliveTest extends TestCase
@@ -15,8 +17,8 @@ class KeepAliveTest extends TestCase
     public function testKeepAliveFromStringCreatesValidKeepAliveHeader()
     {
         $keepAliveHeader = KeepAlive::fromString('Keep-Alive: xxx');
-        $this->assertInstanceOf('Zend\Http\Header\HeaderInterface', $keepAliveHeader);
-        $this->assertInstanceOf('Zend\Http\Header\KeepAlive', $keepAliveHeader);
+        $this->assertInstanceOf(HeaderInterface::class, $keepAliveHeader);
+        $this->assertInstanceOf(KeepAlive::class, $keepAliveHeader);
     }
 
     public function testKeepAliveGetFieldNameReturnsHeaderName()
@@ -51,8 +53,8 @@ class KeepAliveTest extends TestCase
      */
     public function testPreventsCRLFAttackViaFromString()
     {
-        $this->expectException('Zend\Http\Header\Exception\InvalidArgumentException');
-        $header = KeepAlive::fromString("Keep-Alive: xxx\r\n\r\nevilContent");
+        $this->expectException(InvalidArgumentException::class);
+        KeepAlive::fromString("Keep-Alive: xxx\r\n\r\nevilContent");
     }
 
     /**
@@ -61,7 +63,7 @@ class KeepAliveTest extends TestCase
      */
     public function testPreventsCRLFAttackViaConstructor()
     {
-        $this->expectException('Zend\Http\Header\Exception\InvalidArgumentException');
-        $header = new KeepAlive("xxx\r\n\r\nevilContent");
+        $this->expectException(InvalidArgumentException::class);
+        new KeepAlive("xxx\r\n\r\nevilContent");
     }
 }

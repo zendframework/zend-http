@@ -7,11 +7,12 @@
 
 namespace ZendTest\Http\Header;
 
-use PHPUnit\Framework\TestCase;
-use Zend\Http\Header\Date;
 use DateTime;
 use DateTimeZone;
+use PHPUnit\Framework\TestCase;
+use Zend\Http\Header\Date;
 use Zend\Http\Header\Exception\InvalidArgumentException;
+use Zend\Http\Header\HeaderInterface;
 
 class DateTest extends TestCase
 {
@@ -24,18 +25,18 @@ class DateTest extends TestCase
     public function testDateFromStringCreatesValidDateHeader()
     {
         $dateHeader = Date::fromString('Date: Sun, 06 Nov 1994 08:49:37 GMT');
-        $this->assertInstanceOf('Zend\Http\Header\HeaderInterface', $dateHeader);
-        $this->assertInstanceOf('Zend\Http\Header\Date', $dateHeader);
+        $this->assertInstanceOf(HeaderInterface::class, $dateHeader);
+        $this->assertInstanceOf(Date::class, $dateHeader);
     }
 
     public function testDateFromTimeStringCreatesValidDateHeader()
     {
         $dateHeader = Date::fromTimeString('+12 hours');
 
-        $this->assertInstanceOf('Zend\Http\Header\HeaderInterface', $dateHeader);
-        $this->assertInstanceOf('Zend\Http\Header\Date', $dateHeader);
+        $this->assertInstanceOf(HeaderInterface::class, $dateHeader);
+        $this->assertInstanceOf(Date::class, $dateHeader);
 
-        $date     = new \DateTime(null, new \DateTimeZone('GMT'));
+        $date     = new DateTime(null, new DateTimeZone('GMT'));
         $interval = $dateHeader->date()->diff($date, 1);
 
         $this->assertSame('+12 hours 00 minutes 00 seconds', $interval->format('%R%H hours %I minutes %S seconds'));
@@ -45,10 +46,10 @@ class DateTest extends TestCase
     {
         $dateHeader = Date::fromTimestamp(time() + 12 * 60 * 60);
 
-        $this->assertInstanceOf('Zend\Http\Header\HeaderInterface', $dateHeader);
-        $this->assertInstanceOf('Zend\Http\Header\Date', $dateHeader);
+        $this->assertInstanceOf(HeaderInterface::class, $dateHeader);
+        $this->assertInstanceOf(Date::class, $dateHeader);
 
-        $date     = new \DateTime(null, new \DateTimeZone('GMT'));
+        $date     = new DateTime(null, new DateTimeZone('GMT'));
         $interval = $dateHeader->date()->diff($date, 1);
 
         $this->assertSame('+12 hours 00 minutes 00 seconds', $interval->format('%R%H hours %I minutes %S seconds'));
@@ -56,13 +57,13 @@ class DateTest extends TestCase
 
     public function testDateFromTimeStringDetectsBadInput()
     {
-        $this->expectException('Zend\Http\Header\Exception\InvalidArgumentException');
+        $this->expectException(InvalidArgumentException::class);
         Date::fromTimeString('3 Days of the Condor');
     }
 
     public function testDateFromTimestampDetectsBadInput()
     {
-        $this->expectException('Zend\Http\Header\Exception\InvalidArgumentException');
+        $this->expectException(InvalidArgumentException::class);
         Date::fromTimestamp('The Day of the Jackal');
     }
 
@@ -91,13 +92,13 @@ class DateTest extends TestCase
     public function testDateReturnsDateTimeObject()
     {
         $dateHeader = new Date();
-        $this->assertInstanceOf('\DateTime', $dateHeader->date());
+        $this->assertInstanceOf(DateTime::class, $dateHeader->date());
     }
 
     public function testDateFromStringCreatesValidDateTime()
     {
         $dateHeader = Date::fromString('Date: Sun, 06 Nov 1994 08:49:37 GMT');
-        $this->assertInstanceOf('\DateTime', $dateHeader->date());
+        $this->assertInstanceOf(DateTime::class, $dateHeader->date());
         $this->assertEquals('Sun, 06 Nov 1994 08:49:37 GMT', $dateHeader->date()->format('D, d M Y H:i:s \G\M\T'));
     }
 
@@ -112,7 +113,7 @@ class DateTest extends TestCase
 
     public function testDateThrowsExceptionForInvalidDate()
     {
-        $this->expectException('Zend\Http\Header\Exception\InvalidArgumentException');
+        $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessage('Invalid date');
         $dateHeader = new Date();
         $dateHeader->setDate('~~~~');

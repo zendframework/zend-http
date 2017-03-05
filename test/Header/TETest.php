@@ -8,6 +8,8 @@
 namespace ZendTest\Http\Header;
 
 use PHPUnit\Framework\TestCase;
+use Zend\Http\Header\Exception\InvalidArgumentException;
+use Zend\Http\Header\HeaderInterface;
 use Zend\Http\Header\TE;
 
 class TETest extends TestCase
@@ -15,8 +17,8 @@ class TETest extends TestCase
     public function testTEFromStringCreatesValidTEHeader()
     {
         $tEHeader = TE::fromString('TE: xxx');
-        $this->assertInstanceOf('Zend\Http\Header\HeaderInterface', $tEHeader);
-        $this->assertInstanceOf('Zend\Http\Header\TE', $tEHeader);
+        $this->assertInstanceOf(HeaderInterface::class, $tEHeader);
+        $this->assertInstanceOf(TE::class, $tEHeader);
     }
 
     public function testTEGetFieldNameReturnsHeaderName()
@@ -51,8 +53,8 @@ class TETest extends TestCase
      */
     public function testPreventsCRLFAttackViaFromString()
     {
-        $this->expectException('Zend\Http\Header\Exception\InvalidArgumentException');
-        $header = TE::fromString("TE: xxx\r\n\r\nevilContent");
+        $this->expectException(InvalidArgumentException::class);
+        TE::fromString("TE: xxx\r\n\r\nevilContent");
     }
 
     /**
@@ -61,7 +63,7 @@ class TETest extends TestCase
      */
     public function testPreventsCRLFAttackViaConstructor()
     {
-        $this->expectException('Zend\Http\Header\Exception\InvalidArgumentException');
-        $header = new TE("xxx\r\n\r\nevilContent");
+        $this->expectException(InvalidArgumentException::class);
+        new TE("xxx\r\n\r\nevilContent");
     }
 }

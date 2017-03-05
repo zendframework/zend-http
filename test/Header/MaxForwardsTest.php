@@ -8,6 +8,8 @@
 namespace ZendTest\Http\Header;
 
 use PHPUnit\Framework\TestCase;
+use Zend\Http\Header\Exception\InvalidArgumentException;
+use Zend\Http\Header\HeaderInterface;
 use Zend\Http\Header\MaxForwards;
 
 class MaxForwardsTest extends TestCase
@@ -15,8 +17,8 @@ class MaxForwardsTest extends TestCase
     public function testMaxForwardsFromStringCreatesValidMaxForwardsHeader()
     {
         $maxForwardsHeader = MaxForwards::fromString('Max-Forwards: xxx');
-        $this->assertInstanceOf('Zend\Http\Header\HeaderInterface', $maxForwardsHeader);
-        $this->assertInstanceOf('Zend\Http\Header\MaxForwards', $maxForwardsHeader);
+        $this->assertInstanceOf(HeaderInterface::class, $maxForwardsHeader);
+        $this->assertInstanceOf(MaxForwards::class, $maxForwardsHeader);
     }
 
     public function testMaxForwardsGetFieldNameReturnsHeaderName()
@@ -51,8 +53,8 @@ class MaxForwardsTest extends TestCase
      */
     public function testPreventsCRLFAttackViaFromString()
     {
-        $this->expectException('Zend\Http\Header\Exception\InvalidArgumentException');
-        $header = MaxForwards::fromString("Max-Forwards: xxx\r\n\r\nevilContent");
+        $this->expectException(InvalidArgumentException::class);
+        MaxForwards::fromString("Max-Forwards: xxx\r\n\r\nevilContent");
     }
 
     /**
@@ -61,7 +63,7 @@ class MaxForwardsTest extends TestCase
      */
     public function testPreventsCRLFAttackViaConstructorValue()
     {
-        $this->expectException('Zend\Http\Header\Exception\InvalidArgumentException');
-        $header = new MaxForwards("xxx\r\n\r\nevilContent");
+        $this->expectException(InvalidArgumentException::class);
+        new MaxForwards("xxx\r\n\r\nevilContent");
     }
 }

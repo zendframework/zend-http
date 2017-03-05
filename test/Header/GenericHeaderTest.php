@@ -7,9 +7,9 @@
 
 namespace ZendTest\Http\Header;
 
+use PHPUnit\Framework\TestCase;
 use Zend\Http\Header\Exception\InvalidArgumentException;
 use Zend\Http\Header\GenericHeader;
-use PHPUnit\Framework\TestCase;
 
 class GenericHeaderTest extends TestCase
 {
@@ -62,7 +62,7 @@ class GenericHeaderTest extends TestCase
      */
     public function testPreventsCRLFAttackViaFromString()
     {
-        $this->expectException('Zend\Http\Header\Exception\InvalidArgumentException');
+        $this->expectException(InvalidArgumentException::class);
         GenericHeader::fromString("X_Foo_Bar: Bar\r\n\r\nevilContent");
     }
 
@@ -72,7 +72,7 @@ class GenericHeaderTest extends TestCase
      */
     public function testPreventsCRLFAttackViaConstructor()
     {
-        $this->expectException('Zend\Http\Header\Exception\InvalidArgumentException');
+        $this->expectException(InvalidArgumentException::class);
         new GenericHeader('X_Foo_Bar', "Bar\r\n\r\nevilContent");
     }
 
@@ -83,7 +83,7 @@ class GenericHeaderTest extends TestCase
     public function testProtectsFromCRLFAttackViaSetFieldName()
     {
         $header = new GenericHeader();
-        $this->expectException('Zend\Http\Header\Exception\InvalidArgumentException');
+        $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessage('valid');
         $header->setFieldName("\rX-\r\nFoo-\nBar");
     }
@@ -95,7 +95,7 @@ class GenericHeaderTest extends TestCase
     public function testProtectsFromCRLFAttackViaSetFieldValue()
     {
         $header = new GenericHeader();
-        $this->expectException('Zend\Http\Header\Exception\InvalidArgumentException');
+        $this->expectException(InvalidArgumentException::class);
         $header->setFieldValue("\rSome\r\nCLRF\nAttack");
     }
 

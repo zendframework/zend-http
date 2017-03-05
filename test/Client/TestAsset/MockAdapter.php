@@ -7,7 +7,9 @@
 
 namespace ZendTest\Http\Client\TestAsset;
 
-class MockAdapter extends \Zend\Http\Client\Adapter\Test
+use Zend\Http\Client\Adapter\Test;
+
+class MockAdapter extends Test
 {
     public $config = [];
 }

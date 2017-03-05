@@ -8,15 +8,17 @@
 namespace ZendTest\Http\Header;
 
 use PHPUnit\Framework\TestCase;
+use Zend\Http\Header\Exception\InvalidArgumentException;
 use Zend\Http\Header\Expect;
+use Zend\Http\Header\HeaderInterface;
 
 class ExpectTest extends TestCase
 {
     public function testExpectFromStringCreatesValidExpectHeader()
     {
         $expectHeader = Expect::fromString('Expect: xxx');
-        $this->assertInstanceOf('Zend\Http\Header\HeaderInterface', $expectHeader);
-        $this->assertInstanceOf('Zend\Http\Header\Expect', $expectHeader);
+        $this->assertInstanceOf(HeaderInterface::class, $expectHeader);
+        $this->assertInstanceOf(Expect::class, $expectHeader);
     }
 
     public function testExpectGetFieldNameReturnsHeaderName()
@@ -51,8 +53,8 @@ class ExpectTest extends TestCase
      */
     public function testPreventsCRLFAttackViaFromString()
     {
-        $this->expectException('Zend\Http\Header\Exception\InvalidArgumentException');
-        $header = Expect::fromString("Expect: xxx\r\n\r\nevilContent");
+        $this->expectException(InvalidArgumentException::class);
+        Expect::fromString("Expect: xxx\r\n\r\nevilContent");
     }
 
     /**
@@ -61,7 +63,7 @@ class ExpectTest extends TestCase
      */
     public function testPreventsCRLFAttackViaConstructor()
     {
-        $this->expectException('Zend\Http\Header\Exception\InvalidArgumentException');
-        $header = new Expect("xxx\r\n\r\nevilContent");
+        $this->expectException(InvalidArgumentException::class);
+        new Expect("xxx\r\n\r\nevilContent");
     }
 }

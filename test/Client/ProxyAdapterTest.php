@@ -8,6 +8,8 @@
 namespace ZendTest\Http\Client;
 
 use Zend\Http\Client;
+use Zend\Http\Client\Adapter\Proxy;
+use Zend\Http\Client\Adapter\Socket;
 
 /**
  * Zend_Http_Client_Adapter_Proxy test suite.
@@ -67,7 +69,7 @@ class ProxyAdapterTest extends SocketTest
 
 
             $this->config = [
-                'adapter'    => '\Zend\Http\Client\Adapter\Proxy',
+                'adapter'    => Proxy::class,
                 'proxy_host' => $host,
                 'proxy_port' => $port,
                 'proxy_user' => $user,
@@ -76,7 +78,10 @@ class ProxyAdapterTest extends SocketTest
 
             parent::setUp();
         } else {
-            $this->markTestSkipped('Zend\Http\Client proxy server tests are not enabled in phpunit.xml');
+            $this->markTestSkipped(sprintf(
+                '%s proxy server tests are not enabled in phpunit.xml',
+                Client::class
+            ));
         }
     }
 
@@ -133,9 +138,9 @@ class ProxyAdapterTest extends SocketTest
 
     public function testProxyHasAllSocketConfigs()
     {
-        $socket = new \Zend\Http\Client\Adapter\Socket();
+        $socket = new Socket();
         $socketConfig = $socket->getConfig();
-        $proxy = new \Zend\Http\Client\Adapter\Proxy();
+        $proxy = new Proxy();
         $proxyConfig = $proxy->getConfig();
         foreach (array_keys($socketConfig) as $socketConfigKey) {
             $this->assertArrayHasKey(

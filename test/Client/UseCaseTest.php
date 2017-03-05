@@ -9,7 +9,8 @@ namespace ZendTest\Http\Client;
 
 use PHPUnit\Framework\TestCase;
 use Zend\Http\Client as HTTPClient;
-use Zend\Http\Client\Adapter;
+use Zend\Http\Client\Adapter\AdapterInterface;
+use Zend\Http\Client\Adapter\Socket;
 use Zend\Http\Request;
 
 /**
@@ -31,14 +32,14 @@ class UseCaseTest extends TestCase
     /**
      * Common HTTP client
      *
-     * @var \Zend\Http\Client
+     * @var HTTPClient
      */
     protected $client;
 
     /**
      * Common HTTP client adapter
      *
-     * @var \Zend\Http\Client\Adapter\AdapterInterface
+     * @var AdapterInterface
      */
     protected $adapter;
 
@@ -48,7 +49,7 @@ class UseCaseTest extends TestCase
      * @var array
      */
     protected $config = [
-        'adapter'     => 'Zend\Http\Client\Adapter\Socket'
+        'adapter' => Socket::class,
     ];
 
     /**
@@ -63,7 +64,10 @@ class UseCaseTest extends TestCase
             $this->client  = new HTTPClient($this->baseuri);
         } else {
             // Skip tests
-            $this->markTestSkipped("Zend_Http_Client dynamic tests are not enabled in phpunit.xml");
+            $this->markTestSkipped(sprintf(
+                '%s dynamic tests are not enabled in phpunit.xml',
+                HTTPClient::class
+            ));
         }
     }
 

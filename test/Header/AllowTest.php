@@ -9,14 +9,16 @@ namespace ZendTest\Http\Header;
 
 use PHPUnit\Framework\TestCase;
 use Zend\Http\Header\Allow;
+use Zend\Http\Header\Exception\InvalidArgumentException;
+use Zend\Http\Header\HeaderInterface;
 
 class AllowTest extends TestCase
 {
     public function testAllowFromStringCreatesValidAllowHeader()
     {
         $allowHeader = Allow::fromString('Allow: GET, POST, PUT');
-        $this->assertInstanceOf('Zend\Http\Header\HeaderInterface', $allowHeader);
-        $this->assertInstanceOf('Zend\Http\Header\Allow', $allowHeader);
+        $this->assertInstanceOf(HeaderInterface::class, $allowHeader);
+        $this->assertInstanceOf(Allow::class, $allowHeader);
         $this->assertEquals(['GET', 'POST', 'PUT'], $allowHeader->getAllowedMethods());
     }
 
@@ -88,7 +90,7 @@ class AllowTest extends TestCase
      */
     public function testPreventsCRLFAttackViaFromString()
     {
-        $this->expectException('Zend\Http\Header\Exception\InvalidArgumentException');
+        $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessage('Invalid header value detected');
 
         Allow::fromString("Allow: GET\r\n\r\nevilContent");
@@ -110,7 +112,7 @@ class AllowTest extends TestCase
     public function testPreventsCRLFAttackViaAllowMethods($methods)
     {
         $header = new Allow();
-        $this->expectException('Zend\Http\Header\Exception\InvalidArgumentException');
+        $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessage('valid method');
 
         $header->allowMethods($methods);
@@ -124,7 +126,7 @@ class AllowTest extends TestCase
     public function testPreventsCRLFAttackViaDisallowMethods($methods)
     {
         $header = new Allow();
-        $this->expectException('Zend\Http\Header\Exception\InvalidArgumentException');
+        $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessage('valid method');
 
         $header->disallowMethods($methods);

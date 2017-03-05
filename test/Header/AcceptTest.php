@@ -9,20 +9,24 @@ namespace ZendTest\Http\Header;
 
 use PHPUnit\Framework\TestCase;
 use Zend\Http\Header\Accept;
+use Zend\Http\Header\Accept\FieldValuePart\AbstractFieldValuePart;
+use Zend\Http\Header\Accept\FieldValuePart\AcceptFieldValuePart;
+use Zend\Http\Header\Exception\InvalidArgumentException;
+use Zend\Http\Header\HeaderInterface;
 
 class AcceptTest extends TestCase
 {
     public function testInvalidHeaderLine()
     {
-        $this->expectException('Zend\Http\Header\Exception\InvalidArgumentException');
-        $acceptHeader = Accept::fromString('');
+        $this->expectException(InvalidArgumentException::class);
+        Accept::fromString('');
     }
 
     public function testAcceptFromStringCreatesValidAcceptHeader()
     {
         $acceptHeader = Accept::fromString('Accept: xxx');
-        $this->assertInstanceOf('Zend\Http\Header\HeaderInterface', $acceptHeader);
-        $this->assertInstanceOf('Zend\Http\Header\Accept', $acceptHeader);
+        $this->assertInstanceOf(HeaderInterface::class, $acceptHeader);
+        $this->assertInstanceOf(Accept::class, $acceptHeader);
     }
 
     public function testAcceptGetFieldNameReturnsHeaderName()
@@ -56,7 +60,7 @@ class AcceptTest extends TestCase
             $acceptHeader->toString()
         );
 
-        $this->expectException('Zend\Http\Header\Exception\InvalidArgumentException');
+        $this->expectException(InvalidArgumentException::class);
         $acceptHeader->addMediaType('\\', 0.9);
     }
 
@@ -85,7 +89,6 @@ class AcceptTest extends TestCase
             'text/xml',
         ];
 
-        $test = [];
         foreach ($header->getPrioritized() as $type) {
             $this->assertEquals(array_shift($expected), $type->typeString);
         }
@@ -120,7 +123,6 @@ class AcceptTest extends TestCase
             'text/*;q=0.3'
         ];
 
-        $test = [];
         foreach ($header->getPrioritized() as $type) {
             $this->assertEquals(array_shift($expected), $type->raw);
         }
@@ -146,7 +148,7 @@ class AcceptTest extends TestCase
                 if (! $shouldPass) {
                     $this->fail('Exception expected');
                 }
-            } catch (\Zend\Http\Header\Exception\InvalidArgumentException $e) {
+            } catch (InvalidArgumentException $e) {
                 if ($shouldPass) {
                     throw $e;
                 }
@@ -203,10 +205,7 @@ class AcceptTest extends TestCase
         $acceptHeader = Accept::fromString($acceptStr);
 
         $res = $acceptHeader->match('text/html; _randomValue=foobar');
-        $this->assertInstanceOf(
-            'Zend\Http\Header\Accept\FieldValuePart\AbstractFieldValuePart',
-            $res->getMatchedAgainst()
-        );
+        $this->assertInstanceOf(AbstractFieldValuePart::class, $res->getMatchedAgainst());
         $this->assertEquals(
             'foobar',
             $res->getMatchedAgainst()->getParams()->_randomValue
@@ -216,10 +215,7 @@ class AcceptTest extends TestCase
         $acceptHeader = Accept::fromString($acceptStr);
 
         $res = $acceptHeader->match('text/html; _foo=bar');
-        $this->assertInstanceOf(
-            'Zend\Http\Header\Accept\FieldValuePart\AbstractFieldValuePart',
-            $res->getMatchedAgainst()
-        );
+        $this->assertInstanceOf(AbstractFieldValuePart::class, $res->getMatchedAgainst());
 
         $this->assertEquals(
             'bar',
@@ -277,7 +273,7 @@ class AcceptTest extends TestCase
 
         $acceptHeader = Accept::fromString('Accept: */*; version=21');
         $res = $acceptHeader->match('*/*; version=20-22');
-        $this->assertInstanceOf('Zend\Http\Header\Accept\FieldValuePart\AcceptFieldValuePart', $res);
+        $this->assertInstanceOf(AcceptFieldValuePart::class, $res);
         $this->assertEquals('21', $res->getParams()->version);
     }
 
@@ -308,7 +304,7 @@ class AcceptTest extends TestCase
         );
 
         if ($success) {
-            $this->assertInstanceOf('Zend\Http\Header\Accept\FieldValuePart\AcceptFieldValuePart', $res);
+            $this->assertInstanceOf(AcceptFieldValuePart::class, $res);
         } else {
             $this->assertFalse($res);
         }
@@ -461,8 +457,8 @@ class AcceptTest extends TestCase
      */
     public function testPreventsCRLFAttackViaFromString()
     {
-        $this->expectException('Zend\Http\Header\Exception\InvalidArgumentException');
-        $header = Accept::fromString("Accept: application/text\r\n\r\nevilContent");
+        $this->expectException(InvalidArgumentException::class);
+        Accept::fromString("Accept: application/text\r\n\r\nevilContent");
     }
 
     public function testGetEmptyFieldValue()

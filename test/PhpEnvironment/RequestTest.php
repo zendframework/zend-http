@@ -8,9 +8,11 @@
 namespace ZendTest\Http\PhpEnvironment;
 
 use PHPUnit\Framework\TestCase;
-use Zend\Http\Headers;
+use Zend\Http\Exception\InvalidArgumentException;
 use Zend\Http\Header\GenericHeader;
+use Zend\Http\Headers;
 use Zend\Http\PhpEnvironment\Request;
+use Zend\Stdlib\Parameters;
 
 class RequestTest extends TestCase
 {
@@ -696,8 +698,8 @@ class RequestTest extends TestCase
     public function testParameterRetrievalDefaultValue()
     {
         $request = new Request();
-        $p = new \Zend\Stdlib\Parameters([
-            'foo' => 'bar'
+        $p = new Parameters([
+            'foo' => 'bar',
         ]);
         $request->setQuery($p);
         $request->setPost($p);
@@ -718,8 +720,8 @@ class RequestTest extends TestCase
     public function testRetrievingASingleValueForParameters()
     {
         $request = new Request();
-        $p = new \Zend\Stdlib\Parameters([
-            'foo' => 'bar'
+        $p = new Parameters([
+            'foo' => 'bar',
         ]);
         $request->setQuery($p);
         $request->setPost($p);
@@ -763,7 +765,7 @@ class RequestTest extends TestCase
     {
         $_SERVER['REQUEST_METHOD'] = 'xcustomx';
 
-        $this->expectException('Zend\Http\Exception\InvalidArgumentException');
+        $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessage('Invalid HTTP method passed');
 
         new Request(false);

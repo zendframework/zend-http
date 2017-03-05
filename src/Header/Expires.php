@@ -7,9 +7,6 @@
 
 namespace Zend\Http\Header;
 
-use DateTime;
-use DateTimeZone;
-
 /**
  * Expires Header
  *

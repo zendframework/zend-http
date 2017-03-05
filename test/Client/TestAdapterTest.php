@@ -8,6 +8,11 @@
 namespace ZendTest\Http\Client;
 
 use PHPUnit\Framework\TestCase;
+use Zend\Http\Client\Adapter\Exception\InvalidArgumentException;
+use Zend\Http\Client\Adapter\Exception\OutOfRangeException;
+use Zend\Http\Client\Adapter\Exception\RuntimeException;
+use Zend\Http\Client\Adapter\Test;
+use Zend\Http\Response;
 
 /**
  * Exercises Zend_Http_Client_Adapter_Test
@@ -20,7 +25,7 @@ class TestAdapterTest extends TestCase
     /**
      * Test adapter
      *
-     * @var \Zend\Http\Client\Adapter\Test
+     * @var Test
      */
     protected $adapter;
 
@@ -30,7 +35,7 @@ class TestAdapterTest extends TestCase
      */
     public function setUp()
     {
-        $this->adapter = new \Zend\Http\Client\Adapter\Test();
+        $this->adapter = new Test();
     }
 
     /**
@@ -48,7 +53,7 @@ class TestAdapterTest extends TestCase
      */
     public function testSetConfigThrowsOnInvalidConfig()
     {
-        $this->expectException('Zend\Http\Client\Adapter\Exception\InvalidArgumentException');
+        $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessage('Array or Traversable object expected');
 
         $this->adapter->setOptions('foo');
@@ -77,7 +82,7 @@ class TestAdapterTest extends TestCase
             // Make a connection that will fail
             $this->adapter->connect('http://foo');
             $this->fail();
-        } catch (\Zend\Http\Client\Adapter\Exception\RuntimeException $e) {
+        } catch (RuntimeException $e) {
             // Connect again to see that the next request does not fail
             $this->adapter->connect('http://foo');
         }
@@ -133,7 +138,7 @@ class TestAdapterTest extends TestCase
     {
         $this->adapter->read(); // pop out first response
 
-        $respObj = \Zend\Http\Response::fromString($testResponse);
+        $respObj = Response::fromString($testResponse);
 
         $this->adapter->addResponse($respObj);
         $this->assertEquals($testResponse, $this->adapter->read());
@@ -174,7 +179,7 @@ class TestAdapterTest extends TestCase
                 $this->adapter->setResponseIndex($i);
                 $this->fail();
             } catch (\Exception $e) {
-                $this->assertInstanceOf('Zend\\Http\\Client\\Adapter\\Exception\\OutOfRangeException', $e);
+                $this->assertInstanceOf(OutOfRangeException::class, $e);
                 $this->assertRegexp('/out of range/i', $e->getMessage());
             }
         }

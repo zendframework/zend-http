@@ -9,14 +9,16 @@ namespace ZendTest\Http\Header;
 
 use PHPUnit\Framework\TestCase;
 use Zend\Http\Header\Age;
+use Zend\Http\Header\Exception\InvalidArgumentException;
+use Zend\Http\Header\HeaderInterface;
 
 class AgeTest extends TestCase
 {
     public function testAgeFromStringCreatesValidAgeHeader()
     {
         $ageHeader = Age::fromString('Age: 12');
-        $this->assertInstanceOf('Zend\Http\Header\HeaderInterface', $ageHeader);
-        $this->assertInstanceOf('Zend\Http\Header\Age', $ageHeader);
+        $this->assertInstanceOf(HeaderInterface::class, $ageHeader);
+        $this->assertInstanceOf(Age::class, $ageHeader);
         $this->assertEquals('12', $ageHeader->getDeltaSeconds());
     }
 
@@ -53,7 +55,7 @@ class AgeTest extends TestCase
      */
     public function testPreventsCRLFAttackViaFromString()
     {
-        $this->expectException('Zend\Http\Header\Exception\InvalidArgumentException');
+        $this->expectException(InvalidArgumentException::class);
         $header = Age::fromString("Age: 100\r\n\r\nevilContent");
     }
 
@@ -63,7 +65,7 @@ class AgeTest extends TestCase
      */
     public function testPreventsCRLFAttackViaConstructor()
     {
-        $this->expectException('Zend\Http\Header\Exception\InvalidArgumentException');
+        $this->expectException(InvalidArgumentException::class);
         $header = new Age("100\r\n\r\nevilContent");
     }
 }

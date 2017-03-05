@@ -9,14 +9,16 @@ namespace ZendTest\Http\Header;
 
 use PHPUnit\Framework\TestCase;
 use Zend\Http\Header\ContentMD5;
+use Zend\Http\Header\Exception\InvalidArgumentException;
+use Zend\Http\Header\HeaderInterface;
 
 class ContentMD5Test extends TestCase
 {
     public function testContentMD5FromStringCreatesValidContentMD5Header()
     {
         $contentMD5Header = ContentMD5::fromString('Content-MD5: xxx');
-        $this->assertInstanceOf('Zend\Http\Header\HeaderInterface', $contentMD5Header);
-        $this->assertInstanceOf('Zend\Http\Header\ContentMD5', $contentMD5Header);
+        $this->assertInstanceOf(HeaderInterface::class, $contentMD5Header);
+        $this->assertInstanceOf(ContentMD5::class, $contentMD5Header);
     }
 
     public function testContentMD5GetFieldNameReturnsHeaderName()
@@ -51,8 +53,8 @@ class ContentMD5Test extends TestCase
      */
     public function testPreventsCRLFAttackViaFromString()
     {
-        $this->expectException('Zend\Http\Header\Exception\InvalidArgumentException');
-        $header = ContentMD5::fromString("Content-MD5: xxx\r\n\r\nevilContent");
+        $this->expectException(InvalidArgumentException::class);
+        ContentMD5::fromString("Content-MD5: xxx\r\n\r\nevilContent");
     }
 
     /**
@@ -61,7 +63,7 @@ class ContentMD5Test extends TestCase
      */
     public function testPreventsCRLFAttackViaConstructor()
     {
-        $this->expectException('Zend\Http\Header\Exception\InvalidArgumentException');
-        $header = new ContentMD5("xxx\r\n\r\nevilContent");
+        $this->expectException(InvalidArgumentException::class);
+        new ContentMD5("xxx\r\n\r\nevilContent");
     }
 }

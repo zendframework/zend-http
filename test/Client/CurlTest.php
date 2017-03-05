@@ -8,7 +8,11 @@
 namespace ZendTest\Http\Client;
 
 use Zend\Config\Config;
+use Zend\Http\Client;
 use Zend\Http\Client\Adapter;
+use Zend\Http\Client\Adapter\Curl;
+use Zend\Http\Client\Adapter\Exception\InvalidArgumentException;
+use Zend\Http\Client\Adapter\Exception\RuntimeException;
 use Zend\Http\Client\Adapter\Exception\TimeoutException;
 
 /**
@@ -35,7 +39,7 @@ class CurlTest extends CommonHttpTests
      * @var array
      */
     protected $config = [
-        'adapter'     => 'Zend\Http\Client\Adapter\Curl',
+        'adapter'     => Curl::class,
         'curloptions' => [
             CURLOPT_INFILESIZE => 102400000,
         ],
@@ -100,7 +104,7 @@ class CurlTest extends CommonHttpTests
      */
     public function testSetConfigInvalidConfig($config)
     {
-        $this->expectException('Zend\Http\Client\Adapter\Exception\InvalidArgumentException');
+        $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessage('Array or Traversable object expected');
 
         $this->_adapter->setOptions($config);
@@ -119,12 +123,12 @@ class CurlTest extends CommonHttpTests
         }
 
         $config = [
-            'adapter'     => 'Zend\Http\Client\Adapter\Curl',
+            'adapter'     => Curl::class,
             'curloptions' => [CURLOPT_CLOSEPOLICY => true],
         ];
-        $this->client = new \Zend\Http\Client($this->client->getUri(true), $config);
+        $this->client = new Client($this->client->getUri(true), $config);
 
-        $this->expectException('Zend\Http\Client\Adapter\Exception\RuntimeException');
+        $this->expectException(RuntimeException::class);
         $this->expectExceptionMessage('Unknown or erroreous cURL option');
         $this->client->send();
     }
@@ -171,7 +175,7 @@ class CurlTest extends CommonHttpTests
         $this->client->setParameterGet(['swallow' => 'african']);
         $this->client->setParameterPost(['Camelot' => 'A silly place']);
         $this->client->setMethod('POST');
-        $this->expectException('Zend\Http\Client\Adapter\Exception\RuntimeException');
+        $this->expectException(RuntimeException::class);
         $this->expectExceptionMessage(
             'Error in cURL request: Operation timed out after 1000 milliseconds with 0 bytes received'
         );
@@ -224,16 +228,16 @@ class CurlTest extends CommonHttpTests
     public function testWritingAndNotConnectedWithCurlHandleThrowsException()
     {
         $adapter = new Adapter\Curl();
-        $this->expectException('Zend\Http\Client\Adapter\Exception\RuntimeException');
+        $this->expectException(RuntimeException::class);
         $this->expectExceptionMessage('Trying to write but we are not connected');
-        $adapter->write("GET", "someUri");
+        $adapter->write('GET', 'someUri');
     }
 
     public function testSetConfigIsNotArray()
     {
         $adapter = new Adapter\Curl();
-        $this->expectException('Zend\Http\Client\Adapter\Exception\InvalidArgumentException');
-        $adapter->setOptions("foo");
+        $this->expectException(InvalidArgumentException::class);
+        $adapter->setOptions('foo');
     }
 
     public function testSetCurlOptions()

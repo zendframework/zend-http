@@ -8,6 +8,8 @@
 namespace ZendTest\Http\Header;
 
 use PHPUnit\Framework\TestCase;
+use Zend\Http\Header\Exception\InvalidArgumentException;
+use Zend\Http\Header\HeaderInterface;
 use Zend\Http\Header\Refresh;
 
 class RefreshTest extends TestCase
@@ -15,8 +17,8 @@ class RefreshTest extends TestCase
     public function testRefreshFromStringCreatesValidRefreshHeader()
     {
         $refreshHeader = Refresh::fromString('Refresh: xxx');
-        $this->assertInstanceOf('Zend\Http\Header\HeaderInterface', $refreshHeader);
-        $this->assertInstanceOf('Zend\Http\Header\Refresh', $refreshHeader);
+        $this->assertInstanceOf(HeaderInterface::class, $refreshHeader);
+        $this->assertInstanceOf(Refresh::class, $refreshHeader);
     }
 
     public function testRefreshGetFieldNameReturnsHeaderName()
@@ -51,8 +53,8 @@ class RefreshTest extends TestCase
      */
     public function testPreventsCRLFAttackViaFromString()
     {
-        $this->expectException('Zend\Http\Header\Exception\InvalidArgumentException');
-        $header = Refresh::fromString("Refresh: xxx\r\n\r\nevilContent");
+        $this->expectException(InvalidArgumentException::class);
+        Refresh::fromString("Refresh: xxx\r\n\r\nevilContent");
     }
 
     /**
@@ -61,7 +63,7 @@ class RefreshTest extends TestCase
      */
     public function testPreventsCRLFAttackViaConstructorValue()
     {
-        $this->expectException('Zend\Http\Header\Exception\InvalidArgumentException');
-        $header = new Refresh("xxx\r\n\r\nevilContent");
+        $this->expectException(InvalidArgumentException::class);
+        new Refresh("xxx\r\n\r\nevilContent");
     }
 }

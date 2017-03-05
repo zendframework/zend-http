@@ -9,14 +9,16 @@ namespace ZendTest\Http\Header;
 
 use PHPUnit\Framework\TestCase;
 use Zend\Http\Header\AcceptEncoding;
+use Zend\Http\Header\Exception\InvalidArgumentException;
+use Zend\Http\Header\HeaderInterface;
 
 class AcceptEncodingTest extends TestCase
 {
     public function testAcceptEncodingFromStringCreatesValidAcceptEncodingHeader()
     {
         $acceptEncodingHeader = AcceptEncoding::fromString('Accept-Encoding: xxx');
-        $this->assertInstanceOf('Zend\Http\Header\HeaderInterface', $acceptEncodingHeader);
-        $this->assertInstanceOf('Zend\Http\Header\AcceptEncoding', $acceptEncodingHeader);
+        $this->assertInstanceOf(HeaderInterface::class, $acceptEncodingHeader);
+        $this->assertInstanceOf(AcceptEncoding::class, $acceptEncodingHeader);
     }
 
     public function testAcceptEncodingGetFieldNameReturnsHeaderName()
@@ -94,7 +96,7 @@ class AcceptEncodingTest extends TestCase
     public function testPreventsCRLFAttackViaFromString()
     {
         $this->expectException(InvalidArgumentException::class);
-        AcceptEncoding::fromString("Accept-Encoding: compress\r\n\r\nevilContent");
+        $header = AcceptEncoding::fromString("Accept-Encoding: compress\r\n\r\nevilContent");
     }
 
     /**

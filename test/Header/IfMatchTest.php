@@ -8,6 +8,8 @@
 namespace ZendTest\Http\Header;
 
 use PHPUnit\Framework\TestCase;
+use Zend\Http\Header\Exception\InvalidArgumentException;
+use Zend\Http\Header\HeaderInterface;
 use Zend\Http\Header\IfMatch;
 
 class IfMatchTest extends TestCase
@@ -15,8 +17,8 @@ class IfMatchTest extends TestCase
     public function testIfMatchFromStringCreatesValidIfMatchHeader()
     {
         $ifMatchHeader = IfMatch::fromString('If-Match: xxx');
-        $this->assertInstanceOf('Zend\Http\Header\HeaderInterface', $ifMatchHeader);
-        $this->assertInstanceOf('Zend\Http\Header\IfMatch', $ifMatchHeader);
+        $this->assertInstanceOf(HeaderInterface::class, $ifMatchHeader);
+        $this->assertInstanceOf(IfMatch::class, $ifMatchHeader);
     }
 
     public function testIfMatchGetFieldNameReturnsHeaderName()
@@ -51,8 +53,8 @@ class IfMatchTest extends TestCase
      */
     public function testPreventsCRLFAttackViaFromString()
     {
-        $this->expectException('Zend\Http\Header\Exception\InvalidArgumentException');
-        $header = IfMatch::fromString("If-Match: xxx\r\n\r\nevilContent");
+        $this->expectException(InvalidArgumentException::class);
+        IfMatch::fromString("If-Match: xxx\r\n\r\nevilContent");
     }
 
     /**
@@ -61,7 +63,7 @@ class IfMatchTest extends TestCase
      */
     public function testPreventsCRLFAttackViaConstructor()
     {
-        $this->expectException('Zend\Http\Header\Exception\InvalidArgumentException');
-        $header = new IfMatch("xxx\r\n\r\nevilContent");
+        $this->expectException(InvalidArgumentException::class);
+        new IfMatch("xxx\r\n\r\nevilContent");
     }
 }

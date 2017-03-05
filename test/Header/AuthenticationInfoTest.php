@@ -9,14 +9,16 @@ namespace ZendTest\Http\Header;
 
 use PHPUnit\Framework\TestCase;
 use Zend\Http\Header\AuthenticationInfo;
+use Zend\Http\Header\Exception\InvalidArgumentException;
+use Zend\Http\Header\HeaderInterface;
 
 class AuthenticationInfoTest extends TestCase
 {
     public function testAuthenticationInfoFromStringCreatesValidAuthenticationInfoHeader()
     {
         $authenticationInfoHeader = AuthenticationInfo::fromString('Authentication-Info: xxx');
-        $this->assertInstanceOf('Zend\Http\Header\HeaderInterface', $authenticationInfoHeader);
-        $this->assertInstanceOf('Zend\Http\Header\AuthenticationInfo', $authenticationInfoHeader);
+        $this->assertInstanceOf(HeaderInterface::class, $authenticationInfoHeader);
+        $this->assertInstanceOf(AuthenticationInfo::class, $authenticationInfoHeader);
     }
 
     public function testAuthenticationInfoGetFieldNameReturnsHeaderName()
@@ -51,7 +53,7 @@ class AuthenticationInfoTest extends TestCase
      */
     public function testPreventsCRLFAttackViaFromString()
     {
-        $this->expectException('Zend\Http\Header\Exception\InvalidArgumentException');
+        $this->expectException(InvalidArgumentException::class);
         $header = AuthenticationInfo::fromString("Authentication-Info: xxx\r\n\r\nevilContent");
     }
 
@@ -61,7 +63,7 @@ class AuthenticationInfoTest extends TestCase
      */
     public function testPreventsCRLFAttackViaConstructor()
     {
-        $this->expectException('Zend\Http\Header\Exception\InvalidArgumentException');
-        $header = new AuthenticationInfo("xxx\r\n\r\nevilContent");
+        $this->expectException(InvalidArgumentException::class);
+        new AuthenticationInfo("xxx\r\n\r\nevilContent");
     }
 }

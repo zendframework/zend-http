@@ -8,11 +8,11 @@
 namespace ZendTest\Http;
 
 use PHPUnit\Framework\TestCase;
-use Zend\Http\Header\SetCookie;
-use Zend\Http\Response;
-use Zend\Http\Headers;
 use Zend\Http\Cookies;
+use Zend\Http\Header\SetCookie;
+use Zend\Http\Headers;
 use Zend\Http\PhpEnvironment\Request;
+use Zend\Http\Response;
 
 class CookiesTest extends TestCase
 {

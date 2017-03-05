@@ -8,6 +8,8 @@
 namespace ZendTest\Http\Header;
 
 use PHPUnit\Framework\TestCase;
+use Zend\Http\Header\Exception\InvalidArgumentException;
+use Zend\Http\Header\HeaderInterface;
 use Zend\Http\Header\IfNoneMatch;
 
 class IfNoneMatchTest extends TestCase
@@ -15,8 +17,8 @@ class IfNoneMatchTest extends TestCase
     public function testIfNoneMatchFromStringCreatesValidIfNoneMatchHeader()
     {
         $ifNoneMatchHeader = IfNoneMatch::fromString('If-None-Match: xxx');
-        $this->assertInstanceOf('Zend\Http\Header\HeaderInterface', $ifNoneMatchHeader);
-        $this->assertInstanceOf('Zend\Http\Header\IfNoneMatch', $ifNoneMatchHeader);
+        $this->assertInstanceOf(HeaderInterface::class, $ifNoneMatchHeader);
+        $this->assertInstanceOf(IfNoneMatch::class, $ifNoneMatchHeader);
     }
 
     public function testIfNoneMatchGetFieldNameReturnsHeaderName()
@@ -51,8 +53,8 @@ class IfNoneMatchTest extends TestCase
      */
     public function testPreventsCRLFAttackViaFromString()
     {
-        $this->expectException('Zend\Http\Header\Exception\InvalidArgumentException');
-        $header = IfNoneMatch::fromString("If-None-Match: xxx\r\n\r\nevilContent");
+        $this->expectException(InvalidArgumentException::class);
+        IfNoneMatch::fromString("If-None-Match: xxx\r\n\r\nevilContent");
     }
 
     /**
@@ -61,7 +63,7 @@ class IfNoneMatchTest extends TestCase
      */
     public function testPreventsCRLFAttackViaConstructor()
     {
-        $this->expectException('Zend\Http\Header\Exception\InvalidArgumentException');
-        $header = new IfNoneMatch("xxx\r\n\r\nevilContent");
+        $this->expectException(InvalidArgumentException::class);
+        new IfNoneMatch("xxx\r\n\r\nevilContent");
     }
 }

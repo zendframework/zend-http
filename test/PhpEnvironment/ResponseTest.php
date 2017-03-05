@@ -8,6 +8,7 @@
 namespace ZendTest\Http\PhpEnvironment;
 
 use PHPUnit\Framework\TestCase;
+use Zend\Http\Exception\InvalidArgumentException;
 use Zend\Http\PhpEnvironment\Response;
 
 class ResponseTest extends TestCase
@@ -95,7 +96,7 @@ class ResponseTest extends TestCase
         $response->setVersion(Response::VERSION_10);
         $this->assertSame(Response::VERSION_10, $response->getVersion());
 
-        $this->expectException('Zend\Http\Exception\InvalidArgumentException');
+        $this->expectException(InvalidArgumentException::class);
         $response->setVersion('zf/2.0');
     }
 }

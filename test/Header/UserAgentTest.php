@@ -8,6 +8,8 @@
 namespace ZendTest\Http\Header;
 
 use PHPUnit\Framework\TestCase;
+use Zend\Http\Header\Exception\InvalidArgumentException;
+use Zend\Http\Header\HeaderInterface;
 use Zend\Http\Header\UserAgent;
 
 class UserAgentTest extends TestCase
@@ -15,8 +17,8 @@ class UserAgentTest extends TestCase
     public function testUserAgentFromStringCreatesValidUserAgentHeader()
     {
         $userAgentHeader = UserAgent::fromString('User-Agent: xxx');
-        $this->assertInstanceOf('Zend\Http\Header\HeaderInterface', $userAgentHeader);
-        $this->assertInstanceOf('Zend\Http\Header\UserAgent', $userAgentHeader);
+        $this->assertInstanceOf(HeaderInterface::class, $userAgentHeader);
+        $this->assertInstanceOf(UserAgent::class, $userAgentHeader);
     }
 
     public function testUserAgentGetFieldNameReturnsHeaderName()
@@ -51,8 +53,8 @@ class UserAgentTest extends TestCase
      */
     public function testPreventsCRLFAttackViaFromString()
     {
-        $this->expectException('Zend\Http\Header\Exception\InvalidArgumentException');
-        $header = UserAgent::fromString("User-Agent: xxx\r\n\r\nevilContent");
+        $this->expectException(InvalidArgumentException::class);
+        UserAgent::fromString("User-Agent: xxx\r\n\r\nevilContent");
     }
 
     /**
@@ -61,7 +63,7 @@ class UserAgentTest extends TestCase
      */
     public function testPreventsCRLFAttackViaConstructor()
     {
-        $this->expectException('Zend\Http\Header\Exception\InvalidArgumentException');
-        $header = new UserAgent("xxx\r\n\r\nevilContent");
+        $this->expectException(InvalidArgumentException::class);
+        new UserAgent("xxx\r\n\r\nevilContent");
     }
 }

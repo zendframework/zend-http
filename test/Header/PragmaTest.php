@@ -8,6 +8,8 @@
 namespace ZendTest\Http\Header;
 
 use PHPUnit\Framework\TestCase;
+use Zend\Http\Header\Exception\InvalidArgumentException;
+use Zend\Http\Header\HeaderInterface;
 use Zend\Http\Header\Pragma;
 
 class PragmaTest extends TestCase
@@ -15,8 +17,8 @@ class PragmaTest extends TestCase
     public function testPragmaFromStringCreatesValidPragmaHeader()
     {
         $pragmaHeader = Pragma::fromString('Pragma: xxx');
-        $this->assertInstanceOf('Zend\Http\Header\HeaderInterface', $pragmaHeader);
-        $this->assertInstanceOf('Zend\Http\Header\Pragma', $pragmaHeader);
+        $this->assertInstanceOf(HeaderInterface::class, $pragmaHeader);
+        $this->assertInstanceOf(Pragma::class, $pragmaHeader);
     }
 
     public function testPragmaGetFieldNameReturnsHeaderName()
@@ -51,8 +53,8 @@ class PragmaTest extends TestCase
      */
     public function testPreventsCRLFAttackViaFromString()
     {
-        $this->expectException('Zend\Http\Header\Exception\InvalidArgumentException');
-        $header = Pragma::fromString("Pragma: xxx\r\n\r\nevilContent");
+        $this->expectException(InvalidArgumentException::class);
+        Pragma::fromString("Pragma: xxx\r\n\r\nevilContent");
     }
 
     /**
@@ -61,7 +63,7 @@ class PragmaTest extends TestCase
      */
     public function testPreventsCRLFAttackViaConstructor()
     {
-        $this->expectException('Zend\Http\Header\Exception\InvalidArgumentException');
-        $header = new Pragma("xxx\r\n\r\nevilContent");
+        $this->expectException(InvalidArgumentException::class);
+        new Pragma("xxx\r\n\r\nevilContent");
     }
 }

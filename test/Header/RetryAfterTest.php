@@ -9,6 +9,7 @@ namespace ZendTest\Http\Header;
 
 use PHPUnit\Framework\TestCase;
 use Zend\Http\Header\Exception\InvalidArgumentException;
+use Zend\Http\Header\HeaderInterface;
 use Zend\Http\Header\RetryAfter;
 
 class RetryAfterTest extends TestCase
@@ -16,8 +17,8 @@ class RetryAfterTest extends TestCase
     public function testRetryAfterFromStringCreatesValidRetryAfterHeader()
     {
         $retryAfterHeader = RetryAfter::fromString('Retry-After: 10');
-        $this->assertInstanceOf('Zend\Http\Header\HeaderInterface', $retryAfterHeader);
-        $this->assertInstanceOf('Zend\Http\Header\RetryAfter', $retryAfterHeader);
+        $this->assertInstanceOf(HeaderInterface::class, $retryAfterHeader);
+        $this->assertInstanceOf(RetryAfter::class, $retryAfterHeader);
         $this->assertEquals('10', $retryAfterHeader->getDeltaSeconds());
     }
 

@@ -8,6 +8,8 @@
 namespace ZendTest\Http\Header;
 
 use PHPUnit\Framework\TestCase;
+use Zend\Http\Header\Exception\InvalidArgumentException;
+use Zend\Http\Header\HeaderInterface;
 use Zend\Http\Header\WWWAuthenticate;
 
 class WWWAuthenticateTest extends TestCase
@@ -15,8 +17,8 @@ class WWWAuthenticateTest extends TestCase
     public function testWWWAuthenticateFromStringCreatesValidWWWAuthenticateHeader()
     {
         $wWWAuthenticateHeader = WWWAuthenticate::fromString('WWW-Authenticate: xxx');
-        $this->assertInstanceOf('Zend\Http\Header\HeaderInterface', $wWWAuthenticateHeader);
-        $this->assertInstanceOf('Zend\Http\Header\WWWAuthenticate', $wWWAuthenticateHeader);
+        $this->assertInstanceOf(HeaderInterface::class, $wWWAuthenticateHeader);
+        $this->assertInstanceOf(WWWAuthenticate::class, $wWWAuthenticateHeader);
     }
 
     public function testWWWAuthenticateGetFieldNameReturnsHeaderName()
@@ -51,7 +53,7 @@ class WWWAuthenticateTest extends TestCase
      */
     public function testPreventsCRLFAttackViaFromString()
     {
-        $this->expectException('Zend\Http\Header\Exception\InvalidArgumentException');
+        $this->expectException(InvalidArgumentException::class);
         $header = WWWAuthenticate::fromString("WWW-Authenticate: xxx\r\n\r\nevilContent");
     }
 
@@ -61,7 +63,7 @@ class WWWAuthenticateTest extends TestCase
      */
     public function testPreventsCRLFAttackViaConstructor()
     {
-        $this->expectException('Zend\Http\Header\Exception\InvalidArgumentException');
+        $this->expectException(InvalidArgumentException::class);
         $header = new WWWAuthenticate("xxx\r\n\r\nevilContent");
     }
 }

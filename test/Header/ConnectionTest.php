@@ -9,14 +9,16 @@ namespace ZendTest\Http\Header;
 
 use PHPUnit\Framework\TestCase;
 use Zend\Http\Header\Connection;
+use Zend\Http\Header\Exception\InvalidArgumentException;
+use Zend\Http\Header\HeaderInterface;
 
 class ConnectionTest extends TestCase
 {
     public function testConnectionFromStringCreatesValidConnectionHeader()
     {
         $connectionHeader = Connection::fromString('Connection: close');
-        $this->assertInstanceOf('Zend\Http\Header\HeaderInterface', $connectionHeader);
-        $this->assertInstanceOf('Zend\Http\Header\Connection', $connectionHeader);
+        $this->assertInstanceOf(HeaderInterface::class, $connectionHeader);
+        $this->assertInstanceOf(Connection::class, $connectionHeader);
         $this->assertEquals('close', $connectionHeader->getFieldValue());
         $this->assertFalse($connectionHeader->isPersistent());
     }
@@ -58,8 +60,8 @@ class ConnectionTest extends TestCase
      */
     public function testPreventsCRLFAttackViaFromString()
     {
-        $this->expectException('Zend\Http\Header\Exception\InvalidArgumentException');
-        $header = Connection::fromString("Connection: close\r\n\r\nevilContent");
+        $this->expectException(InvalidArgumentException::class);
+        Connection::fromString("Connection: close\r\n\r\nevilContent");
     }
 
     /**
@@ -69,7 +71,7 @@ class ConnectionTest extends TestCase
     public function testPreventsCRLFAttackViaSetters()
     {
         $header = new Connection();
-        $this->expectException('Zend\Http\Header\Exception\InvalidArgumentException');
+        $this->expectException(InvalidArgumentException::class);
         $header->setValue("close\r\n\r\nevilContent");
     }
 }

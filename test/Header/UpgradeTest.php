@@ -8,6 +8,8 @@
 namespace ZendTest\Http\Header;
 
 use PHPUnit\Framework\TestCase;
+use Zend\Http\Header\Exception\InvalidArgumentException;
+use Zend\Http\Header\HeaderInterface;
 use Zend\Http\Header\Upgrade;
 
 class UpgradeTest extends TestCase
@@ -15,8 +17,8 @@ class UpgradeTest extends TestCase
     public function testUpgradeFromStringCreatesValidUpgradeHeader()
     {
         $upgradeHeader = Upgrade::fromString('Upgrade: xxx');
-        $this->assertInstanceOf('Zend\Http\Header\HeaderInterface', $upgradeHeader);
-        $this->assertInstanceOf('Zend\Http\Header\Upgrade', $upgradeHeader);
+        $this->assertInstanceOf(HeaderInterface::class, $upgradeHeader);
+        $this->assertInstanceOf(Upgrade::class, $upgradeHeader);
     }
 
     public function testUpgradeGetFieldNameReturnsHeaderName()
@@ -51,8 +53,8 @@ class UpgradeTest extends TestCase
      */
     public function testPreventsCRLFAttackViaFromString()
     {
-        $this->expectException('Zend\Http\Header\Exception\InvalidArgumentException');
-        $header = Upgrade::fromString("Upgrade: xxx\r\n\r\nevilContent");
+        $this->expectException(InvalidArgumentException::class);
+        Upgrade::fromString("Upgrade: xxx\r\n\r\nevilContent");
     }
 
     /**
@@ -61,7 +63,7 @@ class UpgradeTest extends TestCase
      */
     public function testPreventsCRLFAttackViaConstructor()
     {
-        $this->expectException('Zend\Http\Header\Exception\InvalidArgumentException');
-        $header = new Upgrade("xxx\r\n\r\nevilContent");
+        $this->expectException(InvalidArgumentException::class);
+        new Upgrade("xxx\r\n\r\nevilContent");
     }
 }

@@ -8,6 +8,8 @@
 namespace ZendTest\Http\Header;
 
 use PHPUnit\Framework\TestCase;
+use Zend\Http\Header\Exception\InvalidArgumentException;
+use Zend\Http\Header\HeaderInterface;
 use Zend\Http\Header\Via;
 
 class ViaTest extends TestCase
@@ -15,8 +17,8 @@ class ViaTest extends TestCase
     public function testViaFromStringCreatesValidViaHeader()
     {
         $viaHeader = Via::fromString('Via: xxx');
-        $this->assertInstanceOf('Zend\Http\Header\HeaderInterface', $viaHeader);
-        $this->assertInstanceOf('Zend\Http\Header\Via', $viaHeader);
+        $this->assertInstanceOf(HeaderInterface::class, $viaHeader);
+        $this->assertInstanceOf(Via::class, $viaHeader);
     }
 
     public function testViaGetFieldNameReturnsHeaderName()
@@ -51,8 +53,8 @@ class ViaTest extends TestCase
      */
     public function testPreventsCRLFAttackViaFromString()
     {
-        $this->expectException('Zend\Http\Header\Exception\InvalidArgumentException');
-        $header = Via::fromString("Via: xxx\r\n\r\nevilContent");
+        $this->expectException(InvalidArgumentException::class);
+        Via::fromString("Via: xxx\r\n\r\nevilContent");
     }
 
     /**
@@ -61,7 +63,7 @@ class ViaTest extends TestCase
      */
     public function testPreventsCRLFAttackViaConstructor()
     {
-        $this->expectException('Zend\Http\Header\Exception\InvalidArgumentException');
-        $header = new Via("xxx\r\n\r\nevilContent");
+        $this->expectException(InvalidArgumentException::class);
+        new Via("xxx\r\n\r\nevilContent");
     }
 }

@@ -9,14 +9,16 @@ namespace ZendTest\Http\Header;
 
 use PHPUnit\Framework\TestCase;
 use Zend\Http\Header\ContentType;
+use Zend\Http\Header\Exception\InvalidArgumentException;
+use Zend\Http\Header\HeaderInterface;
 
 class ContentTypeTest extends TestCase
 {
     public function testContentTypeFromStringCreatesValidContentTypeHeader()
     {
         $contentTypeHeader = ContentType::fromString('Content-Type: xxx');
-        $this->assertInstanceOf('Zend\Http\Header\HeaderInterface', $contentTypeHeader);
-        $this->assertInstanceOf('Zend\Http\Header\ContentType', $contentTypeHeader);
+        $this->assertInstanceOf(HeaderInterface::class, $contentTypeHeader);
+        $this->assertInstanceOf(ContentType::class, $contentTypeHeader);
     }
 
     public function testContentTypeGetFieldNameReturnsHeaderName()
@@ -146,8 +148,8 @@ class ContentTypeTest extends TestCase
      */
     public function testPreventsCRLFAttackViaFromString()
     {
-        $this->expectException('Zend\Http\Header\Exception\InvalidArgumentException');
-        $header = ContentType::fromString("Content-Type: foo/bar;\r\n\r\nevilContent");
+        $this->expectException(InvalidArgumentException::class);
+        ContentType::fromString("Content-Type: foo/bar;\r\n\r\nevilContent");
     }
 
     /**
@@ -156,7 +158,7 @@ class ContentTypeTest extends TestCase
      */
     public function testPreventsCRLFAttackViaConstructor()
     {
-        $this->expectException('Zend\Http\Header\Exception\InvalidArgumentException');
-        $header = new ContentType("foo/bar\r\n\r\nevilContent");
+        $this->expectException(InvalidArgumentException::class);
+        new ContentType("foo/bar\r\n\r\nevilContent");
     }
 }

@@ -8,8 +8,9 @@
 namespace ZendTest\Http\Client;
 
 use PHPUnit\Framework\TestCase;
-use Zend\Http\ClientStatic as HTTPClient;
+use ReflectionClass;
 use Zend\Http\Client;
+use Zend\Http\ClientStatic as HTTPClient;
 
 /**
  * This are the test for the prototype of Zend\Http\Client
@@ -39,7 +40,10 @@ class StaticClientTest extends TestCase
             }
         } else {
             // Skip tests
-            $this->markTestSkipped("Zend_Http_Client dynamic tests are not enabled in phpunit.xml");
+            $this->markTestSkipped(sprintf(
+                '%s dynamic tests are not enabled in phpunit.xml',
+                HTTPClient::class
+            ));
         }
     }
 
@@ -152,7 +156,7 @@ class StaticClientTest extends TestCase
 
         HTTPClient::get($testUri, [], [], null, $config);
 
-        $reflectedClass = new \ReflectionClass('Zend\Http\ClientStatic');
+        $reflectedClass = new ReflectionClass(HTTPClient::class);
         $property = $reflectedClass->getProperty('client');
         $property->setAccessible(true);
         $client = $property->getValue();
@@ -177,7 +181,7 @@ class StaticClientTest extends TestCase
 
         HTTPClient::post($testUri, ['foo' => 'bar'], [], null, $config);
 
-        $reflectedClass = new \ReflectionClass('Zend\Http\ClientStatic');
+        $reflectedClass = new ReflectionClass(HTTPClient::class);
         $property = $reflectedClass->getProperty('client');
         $property->setAccessible(true);
         $client = $property->getValue();

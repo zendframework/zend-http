@@ -8,8 +8,16 @@
 namespace ZendTest\Http\Client;
 
 use PHPUnit\Framework\TestCase;
-use Zend\Uri\Http as UriHttp;
+use stdClass;
+use Zend\Config\Config;
 use Zend\Http\Client as HTTPClient;
+use Zend\Http\Client\Adapter\Exception as ClientAdapterException;
+use Zend\Http\Client\Adapter\Test;
+use Zend\Http\Client\Exception as ClientException;
+use Zend\Http\Exception\InvalidArgumentException;
+use Zend\Http\Exception\RuntimeException;
+use Zend\Http\Header\SetCookie;
+use Zend\Uri\Http as UriHttp;
 use ZendTest\Http\Client\TestAsset\MockAdapter;
 use ZendTest\Http\Client\TestAsset\MockClient;
 
@@ -28,7 +36,7 @@ class StaticTest extends TestCase
     /**
      * Common HTTP client
      *
-     * @var \Zend\Http\Client
+     * @var HTTPClient
      */
     protected $_client;
     // @codingStandardsIgnoreEnd
@@ -66,7 +74,7 @@ class StaticTest extends TestCase
         $this->_client->setUri($uristr);
 
         $uri = $this->_client->getUri();
-        $this->assertInstanceOf('Zend\Uri\Http', $uri, 'Returned value is not a Uri object as expected');
+        $this->assertInstanceOf(UriHttp::class, $uri, 'Returned value is not a Uri object as expected');
         $this->assertEquals($uri->__toString(), $uristr, 'Returned Uri object does not hold the expected URI');
 
         $uri = $this->_client->getUri()->toString();
@@ -89,7 +97,7 @@ class StaticTest extends TestCase
         $this->_client->setUri($uriobj);
 
         $uri = $this->_client->getUri();
-        $this->assertInstanceOf('Zend\Uri\Http', $uri, 'Returned value is not a Uri object as expected');
+        $this->assertInstanceOf(UriHttp::class, $uri, 'Returned value is not a Uri object as expected');
         $this->assertEquals($uri, $uriobj, 'Returned object is not the excepted Uri object');
     }
 
@@ -103,7 +111,7 @@ class StaticTest extends TestCase
         $qstr = 'foo=bar&foo=baz';
 
         $this->_client->setUri('http://example.com/test/?' . $qstr);
-        $this->_client->setAdapter('\\Zend\\Http\\Client\\Adapter\\Test');
+        $this->_client->setAdapter(Test::class);
         $this->_client->setMethod('GET');
         $this->_client->send();
 
@@ -152,7 +160,7 @@ class StaticTest extends TestCase
      */
     public function testExceptUnsupportedAuthDynamic()
     {
-        $this->expectException('Zend\Http\Exception\InvalidArgumentException');
+        $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessage('Invalid or not supported authentication type: \'SuperStrongAlgo\'');
 
         $this->_client->setAuth('shahar', '1234', 'SuperStrongAlgo');
@@ -174,7 +182,7 @@ class StaticTest extends TestCase
 
         // Check we got the right cookiejar
         $this->assertInternalType('array', $cookies);
-        $this->assertContainsOnlyInstancesOf('Zend\Http\Header\SetCookie', $cookies);
+        $this->assertContainsOnlyInstancesOf(SetCookie::class, $cookies);
         $this->assertCount(2, $cookies);
     }
 
@@ -202,7 +210,7 @@ class StaticTest extends TestCase
      */
     public function testSetInvalidCookies()
     {
-        $this->expectException('Zend\Http\Exception\InvalidArgumentException');
+        $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessage('Invalid parameter type passed as Cookie');
 
         $this->_client->addCookie('cookie');
@@ -220,7 +228,7 @@ class StaticTest extends TestCase
     {
         $config = [
             'timeout'    => 500,
-            'someoption' => 'hasvalue'
+            'someoption' => 'hasvalue',
         ];
 
         $this->_client->setOptions($config);
@@ -239,11 +247,11 @@ class StaticTest extends TestCase
      */
     public function testConfigSetAsZendConfig()
     {
-        $config = new \Zend\Config\Config([
+        $config = new Config([
             'timeout'  => 400,
             'nested'   => [
                 'item' => 'value',
-            ]
+            ],
         ]);
 
         $this->_client->setOptions($config);
@@ -260,7 +268,7 @@ class StaticTest extends TestCase
      */
     public function testConfigSetInvalid($config)
     {
-        $this->expectException('Zend\Http\Client\Exception\InvalidArgumentException');
+        $this->expectException(ClientException\InvalidArgumentException::class);
         $this->expectExceptionMessage('Config parameter is not valid');
 
         $this->_client->setOptions($config);
@@ -307,7 +315,7 @@ class StaticTest extends TestCase
 
         // Now, test we get a proper response after the request
         $this->_client->setUri('http://example.com/foo/bar');
-        $this->_client->setAdapter('Zend\Http\Client\Adapter\Test');
+        $this->_client->setAdapter(Test::class);
 
         $response = $this->_client->send();
         $this->assertSame(
@@ -325,7 +333,7 @@ class StaticTest extends TestCase
     {
         // Now, test we get a proper response after the request
         $this->_client->setUri('http://example.com/foo/bar');
-        $this->_client->setAdapter('Zend\Http\Client\Adapter\Test');
+        $this->_client->setAdapter(Test::class);
         $this->_client->setOptions(['storeresponse' => false]);
 
         $this->_client->send();
@@ -344,9 +352,12 @@ class StaticTest extends TestCase
     public function testInvalidPostContentType()
     {
         if (! getenv('TESTS_ZEND_HTTP_CLIENT_ONLINE')) {
-            $this->markTestSkipped('Zend\Http\Client online tests are not enabled');
+            $this->markTestSkipped(sprintf(
+                '%s online tests are not enabled',
+                HTTPClient::class
+            ));
         }
-        $this->expectException('Zend\Http\Exception\RuntimeException');
+        $this->expectException(RuntimeException::class);
         $this->expectExceptionMessage('Cannot handle content type \'x-foo/something-fake\' automatically');
 
         $this->_client->setEncType('x-foo/something-fake');
@@ -363,9 +374,12 @@ class StaticTest extends TestCase
     public function testSocketErrorException()
     {
         if (! getenv('TESTS_ZEND_HTTP_CLIENT_ONLINE')) {
-            $this->markTestSkipped('Zend\Http\Client online tests are not enabled');
+            $this->markTestSkipped(sprintf(
+                '%s online tests are not enabled',
+                HTTPClient::class
+            ));
         }
-        $this->expectException('Zend\Http\Client\Adapter\Exception\RuntimeException');
+        $this->expectException(ClientAdapterException\RuntimeException::class);
         $this->expectExceptionMessage('Unable to connect to 255.255.255.255:80');
 
         // Try to connect to an invalid host
@@ -386,7 +400,7 @@ class StaticTest extends TestCase
      */
     public function testSettingInvalidMethodThrowsException($method)
     {
-        $this->expectException('Zend\Http\Exception\InvalidArgumentException');
+        $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessage('Invalid HTTP method passed');
 
         $this->_client->setMethod($method);
@@ -400,9 +414,12 @@ class StaticTest extends TestCase
     public function testFormDataEncodingWithMultiArrayZF7038()
     {
         if (! getenv('TESTS_ZEND_HTTP_CLIENT_ONLINE')) {
-            $this->markTestSkipped('Zend\Http\Client online tests are not enabled');
+            $this->markTestSkipped(sprintf(
+                '%s online tests are not enabled',
+                HTTPClient::class
+            ));
         }
-        $this->_client->setAdapter('Zend\Http\Client\Adapter\Test');
+        $this->_client->setAdapter(Test::class);
         $this->_client->setUri('http://example.com');
         $this->_client->setEncType(HTTPClient::ENC_FORMDATA);
 
@@ -446,9 +463,12 @@ class StaticTest extends TestCase
     public function testMultibyteRawPostDataZF2098()
     {
         if (! getenv('TESTS_ZEND_HTTP_CLIENT_ONLINE')) {
-            $this->markTestSkipped('Zend\Http\Client online tests are not enabled');
+            $this->markTestSkipped(sprintf(
+                '%s online tests are not enabled',
+                HTTPClient::class
+            ));
         }
-        $this->_client->setAdapter('Zend\Http\Client\Adapter\Test');
+        $this->_client->setAdapter(Test::class);
         $this->_client->setUri('http://example.com');
 
         $bodyFile = __DIR__ . '/_files/ZF2098-multibytepostdata.txt';
@@ -474,7 +494,10 @@ class StaticTest extends TestCase
     public function testOpenTempStreamWithValidFileDoesntThrowsException()
     {
         if (! getenv('TESTS_ZEND_HTTP_CLIENT_ONLINE')) {
-            $this->markTestSkipped('Zend\Http\Client online tests are not enabled');
+            $this->markTestSkipped(sprintf(
+                '%s online tests are not enabled',
+                HTTPClient::class
+            ));
         }
         $url = 'http://www.example.com/';
         $config = [
@@ -497,9 +520,12 @@ class StaticTest extends TestCase
     public function testOpenTempStreamWithBogusFileClosesTheConnection()
     {
         if (! getenv('TESTS_ZEND_HTTP_CLIENT_ONLINE')) {
-            $this->markTestSkipped('Zend\Http\Client online tests are not enabled');
+            $this->markTestSkipped(sprintf(
+                '%s online tests are not enabled',
+                HTTPClient::class
+            ));
         }
-        $this->expectException('Zend\Http\Exception\RuntimeException');
+        $this->expectException(RuntimeException::class);
         $this->expectExceptionMessage('Could not open temp file /path/to/bogus/file.ext');
 
         $url = 'http://www.example.com';
@@ -519,7 +545,10 @@ class StaticTest extends TestCase
     public function testEncodedCookiesInRequestHeaders()
     {
         if (! getenv('TESTS_ZEND_HTTP_CLIENT_ONLINE')) {
-            $this->markTestSkipped('Zend\Http\Client online tests are not enabled');
+            $this->markTestSkipped(sprintf(
+                '%s online tests are not enabled',
+                HTTPClient::class
+            ));
         }
         $this->_client->addCookie('foo', 'bar=baz');
         $this->_client->send();
@@ -539,7 +568,10 @@ class StaticTest extends TestCase
     public function testRawCookiesInRequestHeaders()
     {
         if (! getenv('TESTS_ZEND_HTTP_CLIENT_ONLINE')) {
-            $this->markTestSkipped('Zend\Http\Client online tests are not enabled');
+            $this->markTestSkipped(sprintf(
+                '%s online tests are not enabled',
+                HTTPClient::class
+            ));
         }
         $this->_client->setOptions(['encodecookies' => false]);
         $this->_client->addCookie('foo', 'bar=baz');
@@ -599,7 +631,7 @@ class StaticTest extends TestCase
             [false],
             ['foo => bar'],
             [null],
-            [new \stdClass],
+            [new stdClass()],
             [55]
         ];
     }

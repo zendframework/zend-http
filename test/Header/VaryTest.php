@@ -8,6 +8,8 @@
 namespace ZendTest\Http\Header;
 
 use PHPUnit\Framework\TestCase;
+use Zend\Http\Header\Exception\InvalidArgumentException;
+use Zend\Http\Header\HeaderInterface;
 use Zend\Http\Header\Vary;
 
 class VaryTest extends TestCase
@@ -15,8 +17,8 @@ class VaryTest extends TestCase
     public function testVaryFromStringCreatesValidVaryHeader()
     {
         $varyHeader = Vary::fromString('Vary: xxx');
-        $this->assertInstanceOf('Zend\Http\Header\HeaderInterface', $varyHeader);
-        $this->assertInstanceOf('Zend\Http\Header\Vary', $varyHeader);
+        $this->assertInstanceOf(HeaderInterface::class, $varyHeader);
+        $this->assertInstanceOf(Vary::class, $varyHeader);
     }
 
     public function testVaryGetFieldNameReturnsHeaderName()
@@ -51,8 +53,8 @@ class VaryTest extends TestCase
      */
     public function testPreventsCRLFAttackViaFromString()
     {
-        $this->expectException('Zend\Http\Header\Exception\InvalidArgumentException');
-        $header = Vary::fromString("Vary: xxx\r\n\r\nevilContent");
+        $this->expectException(InvalidArgumentException::class);
+        Vary::fromString("Vary: xxx\r\n\r\nevilContent");
     }
 
     /**
@@ -61,7 +63,7 @@ class VaryTest extends TestCase
      */
     public function testPreventsCRLFAttackViaConstructor()
     {
-        $this->expectException('Zend\Http\Header\Exception\InvalidArgumentException');
-        $header = new Vary("xxx\r\n\r\nevilContent");
+        $this->expectException(InvalidArgumentException::class);
+        new Vary("xxx\r\n\r\nevilContent");
     }
 }
