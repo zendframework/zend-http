@@ -332,7 +332,7 @@ class Response extends AbstractMessage implements ResponseInterface
      */
     public function getReasonPhrase()
     {
-        if (null == $this->reasonPhrase and isset($this->recommendedReasonPhrases[$this->statusCode])) {
+        if (null == $this->reasonPhrase && isset($this->recommendedReasonPhrases[$this->statusCode])) {
             $this->reasonPhrase = $this->recommendedReasonPhrases[$this->statusCode];
         }
         return $this->reasonPhrase;
