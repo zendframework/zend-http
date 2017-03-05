@@ -510,30 +510,30 @@ abstract class CommonHttpTests extends TestCase
     {
         $this->client->setUri($this->baseuri . 'testRedirections.php');
 
-            // Set some parameters
-            $this->client->setParameterGet(['swallow' => 'african']);
+        // Set some parameters
+        $this->client->setParameterGet(['swallow' => 'african']);
         $this->client->setParameterPost(['Camelot' => 'A silly place']);
 
-            // Send POST request
-            $this->client->setMethod('POST');
+        // Send POST request
+        $this->client->setMethod('POST');
         $res = $this->client->send();
 
         $this->assertEquals(3, $this->client->getRedirectionsCount(), 'Redirection counter is not as expected');
 
-            // Make sure the body does *not* contain the set parameters
-            $this->assertNotContains('swallow', $res->getBody());
+        // Make sure the body does *not* contain the set parameters
+        $this->assertNotContains('swallow', $res->getBody());
         $this->assertNotContains('Camelot', $res->getBody());
 
-            // Check that we have received and persisted expected cookies
-            $cookies = $this->client->getCookies();
+        // Check that we have received and persisted expected cookies
+        $cookies = $this->client->getCookies();
         $this->assertInternalType('array', $cookies, 'Client is not sending cookies on redirect');
         $this->assertArrayHasKey('zf2testSessionCookie', $cookies, 'Client is not sending cookies on redirect');
         $this->assertArrayHasKey('zf2testLongLivedCookie', $cookies, 'Client is not sending cookies on redirect');
         $this->assertEquals('positive', $cookies['zf2testSessionCookie']->getValue());
         $this->assertEquals('positive', $cookies['zf2testLongLivedCookie']->getValue());
 
-            // Check that expired cookies are not passed on
-            $this->assertArrayNotHasKey('zf2testExpiredCookie', $cookies, 'Expired cookies are not removed.');
+        // Check that expired cookies are not passed on
+        $this->assertArrayNotHasKey('zf2testExpiredCookie', $cookies, 'Expired cookies are not removed.');
     }
 
     /**

@@ -48,9 +48,9 @@ class ContentType implements HeaderInterface
             ));
         }
 
-        $parts             = explode(';', $value);
-        $mediaType         = array_shift($parts);
-        $header = new static($value, trim($mediaType));
+        $parts     = explode(';', $value);
+        $mediaType = array_shift($parts);
+        $header    = new static($value, trim($mediaType));
 
         if (count($parts) > 0) {
             $parameters = [];
