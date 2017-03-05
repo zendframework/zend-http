@@ -41,7 +41,7 @@ class CookieTest extends TestCase
     {
         $setCookies = [
             new SetCookie('foo', 'bar'),
-            new SetCookie('name', 'value')
+            new SetCookie('name', 'value'),
         ];
 
         $cookie = Cookie::fromSetCookieArray($setCookies);
@@ -366,7 +366,7 @@ class CookieTest extends TestCase
 //
 //        $cookies = [
 //            'cookie=foo; domain=example.com; expires=' . date(DATE_COOKIE, $notexpired),
-//            'cookie=foo; domain=example.com; expires=' . date(DATE_COOKIE, $expired)
+//            'cookie=foo; domain=example.com; expires=' . date(DATE_COOKIE, $expired),
 //        ];
 //
 //        // Make sure all cookies are expired
@@ -430,7 +430,7 @@ class CookieTest extends TestCase
 //        $cookies = [
 //            'name=value; domain=foo.com; silly=place; secure',
 //            'foo=value; someCrap; secure; domain=foo.com; ',
-//            'anothercookie=value; secure; has some crap; ignore=me; domain=foo.com; '
+//            'anothercookie=value; secure; has some crap; ignore=me; domain=foo.com; ',
 //        ];
 //
 //        foreach ($cookies as $cstr) {

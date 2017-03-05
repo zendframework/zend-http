@@ -69,7 +69,7 @@ class AcceptCharsetTest extends TestCase
         $expected = [
             'unicode-1-1',
             'iso-8859-5',
-            '*'
+            '*',
         ];
 
         foreach ($header->getPrioritized() as $type) {

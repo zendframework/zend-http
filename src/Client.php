@@ -753,7 +753,7 @@ class Client implements Stdlib\DispatchableInterface
         $this->auth = [
             'user'     => $user,
             'password' => $password,
-            'type'     => $type
+            'type'     => $type,
         ];
 
         return $this;
@@ -1061,7 +1061,7 @@ class Client implements Stdlib\DispatchableInterface
             'formname' => $formname,
             'filename' => basename($filename),
             'ctype' => $ctype,
-            'data' => $data
+            'data' => $data,
         ]);
 
         return $this;

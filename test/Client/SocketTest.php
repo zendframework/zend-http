@@ -54,7 +54,7 @@ class SocketTest extends CommonHttpTests
     {
         $config = [
             'timeout'    => 500,
-            'someoption' => 'hasvalue'
+            'someoption' => 'hasvalue',
         ];
 
         $this->_adapter->setOptions($config);
@@ -93,10 +93,10 @@ class SocketTest extends CommonHttpTests
     public function testConnectingViaSslWithCustomSslOptionsOnContext()
     {
         $config = [
-            'timeout' => 30,
-            'sslverifypeer' => false,
+            'timeout'            => 30,
+            'sslverifypeer'      => false,
             'sslallowselfsigned' => true,
-            'sslverifypeername' => false,
+            'sslverifypeername'  => false,
         ];
         $this->_adapter->setOptions($config);
         try {
@@ -121,8 +121,8 @@ class SocketTest extends CommonHttpTests
     public function testConnectingViaSslUsesCertificateFileContext()
     {
         $config = [
-          'timeout' => 30,
-          'sslcafile' => __DIR__ . '/_files/ca-bundle.crt',
+            'timeout'   => 30,
+            'sslcafile' => __DIR__ . '/_files/ca-bundle.crt',
         ];
         $this->_adapter->setOptions($config);
         try {
@@ -202,14 +202,14 @@ class SocketTest extends CommonHttpTests
         $adapter = new $adapterClass();
         $options = [
             'socket' => [
-                'bindto' => '1.2.3.4:0'
+                'bindto' => '1.2.3.4:0',
             ],
             'ssl' => [
                 'capath'            => null,
                 'verify_peer'       => true,
                 'allow_self_signed' => false,
-                'verify_peer_name'  => true
-            ]
+                'verify_peer_name'  => true,
+            ],
         ];
 
         $adapter->setStreamContext($options);
@@ -245,8 +245,8 @@ class SocketTest extends CommonHttpTests
         $adapter->setStreamContext([
             'ssl' => [
                 'capture_peer_cert' => true,
-                'capture_peer_chain' => true
-            ]
+                'capture_peer_chain' => true,
+            ],
         ]);
 
         $this->client->setAdapter($adapter);
@@ -325,7 +325,7 @@ class SocketTest extends CommonHttpTests
             [new stdClass()],
             [fopen('data://text/plain,', 'r')],
             [false],
-            [null]
+            [null],
         ];
     }
 }

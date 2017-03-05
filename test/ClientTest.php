@@ -29,7 +29,7 @@ class ClientTest extends TestCase
     {
         $initialCookies = [
             new SetCookie('foo', 'far', null, '/', 'www.domain.com'),
-            new SetCookie('bar', 'biz', null, '/', 'www.domain.com')
+            new SetCookie('bar', 'biz', null, '/', 'www.domain.com'),
         ];
 
         // @codingStandardsIgnoreStart
@@ -119,7 +119,7 @@ class ClientTest extends TestCase
     {
         $headers = [
             new SetCookie('foo'),
-            new SetCookie('bar')
+            new SetCookie('bar'),
         ];
 
         $client = new Client();
@@ -133,7 +133,7 @@ class ClientTest extends TestCase
     {
         $headers = new ArrayIterator([
             new SetCookie('foo'),
-            new SetCookie('bar')
+            new SetCookie('bar'),
         ]);
 
         $client = new Client();
@@ -230,7 +230,7 @@ class ClientTest extends TestCase
         $client = new Client('http://www.example.org/part1', [
             'adapter' => $testAdapter,
             'maxredirects' => 1,
-            'storeresponse' => true
+            'storeresponse' => true,
         ]);
 
         // do the request
@@ -263,7 +263,7 @@ class ClientTest extends TestCase
         // create client with HTTP basic authentication
         $client = new Client('http://www.example.org/part1', [
             'adapter' => $testAdapter,
-            'maxredirects' => 1
+            'maxredirects' => 1,
         ]);
         $client->setAuth($user, $password, Client::AUTH_BASIC);
 

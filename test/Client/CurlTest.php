@@ -64,7 +64,7 @@ class CurlTest extends CommonHttpTests
     {
         $config = [
             'timeout'    => 500,
-            'someoption' => 'hasvalue'
+            'someoption' => 'hasvalue',
         ];
 
         $this->_adapter->setOptions($config);
@@ -86,7 +86,7 @@ class CurlTest extends CommonHttpTests
             'timeout'  => 400,
             'nested'   => [
                 'item' => 'value',
-            ]
+            ],
         ]);
 
         $this->_adapter->setOptions($config);
@@ -166,8 +166,9 @@ class CurlTest extends CommonHttpTests
         $adapter->setOptions([
             'curloptions' => [
                 CURLOPT_FOLLOWLOCATION => true,
-                CURLOPT_TIMEOUT => 1,
-            ]]);
+                CURLOPT_TIMEOUT        => 1,
+            ],
+        ]);
 
         $this->client->setUri($this->baseuri . 'testRedirections.php');
 
@@ -218,7 +219,10 @@ class CurlTest extends CommonHttpTests
         $adapter = new Adapter\Curl();
         $this->client->setAdapter($adapter);
         $adapter->setOptions([
-            'curloptions' => [CURLOPT_INFILE => $putFileHandle, CURLOPT_INFILESIZE => $putFileSize]
+            'curloptions' => [
+                CURLOPT_INFILE     => $putFileHandle,
+                CURLOPT_INFILESIZE => $putFileSize,
+            ],
         ]);
         $this->client->setMethod('PUT');
         $this->client->send();
@@ -305,12 +309,12 @@ class CurlTest extends CommonHttpTests
     {
         $adapter = new Adapter\Curl();
         $adapter->setOptions([
-            'sslverifypeer' => true
+            'sslverifypeer' => true,
         ]);
 
         $expected = [
             'curloptions' => [
-                CURLOPT_SSL_VERIFYPEER => true
+                CURLOPT_SSL_VERIFYPEER => true,
             ],
         ];
 
@@ -436,7 +440,7 @@ class CurlTest extends CommonHttpTests
         $adapter = new Adapter\Curl();
         $options = [
             'sslcapath' => __DIR__ . DIRECTORY_SEPARATOR . '/_files',
-            'sslcafile' => 'ca-bundle.crt'
+            'sslcafile' => 'ca-bundle.crt',
         ];
         $adapter->setOptions($options);
 

@@ -69,7 +69,7 @@ class AcceptLanguageTest extends TestCase
         $expected = [
             'en-gb',
             'da',
-            '*'
+            '*',
         ];
 
         $test = [];

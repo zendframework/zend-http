@@ -35,6 +35,6 @@ class SocketPersistentTest extends SocketTest
     protected $config = [
         'adapter'    => Socket::class,
         'persistent' => true,
-        'keepalive'  => true
+        'keepalive'  => true,
     ];
 }

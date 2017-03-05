@@ -69,7 +69,7 @@ class AcceptEncodingTest extends TestCase
         $expected = [
             'gzip',
             'compress',
-            '*'
+            '*',
         ];
 
         $test = [];

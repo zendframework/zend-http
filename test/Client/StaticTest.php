@@ -413,13 +413,14 @@ class StaticTest extends TestCase
 
         $this->_client->setParameterPost([
             'test' => [
-                        'v0.1',
-                        'v0.2',
-                        'k1' => 'v1.0',
-                        'k2' => [
-                            'v2.1',
-                            'k2.1' => 'v2.1.0'
-                         ]]
+                'v0.1',
+                'v0.2',
+                'k1' => 'v1.0',
+                'k2' => [
+                    'v2.1',
+                    'k2.1' => 'v2.1.0',
+                ],
+            ],
         ]);
 
         $this->_client->setMethod('POST');
@@ -589,7 +590,7 @@ class StaticTest extends TestCase
             ['DOSOMETHING'],
             ['PROPFIND'],
             ['Some_Characters'],
-            ['X-MS-ENUMATTS']
+            ['X-MS-ENUMATTS'],
         ];
     }
 
@@ -604,7 +605,7 @@ class StaticTest extends TestCase
             ['N@5TYM3T#0D'],
             ['TWO WORDS'],
             ['GET http://foo.com/?'],
-            ["Injected\nnewline"]
+            ['Injected' . "\n" . 'newline'],
         ];
     }
 
@@ -620,7 +621,7 @@ class StaticTest extends TestCase
             ['foo => bar'],
             [null],
             [new stdClass()],
-            [55]
+            [55],
         ];
     }
 }

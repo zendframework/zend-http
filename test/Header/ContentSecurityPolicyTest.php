@@ -27,10 +27,12 @@ class ContentSecurityPolicyTest extends TestCase
         );
         $this->assertInstanceOf(HeaderInterface::class, $csp);
         $this->assertInstanceOf(ContentSecurityPolicy::class, $csp);
-        $directives = ['default-src' => "'none'",
-                            'script-src'  => "'self'",
-                            'img-src'     => "'self'",
-                            'style-src'   => "'self'"];
+        $directives = [
+            'default-src' => "'none'",
+            'script-src'  => "'self'",
+            'img-src'     => "'self'",
+            'style-src'   => "'self'",
+        ];
         $this->assertEquals($directives, $csp->getDirectives());
     }
 

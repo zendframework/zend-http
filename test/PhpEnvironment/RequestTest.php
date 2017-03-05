@@ -73,7 +73,7 @@ class RequestTest extends TestCase
                     'SCRIPT_FILENAME' => '/var/web/html/index.php',
                 ],
                 '/index.php',
-                ''
+                '',
             ],
             [
                 [
@@ -84,7 +84,7 @@ class RequestTest extends TestCase
                     'SCRIPT_FILENAME' => '/var/web/html/public/index.php',
                 ],
                 '/public/index.php',
-                '/public'
+                '/public',
             ],
             [
                 [
@@ -94,7 +94,7 @@ class RequestTest extends TestCase
                     'SCRIPT_FILENAME' => '/var/web/html/index.php',
                 ],
                 '/index.php',
-                ''
+                '',
             ],
             [
                 [
@@ -105,7 +105,7 @@ class RequestTest extends TestCase
                     'SCRIPT_FILENAME'  => '/var/web/html/index.php',
                 ],
                 '/index.php',
-                ''
+                '',
             ],
             [
                 [
@@ -114,7 +114,7 @@ class RequestTest extends TestCase
                     'SCRIPT_FILENAME' => '/var/web/html/index.php',
                 ],
                 '/index.php',
-                ''
+                '',
             ],
             [
                 [
@@ -123,7 +123,7 @@ class RequestTest extends TestCase
                     'SCRIPT_FILENAME'    => '/var/web/html/index.php',
                 ],
                 '/index.php',
-                ''
+                '',
             ],
             [
                 [
@@ -133,7 +133,7 @@ class RequestTest extends TestCase
                     'SCRIPT_FILENAME' => '/var/web/html/index.php',
                 ],
                 '/index.php',
-                ''
+                '',
             ],
             [
                 [
@@ -142,7 +142,7 @@ class RequestTest extends TestCase
                     'SCRIPT_FILENAME' => '/var/www/zftests/index.php',
                 ],
                 '',
-                ''
+                '',
             ],
             [
                 [
@@ -151,7 +151,7 @@ class RequestTest extends TestCase
                     'SCRIPT_FILENAME' => '/var/web/html/index.php',
                 ],
                 '/html/index.php',
-                '/html'
+                '/html',
             ],
             [
                 [
@@ -160,7 +160,7 @@ class RequestTest extends TestCase
                     'SCRIPT_FILENAME' => '/var/web/dir/index.php',
                 ],
                 '/dir',
-                '/dir'
+                '/dir',
             ],
             [
                 [
@@ -168,10 +168,10 @@ class RequestTest extends TestCase
                     'REQUEST_URI'     => '/~username/public/',
                     'PHP_SELF'        => '/~username/public/index.php',
                     'SCRIPT_FILENAME' => '/Users/username/Sites/public/index.php',
-                    'ORIG_SCRIPT_NAME' => null
+                    'ORIG_SCRIPT_NAME' => null,
                 ],
                 '/~username/public',
-                '/~username/public'
+                '/~username/public',
             ],
             // ZF2-206
             [
@@ -180,10 +180,10 @@ class RequestTest extends TestCase
                     'REQUEST_URI'     => '/zf2tut/',
                     'PHP_SELF'        => '/zf2tut/index.php',
                     'SCRIPT_FILENAME' => 'c:/ZF2Tutorial/public/index.php',
-                    'ORIG_SCRIPT_NAME' => null
+                    'ORIG_SCRIPT_NAME' => null,
                 ],
                 '/zf2tut',
-                '/zf2tut'
+                '/zf2tut',
             ],
             [
                 [
@@ -192,7 +192,7 @@ class RequestTest extends TestCase
                     'SCRIPT_FILENAME' => '/var/web/html/index.php',
                 ],
                 '/html/index.php',
-                '/html'
+                '/html',
             ],
             [
                 [
@@ -201,7 +201,7 @@ class RequestTest extends TestCase
                     'SCRIPT_FILENAME' => '/var/web/html/index.php',
                 ],
                 '/html/index.php',
-                '/html'
+                '/html',
             ],
             // Test when url quert contains a full http url
             [
@@ -211,7 +211,7 @@ class RequestTest extends TestCase
                     'SCRIPT_FILENAME' => '/var/web/html/index.php',
                 ],
                 '/html/index.php',
-                '/html'
+                '/html',
             ],
         ];
     }
@@ -240,52 +240,52 @@ class RequestTest extends TestCase
         return [
             [
                 [
-                    'HTTP_USER_AGENT'     => 'Dummy',
+                    'HTTP_USER_AGENT' => 'Dummy',
                 ],
                 'User-Agent',
-                'Dummy'
+                'Dummy',
             ],
             [
                 [
-                    'HTTP_CUSTOM_COUNT'     => '0',
+                    'HTTP_CUSTOM_COUNT' => '0',
                 ],
                 'Custom-Count',
-                '0'
+                '0',
             ],
             [
                 [
-                    'CONTENT_TYPE'     => 'text/html',
+                    'CONTENT_TYPE' => 'text/html',
                 ],
                 'Content-Type',
-                'text/html'
+                'text/html',
             ],
             [
                 [
-                    'CONTENT_LENGTH'     => 0,
+                    'CONTENT_LENGTH' => 0,
                 ],
                 'Content-Length',
-                0
+                0,
             ],
             [
                 [
-                    'CONTENT_LENGTH'     => 0,
+                    'CONTENT_LENGTH' => 0,
                 ],
                 'Content-Length',
-                0
+                0,
             ],
             [
                 [
-                    'CONTENT_LENGTH'     => 12,
+                    'CONTENT_LENGTH' => 12,
                 ],
                 'Content-Length',
-                12
+                12,
             ],
             [
                 [
-                    'CONTENT_MD5'     => md5('a'),
+                    'CONTENT_MD5' => md5('a'),
                 ],
                 'Content-MD5',
-                md5('a')
+                md5('a'),
             ],
         ];
     }
@@ -432,7 +432,6 @@ class RequestTest extends TestCase
                 '80',
                 '/html/index.php?url=http://test.example.com/path/&foo=bar',
             ],
-
         ];
     }
 
@@ -494,7 +493,6 @@ class RequestTest extends TestCase
                     ],
                 ],
             ],
-
             // file name with brackets and int keys
             // file[], file[]
             [
@@ -541,7 +539,6 @@ class RequestTest extends TestCase
                     ],
                 ],
             ],
-
             // file name with brackets and string keys
             // file[one], file[two]
             [
@@ -588,7 +585,6 @@ class RequestTest extends TestCase
                     ],
                 ],
             ],
-
             // multilevel file name
             // file[], file[][], file[][][]
             [
@@ -649,7 +645,7 @@ class RequestTest extends TestCase
                                 ],
                             ],
                         ],
-                    ]
+                    ],
                 ],
                 [
                     'file' => [
@@ -680,7 +676,7 @@ class RequestTest extends TestCase
                                 ],
                             ],
                         ],
-                    ]
+                    ],
                 ],
             ],
         ];

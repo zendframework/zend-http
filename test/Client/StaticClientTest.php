@@ -151,7 +151,7 @@ class StaticClientTest extends TestCase
         $testUri = $this->baseuri . 'testSimpleRequests.php';
 
         $config = [
-            'useragent' => 'simplegettest'
+            'useragent' => 'simplegettest',
         ];
 
         HTTPClient::get($testUri, [], [], null, $config);
@@ -176,7 +176,7 @@ class StaticClientTest extends TestCase
         $testUri = $this->baseuri . 'testPostData.php';
 
         $config = [
-            'useragent' => 'simpleposttest'
+            'useragent' => 'simpleposttest',
         ];
 
         HTTPClient::post($testUri, ['foo' => 'bar'], [], null, $config);

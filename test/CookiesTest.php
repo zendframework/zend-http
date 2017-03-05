@@ -49,8 +49,8 @@ class CookiesTest extends TestCase
         $_COOKIE = [
             'test' => [
                 'a' => 'value_a',
-                'b' => 'value_b'
-            ]
+                'b' => 'value_b',
+            ],
         ];
         $request = new Request();
         $fieldValue = $request->getCookie('test')->getFieldValue();
@@ -60,13 +60,13 @@ class CookiesTest extends TestCase
             'test' => [
                 'a' => [
                     'a1' => 'va1',
-                    'a2' => 'va2'
+                    'a2' => 'va2',
                 ],
                 'b' => [
                     'b1' => 'vb1',
-                    'b2' => 'vb2'
+                    'b2' => 'vb2',
                 ],
-            ]
+            ],
         ];
         $request = new Request();
         $fieldValue = $request->getCookie('test')->getFieldValue();

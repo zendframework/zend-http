@@ -79,7 +79,7 @@ class Headers implements Countable, Iterator
                 }
                 $current = [
                     'name' => $matches['name'],
-                    'line' => trim($line)
+                    'line' => trim($line),
                 ];
 
                 continue;

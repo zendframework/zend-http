@@ -136,14 +136,14 @@ abstract class AbstractAccept implements HeaderInterface
         $subtype = '*';
 
         return (object) [
-                            'typeString' => trim($fieldValuePart),
-                            'type'       => $type,
-                            'subtype'    => $subtype,
-                            'subtypeRaw' => $subtypeWhole,
-                            'format'     => $format,
-                            'priority'   => isset($params['q']) ? $params['q'] : 1,
-                            'params'     => $params,
-                            'raw'        => trim($raw)
+            'typeString' => trim($fieldValuePart),
+            'type'       => $type,
+            'subtype'    => $subtype,
+            'subtypeRaw' => $subtypeWhole,
+            'format'     => $format,
+            'priority'   => isset($params['q']) ? $params['q'] : 1,
+            'params'     => $params,
+            'raw'        => trim($raw),
         ];
     }
 
@@ -216,8 +216,7 @@ abstract class AbstractAccept implements HeaderInterface
      */
     protected function assembleAcceptParam(&$value, $key)
     {
-        $separators = ['(', ')', '<', '>', '@', ',', ';', ':',
-                            '/', '[', ']', '?', '=', '{', '}',  ' ',  "\t"];
+        $separators = ['(', ')', '<', '>', '@', ',', ';', ':', '/', '[', ']', '?', '=', '{', '}', ' ', "\t"];
 
         $escaped = preg_replace_callback(
             '/[[:cntrl:]"\\\\]/', // escape cntrl, ", \

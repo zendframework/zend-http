@@ -120,7 +120,7 @@ class AcceptTest extends TestCase
             'text/html;q=0.7',
             '*/*;q=0.5',
             'text/html;level=2;q=0.4',
-            'text/*;q=0.3'
+            'text/*;q=0.3',
         ];
 
         foreach ($header->getPrioritized() as $type) {
@@ -130,16 +130,17 @@ class AcceptTest extends TestCase
 
     public function testPrios()
     {
-        $values = ['invalidPrio' => false,
-                        -0.0001       => false,
-                        1.0001        => false,
-                        1.000         => true,
-                        0.999         => true,
-                        0.000         => true,
-                        0.001         => true,
-                        1             => true,
-                        0             => true
-                ];
+        $values = [
+            'invalidPrio' => false,
+            -0.0001       => false,
+            1.0001        => false,
+            1.000         => true,
+            0.999         => true,
+            0.000         => true,
+            0.001         => true,
+            1             => true,
+            0             => true,
+        ];
 
         $header = new Accept();
         foreach ($values as $prio => $shouldPass) {
@@ -229,14 +230,16 @@ class AcceptTest extends TestCase
                 'text/xml;level=2;q=0.4';
         $acceptHeader = Accept::fromString($acceptStr);
 
-        $expected = ['typeString' => 'text/html',
-                'type' => 'text',
-                'subtype' => 'html',
-                'subtypeRaw' => 'html',
-                'format' => 'html',
-                'priority' => 1,
-                'params' => ['q' => 1, 'version' => 23, 'level' => 5],
-                'raw' => 'text/html;q=1; version=23; level=5'];
+        $expected = [
+            'typeString' => 'text/html',
+            'type'       => 'text',
+            'subtype'    => 'html',
+            'subtypeRaw' => 'html',
+            'format'     => 'html',
+            'priority'   => 1,
+            'params'     => ['q' => 1, 'version' => 23, 'level' => 5],
+            'raw'        => 'text/html;q=1; version=23; level=5',
+        ];
 
         $this->assertFalse($acceptHeader->match('text/html; version=22'));
 
@@ -341,14 +344,16 @@ class AcceptTest extends TestCase
                 'text/html;level=2;q=0.4';
         $acceptHeader = Accept::fromString($acceptStr);
 
-        $expected = ['typeString' => 'text/json',
-                'type' => 'text',
-                'subtype' => 'json',
-                'subtypeRaw' => 'json',
-                'format' => 'json',
-                'priority' => 0.9,
-                'params' => ['q' => 0.9, 'version' => 15.3],
-                'raw' => 'text/json; version=15.3; q=0.9'];
+        $expected = [
+            'typeString' => 'text/json',
+            'type'       => 'text',
+            'subtype'    => 'json',
+            'subtypeRaw' => 'json',
+            'format'     => 'json',
+            'priority'   => 0.9,
+            'params'     => ['q' => 0.9, 'version' => 15.3],
+            'raw'        => 'text/json; version=15.3; q=0.9',
+        ];
 
         $str = 'text/html; version=17, text/json; version=15-16';
         $res = $acceptHeader->match($str);
@@ -358,13 +363,13 @@ class AcceptTest extends TestCase
 
         $expected = (object) [
             'typeString' => 'text/html',
-            'type' => 'text',
-            'subtype' => 'html',
+            'type'       => 'text',
+            'subtype'    => 'html',
             'subtypeRaw' => 'html',
-            'format' => 'html',
-            'priority' => 0.4,
-            'params' => ['q' => 0.4, 'level' => 2],
-            'raw' => 'text/html;level=2;q=0.4'
+            'format'     => 'html',
+            'priority'   => 0.4,
+            'params'     => ['q' => 0.4, 'level' => 2],
+            'raw'        => 'text/html;level=2;q=0.4',
         ];
 
         $str = 'text/html; version=17,text/json; version=15-16; q=0.5';
@@ -382,14 +387,16 @@ class AcceptTest extends TestCase
                            . 'text/html;level=2;q=0.4, */*;q=0.5';
         $acceptHdr = Accept::fromString($acceptStr);
 
-        $expected = ['typeString' => 'text/html',
-                'type' => 'text',
-                'subtype' => 'html',
-                'subtypeRaw' => 'html',
-                'format' => 'html',
-                'priority' => 1,
-                'params' => ['level' => 1],
-                'raw' => 'text/html;level=1'];
+        $expected = [
+            'typeString' => 'text/html',
+            'type'       => 'text',
+            'subtype'    => 'html',
+            'subtypeRaw' => 'html',
+            'format'     => 'html',
+            'priority'   => 1,
+            'params'     => ['level' => 1],
+            'raw'        => 'text/html;level=1',
+        ];
 
         $res = $acceptHdr->match('text/html');
         foreach ($expected as $key => $value) {
@@ -443,14 +450,16 @@ class AcceptTest extends TestCase
     {
         $this->markTestIncomplete('No wildcard defaults implemented yet');
 
-        $expected = (object)['typeString' => 'image',
-                'type' => 'image',
-                'subtype' => '*',
-                'subtypeRaw' => '',
-                'format' => 'jpeg',
-                'priority' => 1,
-                'params' => [],
-                'raw' => 'image'];
+        $expected = (object) [
+            'typeString' => 'image',
+            'type'       => 'image',
+            'subtype'    => '*',
+            'subtypeRaw' => '',
+            'format'     => 'jpeg',
+            'priority'   => 1,
+            'params'     => [],
+            'raw'        => 'image',
+        ];
 
         $this->assertEquals($expected, $acceptHdr->match('image'));
         //  $this->assertEquals($expected, $this->_handler->match('text'));

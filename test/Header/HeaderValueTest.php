@@ -59,7 +59,7 @@ class HeaderValueTest extends TestCase
             ["This is a\r\r test", 'assertFalse'],
             ["This is a \r\r\n test", 'assertFalse'],
             ["This is a \r\n\r\ntest", 'assertFalse'],
-            ["This is a \r\n\n\r\n test", 'assertFalse']
+            ["This is a \r\n\n\r\n test", 'assertFalse'],
         ];
     }
 
@@ -88,7 +88,7 @@ class HeaderValueTest extends TestCase
             ["This is a\r\r test"],
             ["This is a \r\r\n test"],
             ["This is a \r\n\r\ntest"],
-            ["This is a \r\n\n\r\n test"]
+            ["This is a \r\n\n\r\n test"],
         ];
     }
 

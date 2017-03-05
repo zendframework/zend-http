@@ -312,7 +312,7 @@ abstract class CommonHttpTests extends TestCase
             'quest' => 'To seek the holy grail',
             'YourMother' => 'Was a hamster',
             'specialChars' => '<>$+ &?=[]^%',
-            'array' => ['firstItem', 'secondItem', '3rdItem']
+            'array' => ['firstItem', 'secondItem', '3rdItem'],
         ];
 
         $headers = ["X-Foo" => "bar"];
@@ -357,7 +357,7 @@ abstract class CommonHttpTests extends TestCase
 
         $pparams = [
             'from' => 'bob',
-            'to'   => 'alice'
+            'to'   => 'alice',
         ];
 
         $this->client->setParameterGet($gparams)->setParameterPost($pparams);
@@ -387,7 +387,7 @@ abstract class CommonHttpTests extends TestCase
             'Accept-encoding' => 'gzip,deflate',
             'X-baz' => 'Foo',
             'X-powered-by' => 'A large wooden badger',
-            'Accept' => 'text/xml,text/html,*/*'
+            'Accept' => 'text/xml,text/html,*/*',
         ];
 
         $this->client->setHeaders($headers);
@@ -416,7 +416,7 @@ abstract class CommonHttpTests extends TestCase
             'Accept-encoding' => 'gzip,deflate',
             'X-baz' => 'Foo',
             'X-powered-by' => 'A large wooden badger',
-            'Accept: text/xml,text/html,*/*'
+            'Accept: text/xml,text/html,*/*',
         ];
 
         $this->client->setHeaders($headers);
@@ -445,17 +445,17 @@ abstract class CommonHttpTests extends TestCase
     {
         $this->client->setUri($this->baseuri . 'testHeaders.php');
         $headers = [
-          'Accept-encoding' => 'gzip,deflate',
-          'X-baz' => 'Foo',
-          'X-powered-by' => [
-              'A large wooden badger',
-              'My Shiny Metal Ass',
-              'Dark Matter'
-          ],
-          'Cookie' => [
-              'foo=bar',
-              'baz=waka'
-          ]
+            'Accept-encoding' => 'gzip,deflate',
+            'X-baz' => 'Foo',
+            'X-powered-by' => [
+                'A large wooden badger',
+                'My Shiny Metal Ass',
+                'Dark Matter',
+            ],
+            'Cookie' => [
+                'foo=bar',
+                'baz=waka',
+            ],
         ];
 
         $this->client->setHeaders($headers);
@@ -654,7 +654,7 @@ abstract class CommonHttpTests extends TestCase
         $this->client->setParameterGet([
             'user'   => 'alice',
             'pass'   => 'secret',
-            'method' => 'Basic'
+            'method' => 'Basic',
         ]);
 
         // First - fail password
@@ -679,7 +679,7 @@ abstract class CommonHttpTests extends TestCase
         $this->client->setParameterGet([
             'user'   => 'alice',
             'pass'   => 'secret',
-            'method' => 'Basic'
+            'method' => 'Basic',
         ]);
 
         // First - fail password
@@ -708,7 +708,7 @@ abstract class CommonHttpTests extends TestCase
 
         $cookies = [
             'name'   => 'value',
-            'cookie' => 'crumble'
+            'cookie' => 'crumble',
         ];
 
         $this->client->setCookies($cookies);
@@ -734,7 +734,7 @@ abstract class CommonHttpTests extends TestCase
         $cookies = [
             'chocolate' => 'chips',
             'crumble' => 'apple',
-            'another' => 'cookie'
+            'another' => 'cookie',
         ];
 
         $this->client->setCookies($cookies);
@@ -757,7 +757,7 @@ abstract class CommonHttpTests extends TestCase
         $cookies = [
             'chocolate' => 'chips',
             'crumble'   => 'apple',
-            'another'   => 'cookie'
+            'another'   => 'cookie',
         ];
 
         $this->client->setCookies($cookies);
@@ -1114,8 +1114,8 @@ abstract class CommonHttpTests extends TestCase
                     'quest' => 'To seek the holy grail',
                     'YourMother' => 'Was a hamster',
                     'specialChars' => '<>$+ &?=[]^%',
-                    'array' => ['firstItem', 'secondItem', '3rdItem']
-                ]
+                    'array' => ['firstItem', 'secondItem', '3rdItem'],
+                ],
             ],
 
             [
@@ -1126,19 +1126,18 @@ abstract class CommonHttpTests extends TestCase
                         'key' => 'value',
                         'nesting' => [
                             'a' => 'AAA',
-                            'b' => 'BBB'
-                        ]
+                            'b' => 'BBB',
+                        ],
                     ],
-                    'someOtherData' => ['foo', 'bar']
-                ]
+                    'someOtherData' => ['foo', 'bar'],
+                ],
             ],
-
             [
                 [
                     'foo1' => 'bar',
-                    'foo2' => ['baz', 'w00t']
-                ]
-            ]
+                    'foo2' => ['baz', 'w00t'],
+                ],
+            ],
         ];
     }
 
@@ -1154,7 +1153,7 @@ abstract class CommonHttpTests extends TestCase
             ['foo => bar'],
             [null],
             [new stdClass()],
-            [55]
+            [55],
         ];
     }
 

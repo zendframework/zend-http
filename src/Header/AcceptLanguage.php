@@ -92,14 +92,14 @@ class AcceptLanguage extends AbstractAccept
         }
 
         $aggregated = [
-                'typeString' => trim($fieldValuePart),
-                'type'       => $type,
-                'subtype'    => $subtype,
-                'subtypeRaw' => $subtypeWhole,
-                'format'     => $format,
-                'priority'   => isset($params['q']) ? $params['q'] : 1,
-                'params'     => $params,
-                'raw'        => trim($raw)
+            'typeString' => trim($fieldValuePart),
+            'type'       => $type,
+            'subtype'    => $subtype,
+            'subtypeRaw' => $subtypeWhole,
+            'format'     => $format,
+            'priority'   => isset($params['q']) ? $params['q'] : 1,
+            'params'     => $params,
+            'raw'        => trim($raw),
         ];
 
         return new FieldValuePart\LanguageFieldValuePart((object) $aggregated);

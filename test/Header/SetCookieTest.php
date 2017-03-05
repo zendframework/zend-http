@@ -496,46 +496,48 @@ class SetCookieTest extends TestCase
             [
                 'Set-Cookie: justacookie=foo; domain=example.com',
                 [
-                    'name'    => 'justacookie',
-                    'value'   => 'foo',
-                    'domain'  => 'example.com',
-                    'path'    => '/',
-                    'expires' => null,
-                    'secure'  => false,
-                    'httponly' => false
+                    'name'     => 'justacookie',
+                    'value'    => 'foo',
+                    'domain'   => 'example.com',
+                    'path'     => '/',
+                    'expires'  => null,
+                    'secure'   => false,
+                    'httponly' => false,
                 ],
-                'justacookie=foo; Domain=example.com'
+                'justacookie=foo; Domain=example.com',
             ],
             [
                 // @codingStandardsIgnoreStart
                 'Set-Cookie: expires=tomorrow; secure; path=/Space Out/; expires=Tue, 21-Nov-2006 08:33:44 GMT; domain=.example.com',
                 // @codingStandardsIgnoreEnd
                 [
-                    'name'    => 'expires',
-                    'value'   => 'tomorrow',
-                    'domain'  => '.example.com',
-                    'path'    => '/Space Out/',
-                    'expires' => strtotime('Tue, 21-Nov-2006 08:33:44 GMT'),
-                    'secure'  => true,
-                    'httponly' => false
+                    'name'     => 'expires',
+                    'value'    => 'tomorrow',
+                    'domain'   => '.example.com',
+                    'path'     => '/Space Out/',
+                    'expires'  => strtotime('Tue, 21-Nov-2006 08:33:44 GMT'),
+                    'secure'   => true,
+                    'httponly' => false,
                 ],
-                'expires=tomorrow; Expires=Tue, 21-Nov-2006 08:33:44 GMT; Domain=.example.com; Path=/Space Out/; Secure'
+                // @codingStandardsIgnoreStart
+                'expires=tomorrow; Expires=Tue, 21-Nov-2006 08:33:44 GMT; Domain=.example.com; Path=/Space Out/; Secure',
+                // @codingStandardsIgnoreEnd
             ],
             [
                 // @codingStandardsIgnoreStart
                 'Set-Cookie: domain=unittests; expires=' . gmdate('D, d-M-Y H:i:s', $now) . ' GMT; domain=example.com; path=/some%20value/',
                 // @codingStandardsIgnoreEnd
                 [
-                    'name'    => 'domain',
-                    'value'   => 'unittests',
-                    'domain'  => 'example.com',
-                    'path'    => '/some%20value/',
-                    'expires' => $now,
-                    'secure'  => false,
-                    'httponly' => false
+                    'name'     => 'domain',
+                    'value'    => 'unittests',
+                    'domain'   => 'example.com',
+                    'path'     => '/some%20value/',
+                    'expires'  => $now,
+                    'secure'   => false,
+                    'httponly' => false,
                 ],
                 // @codingStandardsIgnoreStart
-                'domain=unittests; Expires=' . gmdate('D, d-M-Y H:i:s', $now) . ' GMT; Domain=example.com; Path=/some%20value/'
+                'domain=unittests; Expires=' . gmdate('D, d-M-Y H:i:s', $now) . ' GMT; Domain=example.com; Path=/some%20value/',
                 // @codingStandardsIgnoreEnd
             ],
             [
@@ -543,58 +545,57 @@ class SetCookieTest extends TestCase
                 'Set-Cookie: path=indexAction; path=/; domain=.foo.com; expires=' . gmdate('D, d-M-Y H:i:s', $yesterday) . ' GMT',
                 // @codingStandardsIgnoreEnd
                 [
-                    'name'    => 'path',
-                    'value'   => 'indexAction',
-                    'domain'  => '.foo.com',
-                    'path'    => '/',
-                    'expires' => $yesterday,
-                    'secure'  => false,
-                    'httponly' => false
+                    'name'     => 'path',
+                    'value'    => 'indexAction',
+                    'domain'   => '.foo.com',
+                    'path'     => '/',
+                    'expires'  => $yesterday,
+                    'secure'   => false,
+                    'httponly' => false,
                 ],
-                'path=indexAction; Expires=' . gmdate('D, d-M-Y H:i:s', $yesterday) . ' GMT; Domain=.foo.com; Path=/'
+                'path=indexAction; Expires=' . gmdate('D, d-M-Y H:i:s', $yesterday) . ' GMT; Domain=.foo.com; Path=/',
             ],
-
             [
                 'Set-Cookie: secure=sha1; secure; SECURE; domain=some.really.deep.domain.com',
                 [
-                    'name'    => 'secure',
-                    'value'   => 'sha1',
-                    'domain'  => 'some.really.deep.domain.com',
-                    'path'    => '/',
-                    'expires' => null,
-                    'secure'  => true,
-                    'httponly' => false
+                    'name'     => 'secure',
+                    'value'    => 'sha1',
+                    'domain'   => 'some.really.deep.domain.com',
+                    'path'     => '/',
+                    'expires'  => null,
+                    'secure'   => true,
+                    'httponly' => false,
                 ],
-                'secure=sha1; Domain=some.really.deep.domain.com; Secure'
+                'secure=sha1; Domain=some.really.deep.domain.com; Secure',
             ],
             [
                 'Set-Cookie: justacookie=foo; domain=example.com; httpOnly',
                 [
-                    'name'    => 'justacookie',
-                    'value'   => 'foo',
-                    'domain'  => 'example.com',
-                    'path'    => '/',
-                    'expires' => null,
-                    'secure'  => false,
-                    'httponly' => true
+                    'name'     => 'justacookie',
+                    'value'    => 'foo',
+                    'domain'   => 'example.com',
+                    'path'     => '/',
+                    'expires'  => null,
+                    'secure'   => false,
+                    'httponly' => true,
                 ],
-                'justacookie=foo; Domain=example.com; HttpOnly'
+                'justacookie=foo; Domain=example.com; HttpOnly',
             ],
             [
                 // @codingStandardsIgnoreStart
                 'Set-Cookie: PHPSESSID=123456789+abcd%2Cef; secure; domain=.localdomain; path=/foo/baz; expires=Tue, 21-Nov-2006 08:33:44 GMT;',
                 // @codingStandardsIgnoreEnd
                 [
-                    'name'    => 'PHPSESSID',
-                    'value'   => '123456789+abcd%2Cef',
-                    'domain'  => '.localdomain',
-                    'path'    => '/foo/baz',
-                    'expires' => 'Tue, 21-Nov-2006 08:33:44 GMT',
-                    'secure'  => true,
-                    'httponly' => false
+                    'name'     => 'PHPSESSID',
+                    'value'    => '123456789+abcd%2Cef',
+                    'domain'   => '.localdomain',
+                    'path'     => '/foo/baz',
+                    'expires'  => 'Tue, 21-Nov-2006 08:33:44 GMT',
+                    'secure'   => true,
+                    'httponly' => false,
                 ],
                 // @codingStandardsIgnoreStart
-                'PHPSESSID=123456789+abcd%2Cef; Expires=Tue, 21-Nov-2006 08:33:44 GMT; Domain=.localdomain; Path=/foo/baz; Secure'
+                'PHPSESSID=123456789+abcd%2Cef; Expires=Tue, 21-Nov-2006 08:33:44 GMT; Domain=.localdomain; Path=/foo/baz; Secure',
                 // @codingStandardsIgnoreEnd
             ],
             [
@@ -602,63 +603,63 @@ class SetCookieTest extends TestCase
                 'Set-Cookie: myname=myvalue; Domain=docs.foo.com; Path=/accounts; Expires=Wed, 13-Jan-2021 22:23:01 GMT; Secure; HttpOnly',
                 // @codingStandardsIgnoreEnd
                 [
-                    'name'    => 'myname',
-                    'value'   => 'myvalue',
-                    'domain'  => 'docs.foo.com',
-                    'path'    => '/accounts',
-                    'expires' => 'Wed, 13-Jan-2021 22:23:01 GMT',
-                    'secure'  => true,
-                    'httponly' => true
+                    'name'     => 'myname',
+                    'value'    => 'myvalue',
+                    'domain'   => 'docs.foo.com',
+                    'path'     => '/accounts',
+                    'expires'  => 'Wed, 13-Jan-2021 22:23:01 GMT',
+                    'secure'   => true,
+                    'httponly' => true,
                 ],
                 // @codingStandardsIgnoreStart
-                'myname=myvalue; Expires=Wed, 13-Jan-2021 22:23:01 GMT; Domain=docs.foo.com; Path=/accounts; Secure; HttpOnly'
+                'myname=myvalue; Expires=Wed, 13-Jan-2021 22:23:01 GMT; Domain=docs.foo.com; Path=/accounts; Secure; HttpOnly',
                 // @codingStandardsIgnoreEnd
             ],
             [
                 'Set-Cookie:',
                 [],
-                ''
+                '',
             ],
             [
                 'Set-Cookie: ',
                 [],
-                ''
+                '',
             ],
             [
                 'Set-Cookie: emptykey=    ; Domain=docs.foo.com;',
                 [
-                    'name'    => 'myname',
-                    'value'   => '',
-                    'domain'  => 'docs.foo.com',
+                    'name'   => 'myname',
+                    'value'  => '',
+                    'domain' => 'docs.foo.com',
                 ],
-                'emptykey=; Domain=docs.foo.com'
+                'emptykey=; Domain=docs.foo.com',
             ],
             [
                 'Set-Cookie: emptykey= ; Domain=docs.foo.com;',
                 [
-                    'name'    => 'myname',
-                    'value'   => '',
-                    'domain'  => 'docs.foo.com',
+                    'name'   => 'myname',
+                    'value'  => '',
+                    'domain' => 'docs.foo.com',
                 ],
-                'emptykey=; Domain=docs.foo.com'
+                'emptykey=; Domain=docs.foo.com',
             ],
             [
                 'Set-Cookie: emptykey=; Domain=docs.foo.com;',
                 [
-                    'name'    => 'myname',
-                    'value'   => '',
-                    'domain'  => 'docs.foo.com',
+                    'name'   => 'myname',
+                    'value'  => '',
+                    'domain' => 'docs.foo.com',
                 ],
-                'emptykey=; Domain=docs.foo.com'
+                'emptykey=; Domain=docs.foo.com',
             ],
             [
                 'Set-Cookie: emptykey; Domain=docs.foo.com;',
                 [
-                    'name'    => 'myname',
-                    'value'   => '',
-                    'domain'  => 'docs.foo.com',
+                    'name'   => 'myname',
+                    'value'  => '',
+                    'domain' => 'docs.foo.com',
                 ],
-                'emptykey=; Domain=docs.foo.com'
+                'emptykey=; Domain=docs.foo.com',
             ],
         ];
     }

@@ -260,7 +260,7 @@ class Proxy extends Socket
             STREAM_CRYPTO_METHOD_TLS_CLIENT,
             STREAM_CRYPTO_METHOD_SSLv3_CLIENT,
             STREAM_CRYPTO_METHOD_SSLv23_CLIENT,
-            STREAM_CRYPTO_METHOD_SSLv2_CLIENT
+            STREAM_CRYPTO_METHOD_SSLv2_CLIENT,
         ];
 
         $success = false;
