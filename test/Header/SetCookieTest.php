@@ -363,7 +363,7 @@ class SetCookieTest extends TestCase
      * @param array $info
      * @param string $expected
      */
-    public function testGetFieldValue($cStr, $info, $expected)
+    public function testGetFieldValue($cStr, array $info, $expected)
     {
         $cookie = SetCookie::fromString($cStr);
         if (! $cookie instanceof SetCookie) {
@@ -380,7 +380,7 @@ class SetCookieTest extends TestCase
      * @param array $info
      * @param string $expected
      */
-    public function testToString($cStr, $info, $expected)
+    public function testToString($cStr, array $info, $expected)
     {
         $cookie = SetCookie::fromString($cStr);
         if (! $cookie instanceof SetCookie) {

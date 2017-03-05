@@ -176,7 +176,7 @@ abstract class CommonHttpTests extends TestCase
      *
      * @param array $params
      */
-    public function testGetData($params)
+    public function testGetData(array $params)
     {
         $this->client->setUri($this->client->getUri() . '?name=Arthur');
         $this->client->setParameterGet($params);
@@ -192,7 +192,7 @@ abstract class CommonHttpTests extends TestCase
      *
      * @param array $params
      */
-    public function testPostDataUrlEncoded($params)
+    public function testPostDataUrlEncoded(array $params)
     {
         $this->client->setUri($this->baseuri . 'testPostData.php');
         $this->client->setEncType(HTTPClient::ENC_URLENCODED);
@@ -213,7 +213,7 @@ abstract class CommonHttpTests extends TestCase
      *
      * @param array $params
      */
-    public function testPatchData($params)
+    public function testPatchData(array $params)
     {
         $client = $this->client;
         $client->setUri($this->baseuri . 'testPatchData.php');
@@ -235,7 +235,7 @@ abstract class CommonHttpTests extends TestCase
      *
      * @param array $params
      */
-    public function testDeleteData($params)
+    public function testDeleteData(array $params)
     {
         $client = $this->client;
         $client->setUri($this->baseuri . 'testDeleteData.php');
@@ -257,7 +257,7 @@ abstract class CommonHttpTests extends TestCase
      *
      * @param array $params
      */
-    public function testOptionsData($params)
+    public function testOptionsData(array $params)
     {
         $client = $this->client;
         $client->setUri($this->baseuri . 'testOptionsData.php');
@@ -279,7 +279,7 @@ abstract class CommonHttpTests extends TestCase
      *
      * @param array $params
      */
-    public function testPostDataMultipart($params)
+    public function testPostDataMultipart(array $params)
     {
         $this->client->setUri($this->baseuri . 'testPostData.php');
         $this->client->setEncType(HTTPClient::ENC_FORMDATA);
@@ -1052,7 +1052,7 @@ abstract class CommonHttpTests extends TestCase
      *
      * @param array $params
      */
-    public function testContentTypeAdditionlInfo($params)
+    public function testContentTypeAdditionlInfo(array $params)
     {
         $content_type = 'application/x-www-form-urlencoded; charset=UTF-8';
 

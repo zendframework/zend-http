@@ -129,7 +129,7 @@ class CookieTest extends TestCase
 //     * @param string $cStr
 //     * @param array $cInfo
 //     */
-//    public function testGetName($cStr, $cInfo)
+//    public function testGetName($cStr, array $cInfo)
 //    {
 //        $cookie = Http\Cookie::fromString($cStr);
 //        if (! $cookie instanceof Http\Cookie) {
@@ -220,7 +220,7 @@ class CookieTest extends TestCase
 //     * @param string $cStr
 //     * @param array $cInfo
 //     */
-//    public function testGetDomainInStr($cStr, $cInfo)
+//    public function testGetDomainInStr($cStr, array $cInfo)
 //    {
 //        $cookie = Http\Cookie::fromString($cStr);
 //        if (! $cookie instanceof Http\Cookie) {
@@ -258,7 +258,7 @@ class CookieTest extends TestCase
 //     * @param string $cStr
 //     * @param array $cInfo
 //     */
-//    public function testGetPathInStr($cStr, $cInfo)
+//    public function testGetPathInStr($cStr, array $cInfo)
 //    {
 //        $cookie = Http\Cookie::fromString($cStr);
 //        if (! $cookie instanceof Http\Cookie) {
@@ -302,7 +302,7 @@ class CookieTest extends TestCase
 //     * @param string $cStr
 //     * @param array $cInfo
 //     */
-//    public function testGetExpiryTime($cStr, $cInfo)
+//    public function testGetExpiryTime($cStr, array $cInfo)
 //    {
 //        $cookie = Http\Cookie::fromString($cStr);
 //        if (! $cookie instanceof Http\Cookie) {
@@ -322,7 +322,7 @@ class CookieTest extends TestCase
 //     * @param string $cStr
 //     * @param array $cInfo
 //     */
-//    public function testIsSecure($cStr, $cInfo)
+//    public function testIsSecure($cStr, array $cInfo)
 //    {
 //        $cookie = Http\Cookie::fromString($cStr);
 //        if (! $cookie instanceof Http\Cookie) {
@@ -393,7 +393,7 @@ class CookieTest extends TestCase
 //     * @param string $cStr
 //     * @param array $cInfo
 //     */
-//    public function testIsSessionCookie($cStr, $cInfo)
+//    public function testIsSessionCookie($cStr, array $cInfo)
 //    {
 //        $cookie = Http\Cookie::fromString($cStr);
 //        if (! $cookie instanceof Http\Cookie) {
@@ -414,7 +414,7 @@ class CookieTest extends TestCase
 //     * @param string $cStr
 //     * @param array $cInfo
 //     */
-//    public function testToString($cStr, $cInfo)
+//    public function testToString($cStr, array $cInfo)
 //    {
 //        $cookie = Http\Cookie::fromString($cStr);
 //        if (! $cookie instanceof Http\Cookie) {
