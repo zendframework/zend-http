@@ -9,9 +9,10 @@
 
 namespace ZendTest\Http\Header;
 
+use PHPUnit\Framework\TestCase;
 use Zend\Http\Header\AuthenticationInfo;
 
-class AuthenticationInfoTest extends \PHPUnit_Framework_TestCase
+class AuthenticationInfoTest extends TestCase
 {
     public function testAuthenticationInfoFromStringCreatesValidAuthenticationInfoHeader()
     {
@@ -52,7 +53,7 @@ class AuthenticationInfoTest extends \PHPUnit_Framework_TestCase
      */
     public function testPreventsCRLFAttackViaFromString()
     {
-        $this->setExpectedException('Zend\Http\Header\Exception\InvalidArgumentException');
+        $this->expectException('Zend\Http\Header\Exception\InvalidArgumentException');
         $header = AuthenticationInfo::fromString("Authentication-Info: xxx\r\n\r\nevilContent");
     }
 
@@ -62,7 +63,7 @@ class AuthenticationInfoTest extends \PHPUnit_Framework_TestCase
      */
     public function testPreventsCRLFAttackViaConstructor()
     {
-        $this->setExpectedException('Zend\Http\Header\Exception\InvalidArgumentException');
+        $this->expectException('Zend\Http\Header\Exception\InvalidArgumentException');
         $header = new AuthenticationInfo("xxx\r\n\r\nevilContent");
     }
 }

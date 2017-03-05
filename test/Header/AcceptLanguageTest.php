@@ -9,9 +9,10 @@
 
 namespace ZendTest\Http\Header;
 
+use PHPUnit\Framework\TestCase;
 use Zend\Http\Header\AcceptLanguage;
 
-class AcceptLanguageTest extends \PHPUnit_Framework_TestCase
+class AcceptLanguageTest extends TestCase
 {
     public function testAcceptLanguageFromStringCreatesValidAcceptLanguageHeader()
     {
@@ -110,7 +111,7 @@ class AcceptLanguageTest extends \PHPUnit_Framework_TestCase
      */
     public function testPreventsCRLFAttackViaFromString()
     {
-        $this->setExpectedException('Zend\Http\Header\Exception\InvalidArgumentException');
+        $this->expectException('Zend\Http\Header\Exception\InvalidArgumentException');
         $header = AcceptLanguage::fromString("Accept-Language: da\r\n\r\nevilContent");
     }
 
@@ -121,7 +122,9 @@ class AcceptLanguageTest extends \PHPUnit_Framework_TestCase
     public function testPreventsCRLFAttackViaSetters()
     {
         $header = new AcceptLanguage();
-        $this->setExpectedException('Zend\Http\Header\Exception\InvalidArgumentException', 'valid type');
+        $this->expectException('Zend\Http\Header\Exception\InvalidArgumentException');
+        $this->expectExceptionMessage('valid type');
+
         $header->addLanguage("\nen\r-\r\nus");
     }
 }

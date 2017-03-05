@@ -9,9 +9,10 @@
 
 namespace ZendTest\Http\Header;
 
+use PHPUnit\Framework\TestCase;
 use Zend\Http\Header\RetryAfter;
 
-class RetryAfterTest extends \PHPUnit_Framework_TestCase
+class RetryAfterTest extends TestCase
 {
     public function testRetryAfterFromStringCreatesValidRetryAfterHeader()
     {

@@ -9,11 +9,12 @@
 
 namespace ZendTest\Http\Header;
 
+use PHPUnit\Framework\TestCase;
 use Zend\Http\Header\Date;
 use DateTime;
 use DateTimeZone;
 
-class DateTest extends \PHPUnit_Framework_TestCase
+class DateTest extends TestCase
 {
     public function tearDown()
     {
@@ -57,13 +58,13 @@ class DateTest extends \PHPUnit_Framework_TestCase
 
     public function testDateFromTimeStringDetectsBadInput()
     {
-        $this->setExpectedException('Zend\Http\Header\Exception\InvalidArgumentException');
+        $this->expectException('Zend\Http\Header\Exception\InvalidArgumentException');
         Date::fromTimeString('3 Days of the Condor');
     }
 
     public function testDateFromTimestampDetectsBadInput()
     {
-        $this->setExpectedException('Zend\Http\Header\Exception\InvalidArgumentException');
+        $this->expectException('Zend\Http\Header\Exception\InvalidArgumentException');
         Date::fromTimestamp('The Day of the Jackal');
     }
 
@@ -113,7 +114,8 @@ class DateTest extends \PHPUnit_Framework_TestCase
 
     public function testDateThrowsExceptionForInvalidDate()
     {
-        $this->setExpectedException('Zend\Http\Header\Exception\InvalidArgumentException', 'Invalid date');
+        $this->expectException('Zend\Http\Header\Exception\InvalidArgumentException');
+        $this->expectExceptionMessage('Invalid date');
         $dateHeader = new Date();
         $dateHeader->setDate('~~~~');
     }

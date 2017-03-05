@@ -9,9 +9,10 @@
 
 namespace ZendTest\Http\Header;
 
+use PHPUnit\Framework\TestCase;
 use Zend\Http\Header\ContentEncoding;
 
-class ContentEncodingTest extends \PHPUnit_Framework_TestCase
+class ContentEncodingTest extends TestCase
 {
     public function testContentEncodingFromStringCreatesValidContentEncodingHeader()
     {
@@ -52,7 +53,7 @@ class ContentEncodingTest extends \PHPUnit_Framework_TestCase
      */
     public function testPreventsCRLFAttackViaFromString()
     {
-        $this->setExpectedException('Zend\Http\Header\Exception\InvalidArgumentException');
+        $this->expectException('Zend\Http\Header\Exception\InvalidArgumentException');
         $header = ContentEncoding::fromString("Content-Encoding: xxx\r\n\r\nevilContent");
     }
 
@@ -62,7 +63,7 @@ class ContentEncodingTest extends \PHPUnit_Framework_TestCase
      */
     public function testPreventsCRLFAttackViaConstructor()
     {
-        $this->setExpectedException('Zend\Http\Header\Exception\InvalidArgumentException');
+        $this->expectException('Zend\Http\Header\Exception\InvalidArgumentException');
         $header = new ContentEncoding("xxx\r\n\r\nevilContent");
     }
 }

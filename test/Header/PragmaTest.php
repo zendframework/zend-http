@@ -9,9 +9,10 @@
 
 namespace ZendTest\Http\Header;
 
+use PHPUnit\Framework\TestCase;
 use Zend\Http\Header\Pragma;
 
-class PragmaTest extends \PHPUnit_Framework_TestCase
+class PragmaTest extends TestCase
 {
     public function testPragmaFromStringCreatesValidPragmaHeader()
     {
@@ -52,7 +53,7 @@ class PragmaTest extends \PHPUnit_Framework_TestCase
      */
     public function testPreventsCRLFAttackViaFromString()
     {
-        $this->setExpectedException('Zend\Http\Header\Exception\InvalidArgumentException');
+        $this->expectException('Zend\Http\Header\Exception\InvalidArgumentException');
         $header = Pragma::fromString("Pragma: xxx\r\n\r\nevilContent");
     }
 
@@ -62,7 +63,7 @@ class PragmaTest extends \PHPUnit_Framework_TestCase
      */
     public function testPreventsCRLFAttackViaConstructor()
     {
-        $this->setExpectedException('Zend\Http\Header\Exception\InvalidArgumentException');
+        $this->expectException('Zend\Http\Header\Exception\InvalidArgumentException');
         $header = new Pragma("xxx\r\n\r\nevilContent");
     }
 }

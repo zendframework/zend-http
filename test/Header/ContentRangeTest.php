@@ -9,9 +9,10 @@
 
 namespace ZendTest\Http\Header;
 
+use PHPUnit\Framework\TestCase;
 use Zend\Http\Header\ContentRange;
 
-class ContentRangeTest extends \PHPUnit_Framework_TestCase
+class ContentRangeTest extends TestCase
 {
     public function testContentRangeFromStringCreatesValidContentRangeHeader()
     {
@@ -52,7 +53,7 @@ class ContentRangeTest extends \PHPUnit_Framework_TestCase
      */
     public function testPreventsCRLFAttackViaFromString()
     {
-        $this->setExpectedException('Zend\Http\Header\Exception\InvalidArgumentException');
+        $this->expectException('Zend\Http\Header\Exception\InvalidArgumentException');
         $header = ContentRange::fromString("Content-Range: xxx\r\n\r\nevilContent");
     }
 
@@ -62,7 +63,7 @@ class ContentRangeTest extends \PHPUnit_Framework_TestCase
      */
     public function testPreventsCRLFAttackViaConstructor()
     {
-        $this->setExpectedException('Zend\Http\Header\Exception\InvalidArgumentException');
+        $this->expectException('Zend\Http\Header\Exception\InvalidArgumentException');
         $header = new ContentRange("xxx\r\n\r\nevilContent");
     }
 }

@@ -9,6 +9,8 @@
 
 namespace ZendTest\Http;
 
+use PHPUnit\Framework\TestCase;
+use Zend\Http\Client\Adapter\AdapterInterface;
 use Zend\Uri\Http;
 use Zend\Http\Client;
 use Zend\Http\Cookies;
@@ -19,7 +21,7 @@ use Zend\Http\Response;
 use Zend\Http\Client\Adapter\Test;
 use ZendTest\Http\TestAsset\ExtendedClient;
 
-class ClientTest extends \PHPUnit_Framework_TestCase
+class ClientTest extends TestCase
 {
     public function testIfCookiesAreSticky()
     {
@@ -432,8 +434,7 @@ class ClientTest extends \PHPUnit_Framework_TestCase
     {
         $client = new Client();
 
-        /* @var $adapter \PHPUnit_Framework_MockObject_MockObject|\Zend\Http\Client\Adapter\AdapterInterface */
-        $adapter = $this->getMock('Zend\Http\Client\Adapter\AdapterInterface');
+        $adapter = $this->createMock(AdapterInterface::class);
 
         $client->setAdapter($adapter);
 

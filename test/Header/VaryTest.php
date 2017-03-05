@@ -9,9 +9,10 @@
 
 namespace ZendTest\Http\Header;
 
+use PHPUnit\Framework\TestCase;
 use Zend\Http\Header\Vary;
 
-class VaryTest extends \PHPUnit_Framework_TestCase
+class VaryTest extends TestCase
 {
     public function testVaryFromStringCreatesValidVaryHeader()
     {
@@ -52,7 +53,7 @@ class VaryTest extends \PHPUnit_Framework_TestCase
      */
     public function testPreventsCRLFAttackViaFromString()
     {
-        $this->setExpectedException('Zend\Http\Header\Exception\InvalidArgumentException');
+        $this->expectException('Zend\Http\Header\Exception\InvalidArgumentException');
         $header = Vary::fromString("Vary: xxx\r\n\r\nevilContent");
     }
 
@@ -62,7 +63,7 @@ class VaryTest extends \PHPUnit_Framework_TestCase
      */
     public function testPreventsCRLFAttackViaConstructor()
     {
-        $this->setExpectedException('Zend\Http\Header\Exception\InvalidArgumentException');
+        $this->expectException('Zend\Http\Header\Exception\InvalidArgumentException');
         $header = new Vary("xxx\r\n\r\nevilContent");
     }
 }

@@ -9,9 +9,10 @@
 
 namespace ZendTest\Http\Header;
 
+use PHPUnit\Framework\TestCase;
 use Zend\Http\Header\MaxForwards;
 
-class MaxForwardsTest extends \PHPUnit_Framework_TestCase
+class MaxForwardsTest extends TestCase
 {
     public function testMaxForwardsFromStringCreatesValidMaxForwardsHeader()
     {
@@ -52,7 +53,7 @@ class MaxForwardsTest extends \PHPUnit_Framework_TestCase
      */
     public function testPreventsCRLFAttackViaFromString()
     {
-        $this->setExpectedException('Zend\Http\Header\Exception\InvalidArgumentException');
+        $this->expectException('Zend\Http\Header\Exception\InvalidArgumentException');
         $header = MaxForwards::fromString("Max-Forwards: xxx\r\n\r\nevilContent");
     }
 
@@ -62,7 +63,7 @@ class MaxForwardsTest extends \PHPUnit_Framework_TestCase
      */
     public function testPreventsCRLFAttackViaConstructorValue()
     {
-        $this->setExpectedException('Zend\Http\Header\Exception\InvalidArgumentException');
+        $this->expectException('Zend\Http\Header\Exception\InvalidArgumentException');
         $header = new MaxForwards("xxx\r\n\r\nevilContent");
     }
 }

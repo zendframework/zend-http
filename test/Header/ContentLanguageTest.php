@@ -9,9 +9,10 @@
 
 namespace ZendTest\Http\Header;
 
+use PHPUnit\Framework\TestCase;
 use Zend\Http\Header\ContentLanguage;
 
-class ContentLanguageTest extends \PHPUnit_Framework_TestCase
+class ContentLanguageTest extends TestCase
 {
     public function testContentLanguageFromStringCreatesValidContentLanguageHeader()
     {
@@ -52,7 +53,7 @@ class ContentLanguageTest extends \PHPUnit_Framework_TestCase
      */
     public function testPreventsCRLFAttackViaFromString()
     {
-        $this->setExpectedException('Zend\Http\Header\Exception\InvalidArgumentException');
+        $this->expectException('Zend\Http\Header\Exception\InvalidArgumentException');
         $header = ContentLanguage::fromString("Content-Language: xxx\r\n\r\nevilContent");
     }
 
@@ -62,7 +63,7 @@ class ContentLanguageTest extends \PHPUnit_Framework_TestCase
      */
     public function testPreventsCRLFAttackViaConstructor()
     {
-        $this->setExpectedException('Zend\Http\Header\Exception\InvalidArgumentException');
+        $this->expectException('Zend\Http\Header\Exception\InvalidArgumentException');
         $header = new ContentLanguage("xxx\r\n\r\nevilContent");
     }
 }

@@ -9,9 +9,10 @@
 
 namespace ZendTest\Http\Header;
 
+use PHPUnit\Framework\TestCase;
 use Zend\Http\Header\Expires;
 
-class ExpiresTest extends \PHPUnit_Framework_TestCase
+class ExpiresTest extends TestCase
 {
     public function testExpiresFromStringCreatesValidExpiresHeader()
     {

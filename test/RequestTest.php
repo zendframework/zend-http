@@ -9,11 +9,12 @@
 
 namespace ZendTest\Http;
 
+use PHPUnit\Framework\TestCase;
 use Zend\Http\Request;
 use Zend\Http\Headers;
 use Zend\Http\Header\GenericHeader;
 
-class RequestTest extends \PHPUnit_Framework_TestCase
+class RequestTest extends TestCase
 {
     public function testRequestFromStringFactoryCreatesValidRequest()
     {
@@ -157,7 +158,8 @@ class RequestTest extends \PHPUnit_Framework_TestCase
     {
         $request = new Request();
 
-        $this->setExpectedException('Zend\Http\Exception\InvalidArgumentException', 'must be an instance of');
+        $this->expectException('Zend\Http\Exception\InvalidArgumentException');
+        $this->expectExceptionMessage('must be an instance of');
         $request->setUri(new \stdClass());
     }
 
@@ -173,10 +175,8 @@ class RequestTest extends \PHPUnit_Framework_TestCase
     {
         $request = new Request();
 
-        $this->setExpectedException(
-            'Zend\Http\Exception\InvalidArgumentException',
-            'Not valid or not supported HTTP version'
-        );
+        $this->expectException('Zend\Http\Exception\InvalidArgumentException');
+        $this->expectExceptionMessage('Not valid or not supported HTTP version');
         $request->setVersion('1.2');
     }
 
@@ -277,10 +277,8 @@ class RequestTest extends \PHPUnit_Framework_TestCase
         $request = new Request();
         $request->setAllowCustomMethods(false);
 
-        $this->setExpectedException(
-            'Zend\Http\Exception\InvalidArgumentException',
-            'Invalid HTTP method passed'
-        );
+        $this->expectException('Zend\Http\Exception\InvalidArgumentException');
+        $this->expectExceptionMessage('Invalid HTTP method passed');
 
         $request->setMethod('xcustom');
     }
@@ -295,12 +293,10 @@ class RequestTest extends \PHPUnit_Framework_TestCase
 
     public function testDisallowCustomMethodsFromString()
     {
-        $this->setExpectedException(
-            'Zend\Http\Exception\InvalidArgumentException',
-            'A valid request line was not found in the provided string'
-        );
+        $this->expectException('Zend\Http\Exception\InvalidArgumentException');
+        $this->expectExceptionMessage('A valid request line was not found in the provided string');
 
-        $request = Request::fromString('X-CUS_TOM someurl', false);
+        Request::fromString('X-CUS_TOM someurl', false);
     }
 
     public function testAllowCustomMethodsFlagIsSetByFromString()
@@ -327,7 +323,7 @@ class RequestTest extends \PHPUnit_Framework_TestCase
      */
     public function testCRLFAttack()
     {
-        $this->setExpectedException('Zend\Http\Exception\RuntimeException');
+        $this->expectException('Zend\Http\Exception\RuntimeException');
         $request = Request::fromString(
             "GET /foo HTTP/1.1\r\nHost: example.com\r\nX-Foo: This\ris\r\n\r\nCRLF\nInjection"
         );

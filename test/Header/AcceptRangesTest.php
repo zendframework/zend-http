@@ -9,9 +9,10 @@
 
 namespace ZendTest\Http\Header;
 
+use PHPUnit\Framework\TestCase;
 use Zend\Http\Header\AcceptRanges;
 
-class AcceptRangesTest extends \PHPUnit_Framework_TestCase
+class AcceptRangesTest extends TestCase
 {
     public function testAcceptRangesFromStringCreatesValidAcceptRangesHeader()
     {
@@ -50,7 +51,7 @@ class AcceptRangesTest extends \PHPUnit_Framework_TestCase
      */
     public function testPreventsCRLFAttackViaFromString()
     {
-        $this->setExpectedException('Zend\Http\Header\Exception\InvalidArgumentException');
+        $this->expectException('Zend\Http\Header\Exception\InvalidArgumentException');
         $header = AcceptRanges::fromString("Accept-Ranges: bytes;\r\n\r\nevilContent");
     }
 
@@ -60,7 +61,7 @@ class AcceptRangesTest extends \PHPUnit_Framework_TestCase
      */
     public function testPreventsCRLFAttackViaConstructor()
     {
-        $this->setExpectedException('Zend\Http\Header\Exception\InvalidArgumentException');
+        $this->expectException('Zend\Http\Header\Exception\InvalidArgumentException');
         $header = new AcceptRanges("bytes;\r\n\r\nevilContent");
     }
 }

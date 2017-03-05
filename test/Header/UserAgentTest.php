@@ -9,9 +9,10 @@
 
 namespace ZendTest\Http\Header;
 
+use PHPUnit\Framework\TestCase;
 use Zend\Http\Header\UserAgent;
 
-class UserAgentTest extends \PHPUnit_Framework_TestCase
+class UserAgentTest extends TestCase
 {
     public function testUserAgentFromStringCreatesValidUserAgentHeader()
     {
@@ -52,7 +53,7 @@ class UserAgentTest extends \PHPUnit_Framework_TestCase
      */
     public function testPreventsCRLFAttackViaFromString()
     {
-        $this->setExpectedException('Zend\Http\Header\Exception\InvalidArgumentException');
+        $this->expectException('Zend\Http\Header\Exception\InvalidArgumentException');
         $header = UserAgent::fromString("User-Agent: xxx\r\n\r\nevilContent");
     }
 
@@ -62,7 +63,7 @@ class UserAgentTest extends \PHPUnit_Framework_TestCase
      */
     public function testPreventsCRLFAttackViaConstructor()
     {
-        $this->setExpectedException('Zend\Http\Header\Exception\InvalidArgumentException');
+        $this->expectException('Zend\Http\Header\Exception\InvalidArgumentException');
         $header = new UserAgent("xxx\r\n\r\nevilContent");
     }
 }

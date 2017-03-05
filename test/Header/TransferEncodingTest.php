@@ -9,9 +9,10 @@
 
 namespace ZendTest\Http\Header;
 
+use PHPUnit\Framework\TestCase;
 use Zend\Http\Header\TransferEncoding;
 
-class TransferEncodingTest extends \PHPUnit_Framework_TestCase
+class TransferEncodingTest extends TestCase
 {
     public function testTransferEncodingFromStringCreatesValidTransferEncodingHeader()
     {
@@ -52,7 +53,7 @@ class TransferEncodingTest extends \PHPUnit_Framework_TestCase
      */
     public function testPreventsCRLFAttackViaFromString()
     {
-        $this->setExpectedException('Zend\Http\Header\Exception\InvalidArgumentException');
+        $this->expectException('Zend\Http\Header\Exception\InvalidArgumentException');
         $header = TransferEncoding::fromString("Transfer-Encoding: xxx\r\n\r\nevilContent");
     }
 
@@ -62,7 +63,7 @@ class TransferEncodingTest extends \PHPUnit_Framework_TestCase
      */
     public function testPreventsCRLFAttackViaConstructor()
     {
-        $this->setExpectedException('Zend\Http\Header\Exception\InvalidArgumentException');
+        $this->expectException('Zend\Http\Header\Exception\InvalidArgumentException');
         $header = new TransferEncoding("xxx\r\n\r\nevilContent");
     }
 }

@@ -9,9 +9,10 @@
 
 namespace ZendTest\Http\Response;
 
+use PHPUnit\Framework\TestCase;
 use Zend\Http\Response\Stream;
 
-class ResponseStreamTest extends \PHPUnit_Framework_TestCase
+class ResponseStreamTest extends TestCase
 {
     public function testResponseFactoryFromStringCreatesValidResponse()
     {

@@ -9,6 +9,7 @@
 
 namespace ZendTest\Http\Client;
 
+use PHPUnit\Framework\TestCase;
 use Zend\Http\ClientStatic as HTTPClient;
 use Zend\Http\Client;
 
@@ -18,7 +19,7 @@ use Zend\Http\Client;
  * @group      Zend\Http
  * @group      Zend\Http\Client
  */
-class StaticClientTest extends \PHPUnit_Framework_TestCase
+class StaticClientTest extends TestCase
 {
     /**
      * Uri for test

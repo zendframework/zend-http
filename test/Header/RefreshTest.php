@@ -9,9 +9,10 @@
 
 namespace ZendTest\Http\Header;
 
+use PHPUnit\Framework\TestCase;
 use Zend\Http\Header\Refresh;
 
-class RefreshTest extends \PHPUnit_Framework_TestCase
+class RefreshTest extends TestCase
 {
     public function testRefreshFromStringCreatesValidRefreshHeader()
     {
@@ -52,7 +53,7 @@ class RefreshTest extends \PHPUnit_Framework_TestCase
      */
     public function testPreventsCRLFAttackViaFromString()
     {
-        $this->setExpectedException('Zend\Http\Header\Exception\InvalidArgumentException');
+        $this->expectException('Zend\Http\Header\Exception\InvalidArgumentException');
         $header = Refresh::fromString("Refresh: xxx\r\n\r\nevilContent");
     }
 
@@ -62,7 +63,7 @@ class RefreshTest extends \PHPUnit_Framework_TestCase
      */
     public function testPreventsCRLFAttackViaConstructorValue()
     {
-        $this->setExpectedException('Zend\Http\Header\Exception\InvalidArgumentException');
+        $this->expectException('Zend\Http\Header\Exception\InvalidArgumentException');
         $header = new Refresh("xxx\r\n\r\nevilContent");
     }
 }

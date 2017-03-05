@@ -9,9 +9,10 @@
 
 namespace ZendTest\Http\Header;
 
+use PHPUnit\Framework\TestCase;
 use Zend\Http\Header\Upgrade;
 
-class UpgradeTest extends \PHPUnit_Framework_TestCase
+class UpgradeTest extends TestCase
 {
     public function testUpgradeFromStringCreatesValidUpgradeHeader()
     {
@@ -52,7 +53,7 @@ class UpgradeTest extends \PHPUnit_Framework_TestCase
      */
     public function testPreventsCRLFAttackViaFromString()
     {
-        $this->setExpectedException('Zend\Http\Header\Exception\InvalidArgumentException');
+        $this->expectException('Zend\Http\Header\Exception\InvalidArgumentException');
         $header = Upgrade::fromString("Upgrade: xxx\r\n\r\nevilContent");
     }
 
@@ -62,7 +63,7 @@ class UpgradeTest extends \PHPUnit_Framework_TestCase
      */
     public function testPreventsCRLFAttackViaConstructor()
     {
-        $this->setExpectedException('Zend\Http\Header\Exception\InvalidArgumentException');
+        $this->expectException('Zend\Http\Header\Exception\InvalidArgumentException');
         $header = new Upgrade("xxx\r\n\r\nevilContent");
     }
 }

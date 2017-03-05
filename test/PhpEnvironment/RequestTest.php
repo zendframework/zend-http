@@ -9,7 +9,7 @@
 
 namespace ZendTest\Http\PhpEnvironment;
 
-use PHPUnit_Framework_TestCase as TestCase;
+use PHPUnit\Framework\TestCase;
 use Zend\Http\Headers;
 use Zend\Http\Header\GenericHeader;
 use Zend\Http\PhpEnvironment\Request;
@@ -765,10 +765,8 @@ class RequestTest extends TestCase
     {
         $_SERVER['REQUEST_METHOD'] = 'xcustomx';
 
-        $this->setExpectedException(
-            'Zend\Http\Exception\InvalidArgumentException',
-            'Invalid HTTP method passed'
-        );
+        $this->expectException('Zend\Http\Exception\InvalidArgumentException');
+        $this->expectExceptionMessage('Invalid HTTP method passed');
 
         $request = new Request(false);
     }

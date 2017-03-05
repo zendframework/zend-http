@@ -9,9 +9,10 @@
 
 namespace ZendTest\Http\Header;
 
+use PHPUnit\Framework\TestCase;
 use Zend\Http\Header\Connection;
 
-class ConnectionTest extends \PHPUnit_Framework_TestCase
+class ConnectionTest extends TestCase
 {
     public function testConnectionFromStringCreatesValidConnectionHeader()
     {
@@ -59,7 +60,7 @@ class ConnectionTest extends \PHPUnit_Framework_TestCase
      */
     public function testPreventsCRLFAttackViaFromString()
     {
-        $this->setExpectedException('Zend\Http\Header\Exception\InvalidArgumentException');
+        $this->expectException('Zend\Http\Header\Exception\InvalidArgumentException');
         $header = Connection::fromString("Connection: close\r\n\r\nevilContent");
     }
 
@@ -70,7 +71,7 @@ class ConnectionTest extends \PHPUnit_Framework_TestCase
     public function testPreventsCRLFAttackViaSetters()
     {
         $header = new Connection();
-        $this->setExpectedException('Zend\Http\Header\Exception\InvalidArgumentException');
+        $this->expectException('Zend\Http\Header\Exception\InvalidArgumentException');
         $header->setValue("close\r\n\r\nevilContent");
     }
 }

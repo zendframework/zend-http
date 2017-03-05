@@ -9,9 +9,10 @@
 
 namespace ZendTest\Http;
 
+use PHPUnit\Framework\TestCase;
 use Zend\Http\Response;
 
-class ResponseTest extends \PHPUnit_Framework_TestCase
+class ResponseTest extends TestCase
 {
     public function testResponseFactoryFromStringCreatesValidResponse()
     {
@@ -59,7 +60,8 @@ class ResponseTest extends \PHPUnit_Framework_TestCase
     public function testResponseSetStatusCodeThrowsExceptionOnInvalidCode()
     {
         $response = new Response;
-        $this->setExpectedException('Zend\Http\Exception\InvalidArgumentException', 'Invalid status code');
+        $this->expectException('Zend\Http\Exception\InvalidArgumentException');
+        $this->expectExceptionMessage('Invalid status code');
         $response->setStatusCode(606);
     }
 
@@ -81,10 +83,9 @@ class ResponseTest extends \PHPUnit_Framework_TestCase
     public function testResponseSetCustomStatusCodeThrowsExceptionOnInvalidCode()
     {
         $response = new Response;
-        $this->setExpectedException(
-            'Zend\Http\Exception\InvalidArgumentException',
-            'Invalid status code provided: "foo"'
-        );
+        $this->expectException('Zend\Http\Exception\InvalidArgumentException');
+        $this->expectExceptionMessage('Invalid status code provided: "foo"');
+
         $response->setStatusCode('foo');
     }
 
@@ -376,7 +377,8 @@ class ResponseTest extends \PHPUnit_Framework_TestCase
     public function testUnknownCode()
     {
         $response_str = $this->readResponse('response_unknown');
-        $this->setExpectedException('InvalidArgumentException', 'Invalid status code provided: "550"');
+        $this->expectException('InvalidArgumentException');
+        $this->expectExceptionMessage('Invalid status code provided: "550"');
         $response = Response::fromString($response_str);
         $this->assertEquals(550, $response->getStatusCode());
     }
@@ -443,7 +445,7 @@ class ResponseTest extends \PHPUnit_Framework_TestCase
      */
     public function testPreventsCRLFAttackWhenDeserializing()
     {
-        $this->setExpectedException('Zend\Http\Exception\RuntimeException');
+        $this->expectException('Zend\Http\Exception\RuntimeException');
         $response = Response::fromString(
             "HTTP/1.1 200 OK\r\nAllow: POST\r\nX-Foo: This\ris\r\n\r\nCRLF\nInjection"
         );

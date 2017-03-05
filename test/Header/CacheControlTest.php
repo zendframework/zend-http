@@ -9,9 +9,10 @@
 
 namespace ZendTest\Http\Header;
 
+use PHPUnit\Framework\TestCase;
 use Zend\Http\Header\CacheControl;
 
-class CacheControlTest extends \PHPUnit_Framework_TestCase
+class CacheControlTest extends TestCase
 {
     public function testCacheControlFromStringCreatesValidCacheControlHeader()
     {
@@ -105,7 +106,7 @@ class CacheControlTest extends \PHPUnit_Framework_TestCase
      */
     public function testPreventsCRLFAttackViaFromString()
     {
-        $this->setExpectedException('Zend\Http\Header\Exception\InvalidArgumentException');
+        $this->expectException('Zend\Http\Header\Exception\InvalidArgumentException');
         $header = CacheControl::fromString("Cache-Control: xxx\r\n\r\n");
     }
 
@@ -116,7 +117,7 @@ class CacheControlTest extends \PHPUnit_Framework_TestCase
     public function testProtectsFromCRLFAttackViaSetters()
     {
         $header = new CacheControl();
-        $this->setExpectedException('Zend\Http\Header\Exception\InvalidArgumentException');
+        $this->expectException('Zend\Http\Header\Exception\InvalidArgumentException');
         $header->addDirective("\rsome\r\ninvalid\nkey", "\ra\r\nCRLF\ninjection");
     }
 }

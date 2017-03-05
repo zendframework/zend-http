@@ -9,13 +9,14 @@
 
 namespace ZendTest\Http\Header;
 
+use PHPUnit\Framework\TestCase;
 use Zend\Http\Header\Accept;
 
-class AcceptTest extends \PHPUnit_Framework_TestCase
+class AcceptTest extends TestCase
 {
     public function testInvalidHeaderLine()
     {
-        $this->setExpectedException('Zend\Http\Header\Exception\InvalidArgumentException');
+        $this->expectException('Zend\Http\Header\Exception\InvalidArgumentException');
         $acceptHeader = Accept::fromString('');
     }
 
@@ -57,7 +58,7 @@ class AcceptTest extends \PHPUnit_Framework_TestCase
             $acceptHeader->toString()
         );
 
-        $this->setExpectedException('Zend\Http\Header\Exception\InvalidArgumentException');
+        $this->expectException('Zend\Http\Header\Exception\InvalidArgumentException');
         $acceptHeader->addMediaType('\\', 0.9);
     }
 
@@ -462,7 +463,7 @@ class AcceptTest extends \PHPUnit_Framework_TestCase
      */
     public function testPreventsCRLFAttackViaFromString()
     {
-        $this->setExpectedException('Zend\Http\Header\Exception\InvalidArgumentException');
+        $this->expectException('Zend\Http\Header\Exception\InvalidArgumentException');
         $header = Accept::fromString("Accept: application/text\r\n\r\nevilContent");
     }
 

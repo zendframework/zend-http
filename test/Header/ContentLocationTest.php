@@ -9,9 +9,10 @@
 
 namespace ZendTest\Http\Header;
 
+use PHPUnit\Framework\TestCase;
 use Zend\Http\Header\ContentLocation;
 
-class ContentLocationTest extends \PHPUnit_Framework_TestCase
+class ContentLocationTest extends TestCase
 {
     public function testContentLocationFromStringCreatesValidLocationHeader()
     {
@@ -64,7 +65,7 @@ class ContentLocationTest extends \PHPUnit_Framework_TestCase
      */
     public function testPreventsCRLFAttackViaFromString()
     {
-        $this->setExpectedException('Zend\Http\Header\Exception\InvalidArgumentException');
+        $this->expectException('Zend\Http\Header\Exception\InvalidArgumentException');
         $header = ContentLocation::fromString("Content-Location: /path/to\r\n\r\nevilContent");
     }
 }

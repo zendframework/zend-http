@@ -9,6 +9,7 @@
 
 namespace ZendTest\Http\Client;
 
+use PHPUnit\Framework\TestCase;
 use Zend\Http\Client as HTTPClient;
 use Zend\Http;
 use Zend\Http\Client\Adapter;
@@ -34,7 +35,7 @@ use Exception;
  * @group      Zend_Http
  * @group      Zend_Http_Client
  */
-abstract class CommonHttpTests extends \PHPUnit_Framework_TestCase
+abstract class CommonHttpTests extends TestCase
 {
     /**
      * The bast URI for this test, containing all files in the files directory

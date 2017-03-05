@@ -9,9 +9,10 @@
 
 namespace ZendTest\Http\Header;
 
+use PHPUnit\Framework\TestCase;
 use Zend\Http\Header\Origin;
 
-class OriginTest extends \PHPUnit_Framework_TestCase
+class OriginTest extends TestCase
 {
     /**
      * @group 6484
@@ -57,7 +58,7 @@ class OriginTest extends \PHPUnit_Framework_TestCase
      */
     public function testPreventsCRLFAttackViaConstructor()
     {
-        $this->setExpectedException('Zend\Http\Header\Exception\InvalidArgumentException');
+        $this->expectException('Zend\Http\Header\Exception\InvalidArgumentException');
         $header = new Origin("http://zend.org\r\n\r\nevilContent");
     }
 }

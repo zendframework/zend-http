@@ -9,9 +9,10 @@
 
 namespace ZendTest\Http\Header;
 
+use PHPUnit\Framework\TestCase;
 use Zend\Http\Header\Referer;
 
-class RefererTest extends \PHPUnit_Framework_TestCase
+class RefererTest extends TestCase
 {
     public function testRefererFromStringCreatesValidLocationHeader()
     {
@@ -71,7 +72,7 @@ class RefererTest extends \PHPUnit_Framework_TestCase
      */
     public function testCRLFAttack()
     {
-        $this->setExpectedException('Zend\Http\Header\Exception\InvalidArgumentException');
+        $this->expectException('Zend\Http\Header\Exception\InvalidArgumentException');
         $header = Referer::fromString("Referer: http://www.example.com/\r\n\r\nevilContent");
     }
 }

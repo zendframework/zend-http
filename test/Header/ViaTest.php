@@ -9,9 +9,10 @@
 
 namespace ZendTest\Http\Header;
 
+use PHPUnit\Framework\TestCase;
 use Zend\Http\Header\Via;
 
-class ViaTest extends \PHPUnit_Framework_TestCase
+class ViaTest extends TestCase
 {
     public function testViaFromStringCreatesValidViaHeader()
     {
@@ -52,7 +53,7 @@ class ViaTest extends \PHPUnit_Framework_TestCase
      */
     public function testPreventsCRLFAttackViaFromString()
     {
-        $this->setExpectedException('Zend\Http\Header\Exception\InvalidArgumentException');
+        $this->expectException('Zend\Http\Header\Exception\InvalidArgumentException');
         $header = Via::fromString("Via: xxx\r\n\r\nevilContent");
     }
 
@@ -62,7 +63,7 @@ class ViaTest extends \PHPUnit_Framework_TestCase
      */
     public function testPreventsCRLFAttackViaConstructor()
     {
-        $this->setExpectedException('Zend\Http\Header\Exception\InvalidArgumentException');
+        $this->expectException('Zend\Http\Header\Exception\InvalidArgumentException');
         $header = new Via("xxx\r\n\r\nevilContent");
     }
 }

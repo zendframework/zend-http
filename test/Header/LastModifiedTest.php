@@ -9,9 +9,10 @@
 
 namespace ZendTest\Http\Header;
 
+use PHPUnit\Framework\TestCase;
 use Zend\Http\Header\LastModified;
 
-class LastModifiedTest extends \PHPUnit_Framework_TestCase
+class LastModifiedTest extends TestCase
 {
     public function testExpiresFromStringCreatesValidLastModifiedHeader()
     {

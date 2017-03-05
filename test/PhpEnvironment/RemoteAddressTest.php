@@ -9,7 +9,7 @@
 
 namespace ZendTest\Http\PhpEnvironment;
 
-use PHPUnit_Framework_TestCase as TestCase;
+use PHPUnit\Framework\TestCase;
 use Zend\Http\PhpEnvironment\RemoteAddress as RemoteAddr;
 
 class RemoteAddressTest extends TestCase

@@ -9,9 +9,10 @@
 
 namespace ZendTest\Http\Header;
 
+use PHPUnit\Framework\TestCase;
 use Zend\Http\Header\Allow;
 
-class AllowTest extends \PHPUnit_Framework_TestCase
+class AllowTest extends TestCase
 {
     public function testAllowFromStringCreatesValidAllowHeader()
     {
@@ -89,10 +90,9 @@ class AllowTest extends \PHPUnit_Framework_TestCase
      */
     public function testPreventsCRLFAttackViaFromString()
     {
-        $this->setExpectedException(
-            'Zend\Http\Header\Exception\InvalidArgumentException',
-            'Invalid header value detected'
-        );
+        $this->expectException('Zend\Http\Header\Exception\InvalidArgumentException');
+        $this->expectExceptionMessage('Invalid header value detected');
+
         $header = Allow::fromString("Allow: GET\r\n\r\nevilContent");
     }
 
@@ -112,7 +112,9 @@ class AllowTest extends \PHPUnit_Framework_TestCase
     public function testPreventsCRLFAttackViaAllowMethods($methods)
     {
         $header = new Allow();
-        $this->setExpectedException('Zend\Http\Header\Exception\InvalidArgumentException', 'valid method');
+        $this->expectException('Zend\Http\Header\Exception\InvalidArgumentException');
+        $this->expectExceptionMessage('valid method');
+
         $header->allowMethods($methods);
     }
 
@@ -124,7 +126,9 @@ class AllowTest extends \PHPUnit_Framework_TestCase
     public function testPreventsCRLFAttackViaDisallowMethods($methods)
     {
         $header = new Allow();
-        $this->setExpectedException('Zend\Http\Header\Exception\InvalidArgumentException', 'valid method');
+        $this->expectException('Zend\Http\Header\Exception\InvalidArgumentException');
+        $this->expectExceptionMessage('valid method');
+
         $header->disallowMethods($methods);
     }
 }

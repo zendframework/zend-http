@@ -9,9 +9,10 @@
 
 namespace ZendTest\Http\Header;
 
+use PHPUnit\Framework\TestCase;
 use Zend\Http\Header\From;
 
-class FromTest extends \PHPUnit_Framework_TestCase
+class FromTest extends TestCase
 {
     public function testFromFromStringCreatesValidFromHeader()
     {
@@ -52,7 +53,7 @@ class FromTest extends \PHPUnit_Framework_TestCase
      */
     public function testPreventsCRLFAttackViaFromString()
     {
-        $this->setExpectedException('Zend\Http\Header\Exception\InvalidArgumentException');
+        $this->expectException('Zend\Http\Header\Exception\InvalidArgumentException');
         $header = From::fromString("From: xxx\r\n\r\nevilContent");
     }
 
@@ -62,7 +63,7 @@ class FromTest extends \PHPUnit_Framework_TestCase
      */
     public function testPreventsCRLFAttackViaConstructor()
     {
-        $this->setExpectedException('Zend\Http\Header\Exception\InvalidArgumentException');
+        $this->expectException('Zend\Http\Header\Exception\InvalidArgumentException');
         $header = new From("xxx\r\n\r\nevilContent");
     }
 }

@@ -9,9 +9,10 @@
 
 namespace ZendTest\Http\Header;
 
+use PHPUnit\Framework\TestCase;
 use Zend\Http\Header\KeepAlive;
 
-class KeepAliveTest extends \PHPUnit_Framework_TestCase
+class KeepAliveTest extends TestCase
 {
     public function testKeepAliveFromStringCreatesValidKeepAliveHeader()
     {
@@ -52,7 +53,7 @@ class KeepAliveTest extends \PHPUnit_Framework_TestCase
      */
     public function testPreventsCRLFAttackViaFromString()
     {
-        $this->setExpectedException('Zend\Http\Header\Exception\InvalidArgumentException');
+        $this->expectException('Zend\Http\Header\Exception\InvalidArgumentException');
         $header = KeepAlive::fromString("Keep-Alive: xxx\r\n\r\nevilContent");
     }
 
@@ -62,7 +63,7 @@ class KeepAliveTest extends \PHPUnit_Framework_TestCase
      */
     public function testPreventsCRLFAttackViaConstructor()
     {
-        $this->setExpectedException('Zend\Http\Header\Exception\InvalidArgumentException');
+        $this->expectException('Zend\Http\Header\Exception\InvalidArgumentException');
         $header = new KeepAlive("xxx\r\n\r\nevilContent");
     }
 }

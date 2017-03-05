@@ -102,10 +102,8 @@ class CurlTest extends CommonHttpTests
      */
     public function testSetConfigInvalidConfig($config)
     {
-        $this->setExpectedException(
-            'Zend\Http\Client\Adapter\Exception\InvalidArgumentException',
-            'Array or Traversable object expected'
-        );
+        $this->expectException('Zend\Http\Client\Adapter\Exception\InvalidArgumentException');
+        $this->expectExceptionMessage('Array or Traversable object expected');
 
         $this->_adapter->setOptions($config);
     }
@@ -128,10 +126,8 @@ class CurlTest extends CommonHttpTests
         ];
         $this->client = new \Zend\Http\Client($this->client->getUri(true), $config);
 
-        $this->setExpectedException(
-            'Zend\Http\Client\Adapter\Exception\RuntimeException',
-            'Unknown or erroreous cURL option'
-        );
+        $this->expectException('Zend\Http\Client\Adapter\Exception\RuntimeException');
+        $this->expectExceptionMessage('Unknown or erroreous cURL option');
         $this->client->send();
     }
 
@@ -177,8 +173,8 @@ class CurlTest extends CommonHttpTests
         $this->client->setParameterGet(['swallow' => 'african']);
         $this->client->setParameterPost(['Camelot' => 'A silly place']);
         $this->client->setMethod('POST');
-        $this->setExpectedException(
-            'Zend\Http\Client\Adapter\Exception\RuntimeException',
+        $this->expectException('Zend\Http\Client\Adapter\Exception\RuntimeException');
+        $this->expectExceptionMessage(
             'Error in cURL request: Operation timed out after 1000 milliseconds with 0 bytes received'
         );
         $this->client->send();
@@ -230,17 +226,15 @@ class CurlTest extends CommonHttpTests
     public function testWritingAndNotConnectedWithCurlHandleThrowsException()
     {
         $adapter = new Adapter\Curl();
-        $this->setExpectedException(
-            'Zend\Http\Client\Adapter\Exception\RuntimeException',
-            'Trying to write but we are not connected'
-        );
+        $this->expectException('Zend\Http\Client\Adapter\Exception\RuntimeException');
+        $this->expectExceptionMessage('Trying to write but we are not connected');
         $adapter->write("GET", "someUri");
     }
 
     public function testSetConfigIsNotArray()
     {
         $adapter = new Adapter\Curl();
-        $this->setExpectedException('Zend\Http\Client\Adapter\Exception\InvalidArgumentException');
+        $this->expectException('Zend\Http\Client\Adapter\Exception\InvalidArgumentException');
         $adapter->setOptions("foo");
     }
 

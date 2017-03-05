@@ -9,9 +9,10 @@
 
 namespace ZendTest\Http\Header;
 
+use PHPUnit\Framework\TestCase;
 use Zend\Http\Header\IfModifiedSince;
 
-class IfModifiedSinceTest extends \PHPUnit_Framework_TestCase
+class IfModifiedSinceTest extends TestCase
 {
     public function testIfModifiedSinceFromStringCreatesValidIfModifiedSinceHeader()
     {

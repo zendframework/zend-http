@@ -9,10 +9,11 @@
 
 namespace ZendTest\Http;
 
+use PHPUnit\Framework\TestCase;
 use Zend\Http\Headers;
 use Zend\Http\Header;
 
-class HeadersTest extends \PHPUnit_Framework_TestCase
+class HeadersTest extends TestCase
 {
     public function testHeadersImplementsProperClasses()
     {
@@ -62,7 +63,8 @@ class HeadersTest extends \PHPUnit_Framework_TestCase
 
     public function testHeadersFromStringFactoryThrowsExceptionOnMalformedHeaderLine()
     {
-        $this->setExpectedException('Zend\Http\Exception\RuntimeException', 'does not match');
+        $this->expectException('Zend\Http\Exception\RuntimeException');
+        $this->expectExceptionMessage('does not match');
         Headers::fromString("Fake = foo-bar\r\n\r\n");
     }
 
@@ -133,7 +135,8 @@ class HeadersTest extends \PHPUnit_Framework_TestCase
 
     public function testHeadersAddHeaderLineThrowsExceptionOnMissingFieldValue()
     {
-        $this->setExpectedException('Zend\Http\Exception\InvalidArgumentException', 'without a field');
+        $this->expectException('Zend\Http\Exception\InvalidArgumentException');
+        $this->expectExceptionMessage('without a field');
         $headers = new Headers();
         $headers->addHeaderLine('Foo');
     }
@@ -178,7 +181,8 @@ class HeadersTest extends \PHPUnit_Framework_TestCase
 
     public function testHeadersAddHeadersThrowsExceptionOnInvalidArguments()
     {
-        $this->setExpectedException('Zend\Http\Exception\InvalidArgumentException', 'Expected array or Trav');
+        $this->expectException('Zend\Http\Exception\InvalidArgumentException');
+        $this->expectExceptionMessage('Expected array or Trav');
         $headers = new Headers();
         $headers->addHeaders('foo');
     }
@@ -285,7 +289,7 @@ class HeadersTest extends \PHPUnit_Framework_TestCase
      */
     public function testCRLFAttack()
     {
-        $this->setExpectedException('Zend\Http\Exception\RuntimeException');
+        $this->expectException('Zend\Http\Exception\RuntimeException');
         $headers = Headers::fromString("Fake: foo-bar\r\n\r\nevilContent");
     }
 }

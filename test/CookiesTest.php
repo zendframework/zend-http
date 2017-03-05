@@ -9,13 +9,14 @@
 
 namespace ZendTest\Http;
 
+use PHPUnit\Framework\TestCase;
 use Zend\Http\Header\SetCookie;
 use Zend\Http\Response;
 use Zend\Http\Headers;
 use Zend\Http\Cookies;
 use Zend\Http\PhpEnvironment\Request;
 
-class CookiesTest extends \PHPUnit_Framework_TestCase
+class CookiesTest extends TestCase
 {
     public function testFromResponseInSetCookie()
     {

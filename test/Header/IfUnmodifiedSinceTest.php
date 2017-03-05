@@ -9,9 +9,10 @@
 
 namespace ZendTest\Http\Header;
 
+use PHPUnit\Framework\TestCase;
 use Zend\Http\Header\IfUnmodifiedSince;
 
-class IfUnmodifiedSinceTest extends \PHPUnit_Framework_TestCase
+class IfUnmodifiedSinceTest extends TestCase
 {
     public function testIfUnmodifiedSinceFromStringCreatesValidIfUnmodifiedSinceHeader()
     {

@@ -9,7 +9,7 @@
 
 namespace ZendTest\Http\Header;
 
-use PHPUnit_Framework_TestCase as TestCase;
+use PHPUnit\Framework\TestCase;
 use Zend\Http\Header\HeaderValue;
 
 class HeaderValueTest extends TestCase
@@ -91,7 +91,7 @@ class HeaderValueTest extends TestCase
      */
     public function testAssertValidRaisesExceptionForInvalidValue($value)
     {
-        $this->setExpectedException('Zend\Http\Header\Exception\InvalidArgumentException');
+        $this->expectException('Zend\Http\Header\Exception\InvalidArgumentException');
         HeaderValue::assertValid($value);
     }
 }

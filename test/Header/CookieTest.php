@@ -9,6 +9,7 @@
 
 namespace ZendTest\Http\Header;
 
+use PHPUnit\Framework\TestCase;
 use Zend\Http\Header\Cookie;
 use Zend\Http\Header\SetCookie;
 
@@ -18,7 +19,7 @@ use Zend\Http\Header\SetCookie;
  * @group      Zend_Http
  * @group      Zend_Http_Cookie
  */
-class CookieTest extends \PHPUnit_Framework_TestCase
+class CookieTest extends TestCase
 {
     public function testCookieFromStringCreatesValidCookieHeader()
     {
@@ -73,7 +74,7 @@ class CookieTest extends \PHPUnit_Framework_TestCase
      */
     public function testPreventsCRLFAttackViaFromString()
     {
-        $this->setExpectedException('Zend\Http\Header\Exception\InvalidArgumentException');
+        $this->expectException('Zend\Http\Header\Exception\InvalidArgumentException');
         $header = Cookie::fromString("Cookie: foo=bar\r\n\r\nevilContent");
     }
 
@@ -109,9 +110,8 @@ class CookieTest extends \PHPUnit_Framework_TestCase
 //     */
 //    public function testSetInvalidName($char)
 //    {
-//        $this->setExpectedException(
-//            'Zend\Http\Exception\InvalidArgumentException',
-//            'Cookie name cannot contain these characters');
+//        $this->expectException('Zend\Http\Exception\InvalidArgumentException');
+//        $this->expectExceptionMessage('Cookie name cannot contain these characters');
 //
 //        $cookie = new Http\Cookie("cookie_$char", 'foo', 'example.com');
 //    }

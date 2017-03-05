@@ -9,13 +9,14 @@
 
 namespace ZendTest\Http\Header;
 
+use PHPUnit\Framework\TestCase;
 use Zend\Http\Header\ContentSecurityPolicy;
 
-class ContentSecurityPolicyTest extends \PHPUnit_Framework_TestCase
+class ContentSecurityPolicyTest extends TestCase
 {
     public function testContentSecurityPolicyFromStringThrowsExceptionIfImproperHeaderNameUsed()
     {
-        $this->setExpectedException('Zend\Http\Header\Exception\InvalidArgumentException');
+        $this->expectException('Zend\Http\Header\Exception\InvalidArgumentException');
         ContentSecurityPolicy::fromString('X-Content-Security-Policy: default-src *;');
     }
 
@@ -77,7 +78,7 @@ class ContentSecurityPolicyTest extends \PHPUnit_Framework_TestCase
 
     public function testContentSecurityPolicySetDirectiveThrowsExceptionIfInvalidDirectiveNameGiven()
     {
-        $this->setExpectedException('Zend\Http\Header\Exception\InvalidArgumentException');
+        $this->expectException('Zend\Http\Header\Exception\InvalidArgumentException');
         $csp = new ContentSecurityPolicy();
         $csp->setDirective('foo', []);
     }
@@ -96,7 +97,7 @@ class ContentSecurityPolicyTest extends \PHPUnit_Framework_TestCase
      */
     public function testPreventsCRLFAttackViaFromString()
     {
-        $this->setExpectedException('Zend\Http\Header\Exception\InvalidArgumentException');
+        $this->expectException('Zend\Http\Header\Exception\InvalidArgumentException');
         $header = ContentSecurityPolicy::fromString("Content-Security-Policy: default-src 'none'\r\n\r\nevilContent");
     }
 
@@ -107,7 +108,7 @@ class ContentSecurityPolicyTest extends \PHPUnit_Framework_TestCase
     public function testPreventsCRLFAttackViaDirective()
     {
         $header = new ContentSecurityPolicy();
-        $this->setExpectedException('Zend\Http\Header\Exception\InvalidArgumentException');
+        $this->expectException('Zend\Http\Header\Exception\InvalidArgumentException');
         $header->setDirective('default-src', ["\rsome\r\nCRLF\ninjection"]);
     }
 

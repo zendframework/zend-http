@@ -9,13 +9,15 @@
 
 namespace ZendTest\Http\Client;
 
+use PHPUnit\Framework\TestCase;
+
 /**
  * Exercises Zend_Http_Client_Adapter_Test
  *
  * @group      Zend_Http
  * @group      Zend_Http_Client
  */
-class TestAdapterTest extends \PHPUnit_Framework_TestCase
+class TestAdapterTest extends TestCase
 {
     /**
      * Test adapter
@@ -48,10 +50,8 @@ class TestAdapterTest extends \PHPUnit_Framework_TestCase
      */
     public function testSetConfigThrowsOnInvalidConfig()
     {
-        $this->setExpectedException(
-            'Zend\Http\Client\Adapter\Exception\InvalidArgumentException',
-            'Array or Traversable object expected'
-        );
+        $this->expectException('Zend\Http\Client\Adapter\Exception\InvalidArgumentException');
+        $this->expectExceptionMessage('Array or Traversable object expected');
 
         $this->adapter->setOptions('foo');
     }

@@ -9,9 +9,10 @@
 
 namespace ZendTest\Http\Header;
 
+use PHPUnit\Framework\TestCase;
 use Zend\Http\Header\ContentMD5;
 
-class ContentMD5Test extends \PHPUnit_Framework_TestCase
+class ContentMD5Test extends TestCase
 {
     public function testContentMD5FromStringCreatesValidContentMD5Header()
     {
@@ -52,7 +53,7 @@ class ContentMD5Test extends \PHPUnit_Framework_TestCase
      */
     public function testPreventsCRLFAttackViaFromString()
     {
-        $this->setExpectedException('Zend\Http\Header\Exception\InvalidArgumentException');
+        $this->expectException('Zend\Http\Header\Exception\InvalidArgumentException');
         $header = ContentMD5::fromString("Content-MD5: xxx\r\n\r\nevilContent");
     }
 
@@ -62,7 +63,7 @@ class ContentMD5Test extends \PHPUnit_Framework_TestCase
      */
     public function testPreventsCRLFAttackViaConstructor()
     {
-        $this->setExpectedException('Zend\Http\Header\Exception\InvalidArgumentException');
+        $this->expectException('Zend\Http\Header\Exception\InvalidArgumentException');
         $header = new ContentMD5("xxx\r\n\r\nevilContent");
     }
 }

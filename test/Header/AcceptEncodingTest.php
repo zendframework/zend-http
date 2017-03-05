@@ -9,9 +9,10 @@
 
 namespace ZendTest\Http\Header;
 
+use PHPUnit\Framework\TestCase;
 use Zend\Http\Header\AcceptEncoding;
 
-class AcceptEncodingTest extends \PHPUnit_Framework_TestCase
+class AcceptEncodingTest extends TestCase
 {
     public function testAcceptEncodingFromStringCreatesValidAcceptEncodingHeader()
     {
@@ -94,7 +95,7 @@ class AcceptEncodingTest extends \PHPUnit_Framework_TestCase
      */
     public function testPreventsCRLFAttackViaFromString()
     {
-        $this->setExpectedException('Zend\Http\Header\Exception\InvalidArgumentException');
+        $this->expectException('Zend\Http\Header\Exception\InvalidArgumentException');
         $header = AcceptEncoding::fromString("Accept-Encoding: compress\r\n\r\nevilContent");
     }
 
@@ -105,7 +106,9 @@ class AcceptEncodingTest extends \PHPUnit_Framework_TestCase
     public function testPreventsCRLFAttackViaSetters()
     {
         $header = new AcceptEncoding();
-        $this->setExpectedException('Zend\Http\Header\Exception\InvalidArgumentException', 'valid type');
+        $this->expectException('Zend\Http\Header\Exception\InvalidArgumentException');
+        $this->expectExceptionMessage('valid type');
+
         $header->addEncoding("\nc\rom\r\npress");
     }
 }

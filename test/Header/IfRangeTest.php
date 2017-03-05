@@ -9,9 +9,10 @@
 
 namespace ZendTest\Http\Header;
 
+use PHPUnit\Framework\TestCase;
 use Zend\Http\Header\IfRange;
 
-class IfRangeTest extends \PHPUnit_Framework_TestCase
+class IfRangeTest extends TestCase
 {
     public function testIfRangeFromStringCreatesValidIfRangeHeader()
     {
@@ -52,7 +53,7 @@ class IfRangeTest extends \PHPUnit_Framework_TestCase
      */
     public function testPreventsCRLFAttackViaFromString()
     {
-        $this->setExpectedException('Zend\Http\Header\Exception\InvalidArgumentException');
+        $this->expectException('Zend\Http\Header\Exception\InvalidArgumentException');
         $header = IfRange::fromString("If-Range: xxx\r\n\r\nevilContent");
     }
 
@@ -62,7 +63,7 @@ class IfRangeTest extends \PHPUnit_Framework_TestCase
      */
     public function testPreventsCRLFAttackViaConstructor()
     {
-        $this->setExpectedException('Zend\Http\Header\Exception\InvalidArgumentException');
+        $this->expectException('Zend\Http\Header\Exception\InvalidArgumentException');
         $header = new IfRange("xxx\r\n\r\nevilContent");
     }
 }

@@ -9,9 +9,10 @@
 
 namespace ZendTest\Http\Header;
 
+use PHPUnit\Framework\TestCase;
 use Zend\Http\Header\IfMatch;
 
-class IfMatchTest extends \PHPUnit_Framework_TestCase
+class IfMatchTest extends TestCase
 {
     public function testIfMatchFromStringCreatesValidIfMatchHeader()
     {
@@ -52,7 +53,7 @@ class IfMatchTest extends \PHPUnit_Framework_TestCase
      */
     public function testPreventsCRLFAttackViaFromString()
     {
-        $this->setExpectedException('Zend\Http\Header\Exception\InvalidArgumentException');
+        $this->expectException('Zend\Http\Header\Exception\InvalidArgumentException');
         $header = IfMatch::fromString("If-Match: xxx\r\n\r\nevilContent");
     }
 
@@ -62,7 +63,7 @@ class IfMatchTest extends \PHPUnit_Framework_TestCase
      */
     public function testPreventsCRLFAttackViaConstructor()
     {
-        $this->setExpectedException('Zend\Http\Header\Exception\InvalidArgumentException');
+        $this->expectException('Zend\Http\Header\Exception\InvalidArgumentException');
         $header = new IfMatch("xxx\r\n\r\nevilContent");
     }
 }
