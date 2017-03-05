@@ -62,7 +62,7 @@ class Proxy extends Socket
     {
         //enforcing that the proxy keys are set in the form proxy_*
         foreach ($options as $k => $v) {
-            if (preg_match("/^proxy[a-z]+/", $k)) {
+            if (preg_match('/^proxy[a-z]+/', $k)) {
                 $options['proxy_' . substr($k, 5, strlen($k))] = $v;
                 unset($options[$k]);
             }
@@ -123,15 +123,15 @@ class Proxy extends Socket
 
         // Make sure we're properly connected
         if (! $this->socket) {
-            throw new AdapterException\RuntimeException("Trying to write but we are not connected");
+            throw new AdapterException\RuntimeException('Trying to write but we are not connected');
         }
 
         $host = $this->config['proxy_host'];
         $port = $this->config['proxy_port'];
 
-        if ($this->connectedTo[0] != "tcp://$host" || $this->connectedTo[1] != $port) {
+        if ($this->connectedTo[0] != sprintf('tcp://%s', $host) || $this->connectedTo[1] != $port) {
             throw new AdapterException\RuntimeException(
-                "Trying to write but we are connected to the wrong proxy server"
+                'Trying to write but we are connected to the wrong proxy server'
             );
         }
 
@@ -159,17 +159,17 @@ class Proxy extends Socket
             if ($uri->getQuery()) {
                 $path .= '?' . $uri->getQuery();
             }
-            $request = "$method $path HTTP/$httpVer\r\n";
+            $request = sprintf('%s %s HTTP/%s%s', $method, $path, $httpVer, "\r\n");
         } else {
-            $request = "$method $uri HTTP/$httpVer\r\n";
+            $request = sprintf('%s %s HTTP/%s%s', $method, $uri, $httpVer, "\r\n");
         }
 
         // Add all headers to the request string
         foreach ($headers as $k => $v) {
             if (is_string($k)) {
-                $v = "$k: $v";
+                $v = $k . ': ' . $v;
             }
-            $request .= "$v\r\n";
+            $request .= $v . "\r\n";
         }
 
         if (is_resource($body)) {
@@ -184,7 +184,7 @@ class Proxy extends Socket
         $test  = fwrite($this->socket, $request);
         $error = ErrorHandler::stop();
         if (! $test) {
-            throw new AdapterException\RuntimeException("Error writing request to proxy server", 0, $error);
+            throw new AdapterException\RuntimeException('Error writing request to proxy server', 0, $error);
         }
 
         if (is_resource($body)) {
@@ -207,18 +207,18 @@ class Proxy extends Socket
      */
     protected function connectHandshake($host, $port = 443, $httpVer = '1.1', array &$headers = [])
     {
-        $request = "CONNECT $host:$port HTTP/$httpVer\r\n" .
-                   "Host: " . $host . "\r\n";
+        $request = 'CONNECT ' . $host . ':' . $port . ' HTTP/' . $httpVer . "\r\n"
+            . 'Host: ' . $host . "\r\n";
 
         // Add the user-agent header
         if (isset($this->config['useragent'])) {
-            $request .= "User-agent: " . $this->config['useragent'] . "\r\n";
+            $request .= 'User-agent: ' . $this->config['useragent'] . "\r\n";
         }
 
         // If the proxy-authorization header is set, send it to proxy but remove
         // it from headers sent to target host
         if (isset($headers['proxy-authorization'])) {
-            $request .= "Proxy-authorization: " . $headers['proxy-authorization'] . "\r\n";
+            $request .= 'Proxy-authorization: ' . $headers['proxy-authorization'] . "\r\n";
             unset($headers['proxy-authorization']);
         }
 
@@ -229,7 +229,7 @@ class Proxy extends Socket
         $test  = fwrite($this->socket, $request);
         $error = ErrorHandler::stop();
         if (! $test) {
-            throw new AdapterException\RuntimeException("Error writing request to proxy server", 0, $error);
+            throw new AdapterException\RuntimeException('Error writing request to proxy server', 0, $error);
         }
 
         // Read response headers only
@@ -249,9 +249,10 @@ class Proxy extends Socket
 
         // Check that the response from the proxy is 200
         if (Response::fromString($response)->getStatusCode() != 200) {
-            throw new AdapterException\RuntimeException(
-                "Unable to connect to HTTPS proxy. Server response: " . $response
-            );
+            throw new AdapterException\RuntimeException(sprintf(
+                'Unable to connect to HTTPS proxy. Server response: %s',
+                $response
+            ));
         }
 
         // If all is good, switch socket to secure mode. We have to fall back
@@ -272,8 +273,9 @@ class Proxy extends Socket
         }
 
         if (! $success) {
-            throw new AdapterException\RuntimeException("Unable to connect to" .
-                    " HTTPS server through proxy: could not negotiate secure connection.");
+            throw new AdapterException\RuntimeException(
+                'Unable to connect to HTTPS server through proxy: could not negotiate secure connection.'
+            );
         }
     }
 

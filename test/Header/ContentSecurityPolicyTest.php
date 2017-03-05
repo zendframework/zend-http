@@ -61,8 +61,8 @@ class ContentSecurityPolicyTest extends TestCase
         $csp->setDirective('default-src', ['https://*.google.com', 'http://foo.com'])
             ->setDirective('img-src', ["'self'"])
             ->setDirective('script-src', ['https://*.googleapis.com', 'https://*.bar.com']);
-        $header = "Content-Security-Policy: default-src https://*.google.com http://foo.com; "
-                . "img-src 'self'; script-src https://*.googleapis.com https://*.bar.com;";
+        $header = 'Content-Security-Policy: default-src https://*.google.com http://foo.com; '
+                . 'img-src \'self\'; script-src https://*.googleapis.com https://*.bar.com;';
         $this->assertEquals($header, $csp->toString());
     }
 

@@ -133,9 +133,10 @@ abstract class AbstractDate implements HeaderInterface
     public static function setDateFormat($format)
     {
         if (! isset(static::$dateFormats[$format])) {
-            throw new Exception\InvalidArgumentException(
-                "No constant defined for provided date format: {$format}"
-            );
+            throw new Exception\InvalidArgumentException(sprintf(
+                'No constant defined for provided date format: %s',
+                $format
+            ));
         }
 
         static::$dateFormat = static::$dateFormats[$format];

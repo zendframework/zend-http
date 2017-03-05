@@ -238,7 +238,7 @@ class ClientTest extends TestCase
 
         // response should be the second response, since third response should not
         // be requested, due to the maxredirects = 1 limit
-        $this->assertEquals($response->getContent(), "Page #2");
+        $this->assertEquals($response->getContent(), 'Page #2');
     }
 
     public function testIfClientDoesNotLooseAuthenticationOnRedirect()

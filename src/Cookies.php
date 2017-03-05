@@ -164,7 +164,7 @@ class Cookies extends Headers
         if (is_string($uri)) {
             $uri = Uri\UriFactory::factory($uri, 'http');
         } elseif (! $uri instanceof Uri\Uri) {
-            throw new Exception\InvalidArgumentException("Invalid URI string or object passed");
+            throw new Exception\InvalidArgumentException('Invalid URI string or object passed');
         }
 
         $host = $uri->getHost();
@@ -232,7 +232,10 @@ class Cookies extends Headers
                     return $cookie->__toString();
 
                 default:
-                    throw new Exception\InvalidArgumentException("Invalid value passed for \$retAs: {$retAs}");
+                    throw new Exception\InvalidArgumentException(sprintf(
+                        'Invalid value passed for $retAs: %s',
+                        $retAs
+                    ));
             }
         }
 

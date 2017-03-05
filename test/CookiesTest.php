@@ -20,13 +20,13 @@ class CookiesTest extends TestCase
     {
         $response = new Response();
         $headers = new Headers();
-        $header = new SetCookie("foo", "bar");
-        $header->setDomain("www.zend.com");
-        $header->setPath("/");
+        $header = new SetCookie('foo', 'bar');
+        $header->setDomain('www.zend.com');
+        $header->setPath('/');
         $headers->addHeader($header);
         $response->setHeaders($headers);
 
-        $response = Cookies::fromResponse($response, "http://www.zend.com");
+        $response = Cookies::fromResponse($response, 'http://www.zend.com');
         $this->assertSame($header, $response->getCookie('http://www.zend.com', 'foo'));
     }
 
@@ -34,13 +34,13 @@ class CookiesTest extends TestCase
     {
         $response = new Response();
         $headers = new Headers();
-        $header = new SetCookie("foo", "bar");
-        $header->setDomain("www.zend.com");
-        $header->setPath("/");
+        $header = new SetCookie('foo', 'bar');
+        $header->setDomain('www.zend.com');
+        $header->setPath('/');
         $headers->addHeader($header);
         $response->setHeaders($headers);
 
-        $response = Cookies::fromResponse($response, "http://www.zend.com");
+        $response = Cookies::fromResponse($response, 'http://www.zend.com');
         $this->assertSame($header, $response->getCookie('http://www.zend.com', 'foo'));
     }
 

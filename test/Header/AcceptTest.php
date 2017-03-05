@@ -421,17 +421,17 @@ class AcceptTest extends TestCase
         $this->assertEquals('application/text', $res[0]->raw);
         $this->assertEquals('application/*', $res[1]->raw);
 
-        $accept = Accept::fromString("Accept: text/xml, application/xml");
+        $accept = Accept::fromString('Accept: text/xml, application/xml');
         $res = $accept->getPrioritized();
         $this->assertEquals('application/xml', $res[0]->raw);
         $this->assertEquals('text/xml', $res[1]->raw);
 
-        $accept = Accept::fromString("Accept: application/xml, text/xml");
+        $accept = Accept::fromString('Accept: application/xml, text/xml');
         $res = $accept->getPrioritized();
         $this->assertEquals('application/xml', $res[0]->raw);
         $this->assertEquals('text/xml', $res[1]->raw);
 
-        $accept = Accept::fromString("Accept: application/vnd.foobar+xml; q=0.9, text/xml");
+        $accept = Accept::fromString('Accept: application/vnd.foobar+xml; q=0.9, text/xml');
         $res = $accept->getPrioritized();
         $this->assertEquals(1.0, $res[0]->getPriority());
         $this->assertEquals(0.9, $res[1]->getPriority());

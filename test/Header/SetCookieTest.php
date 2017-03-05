@@ -367,7 +367,7 @@ class SetCookieTest extends TestCase
     {
         $cookie = SetCookie::fromString($cStr);
         if (! $cookie instanceof SetCookie) {
-            $this->fail("Failed creating a cookie object from '$cStr'");
+            $this->fail(sprintf('Failed creating a cookie object from "%s"', $cStr));
         }
         $this->assertEquals($expected, $cookie->getFieldValue());
         $this->assertEquals($cookie->getFieldName() . ': ' . $expected, $cookie->toString());
@@ -384,7 +384,7 @@ class SetCookieTest extends TestCase
     {
         $cookie = SetCookie::fromString($cStr);
         if (! $cookie instanceof SetCookie) {
-            $this->fail("Failed creating a cookie object from '$cStr'");
+            $this->fail(sprintf('Failed creating a cookie object from "%s"', $cStr));
         }
         $this->assertEquals($cookie->getFieldName() . ': ' . $expected, $cookie->toString());
     }
@@ -412,7 +412,7 @@ class SetCookieTest extends TestCase
 
     public function testSetJsonValue()
     {
-        $cookieName = "fooCookie";
+        $cookieName = 'fooCookie';
         $jsonData = json_encode(['foo' => 'bar']);
 
         $cookie = new SetCookie($cookieName, $jsonData);
@@ -420,7 +420,7 @@ class SetCookieTest extends TestCase
         $regExp = sprintf('#^%s=%s#', $cookieName, urlencode($jsonData));
         $this->assertRegExp($regExp, $cookie->getFieldValue());
 
-        $cookieName = "fooCookie";
+        $cookieName = 'fooCookie';
         $jsonData = json_encode(['foo' => 'bar']);
 
         $cookie = new SetCookie($cookieName, $jsonData);
@@ -446,13 +446,13 @@ class SetCookieTest extends TestCase
      */
     public function testPreventsCRLFAttackViaConstructor()
     {
-        $header = new SetCookie("leo_auth_token", "example\r\n\r\nevilContent");
+        $header = new SetCookie('leo_auth_token', "example\r\n\r\nevilContent");
         $this->assertEquals('Set-Cookie: leo_auth_token=example%0D%0A%0D%0AevilContent', $header->toString());
     }
 
     public function testPreventsCRLFAttackViaSetValue()
     {
-        $header = new SetCookie("leo_auth_token");
+        $header = new SetCookie('leo_auth_token');
         $header->setValue("example\r\n\r\nevilContent");
         $this->assertEquals('Set-Cookie: leo_auth_token=example%0D%0A%0D%0AevilContent', $header->toString());
     }

@@ -243,7 +243,7 @@ class RequestTest extends TestCase
      */
     public function testRequestsWithoutHttpVersionAreOK()
     {
-        $requestString = "GET http://www.domain.com/index.php";
+        $requestString = 'GET http://www.domain.com/index.php';
         $request = Request::fromString($requestString);
         $this->assertEquals($request::METHOD_GET, $request->getMethod());
     }

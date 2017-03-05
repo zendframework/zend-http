@@ -154,7 +154,7 @@ class StaticTest extends TestCase
     public function testExceptUnsupportedAuthDynamic()
     {
         $this->expectException(InvalidArgumentException::class);
-        $this->expectExceptionMessage('Invalid or not supported authentication type: \'SuperStrongAlgo\'');
+        $this->expectExceptionMessage('Invalid or not supported authentication type: "SuperStrongAlgo"');
 
         $this->_client->setAuth('shahar', '1234', 'SuperStrongAlgo');
     }
@@ -436,7 +436,7 @@ class StaticTest extends TestCase
                ($got = array_shift($gotLines))) {
             $expected = trim($expected);
             $got = trim($got);
-            $this->assertRegExp("/^$expected$/", $got);
+            $this->assertRegExp(sprintf('/^%s$/', $expected), $got);
         }
     }
 
@@ -469,7 +469,7 @@ class StaticTest extends TestCase
         $request = $this->_client->getLastRawRequest();
 
         if (! preg_match('/^content-length:\s+(\d+)/mi', $request, $match)) {
-            $this->fail("Unable to find content-length header in request");
+            $this->fail('Unable to find content-length header in request');
         }
 
         $this->assertEquals(filesize($bodyFile), (int) $match[1]);

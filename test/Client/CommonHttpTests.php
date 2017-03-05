@@ -138,7 +138,7 @@ abstract class CommonHttpTests extends TestCase
     {
         $this->client->setMethod($method);
         $res = $this->client->send();
-        $this->assertTrue($res->isSuccess(), "HTTP {$method} request failed.");
+        $this->assertTrue($res->isSuccess(), sprintf('HTTP %s request failed.', $method));
     }
 
     /**
@@ -155,7 +155,7 @@ abstract class CommonHttpTests extends TestCase
         $this->client->setMethod('TRACE');
         $res = $this->client->send();
         if ($res->getStatusCode() == 405 || $res->getStatusCode() == 501) {
-            $this->markTestSkipped("Server does not allow the TRACE method");
+            $this->markTestSkipped('Server does not allow the TRACE method');
         }
 
         $this->assertEquals(
@@ -202,7 +202,7 @@ abstract class CommonHttpTests extends TestCase
         $this->client->setMethod('POST');
         $this->assertFalse($this->client->getRequest()->isPatch());
         $res = $this->client->send();
-        $this->assertEquals(serialize($params), $res->getBody(), "POST data integrity test failed");
+        $this->assertEquals(serialize($params), $res->getBody(), 'POST data integrity test failed');
     }
 
     /**
@@ -224,7 +224,7 @@ abstract class CommonHttpTests extends TestCase
         $this->assertEquals($client::ENC_URLENCODED, $this->client->getEncType());
         $this->assertTrue($client->getRequest()->isPatch());
         $res = $this->client->send();
-        $this->assertEquals(serialize($params), $res->getBody(), "PATCH data integrity test failed");
+        $this->assertEquals(serialize($params), $res->getBody(), 'PATCH data integrity test failed');
     }
 
     /**
@@ -246,7 +246,7 @@ abstract class CommonHttpTests extends TestCase
         $this->assertEquals($client::ENC_URLENCODED, $this->client->getEncType());
         $this->assertTrue($client->getRequest()->isDelete());
         $res = $this->client->send();
-        $this->assertEquals(serialize($params), $res->getBody(), "DELETE data integrity test failed");
+        $this->assertEquals(serialize($params), $res->getBody(), 'DELETE data integrity test failed');
     }
 
     /**
@@ -268,7 +268,7 @@ abstract class CommonHttpTests extends TestCase
         $this->assertEquals($client::ENC_URLENCODED, $this->client->getEncType());
         $this->assertTrue($client->getRequest()->isOptions());
         $res = $this->client->send();
-        $this->assertEquals(serialize($params), $res->getBody(), "OPTIONS data integrity test failed");
+        $this->assertEquals(serialize($params), $res->getBody(), 'OPTIONS data integrity test failed');
     }
 
     /**
@@ -286,7 +286,7 @@ abstract class CommonHttpTests extends TestCase
         $this->client->setParameterPost($params);
         $this->client->setMethod('POST');
         $res = $this->client->send();
-        $this->assertEquals(serialize($params), $res->getBody(), "POST data integrity test failed");
+        $this->assertEquals(serialize($params), $res->getBody(), 'POST data integrity test failed');
     }
 
     /**
@@ -294,7 +294,7 @@ abstract class CommonHttpTests extends TestCase
      */
     public function testRawPostData()
     {
-        $data = "Chuck Norris never wet his bed as a child. The bed wet itself out of fear.";
+        $data = 'Chuck Norris never wet his bed as a child. The bed wet itself out of fear.';
 
         $this->client->setRawBody($data);
         $this->client->setEncType('text/html');
@@ -315,7 +315,7 @@ abstract class CommonHttpTests extends TestCase
             'array' => ['firstItem', 'secondItem', '3rdItem'],
         ];
 
-        $headers = ["X-Foo" => "bar"];
+        $headers = ['X-Foo' => 'bar'];
 
         $this->client->setParameterPost($params);
         $this->client->setParameterGet($params);
@@ -327,7 +327,7 @@ abstract class CommonHttpTests extends TestCase
         $this->assertContains(
             serialize($params) . "\n" . serialize($params),
             $res->getBody(),
-            "returned body does not contain all GET and POST parameters (it should!)"
+            'returned body does not contain all GET and POST parameters (it should!)'
         );
 
         $this->client->resetParameters();
@@ -339,8 +339,8 @@ abstract class CommonHttpTests extends TestCase
             $res->getBody(),
             "returned body contains GET or POST parameters (it shouldn't!)"
         );
-        $headerXFoo = $this->client->getHeader("X-Foo");
-        $this->assertEmpty($headerXFoo, "Header not preserved by reset");
+        $headerXFoo = $this->client->getHeader('X-Foo');
+        $this->assertEmpty($headerXFoo, 'Header not preserved by reset');
     }
 
     /**
@@ -395,13 +395,13 @@ abstract class CommonHttpTests extends TestCase
 
         $res = $this->client->send();
         if ($res->getStatusCode() == 405 || $res->getStatusCode() == 501) {
-            $this->markTestSkipped("Server does not allow the TRACE method");
+            $this->markTestSkipped('Server does not allow the TRACE method');
         }
 
         $body = strtolower($res->getBody());
 
         foreach ($headers as $key => $val) {
-            $this->assertContains(strtolower("$key: $val"), $body);
+            $this->assertContains(strtolower($key . ': ' . $val), $body);
         }
     }
 
@@ -424,14 +424,14 @@ abstract class CommonHttpTests extends TestCase
 
         $res = $this->client->send();
         if ($res->getStatusCode() == 405 || $res->getStatusCode() == 501) {
-            $this->markTestSkipped("Server does not allow the TRACE method");
+            $this->markTestSkipped('Server does not allow the TRACE method');
         }
 
         $body = strtolower($res->getBody());
 
         foreach ($headers as $key => $val) {
             if (is_string($key)) {
-                $this->assertContains(strtolower("$key: $val"), $body);
+                $this->assertContains(strtolower($key . ': ' . $val), $body);
             } else {
                 $this->assertContains(strtolower($val), $body);
             }
@@ -463,7 +463,7 @@ abstract class CommonHttpTests extends TestCase
 
         $res = $this->client->send();
         if ($res->getStatusCode() == 405 || $res->getStatusCode() == 501) {
-            $this->markTestSkipped("Server does not allow the TRACE method");
+            $this->markTestSkipped('Server does not allow the TRACE method');
         }
         $body = strtolower($res->getBody());
 
@@ -472,7 +472,7 @@ abstract class CommonHttpTests extends TestCase
                 $val = implode(', ', $val);
             }
 
-            $this->assertContains(strtolower("$key: $val"), $body);
+            $this->assertContains(strtolower($key . ': ' . $val), $body);
         }
     }
 
@@ -580,8 +580,12 @@ abstract class CommonHttpTests extends TestCase
         $res = $this->client->send();
         $this->assertTrue(
             $res->isRedirect(),
-            "Last response was not a redirection as expected. Response code: {$res->getStatusCode()}. "
-            . "Redirections counter: {$this->client->getRedirectionsCount()} (when strict redirects are on)"
+            sprintf(
+                'Last response was not a redirection as expected. Response code: %d. '
+                . 'Redirections counter: %d (when strict redirects are on)',
+                $res->getStatusCode(),
+                $this->client->getRedirectionsCount()
+            )
         );
 
         // Then try with normal redirections
@@ -591,8 +595,12 @@ abstract class CommonHttpTests extends TestCase
         $res = $this->client->send();
         $this->assertTrue(
             $res->isRedirect(),
-            "Last response was not a redirection as expected. Response code: {$res->getStatusCode()}. "
-            . "Redirections counter: {$this->client->getRedirectionsCount()} (when strict redirects are off)"
+            sprintf(
+                'Last response was not a redirection as expected. Response code: %d.'
+                . ' Redirections counter: %d (when strict redirects are off)',
+                $res->getStatusCode(),
+                $this->client->getRedirectionsCount()
+            )
         );
     }
 
@@ -612,9 +620,9 @@ abstract class CommonHttpTests extends TestCase
         $res = $this->client->send();
 
         $this->assertEquals(
-            "{$uri}/path/to/fake/file.ext?redirect=abpath",
+            sprintf('%s/path/to/fake/file.ext?redirect=abpath', $uri),
             $this->client->getUri()->toString(),
-            "The new location is not as expected: {$this->client->getUri()->toString()}"
+            sprintf('The new location is not as expected: %s', $this->client->getUri()->toString())
         );
     }
 
@@ -635,9 +643,9 @@ abstract class CommonHttpTests extends TestCase
         $this->client->send();
 
         $this->assertEquals(
-            "{$uri}?redirect=relpath",
+            sprintf('%s?redirect=relpath', $uri),
             $this->client->getUri()->toString(),
-            "The new location is not as expected: {$this->client->getUri()->toString()}"
+            sprintf('The new location is not as expected: %s', $this->client->getUri()->toString())
         );
     }
 
@@ -790,7 +798,7 @@ abstract class CommonHttpTests extends TestCase
         $this->client->setMethod('POST');
         $res = $this->client->send();
 
-        $body = 'uploadfile myfile.txt text/plain ' . strlen($rawdata) . "\n";
+        $body = sprintf('uploadfile myfile.txt text/plain %d' . "\n", strlen($rawdata));
         $this->assertEquals($body, $res->getBody(), 'Response body does not include expected upload parameters');
     }
 
@@ -810,7 +818,7 @@ abstract class CommonHttpTests extends TestCase
 
         $size = filesize(__FILE__);
 
-        $body = "uploadfile " . basename(__FILE__) . " text/x-foo-bar $size\n";
+        $body = sprintf('uploadfile %s text/x-foo-bar %d' . "\n", basename(__FILE__), $size);
         $this->assertEquals($body, $res->getBody(), 'Response body does not include expected upload parameters');
     }
 
@@ -846,7 +854,7 @@ abstract class CommonHttpTests extends TestCase
         $res = $this->client->send();
 
         $size = filesize($file);
-        $body = "uploadfile " . basename($file) . " image/jpeg $size\n";
+        $body = sprintf('uploadfile %s image/jpeg %d' . "\n", basename($file), $size);
         $this->assertEquals(
             $body,
             $res->getBody(),
@@ -902,7 +910,7 @@ abstract class CommonHttpTests extends TestCase
         $expectedBody = '';
         foreach ($files as $filename) {
             $this->client->setFileUpload($filename, 'uploadfile[]', $rawData, 'text/plain');
-            $expectedBody .= "uploadfile $filename text/plain " . strlen($rawData) . "\n";
+            $expectedBody .= sprintf('uploadfile %s text/plain %d' . "\n", $filename, strlen($rawData));
         }
         $this->client->setMethod('POST');
 
@@ -1032,7 +1040,7 @@ abstract class CommonHttpTests extends TestCase
 
         $response = $this->client->send();
         if (! $response->isSuccess()) {
-            throw new AdapterException\RuntimeException("Error requesting test URL");
+            throw new AdapterException\RuntimeException('Error requesting test URL');
         }
 
         $clen = $response->getHeaders()->get('Content-Length');
@@ -1121,8 +1129,8 @@ abstract class CommonHttpTests extends TestCase
             [
                 [
                     'someData' => [
-                        "1",
-                        "2",
+                        '1',
+                        '2',
                         'key' => 'value',
                         'nesting' => [
                             'a' => 'AAA',
@@ -1196,7 +1204,10 @@ abstract class CommonHttpTests extends TestCase
         }
         $endTime = microtime(true);
         if ($timeoutException === null) {
-            $this->markTestSkipped("There's something responding at ".$this->getNotRespondingUri());
+            $this->markTestSkipped(sprintf(
+                'There is something responding at %s',
+                $this->getNotRespondingUri()
+            ));
         }
         $deltaTime = ceil($endTime - $startTime);
         $this->assertGreaterThanOrEqual($connectTimeout, $deltaTime);

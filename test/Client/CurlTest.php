@@ -213,7 +213,7 @@ class CurlTest extends CommonHttpTests
         // Method 2: Using a File-Handle to the file to PUT the data
         $putFilePath = dirname(realpath(__FILE__)) . DIRECTORY_SEPARATOR .
             '_files' . DIRECTORY_SEPARATOR . 'staticFile.jpg';
-        $putFileHandle = fopen($putFilePath, "r");
+        $putFileHandle = fopen($putFilePath, 'r');
         $putFileSize = filesize($putFilePath);
 
         $adapter = new Adapter\Curl();
@@ -331,7 +331,7 @@ class CurlTest extends CommonHttpTests
     {
         $adapter = new Adapter\Curl();
         $adapter->setOptions(['timeout' => 2, 'maxredirects' => 1]);
-        $adapter->connect("http://framework.zend.com");
+        $adapter->connect('http://framework.zend.com');
 
         $this->assertInternalType('resource', $adapter->getHandle());
     }

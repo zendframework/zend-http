@@ -147,9 +147,10 @@ class Socket implements HttpAdapter, StreamInterface
             $this->context = stream_context_create($context);
         } else {
             // Invalid parameter
-            throw new AdapterException\InvalidArgumentException(
-                "Expecting either a stream context resource or array, got " . gettype($context)
-            );
+            throw new AdapterException\InvalidArgumentException(sprintf(
+                'Expecting either a stream context resource or array, got %s',
+                gettype($context)
+            ));
         }
 
         return $this;
@@ -305,7 +306,7 @@ class Socket implements HttpAdapter, StreamInterface
                     $errorString = '';
                     if (extension_loaded('openssl')) {
                         while (($sslError = openssl_error_string()) != false) {
-                            $errorString .= "; SSL error: $sslError";
+                            $errorString .= sprintf('; SSL error: %s', $sslError);
                         }
                     }
                     $this->close();
@@ -324,7 +325,7 @@ class Socket implements HttpAdapter, StreamInterface
                     }
 
                     if ($errorString) {
-                        $errorString = ": $errorString";
+                        $errorString = sprintf(': %s', $errorString);
                     }
 
                     throw new AdapterException\RuntimeException(sprintf(
@@ -334,7 +335,7 @@ class Socket implements HttpAdapter, StreamInterface
                     ), 0, $error);
                 }
 
-                $host = $this->config['ssltransport'] . "://" . $host;
+                $host = $this->config['ssltransport'] . '://' . $host;
             } else {
                 $host = 'tcp://' . $host;
             }
@@ -377,12 +378,12 @@ class Socket implements HttpAdapter, StreamInterface
         if ($uri->getQuery()) {
             $path .= '?' . $uri->getQuery();
         }
-        $request = "{$method} {$path} HTTP/{$httpVer}\r\n";
+        $request = $method . ' ' . $path . ' HTTP/' . $httpVer . "\r\n";
         foreach ($headers as $k => $v) {
             if (is_string($k)) {
-                $v = ucfirst($k) . ": $v";
+                $v = ucfirst($k) . ': ' . $v;
             }
-            $request .= "$v\r\n";
+            $request .= $v . "\r\n";
         }
 
         if (is_resource($body)) {
@@ -474,8 +475,10 @@ class Socket implements HttpAdapter, StreamInterface
                     $chunksize = trim($line);
                     if (! ctype_xdigit($chunksize)) {
                         $this->close();
-                        throw new AdapterException\RuntimeException('Invalid chunk size "' .
-                            $chunksize . '" unable to read chunked body');
+                        throw new AdapterException\RuntimeException(sprintf(
+                            'Invalid chunk size "%s" unable to read chunked body',
+                            $chunksize
+                        ));
                     }
 
                     // Convert the hexadecimal value to plain integer
@@ -516,8 +519,10 @@ class Socket implements HttpAdapter, StreamInterface
                 } while ($chunksize > 0);
             } else {
                 $this->close();
-                throw new AdapterException\RuntimeException('Cannot handle "' .
-                    $transferEncoding->getFieldValue() . '" transfer encoding');
+                throw new AdapterException\RuntimeException(sprintf(
+                    'Cannot handle "%s" transfer encoding',
+                    $transferEncoding->getFieldValue()
+                ));
             }
 
             // We automatically decode chunked-messages when writing to a stream
@@ -622,7 +627,7 @@ class Socket implements HttpAdapter, StreamInterface
             if ($timedout) {
                 $this->close();
                 throw new AdapterException\TimeoutException(
-                    "Read timed out after {$this->config['timeout']} seconds",
+                    sprintf('Read timed out after %d seconds', $this->config['timeout']),
                     AdapterException\TimeoutException::READ_TIMEOUT
                 );
             }

@@ -49,7 +49,10 @@ class ProxyAdapterTest extends SocketTest
                 $port = 8080;
             } else {
                 if (($port < 1 || $port > 65535)) {
-                    $this->markTestSkipped("$port is not a valid proxy port number. Should be between 1 and 65535.");
+                    $this->markTestSkipped(sprintf(
+                        '%s is not a valid proxy port number. Should be between 1 and 65535.',
+                        $port
+                    ));
                 }
             }
 
@@ -144,7 +147,7 @@ class ProxyAdapterTest extends SocketTest
             $this->assertArrayHasKey(
                 $socketConfigKey,
                 $proxyConfig,
-                "Proxy adapter should have all the Socket configuration keys"
+                'Proxy adapter should have all the Socket configuration keys'
             );
         }
     }

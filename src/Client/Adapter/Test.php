@@ -130,12 +130,12 @@ class Test implements AdapterInterface
         if ($uri->getQuery()) {
             $path .= '?' . $uri->getQuery();
         }
-        $request = "{$method} {$path} HTTP/{$httpVer}\r\n";
+        $request = $method . ' ' . $path . ' HTTP/' . $httpVer . "\r\n";
         foreach ($headers as $k => $v) {
             if (is_string($k)) {
-                $v = ucfirst($k) . ": $v";
+                $v = ucfirst($k) . ': ' . $v;
             }
-            $request .= "$v\r\n";
+            $request .= $v . "\r\n";
         }
 
         // Add the request body
