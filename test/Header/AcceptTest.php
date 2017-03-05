@@ -195,13 +195,12 @@ class AcceptTest extends TestCase
                    . '\"";level="foo;, bar", text/json;level=1, text/xml;level=2;q=0.4';
         $acceptHeader = Accept::fromString($acceptStr);
 
-        $this->assertEquals($acceptStr, $acceptHeader->getFieldName().': ' . $acceptHeader->getFieldValue());
+        $this->assertEquals($acceptStr, $acceptHeader->getFieldName() . ': ' . $acceptHeader->getFieldValue());
     }
 
     public function testMatchReturnsMatchedAgainstObject()
     {
-        $acceptStr = 'Accept: text/html;q=1; version=23; level=5, text/json;level=1,' .
-                'text/xml;level=2;q=0.4';
+        $acceptStr = 'Accept: text/html;q=1; version=23; level=5, text/json;level=1,text/xml;level=2;q=0.4';
         $acceptHeader = Accept::fromString($acceptStr);
 
         $res = $acceptHeader->match('text/html; _randomValue=foobar');
@@ -225,8 +224,7 @@ class AcceptTest extends TestCase
 
     public function testVersioning()
     {
-        $acceptStr = 'Accept: text/html;q=1; version=23; level=5, text/json;level=1,' .
-                'text/xml;level=2;q=0.4';
+        $acceptStr = 'Accept: text/html;q=1; version=23; level=5, text/json;level=1,text/xml;level=2;q=0.4';
         $acceptHeader = Accept::fromString($acceptStr);
 
         $expected = [
@@ -339,8 +337,7 @@ class AcceptTest extends TestCase
 
     public function testVersioningAndPriorization()
     {
-        $acceptStr = 'Accept: text/html; version=23, text/json; version=15.3; q=0.9,' .
-                'text/html;level=2;q=0.4';
+        $acceptStr = 'Accept: text/html; version=23, text/json; version=15.3; q=0.9,text/html;level=2;q=0.4';
         $acceptHeader = Accept::fromString($acceptStr);
 
         $expected = [
@@ -381,8 +378,7 @@ class AcceptTest extends TestCase
     public function testPrioritizing()
     {
         // Example is copy/paste from rfc2616
-        $acceptStr = 'Accept: text/*;q=0.3, */*,text/html;q=1, text/html;level=1,'
-                           . 'text/html;level=2;q=0.4, */*;q=0.5';
+        $acceptStr = 'Accept: text/*;q=0.3, */*,text/html;q=1, text/html;level=1,text/html;level=2;q=0.4, */*;q=0.5';
         $acceptHdr = Accept::fromString($acceptStr);
 
         $expected = [

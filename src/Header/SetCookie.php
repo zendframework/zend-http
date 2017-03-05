@@ -233,7 +233,7 @@ class SetCookie implements MultipleHeaderInterface
 
         $value = urlencode($this->getValue());
         if ($this->hasQuoteFieldValue()) {
-            $value = '"'. $value . '"';
+            $value = '"' . $value . '"';
         }
 
         $fieldValue = $this->getName() . '=' . $value;

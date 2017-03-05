@@ -541,7 +541,7 @@ class StaticTest extends TestCase
         }
         $this->_client->addCookie('foo', 'bar=baz');
         $this->_client->send();
-        $cookieValue = 'Cookie: foo='.urlencode('bar=baz');
+        $cookieValue = 'Cookie: foo=' . urlencode('bar=baz');
         $this->assertContains(
             $cookieValue,
             $this->_client->getLastRawRequest(),

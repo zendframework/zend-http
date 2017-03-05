@@ -32,9 +32,13 @@ class ClientTest extends TestCase
             new SetCookie('bar', 'biz', null, '/', 'www.domain.com'),
         ];
 
-        // @codingStandardsIgnoreStart
-        $requestString = "GET http://www.domain.com/index.php HTTP/1.1\r\nHost: domain.com\r\nUser-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.7; rv:16.0) Gecko/20100101 Firefox/16.0\r\nAccept: */*\r\nAccept-Language: en-US,en;q=0.5\r\nAccept-Encoding: gzip, deflate\r\nConnection: keep-alive\r\n";
-        // @codingStandardsIgnoreEnd
+        $requestString = 'GET http://www.domain.com/index.php HTTP/1.1' . "\r\n"
+            . 'Host: domain.com' . "\r\n"
+            . 'User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.7; rv:16.0) Gecko/20100101 Firefox/16.0' . "\r\n"
+            . 'Accept: */*' . "\r\n"
+            . 'Accept-Language: en-US,en;q=0.5' . "\r\n"
+            . 'Accept-Encoding: gzip, deflate' . "\r\n"
+            . 'Connection: keep-alive' . "\r\n";
         $request = Request::fromString($requestString);
 
         $client = new Client('http://www.domain.com/');
@@ -42,9 +46,17 @@ class ClientTest extends TestCase
         $client->addCookie($initialCookies);
 
         $cookies = new Cookies($client->getRequest()->getHeaders());
-        // @codingStandardsIgnoreStart
-        $rawHeaders = "HTTP/1.1 200 OK\r\nAccess-Control-Allow-Origin: *\r\nContent-Encoding: gzip\r\nContent-Type: application/javascript\r\nDate: Sun, 18 Nov 2012 16:16:08 GMT\r\nServer: nginx/1.1.19\r\nSet-Cookie: baz=bah; domain=www.domain.com; path=/\r\nSet-Cookie: joe=test; domain=www.domain.com; path=/\r\nVary: Accept-Encoding\r\nX-Powered-By: PHP/5.3.10-1ubuntu3.4\r\nConnection: keep-alive\r\n";
-        // @codingStandardsIgnoreEnd
+        $rawHeaders = 'HTTP/1.1 200 OK' . "\r\n"
+            . 'Access-Control-Allow-Origin: *' . "\r\n"
+            . 'Content-Encoding: gzip' . "\r\n"
+            . 'Content-Type: application/javascript' . "\r\n"
+            . 'Date: Sun, 18 Nov 2012 16:16:08 GMT' . "\r\n"
+            . 'Server: nginx/1.1.19' . "\r\n"
+            . 'Set-Cookie: baz=bah; domain=www.domain.com; path=/' . "\r\n"
+            . 'Set-Cookie: joe=test; domain=www.domain.com; path=/' . "\r\n"
+            . 'Vary: Accept-Encoding' . "\r\n"
+            . 'X-Powered-By: PHP/5.3.10-1ubuntu3.4' . "\r\n"
+            . 'Connection: keep-alive' . "\r\n";
         $response = Response::fromString($rawHeaders);
         $client->setResponse($response);
 
@@ -67,9 +79,13 @@ class ClientTest extends TestCase
         $method = new ReflectionMethod(Client::class, 'prepareHeaders');
         $method->setAccessible(true);
 
-        // @codingStandardsIgnoreStart
-        $requestString = "GET http://www.domain.com/index.php HTTP/1.1\r\nHost: domain.com\r\nUser-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.7; rv:16.0) Gecko/20100101 Firefox/16.0\r\nAccept: */*\r\nAccept-Language: en-US,en;q=0.5\r\nAccept-Encoding: gzip, deflate\r\nConnection: keep-alive\r\n";
-        // @codingStandardsIgnoreEnd
+        $requestString = 'GET http://www.domain.com/index.php HTTP/1.1' . "\r\n"
+            . 'Host: domain.com' . "\r\n"
+            . 'User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.7; rv:16.0) Gecko/20100101 Firefox/16.0' . "\r\n"
+            . 'Accept: */*' . "\r\n"
+            . 'Accept-Language: en-US,en;q=0.5' . "\r\n"
+            . 'Accept-Encoding: gzip, deflate' . "\r\n"
+            . 'Connection: keep-alive' . "\r\n";
         $request = Request::fromString($requestString);
 
         $adapter = new Test();
@@ -78,9 +94,15 @@ class ClientTest extends TestCase
         $client->setAdapter($adapter);
         $client->setRequest($request);
 
-        // @codingStandardsIgnoreStart
-        $rawHeaders = "HTTP/1.1 200 OK\r\nAccess-Control-Allow-Origin: *\r\nContent-Encoding: gzip, deflate\r\nContent-Type: application/javascript\r\nDate: Sun, 18 Nov 2012 16:16:08 GMT\r\nServer: nginx/1.1.19\r\nVary: Accept-Encoding\r\nX-Powered-By: PHP/5.3.10-1ubuntu3.4\r\nConnection: keep-alive\r\n";
-        // @codingStandardsIgnoreEnd
+        $rawHeaders = 'HTTP/1.1 200 OK' . "\r\n"
+            . 'Access-Control-Allow-Origin: *' . "\r\n"
+            . 'Content-Encoding: gzip, deflate' . "\r\n"
+            . 'Content-Type: application/javascript' . "\r\n"
+            . 'Date: Sun, 18 Nov 2012 16:16:08 GMT' . "\r\n"
+            . 'Server: nginx/1.1.19' . "\r\n"
+            . 'Vary: Accept-Encoding' . "\r\n"
+            . 'X-Powered-By: PHP/5.3.10-1ubuntu3.4' . "\r\n"
+            . 'Connection: keep-alive' . "\r\n";
         $response = Response::fromString($rawHeaders);
         $client->getAdapter()->setResponse($response);
 
@@ -210,20 +232,20 @@ class ClientTest extends TestCase
         $testAdapter = new Test();
         // first response, contains a redirect
         $testAdapter->setResponse(
-            "HTTP/1.1 303 See Other\r\n"
-            . "Location: http://www.example.org/part2\r\n\r\n"
-            . "Page #1"
+            'HTTP/1.1 303 See Other' . "\r\n"
+            . 'Location: http://www.example.org/part2' . "\r\n\r\n"
+            . 'Page #1'
         );
         // seconds response, contains a redirect
         $testAdapter->addResponse(
-            "HTTP/1.1 303 See Other\r\n"
-            . "Location: http://www.example.org/part3\r\n\r\n"
-            . "Page #2"
+            'HTTP/1.1 303 See Other' . "\r\n"
+            . 'Location: http://www.example.org/part3' . "\r\n\r\n"
+            . 'Page #2'
         );
         // third response
         $testAdapter->addResponse(
-            "HTTP/1.1 303 See Other\r\n\r\n"
-            . "Page #3"
+            'HTTP/1.1 303 See Other' . "\r\n\r\n"
+            . 'Page #3'
         );
 
         // create a client which allows one redirect at most!
@@ -251,13 +273,13 @@ class ClientTest extends TestCase
         // set up two responses that simulate a redirection
         $testAdapter = new Test();
         $testAdapter->setResponse(
-            "HTTP/1.1 303 See Other\r\n"
-            . "Location: http://www.example.org/part2\r\n\r\n"
-            . "The URL of this page has changed."
+            'HTTP/1.1 303 See Other' . "\r\n"
+            . 'Location: http://www.example.org/part2' . "\r\n\r\n"
+            . 'The URL of this page has changed.'
         );
         $testAdapter->addResponse(
-            "HTTP/1.1 200 OK\r\n\r\n"
-            . "Welcome to this Website."
+            'HTTP/1.1 200 OK' . "\r\n\r\n"
+            . 'Welcome to this Website.'
         );
 
         // create client with HTTP basic authentication
@@ -268,7 +290,7 @@ class ClientTest extends TestCase
         $client->setAuth($user, $password, Client::AUTH_BASIC);
 
         // do request
-        $response = $client->setMethod('GET')->send();
+        $client->setMethod('GET')->send();
 
         // the last request should contain the Authorization header
         $this->assertContains($encoded, $client->getLastRawRequest());
@@ -286,13 +308,13 @@ class ClientTest extends TestCase
 
         // set up two responses that simulate a redirection from example.org to example.com
         $testAdapter->setResponse(
-            "HTTP/1.1 303 See Other\r\n"
-            . "Location: http://example.com/part2\r\n\r\n"
-            . "The URL of this page has changed."
+            'HTTP/1.1 303 See Other' . "\r\n"
+            . 'Location: http://example.com/part2' . "\r\n\r\n"
+            . 'The URL of this page has changed.'
         );
         $testAdapter->addResponse(
-            "HTTP/1.1 200 OK\r\n\r\n"
-            . "Welcome to this Website."
+            'HTTP/1.1 200 OK' . "\r\n\r\n"
+            . 'Welcome to this Website.'
         );
 
         // set auth and do request
@@ -306,13 +328,13 @@ class ClientTest extends TestCase
 
         // set up two responses that simulate a redirection from example.org to sub.example.org
         $testAdapter->setResponse(
-            "HTTP/1.1 303 See Other\r\n"
-            . "Location: http://sub.example.org/part2\r\n\r\n"
-            . "The URL of this page has changed."
+            'HTTP/1.1 303 See Other' . "\r\n"
+            . 'Location: http://sub.example.org/part2' . "\r\n\r\n"
+            . 'The URL of this page has changed.'
         );
         $testAdapter->addResponse(
-            "HTTP/1.1 200 OK\r\n\r\n"
-            . "Welcome to this Website."
+            'HTTP/1.1 200 OK' . "\r\n\r\n"
+            . 'Welcome to this Website.'
         );
 
         // set auth and do request
@@ -326,13 +348,13 @@ class ClientTest extends TestCase
 
         // set up two responses that simulate a rediration from sub.example.org to example.org
         $testAdapter->setResponse(
-            "HTTP/1.1 303 See Other\r\n"
-            . "Location: http://example.org/part2\r\n\r\n"
-            . "The URL of this page has changed."
+            'HTTP/1.1 303 See Other' . "\r\n"
+            . 'Location: http://example.org/part2' . "\r\n\r\n"
+            . 'The URL of this page has changed.'
         );
         $testAdapter->addResponse(
-            "HTTP/1.1 200 OK\r\n\r\n"
-            . "Welcome to this Website."
+            'HTTP/1.1 200 OK' . "\r\n\r\n"
+            . 'Welcome to this Website.'
         );
 
         // set auth and do request

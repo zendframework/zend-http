@@ -658,7 +658,7 @@ abstract class CommonHttpTests extends TestCase
      */
     public function testHttpAuthBasic()
     {
-        $this->client->setUri($this->baseuri. 'testHttpAuth.php');
+        $this->client->setUri($this->baseuri . 'testHttpAuth.php');
         $this->client->setParameterGet([
             'user'   => 'alice',
             'pass'   => 'secret',
@@ -712,7 +712,7 @@ abstract class CommonHttpTests extends TestCase
      */
     public function testCookiesStringNoJar()
     {
-        $this->client->setUri($this->baseuri. 'testCookies.php');
+        $this->client->setUri($this->baseuri . 'testCookies.php');
 
         $cookies = [
             'name'   => 'value',
@@ -735,7 +735,7 @@ abstract class CommonHttpTests extends TestCase
      */
     public function testSetCookieObjectArray()
     {
-        $this->client->setUri($this->baseuri. 'testCookies.php');
+        $this->client->setUri($this->baseuri . 'testCookies.php');
         $refuri = $this->client->getUri();
 
         $cookies = [
@@ -759,7 +759,7 @@ abstract class CommonHttpTests extends TestCase
      */
     public function testSetCookieStringArray()
     {
-        $this->client->setUri($this->baseuri. 'testCookies.php');
+        $this->client->setUri($this->baseuri . 'testCookies.php');
 
         $cookies = [
             'chocolate' => 'chips',
@@ -790,7 +790,7 @@ abstract class CommonHttpTests extends TestCase
             $this->markTestSkipped('File uploads disabled.');
         }
 
-        $this->client->setUri($this->baseuri. 'testUploads.php');
+        $this->client->setUri($this->baseuri . 'testUploads.php');
 
         $rawdata = file_get_contents(__FILE__);
         $this->client->setFileUpload('myfile.txt', 'uploadfile', $rawdata, 'text/plain');
@@ -810,7 +810,7 @@ abstract class CommonHttpTests extends TestCase
             $this->markTestSkipped('File uploads disabled.');
         }
 
-        $this->client->setUri($this->baseuri. 'testUploads.php');
+        $this->client->setUri($this->baseuri . 'testUploads.php');
         $this->client->setFileUpload(__FILE__, 'uploadfile', null, 'text/x-foo-bar');
         $this->client->setMethod('POST');
         $res = $this->client->send();
@@ -845,9 +845,11 @@ abstract class CommonHttpTests extends TestCase
             );
         }
 
-        $file = dirname(realpath(__FILE__)) . DIRECTORY_SEPARATOR . '_files' . DIRECTORY_SEPARATOR . 'staticFile.jpg';
+        $file = dirname(realpath(__FILE__))
+            . DIRECTORY_SEPARATOR . '_files'
+            . DIRECTORY_SEPARATOR . 'staticFile.jpg';
 
-        $this->client->setUri($this->baseuri. 'testUploads.php');
+        $this->client->setUri($this->baseuri . 'testUploads.php');
         $this->client->setFileUpload($file, 'uploadfile');
         $this->client->setMethod('POST');
         $res = $this->client->send();
@@ -867,7 +869,7 @@ abstract class CommonHttpTests extends TestCase
             $this->markTestSkipped('File uploads disabled.');
         }
 
-        $this->client->setUri($this->baseuri. 'testUploads.php');
+        $this->client->setUri($this->baseuri . 'testUploads.php');
 
         $rawdata = file_get_contents(__FILE__);
         $this->client->setFileUpload('/some strage/path%/with[!@#$&]/myfile.txt', 'uploadfile', $rawdata, 'text/plain');
@@ -1016,8 +1018,12 @@ abstract class CommonHttpTests extends TestCase
             $this->markTestSkipped('Current adapter does not support streaming');
             return;
         }
-        $data = fopen(dirname(realpath(__FILE__)) . DIRECTORY_SEPARATOR . '_files' . DIRECTORY_SEPARATOR
-            . 'staticFile.jpg', "r");
+        $data = fopen(
+            dirname(realpath(__FILE__))
+            . DIRECTORY_SEPARATOR . '_files'
+            . DIRECTORY_SEPARATOR . 'staticFile.jpg',
+            'r'
+        );
         $this->client->setRawBody($data);
         $this->client->setEncType('image/jpeg');
         $this->client->setMethod('PUT');
@@ -1034,8 +1040,11 @@ abstract class CommonHttpTests extends TestCase
     public function testZF9404DoubleContentLengthHeader()
     {
         $this->client->setUri($this->baseuri . 'ZF9404-doubleContentLength.php');
-        $expect = filesize(dirname(realpath(__FILE__)) . DIRECTORY_SEPARATOR . '_files' . DIRECTORY_SEPARATOR
-            . 'ZF9404-doubleContentLength.php');
+        $expect = filesize(
+            dirname(realpath(__FILE__))
+            . DIRECTORY_SEPARATOR . '_files'
+            . DIRECTORY_SEPARATOR . 'ZF9404-doubleContentLength.php'
+        );
 
         $response = $this->client->send();
         if (! $response->isSuccess()) {
@@ -1103,8 +1112,11 @@ abstract class CommonHttpTests extends TestCase
     protected function _getTestFileContents($file)
     {
         // @codingStandardsIgnoreEnd
-        return file_get_contents(dirname(realpath(__FILE__)) . DIRECTORY_SEPARATOR .
-           '_files' . DIRECTORY_SEPARATOR . $file);
+        return file_get_contents(
+            dirname(realpath(__FILE__))
+            . DIRECTORY_SEPARATOR . '_files'
+            . DIRECTORY_SEPARATOR . $file
+        );
     }
 
     /**

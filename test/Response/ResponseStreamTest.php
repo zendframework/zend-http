@@ -14,7 +14,7 @@ class ResponseStreamTest extends TestCase
 {
     public function testResponseFactoryFromStringCreatesValidResponse()
     {
-        $string = 'HTTP/1.0 200 OK' . "\r\n\r\n".'Foo Bar'."\r\n";
+        $string = 'HTTP/1.0 200 OK' . "\r\n\r\n" . 'Foo Bar' . "\r\n";
         $stream = fopen('php://temp', 'rb+');
         fwrite($stream, 'Bar Foo');
         rewind($stream);
@@ -32,7 +32,7 @@ class ResponseStreamTest extends TestCase
     public function testResponseFactoryFromEmptyStringCreatesValidResponse()
     {
         $stream = fopen('php://temp', 'rb+');
-        fwrite($stream, 'HTTP/1.0 200 OK' . "\r\n\r\n".'Foo Bar'."\r\n".'Bar Foo');
+        fwrite($stream, 'HTTP/1.0 200 OK' . "\r\n\r\n" . 'Foo Bar' . "\r\n" . 'Bar Foo');
         rewind($stream);
 
         $response = Stream::fromStream('', $stream);

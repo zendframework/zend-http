@@ -191,8 +191,11 @@ class CurlTest extends CommonHttpTests
     {
         // Method 1: Using the binary string of a file to PUT
         $this->client->setUri($this->baseuri . 'testRawPostData.php');
-        $putFileContents = file_get_contents(dirname(realpath(__FILE__)) . DIRECTORY_SEPARATOR .
-            '_files' . DIRECTORY_SEPARATOR . 'staticFile.jpg');
+        $putFileContents = file_get_contents(
+            dirname(realpath(__FILE__))
+            . DIRECTORY_SEPARATOR . '_files'
+            . DIRECTORY_SEPARATOR . 'staticFile.jpg'
+        );
 
         $this->client->setRawBody($putFileContents);
         $this->client->setMethod('PUT');
@@ -207,12 +210,16 @@ class CurlTest extends CommonHttpTests
     public function testPutFileHandleWithHttpClient()
     {
         $this->client->setUri($this->baseuri . 'testRawPostData.php');
-        $putFileContents = file_get_contents(dirname(realpath(__FILE__)) . DIRECTORY_SEPARATOR .
-            '_files' . DIRECTORY_SEPARATOR . 'staticFile.jpg');
+        $putFileContents = file_get_contents(
+            dirname(realpath(__FILE__))
+            . DIRECTORY_SEPARATOR . '_files'
+            . DIRECTORY_SEPARATOR . 'staticFile.jpg'
+        );
 
         // Method 2: Using a File-Handle to the file to PUT the data
-        $putFilePath = dirname(realpath(__FILE__)) . DIRECTORY_SEPARATOR .
-            '_files' . DIRECTORY_SEPARATOR . 'staticFile.jpg';
+        $putFilePath = dirname(realpath(__FILE__))
+            . DIRECTORY_SEPARATOR . '_files'
+            . DIRECTORY_SEPARATOR . 'staticFile.jpg';
         $putFileHandle = fopen($putFilePath, 'r');
         $putFileSize = filesize($putFilePath);
 
@@ -352,7 +359,7 @@ class CurlTest extends CommonHttpTests
     public function testAuthorizeHeader()
     {
         // We just need someone to talk to
-        $this->client->setUri($this->baseuri. 'testHttpAuth.php');
+        $this->client->setUri($this->baseuri . 'testHttpAuth.php');
         $adapter = new Adapter\Curl();
         $this->client->setAdapter($adapter);
 

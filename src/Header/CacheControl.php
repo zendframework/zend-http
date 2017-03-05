@@ -143,7 +143,7 @@ class CacheControl implements HeaderInterface
                 $parts[] = $key;
             } else {
                 if (preg_match('#[^a-zA-Z0-9._-]#', $value)) {
-                    $value = '"' . $value.'"';
+                    $value = '"' . $value . '"';
                 }
                 $parts[] = $key . '=' . $value;
             }

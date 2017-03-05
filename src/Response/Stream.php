@@ -162,7 +162,7 @@ class Stream extends Response
 
         while (count($responseArray)) {
             $nextLine        = array_shift($responseArray);
-            $headersString  .= $nextLine."\n";
+            $headersString  .= $nextLine . "\n";
             $nextLineTrimmed = trim($nextLine);
             if ($nextLineTrimmed == '') {
                 $headerComplete = true;
@@ -172,7 +172,7 @@ class Stream extends Response
 
         if (! $headerComplete) {
             while (false !== ($nextLine = fgets($stream))) {
-                $headersString .= trim($nextLine)."\r\n";
+                $headersString .= trim($nextLine) . "\r\n";
                 if ($nextLine == "\r\n" || $nextLine == "\n") {
                     $headerComplete = true;
                     break;
