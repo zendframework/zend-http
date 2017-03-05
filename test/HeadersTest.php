@@ -217,6 +217,7 @@ class HeadersTest extends TestCase
         $headers = new Headers();
         $headers->addHeaders(['Foo' => 'bar', 'Baz' => 'baz']);
         $iterations = 0;
+
         /** @var HeaderInterface $header */
         foreach ($headers as $index => $header) {
             $iterations++;

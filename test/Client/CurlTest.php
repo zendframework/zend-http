@@ -408,7 +408,6 @@ class CurlTest extends CommonHttpTests
         $this->assertEquals('foo=bar', $this->client->getResponse()->getBody());
     }
 
-
     /**
      * @group ZF-7683
      * @see https://github.com/zendframework/zend-http/pull/53

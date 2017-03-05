@@ -24,7 +24,6 @@ class Expires extends AbstractDate
         return 'Expires';
     }
 
-
     public function setDate($date)
     {
         if ($date === '0' || $date === 0) {

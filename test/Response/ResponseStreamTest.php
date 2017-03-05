@@ -52,7 +52,6 @@ class ResponseStreamTest extends TestCase
             }
         }
 
-
         $headers .= fread($stream, 100); // Should accept also part of body as text
 
         $res = Stream::fromStream($headers, $stream);
@@ -61,7 +60,6 @@ class ResponseStreamTest extends TestCase
         $this->assertEquals('0b13cb193de9450aa70a6403e2c9902f', md5($res->getBody()));
         $this->assertEquals('f24dd075ba2ebfb3bf21270e3fdc5303', md5($res->getContent()));
     }
-
 
     public function test300isRedirect()
     {
@@ -97,7 +95,6 @@ class ResponseStreamTest extends TestCase
                 break;
             }
         }
-
 
         $data .= fread($stream, 100); // Should accept also part of body as text
 

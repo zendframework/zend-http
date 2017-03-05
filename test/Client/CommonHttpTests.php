@@ -730,7 +730,6 @@ abstract class CommonHttpTests extends TestCase
         );
     }
 
-
     /**
      * Make sure we can set an array of object cookies
      */
@@ -1052,7 +1051,6 @@ abstract class CommonHttpTests extends TestCase
         $this->assertEquals($expect, strlen($response->getBody()));
     }
 
-
     /**
      * @group ZF2-78
      *
@@ -1125,7 +1123,6 @@ abstract class CommonHttpTests extends TestCase
                     'array' => ['firstItem', 'secondItem', '3rdItem'],
                 ],
             ],
-
             [
                 [
                     'someData' => [
@@ -1179,7 +1176,6 @@ abstract class CommonHttpTests extends TestCase
 
         return $notRespondingUri;
     }
-
 
     /**
      * Check connecttimeout/timeout: invalid URIs should timeout after 'connecttimeout' seconds.

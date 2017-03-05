@@ -38,7 +38,6 @@ class RemoteAddress
      */
     protected $proxyHeader = 'HTTP_X_FORWARDED_FOR';
 
-
     /**
      * Changes proxy handling setting.
      *

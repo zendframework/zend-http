@@ -64,7 +64,6 @@ class AcceptTest extends TestCase
         $acceptHeader->addMediaType('\\', 0.9);
     }
 
-
     /** Implementation specific tests here */
 
     public function testCanParseCommaSeparatedValues()
@@ -379,7 +378,6 @@ class AcceptTest extends TestCase
         }
     }
 
-
     public function testPrioritizing()
     {
         // Example is copy/paste from rfc2616
@@ -444,7 +442,6 @@ class AcceptTest extends TestCase
         $res = $accept->getPrioritized();
         $this->assertEquals('application/vnd.foobar+xml; version="\'Ѿ"', $res[0]->getRaw());
     }
-
 
     public function testWildcardDefaults()
     {

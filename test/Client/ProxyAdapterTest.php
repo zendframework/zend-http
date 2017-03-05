@@ -70,7 +70,6 @@ class ProxyAdapterTest extends SocketTest
                 $pass = getenv('TESTS_ZEND_HTTP_CLIENT_HTTP_PROXY_PASS');
             }
 
-
             $this->config = [
                 'adapter'    => Proxy::class,
                 'proxy_host' => $host,

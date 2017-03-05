@@ -112,7 +112,6 @@ class SocketTest extends CommonHttpTests
         $this->assertFalse($options['ssl']['verify_peer_name']);
     }
 
-
     /**
      * Test Certificate File Option
      * The configuration is set to a legitimate certificate bundle file,

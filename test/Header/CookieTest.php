@@ -101,6 +101,7 @@ class CookieTest extends TestCase
             'CRLF characters' => ["foo=bar\r\n\r\nevilContent", '0=foo%3Dbar%0D%0A%0D%0AevilContent'],
         ];
     }
+
 // @codingStandardsIgnoreStart
 //    /**
 //     * Cookie creation and data accessors tests
