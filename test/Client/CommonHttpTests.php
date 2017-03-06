@@ -10,7 +10,6 @@ namespace ZendTest\Http\Client;
 use Exception;
 use PHPUnit\Framework\TestCase;
 use stdClass;
-use Zend\Http\Client;
 use Zend\Http\Client as HTTPClient;
 use Zend\Http\Client\Adapter;
 use Zend\Http\Client\Adapter\AdapterInterface;
@@ -49,7 +48,7 @@ abstract class CommonHttpTests extends TestCase
     /**
      * Common HTTP client
      *
-     * @var Client
+     * @var HTTPClient
      */
     protected $client;
 
