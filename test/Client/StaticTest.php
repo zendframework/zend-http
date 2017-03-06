@@ -154,7 +154,7 @@ class StaticTest extends TestCase
     public function testExceptUnsupportedAuthDynamic()
     {
         $this->expectException(InvalidArgumentException::class);
-        $this->expectExceptionMessage('Invalid or not supported authentication type: "SuperStrongAlgo"');
+        $this->expectExceptionMessage('Invalid or not supported authentication type: \'SuperStrongAlgo\'');
 
         $this->_client->setAuth('shahar', '1234', 'SuperStrongAlgo');
     }

@@ -358,7 +358,7 @@ class Curl implements HttpAdapter, StreamInterface
             default:
                 // For now, through an exception for unsupported request methods
                 throw new AdapterException\InvalidArgumentException(sprintf(
-                    'Method "%s" currently not supported',
+                    'Method \'%s\' currently not supported',
                     $method
                 ));
         }

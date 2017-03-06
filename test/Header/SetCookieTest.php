@@ -367,7 +367,7 @@ class SetCookieTest extends TestCase
     {
         $cookie = SetCookie::fromString($cStr);
         if (! $cookie instanceof SetCookie) {
-            $this->fail(sprintf('Failed creating a cookie object from "%s"', $cStr));
+            $this->fail(sprintf('Failed creating a cookie object from \'%s\'', $cStr));
         }
         $this->assertEquals($expected, $cookie->getFieldValue());
         $this->assertEquals($cookie->getFieldName() . ': ' . $expected, $cookie->toString());
@@ -384,7 +384,7 @@ class SetCookieTest extends TestCase
     {
         $cookie = SetCookie::fromString($cStr);
         if (! $cookie instanceof SetCookie) {
-            $this->fail(sprintf('Failed creating a cookie object from "%s"', $cStr));
+            $this->fail(sprintf('Failed creating a cookie object from \'%s\'', $cStr));
         }
         $this->assertEquals($cookie->getFieldName() . ': ' . $expected, $cookie->toString());
     }

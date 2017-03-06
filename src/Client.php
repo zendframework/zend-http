@@ -745,7 +745,7 @@ class Client implements Stdlib\DispatchableInterface
     {
         if (! defined('static::AUTH_' . strtoupper($type))) {
             throw new Exception\InvalidArgumentException(sprintf(
-                'Invalid or not supported authentication type: "%s"',
+                'Invalid or not supported authentication type: \'%s\'',
                 $type
             ));
         }
@@ -787,7 +787,7 @@ class Client implements Stdlib\DispatchableInterface
     {
         if (! defined('self::AUTH_' . strtoupper($type))) {
             throw new Exception\InvalidArgumentException(sprintf(
-                'Invalid or not supported authentication type: "%s"',
+                'Invalid or not supported authentication type: \'%s\'',
                 $type
             ));
         }
@@ -797,7 +797,7 @@ class Client implements Stdlib\DispatchableInterface
                 // In basic authentication, the user name cannot contain ":"
                 if (strpos($user, ':') !== false) {
                     throw new Exception\InvalidArgumentException(
-                        'The user name cannot contain ":" in Basic HTTP authentication'
+                        'The user name cannot contain \':\' in Basic HTTP authentication'
                     );
                 }
                 $response = base64_encode($user . ':' . $password);
@@ -809,7 +809,7 @@ class Client implements Stdlib\DispatchableInterface
                 foreach ($digest as $key => $value) {
                     if (! defined('self::DIGEST_' . strtoupper($key))) {
                         throw new Exception\InvalidArgumentException(sprintf(
-                            'Invalid or not supported digest authentication parameter: "%s"',
+                            'Invalid or not supported digest authentication parameter: \'%s\'',
                             $key
                         ));
                     }
@@ -1061,7 +1061,7 @@ class Client implements Stdlib\DispatchableInterface
             $error = ErrorHandler::stop();
             if ($data === false) {
                 throw new Exception\RuntimeException(sprintf(
-                    'Unable to read file "%s" for upload',
+                    'Unable to read file \'%s\' for upload',
                     $filename
                 ), 0, $error);
             }
@@ -1281,7 +1281,7 @@ class Client implements Stdlib\DispatchableInterface
                 $body = http_build_query($this->getRequest()->getPost()->toArray(), null, '&');
             } else {
                 throw new Client\Exception\RuntimeException(sprintf(
-                    'Cannot handle content type "%s" automatically',
+                    'Cannot handle content type \'%s\' automatically',
                     $this->encType
                 ));
             }
@@ -1460,7 +1460,7 @@ class Client implements Stdlib\DispatchableInterface
                 // In basic authentication, the user name cannot contain ":"
                 if (strpos($user, ':') !== false) {
                     throw new Client\Exception\InvalidArgumentException(
-                        'The user name cannot contain ":" in "Basic" HTTP authentication'
+                        'The user name cannot contain \':\' in \'Basic\' HTTP authentication'
                     );
                 }
 
@@ -1474,7 +1474,7 @@ class Client implements Stdlib\DispatchableInterface
 
             default:
                 throw new Client\Exception\InvalidArgumentException(sprintf(
-                    'Not a supported HTTP authentication type: "%s"',
+                    'Not a supported HTTP authentication type: \'%s\'',
                     $type
                 ));
         }
