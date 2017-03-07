@@ -1,36 +1,44 @@
 <?php
 /**
- * Zend Framework (http://framework.zend.com/)
- *
- * @link      http://github.com/zendframework/zf2 for the canonical source repository
- * @copyright Copyright (c) 2005-2015 Zend Technologies USA Inc. (http://www.zend.com)
- * @license   http://framework.zend.com/license/new-bsd New BSD License
+ * @see       https://github.com/zendframework/zend-http for the canonical source repository
+ * @copyright Copyright (c) 2005-2017 Zend Technologies USA Inc. (http://www.zend.com)
+ * @license   https://github.com/zendframework/zend-http/blob/master/LICENSE.md New BSD License
  */
 
 namespace ZendTest\Http;
 
-use Zend\Uri\Http;
+use ArrayIterator;
+use PHPUnit\Framework\TestCase;
+use ReflectionMethod;
 use Zend\Http\Client;
+use Zend\Http\Client\Adapter\AdapterInterface;
+use Zend\Http\Client\Adapter\Test;
+use Zend\Http\Client\Exception as ClientException;
 use Zend\Http\Cookies;
+use Zend\Http\Exception as HttpException;
 use Zend\Http\Header\AcceptEncoding;
 use Zend\Http\Header\SetCookie;
 use Zend\Http\Request;
 use Zend\Http\Response;
-use Zend\Http\Client\Adapter\Test;
+use Zend\Uri\Http;
 use ZendTest\Http\TestAsset\ExtendedClient;
 
-class ClientTest extends \PHPUnit_Framework_TestCase
+class ClientTest extends TestCase
 {
     public function testIfCookiesAreSticky()
     {
         $initialCookies = [
             new SetCookie('foo', 'far', null, '/', 'www.domain.com'),
-            new SetCookie('bar', 'biz', null, '/', 'www.domain.com')
+            new SetCookie('bar', 'biz', null, '/', 'www.domain.com'),
         ];
 
-        // @codingStandardsIgnoreStart
-        $requestString = "GET http://www.domain.com/index.php HTTP/1.1\r\nHost: domain.com\r\nUser-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.7; rv:16.0) Gecko/20100101 Firefox/16.0\r\nAccept: */*\r\nAccept-Language: en-US,en;q=0.5\r\nAccept-Encoding: gzip, deflate\r\nConnection: keep-alive\r\n";
-        // @codingStandardsIgnoreEnd
+        $requestString = 'GET http://www.domain.com/index.php HTTP/1.1' . "\r\n"
+            . 'Host: domain.com' . "\r\n"
+            . 'User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.7; rv:16.0) Gecko/20100101 Firefox/16.0' . "\r\n"
+            . 'Accept: */*' . "\r\n"
+            . 'Accept-Language: en-US,en;q=0.5' . "\r\n"
+            . 'Accept-Encoding: gzip, deflate' . "\r\n"
+            . 'Connection: keep-alive' . "\r\n";
         $request = Request::fromString($requestString);
 
         $client = new Client('http://www.domain.com/');
@@ -38,9 +46,17 @@ class ClientTest extends \PHPUnit_Framework_TestCase
         $client->addCookie($initialCookies);
 
         $cookies = new Cookies($client->getRequest()->getHeaders());
-        // @codingStandardsIgnoreStart
-        $rawHeaders = "HTTP/1.1 200 OK\r\nAccess-Control-Allow-Origin: *\r\nContent-Encoding: gzip\r\nContent-Type: application/javascript\r\nDate: Sun, 18 Nov 2012 16:16:08 GMT\r\nServer: nginx/1.1.19\r\nSet-Cookie: baz=bah; domain=www.domain.com; path=/\r\nSet-Cookie: joe=test; domain=www.domain.com; path=/\r\nVary: Accept-Encoding\r\nX-Powered-By: PHP/5.3.10-1ubuntu3.4\r\nConnection: keep-alive\r\n";
-        // @codingStandardsIgnoreEnd
+        $rawHeaders = 'HTTP/1.1 200 OK' . "\r\n"
+            . 'Access-Control-Allow-Origin: *' . "\r\n"
+            . 'Content-Encoding: gzip' . "\r\n"
+            . 'Content-Type: application/javascript' . "\r\n"
+            . 'Date: Sun, 18 Nov 2012 16:16:08 GMT' . "\r\n"
+            . 'Server: nginx/1.1.19' . "\r\n"
+            . 'Set-Cookie: baz=bah; domain=www.domain.com; path=/' . "\r\n"
+            . 'Set-Cookie: joe=test; domain=www.domain.com; path=/' . "\r\n"
+            . 'Vary: Accept-Encoding' . "\r\n"
+            . 'X-Powered-By: PHP/5.3.10-1ubuntu3.4' . "\r\n"
+            . 'Connection: keep-alive' . "\r\n";
         $response = Response::fromString($rawHeaders);
         $client->setResponse($response);
 
@@ -53,30 +69,40 @@ class ClientTest extends \PHPUnit_Framework_TestCase
 
     public function testClientRetrievesUppercaseHttpMethodFromRequestObject()
     {
-        $client = new Client;
+        $client = new Client();
         $client->setMethod('post');
         $this->assertEquals(Client::ENC_URLENCODED, $client->getEncType());
     }
 
     public function testAcceptEncodingHeaderWorksProperly()
     {
-        $method = new \ReflectionMethod('\Zend\Http\Client', 'prepareHeaders');
+        $method = new ReflectionMethod(Client::class, 'prepareHeaders');
         $method->setAccessible(true);
 
-        // @codingStandardsIgnoreStart
-        $requestString = "GET http://www.domain.com/index.php HTTP/1.1\r\nHost: domain.com\r\nUser-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.7; rv:16.0) Gecko/20100101 Firefox/16.0\r\nAccept: */*\r\nAccept-Language: en-US,en;q=0.5\r\nAccept-Encoding: gzip, deflate\r\nConnection: keep-alive\r\n";
-        // @codingStandardsIgnoreEnd
+        $requestString = 'GET http://www.domain.com/index.php HTTP/1.1' . "\r\n"
+            . 'Host: domain.com' . "\r\n"
+            . 'User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.7; rv:16.0) Gecko/20100101 Firefox/16.0' . "\r\n"
+            . 'Accept: */*' . "\r\n"
+            . 'Accept-Language: en-US,en;q=0.5' . "\r\n"
+            . 'Accept-Encoding: gzip, deflate' . "\r\n"
+            . 'Connection: keep-alive' . "\r\n";
         $request = Request::fromString($requestString);
 
-        $adapter = new \Zend\Http\Client\Adapter\Test();
+        $adapter = new Test();
 
-        $client = new \Zend\Http\Client('http://www.domain.com/');
+        $client = new Client('http://www.domain.com/');
         $client->setAdapter($adapter);
         $client->setRequest($request);
 
-        // @codingStandardsIgnoreStart
-        $rawHeaders = "HTTP/1.1 200 OK\r\nAccess-Control-Allow-Origin: *\r\nContent-Encoding: gzip, deflate\r\nContent-Type: application/javascript\r\nDate: Sun, 18 Nov 2012 16:16:08 GMT\r\nServer: nginx/1.1.19\r\nVary: Accept-Encoding\r\nX-Powered-By: PHP/5.3.10-1ubuntu3.4\r\nConnection: keep-alive\r\n";
-        // @codingStandardsIgnoreEnd
+        $rawHeaders = 'HTTP/1.1 200 OK' . "\r\n"
+            . 'Access-Control-Allow-Origin: *' . "\r\n"
+            . 'Content-Encoding: gzip, deflate' . "\r\n"
+            . 'Content-Type: application/javascript' . "\r\n"
+            . 'Date: Sun, 18 Nov 2012 16:16:08 GMT' . "\r\n"
+            . 'Server: nginx/1.1.19' . "\r\n"
+            . 'Vary: Accept-Encoding' . "\r\n"
+            . 'X-Powered-By: PHP/5.3.10-1ubuntu3.4' . "\r\n"
+            . 'Connection: keep-alive' . "\r\n";
         $response = Response::fromString($rawHeaders);
         $client->getAdapter()->setResponse($response);
 
@@ -87,18 +113,17 @@ class ClientTest extends \PHPUnit_Framework_TestCase
     public function testIfZeroValueCookiesCanBeSet()
     {
         $client = new Client();
-        $client->addCookie("test", 0);
-        $client->addCookie("test2", "0");
-        $client->addCookie("test3", false);
+        $client->addCookie('test', 0);
+        $client->addCookie('test2', '0');
+        $client->addCookie('test3', false);
     }
 
-    /**
-    * @expectedException Zend\Http\Exception\InvalidArgumentException
-    */
     public function testIfNullValueCookiesThrowsException()
     {
         $client = new Client();
-        $client->addCookie("test", null);
+
+        $this->expectException(HttpException\InvalidArgumentException::class);
+        $client->addCookie('test', null);
     }
 
     public function testIfCookieHeaderCanBeSet()
@@ -116,7 +141,7 @@ class ClientTest extends \PHPUnit_Framework_TestCase
     {
         $headers = [
             new SetCookie('foo'),
-            new SetCookie('bar')
+            new SetCookie('bar'),
         ];
 
         $client = new Client();
@@ -128,9 +153,9 @@ class ClientTest extends \PHPUnit_Framework_TestCase
 
     public function testIfArrayIteratorOfHeadersCanBeSet()
     {
-        $headers = new \ArrayIterator([
+        $headers = new ArrayIterator([
             new SetCookie('foo'),
-            new SetCookie('bar')
+            new SetCookie('bar'),
         ]);
 
         $client = new Client();
@@ -166,7 +191,7 @@ class ClientTest extends \PHPUnit_Framework_TestCase
     {
         $client = new Client();
 
-        $client->setAdapter('Zend\Http\Client\Adapter\Test');
+        $client->setAdapter(Test::class);
 
         $request = $client->getRequest();
 
@@ -190,20 +215,16 @@ class ClientTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('Basic ' . base64_encode('test:test'), $encoded);
     }
 
-    /**
-     * @expectedException Zend\Http\Client\Exception\InvalidArgumentException
-     */
     public function testEncodeAuthHeaderThrowsExceptionWhenUsernameContainsSemiColon()
     {
-        $encoded = Client::encodeAuthHeader('test:', 'test');
+        $this->expectException(ClientException\InvalidArgumentException::class);
+        Client::encodeAuthHeader('test:', 'test');
     }
 
-    /**
-     * @expectedException Zend\Http\Client\Exception\InvalidArgumentException
-     */
     public function testEncodeAuthHeaderThrowsExceptionWhenInvalidAuthTypeIsUsed()
     {
-        $encoded = Client::encodeAuthHeader('test', 'test', 'test');
+        $this->expectException(ClientException\InvalidArgumentException::class);
+        Client::encodeAuthHeader('test', 'test', 'test');
     }
 
     public function testIfMaxredirectWorksCorrectly()
@@ -211,27 +232,27 @@ class ClientTest extends \PHPUnit_Framework_TestCase
         $testAdapter = new Test();
         // first response, contains a redirect
         $testAdapter->setResponse(
-            "HTTP/1.1 303 See Other\r\n"
-            . "Location: http://www.example.org/part2\r\n\r\n"
-            . "Page #1"
+            'HTTP/1.1 303 See Other' . "\r\n"
+            . 'Location: http://www.example.org/part2' . "\r\n\r\n"
+            . 'Page #1'
         );
         // seconds response, contains a redirect
         $testAdapter->addResponse(
-            "HTTP/1.1 303 See Other\r\n"
-            . "Location: http://www.example.org/part3\r\n\r\n"
-            . "Page #2"
+            'HTTP/1.1 303 See Other' . "\r\n"
+            . 'Location: http://www.example.org/part3' . "\r\n\r\n"
+            . 'Page #2'
         );
         // third response
         $testAdapter->addResponse(
-            "HTTP/1.1 303 See Other\r\n\r\n"
-            . "Page #3"
+            'HTTP/1.1 303 See Other' . "\r\n\r\n"
+            . 'Page #3'
         );
 
         // create a client which allows one redirect at most!
         $client = new Client('http://www.example.org/part1', [
             'adapter' => $testAdapter,
             'maxredirects' => 1,
-            'storeresponse' => true
+            'storeresponse' => true,
         ]);
 
         // do the request
@@ -239,7 +260,7 @@ class ClientTest extends \PHPUnit_Framework_TestCase
 
         // response should be the second response, since third response should not
         // be requested, due to the maxredirects = 1 limit
-        $this->assertEquals($response->getContent(), "Page #2");
+        $this->assertEquals($response->getContent(), 'Page #2');
     }
 
     public function testIfClientDoesNotLooseAuthenticationOnRedirect()
@@ -252,24 +273,24 @@ class ClientTest extends \PHPUnit_Framework_TestCase
         // set up two responses that simulate a redirection
         $testAdapter = new Test();
         $testAdapter->setResponse(
-            "HTTP/1.1 303 See Other\r\n"
-            . "Location: http://www.example.org/part2\r\n\r\n"
-            . "The URL of this page has changed."
+            'HTTP/1.1 303 See Other' . "\r\n"
+            . 'Location: http://www.example.org/part2' . "\r\n\r\n"
+            . 'The URL of this page has changed.'
         );
         $testAdapter->addResponse(
-            "HTTP/1.1 200 OK\r\n\r\n"
-            . "Welcome to this Website."
+            'HTTP/1.1 200 OK' . "\r\n\r\n"
+            . 'Welcome to this Website.'
         );
 
         // create client with HTTP basic authentication
         $client = new Client('http://www.example.org/part1', [
             'adapter' => $testAdapter,
-            'maxredirects' => 1
+            'maxredirects' => 1,
         ]);
         $client->setAuth($user, $password, Client::AUTH_BASIC);
 
         // do request
-        $response = $client->setMethod('GET')->send();
+        $client->setMethod('GET')->send();
 
         // the last request should contain the Authorization header
         $this->assertContains($encoded, $client->getLastRawRequest());
@@ -287,39 +308,39 @@ class ClientTest extends \PHPUnit_Framework_TestCase
 
         // set up two responses that simulate a redirection from example.org to example.com
         $testAdapter->setResponse(
-            "HTTP/1.1 303 See Other\r\n"
-            . "Location: http://example.com/part2\r\n\r\n"
-            . "The URL of this page has changed."
+            'HTTP/1.1 303 See Other' . "\r\n"
+            . 'Location: http://example.com/part2' . "\r\n\r\n"
+            . 'The URL of this page has changed.'
         );
         $testAdapter->addResponse(
-            "HTTP/1.1 200 OK\r\n\r\n"
-            . "Welcome to this Website."
+            'HTTP/1.1 200 OK' . "\r\n\r\n"
+            . 'Welcome to this Website.'
         );
 
         // set auth and do request
         $client->setUri('http://example.org/part1')
             ->setAuth($user, $password, Client::AUTH_BASIC);
-        $response = $client->setMethod('GET')->send();
+        $client->setMethod('GET')->send();
 
         // the last request should NOT contain the Authorization header,
         // because example.com is different from example.org
         $this->assertNotContains($encoded, $client->getLastRawRequest());
 
-        // set up two responses that simulate a rediration from example.org to sub.example.org
+        // set up two responses that simulate a redirection from example.org to sub.example.org
         $testAdapter->setResponse(
-            "HTTP/1.1 303 See Other\r\n"
-            . "Location: http://sub.example.org/part2\r\n\r\n"
-            . "The URL of this page has changed."
+            'HTTP/1.1 303 See Other' . "\r\n"
+            . 'Location: http://sub.example.org/part2' . "\r\n\r\n"
+            . 'The URL of this page has changed.'
         );
         $testAdapter->addResponse(
-            "HTTP/1.1 200 OK\r\n\r\n"
-            . "Welcome to this Website."
+            'HTTP/1.1 200 OK' . "\r\n\r\n"
+            . 'Welcome to this Website.'
         );
 
         // set auth and do request
         $client->setUri('http://example.org/part1')
             ->setAuth($user, $password, Client::AUTH_BASIC);
-        $response = $client->setMethod('GET')->send();
+        $client->setMethod('GET')->send();
 
         // the last request should contain the Authorization header,
         // because sub.example.org is a subdomain unter example.org
@@ -327,19 +348,19 @@ class ClientTest extends \PHPUnit_Framework_TestCase
 
         // set up two responses that simulate a rediration from sub.example.org to example.org
         $testAdapter->setResponse(
-            "HTTP/1.1 303 See Other\r\n"
-            . "Location: http://example.org/part2\r\n\r\n"
-            . "The URL of this page has changed."
+            'HTTP/1.1 303 See Other' . "\r\n"
+            . 'Location: http://example.org/part2' . "\r\n\r\n"
+            . 'The URL of this page has changed.'
         );
         $testAdapter->addResponse(
-            "HTTP/1.1 200 OK\r\n\r\n"
-            . "Welcome to this Website."
+            'HTTP/1.1 200 OK' . "\r\n\r\n"
+            . 'Welcome to this Website.'
         );
 
         // set auth and do request
         $client->setUri('http://sub.example.org/part1')
             ->setAuth($user, $password, Client::AUTH_BASIC);
-        $response = $client->setMethod('GET')->send();
+        $client->setMethod('GET')->send();
 
         // the last request should NOT contain the Authorization header,
         // because example.org is not a subdomain unter sub.example.org
@@ -361,7 +382,7 @@ class ClientTest extends \PHPUnit_Framework_TestCase
         $body = json_encode(['foofoo' => 'barbar']);
 
         $client = new Client();
-        $prepareHeadersReflection = new \ReflectionMethod($client, 'prepareHeaders');
+        $prepareHeadersReflection = new ReflectionMethod($client, 'prepareHeaders');
         $prepareHeadersReflection->setAccessible(true);
 
         $request = new Request();
@@ -387,7 +408,7 @@ class ClientTest extends \PHPUnit_Framework_TestCase
         $body = json_encode(['foofoo' => 'barbar']);
 
         $client = new Client();
-        $prepareHeadersReflection = new \ReflectionMethod($client, 'prepareHeaders');
+        $prepareHeadersReflection = new ReflectionMethod($client, 'prepareHeaders');
         $prepareHeadersReflection->setAccessible(true);
 
         $request = new Request();
@@ -432,8 +453,7 @@ class ClientTest extends \PHPUnit_Framework_TestCase
     {
         $client = new Client();
 
-        /* @var $adapter \PHPUnit_Framework_MockObject_MockObject|\Zend\Http\Client\Adapter\AdapterInterface */
-        $adapter = $this->getMock('Zend\Http\Client\Adapter\AdapterInterface');
+        $adapter = $this->createMock(AdapterInterface::class);
 
         $client->setAdapter($adapter);
 
@@ -462,12 +482,12 @@ class ClientTest extends \PHPUnit_Framework_TestCase
      */
     public function testClientRequestMethod()
     {
-        $request = new Request;
+        $request = new Request();
         $request->setMethod(Request::METHOD_POST);
         $request->getPost()->set('data', 'random');
 
-        $client = new Client;
-        $client->setAdapter('Zend\Http\Client\Adapter\Test');
+        $client = new Client();
+        $client->setAdapter(Test::class);
         $client->send($request);
 
         $this->assertSame(Client::ENC_URLENCODED, $client->getEncType());
@@ -492,14 +512,14 @@ class ClientTest extends \PHPUnit_Framework_TestCase
      */
     public function testFormUrlEncodeSeparator()
     {
-        $client = new Client;
+        $client = new Client();
         $client->setEncType('application/x-www-form-urlencoded');
-        $request = new Request;
+        $request = new Request();
         $request->setMethod(Request::METHOD_POST);
         $request->getPost()->set('foo', 'bar');
         $request->getPost()->set('baz', 'foo');
         ini_set('arg_separator.output', '$');
-        $client->setAdapter('Zend\Http\Client\Adapter\Test');
+        $client->setAdapter(Test::class);
         $client->send($request);
         $rawRequest = $client->getLastRawRequest();
         $this->assertContains('foo=bar&baz=foo', $rawRequest);

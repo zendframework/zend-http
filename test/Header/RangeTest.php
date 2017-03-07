@@ -1,23 +1,24 @@
 <?php
 /**
- * Zend Framework (http://framework.zend.com/)
- *
- * @link      http://github.com/zendframework/zf2 for the canonical source repository
- * @copyright Copyright (c) 2005-2015 Zend Technologies USA Inc. (http://www.zend.com)
- * @license   http://framework.zend.com/license/new-bsd New BSD License
+ * @see       https://github.com/zendframework/zend-http for the canonical source repository
+ * @copyright Copyright (c) 2005-2017 Zend Technologies USA Inc. (http://www.zend.com)
+ * @license   https://github.com/zendframework/zend-http/blob/master/LICENSE.md New BSD License
  */
 
 namespace ZendTest\Http\Header;
 
+use PHPUnit\Framework\TestCase;
+use Zend\Http\Header\Exception\InvalidArgumentException;
+use Zend\Http\Header\HeaderInterface;
 use Zend\Http\Header\Range;
 
-class RangeTest extends \PHPUnit_Framework_TestCase
+class RangeTest extends TestCase
 {
     public function testRangeFromStringCreatesValidRangeHeader()
     {
         $rangeHeader = Range::fromString('Range: xxx');
-        $this->assertInstanceOf('Zend\Http\Header\HeaderInterface', $rangeHeader);
-        $this->assertInstanceOf('Zend\Http\Header\Range', $rangeHeader);
+        $this->assertInstanceOf(HeaderInterface::class, $rangeHeader);
+        $this->assertInstanceOf(Range::class, $rangeHeader);
     }
 
     public function testRangeGetFieldNameReturnsHeaderName()
@@ -52,8 +53,8 @@ class RangeTest extends \PHPUnit_Framework_TestCase
      */
     public function testPreventsCRLFAttackViaFromString()
     {
-        $this->setExpectedException('Zend\Http\Header\Exception\InvalidArgumentException');
-        $header = Range::fromString("Range: xxx\r\n\r\nevilContent");
+        $this->expectException(InvalidArgumentException::class);
+        Range::fromString("Range: xxx\r\n\r\nevilContent");
     }
 
     /**
@@ -62,7 +63,7 @@ class RangeTest extends \PHPUnit_Framework_TestCase
      */
     public function testPreventsCRLFAttackViaConstructorValue()
     {
-        $this->setExpectedException('Zend\Http\Header\Exception\InvalidArgumentException');
-        $header = new Range("xxx\r\n\r\nevilContent");
+        $this->expectException(InvalidArgumentException::class);
+        new Range("xxx\r\n\r\nevilContent");
     }
 }

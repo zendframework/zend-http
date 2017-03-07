@@ -1,23 +1,24 @@
 <?php
 /**
- * Zend Framework (http://framework.zend.com/)
- *
- * @link      http://github.com/zendframework/zf2 for the canonical source repository
- * @copyright Copyright (c) 2005-2015 Zend Technologies USA Inc. (http://www.zend.com)
- * @license   http://framework.zend.com/license/new-bsd New BSD License
+ * @see       https://github.com/zendframework/zend-http for the canonical source repository
+ * @copyright Copyright (c) 2005-2017 Zend Technologies USA Inc. (http://www.zend.com)
+ * @license   https://github.com/zendframework/zend-http/blob/master/LICENSE.md New BSD License
  */
 
 namespace ZendTest\Http\Header;
 
+use PHPUnit\Framework\TestCase;
+use Zend\Http\Header\Exception\InvalidArgumentException;
 use Zend\Http\Header\From;
+use Zend\Http\Header\HeaderInterface;
 
-class FromTest extends \PHPUnit_Framework_TestCase
+class FromTest extends TestCase
 {
     public function testFromFromStringCreatesValidFromHeader()
     {
         $fromHeader = From::fromString('From: xxx');
-        $this->assertInstanceOf('Zend\Http\Header\HeaderInterface', $fromHeader);
-        $this->assertInstanceOf('Zend\Http\Header\From', $fromHeader);
+        $this->assertInstanceOf(HeaderInterface::class, $fromHeader);
+        $this->assertInstanceOf(From::class, $fromHeader);
     }
 
     public function testFromGetFieldNameReturnsHeaderName()
@@ -52,8 +53,8 @@ class FromTest extends \PHPUnit_Framework_TestCase
      */
     public function testPreventsCRLFAttackViaFromString()
     {
-        $this->setExpectedException('Zend\Http\Header\Exception\InvalidArgumentException');
-        $header = From::fromString("From: xxx\r\n\r\nevilContent");
+        $this->expectException(InvalidArgumentException::class);
+        From::fromString("From: xxx\r\n\r\nevilContent");
     }
 
     /**
@@ -62,7 +63,7 @@ class FromTest extends \PHPUnit_Framework_TestCase
      */
     public function testPreventsCRLFAttackViaConstructor()
     {
-        $this->setExpectedException('Zend\Http\Header\Exception\InvalidArgumentException');
-        $header = new From("xxx\r\n\r\nevilContent");
+        $this->expectException(InvalidArgumentException::class);
+        new From("xxx\r\n\r\nevilContent");
     }
 }

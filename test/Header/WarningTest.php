@@ -1,23 +1,24 @@
 <?php
 /**
- * Zend Framework (http://framework.zend.com/)
- *
- * @link      http://github.com/zendframework/zf2 for the canonical source repository
- * @copyright Copyright (c) 2005-2015 Zend Technologies USA Inc. (http://www.zend.com)
- * @license   http://framework.zend.com/license/new-bsd New BSD License
+ * @see       https://github.com/zendframework/zend-http for the canonical source repository
+ * @copyright Copyright (c) 2005-2017 Zend Technologies USA Inc. (http://www.zend.com)
+ * @license   https://github.com/zendframework/zend-http/blob/master/LICENSE.md New BSD License
  */
 
 namespace ZendTest\Http\Header;
 
+use PHPUnit\Framework\TestCase;
+use Zend\Http\Header\Exception\InvalidArgumentException;
+use Zend\Http\Header\HeaderInterface;
 use Zend\Http\Header\Warning;
 
-class WarningTest extends \PHPUnit_Framework_TestCase
+class WarningTest extends TestCase
 {
     public function testWarningFromStringCreatesValidWarningHeader()
     {
         $warningHeader = Warning::fromString('Warning: xxx');
-        $this->assertInstanceOf('Zend\Http\Header\HeaderInterface', $warningHeader);
-        $this->assertInstanceOf('Zend\Http\Header\Warning', $warningHeader);
+        $this->assertInstanceOf(HeaderInterface::class, $warningHeader);
+        $this->assertInstanceOf(Warning::class, $warningHeader);
     }
 
     public function testWarningGetFieldNameReturnsHeaderName()
@@ -52,8 +53,8 @@ class WarningTest extends \PHPUnit_Framework_TestCase
      */
     public function testPreventsCRLFAttackViaFromString()
     {
-        $this->setExpectedException('Zend\Http\Header\Exception\InvalidArgumentException');
-        $header = Warning::fromString("Warning: xxx\r\n\r\nevilContent");
+        $this->expectException(InvalidArgumentException::class);
+        Warning::fromString("Warning: xxx\r\n\r\nevilContent");
     }
 
     /**
@@ -62,7 +63,7 @@ class WarningTest extends \PHPUnit_Framework_TestCase
      */
     public function testPreventsCRLFAttackViaConstructor()
     {
-        $this->setExpectedException('Zend\Http\Header\Exception\InvalidArgumentException');
-        $header = new Warning("xxx\r\n\r\nevilContent");
+        $this->expectException(InvalidArgumentException::class);
+        new Warning("xxx\r\n\r\nevilContent");
     }
 }

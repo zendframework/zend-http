@@ -1,27 +1,34 @@
 <?php
 /**
- * Zend Framework (http://framework.zend.com/)
- *
- * @link      http://github.com/zendframework/zf2 for the canonical source repository
- * @copyright Copyright (c) 2005-2015 Zend Technologies USA Inc. (http://www.zend.com)
- * @license   http://framework.zend.com/license/new-bsd New BSD License
+ * @see       https://github.com/zendframework/zend-http for the canonical source repository
+ * @copyright Copyright (c) 2005-2017 Zend Technologies USA Inc. (http://www.zend.com)
+ * @license   https://github.com/zendframework/zend-http/blob/master/LICENSE.md New BSD License
  */
 
 namespace ZendTest\Http\Header;
 
+use PHPUnit\Framework\TestCase;
+use Zend\Http\Header\Exception\InvalidArgumentException;
+use Zend\Http\Header\HeaderInterface;
 use Zend\Http\Header\Location;
+use Zend\Uri\File;
+use Zend\Uri\Http;
+use Zend\Uri\Mailto;
+use Zend\Uri\Uri;
+use Zend\Uri\UriFactory;
 
-class LocationTest extends \PHPUnit_Framework_TestCase
+class LocationTest extends TestCase
 {
     /**
-     * @param  string $uri The URL to redirect to
      * @dataProvider locationFromStringCreatesValidLocationHeaderProvider
+     *
+     * @param string $uri The URL to redirect to
      */
     public function testLocationFromStringCreatesValidLocationHeader($uri)
     {
         $locationHeader = Location::fromString('Location: ' . $uri);
-        $this->assertInstanceOf('Zend\Http\Header\HeaderInterface', $locationHeader);
-        $this->assertInstanceOf('Zend\Http\Header\Location', $locationHeader);
+        $this->assertInstanceOf(HeaderInterface::class, $locationHeader);
+        $this->assertInstanceOf(Location::class, $locationHeader);
     }
 
     public function locationFromStringCreatesValidLocationHeaderProvider()
@@ -37,32 +44,32 @@ class LocationTest extends \PHPUnit_Framework_TestCase
     /**
      * Test that we can set a redirect to different URI-Schemes
      *
+     * @dataProvider locationCanSetDifferentSchemeUrisProvider
+     *
      * @param string $uri
      * @param string $expectedClass
-     *
-     * @dataProvider locationCanSetDifferentSchemeUrisProvider
      */
     public function testLocationCanSetDifferentSchemeUris($uri, $expectedClass)
     {
-        $locationHeader = new Location;
+        $locationHeader = new Location();
         $locationHeader->setUri($uri);
-        $this->assertAttributeInstanceof($expectedClass, 'uri', $locationHeader);
+        $this->assertAttributeInstanceOf($expectedClass, 'uri', $locationHeader);
     }
 
     /**
      * Test that we can set a redirect to different URI-schemes via a class
      *
+     * @dataProvider locationCanSetDifferentSchemeUrisProvider
+     *
      * @param string $uri
      * @param string $expectedClass
-     *
-     * @dataProvider locationCanSetDifferentSchemeUrisProvider
      */
     public function testLocationCanSetDifferentSchemeUriObjects($uri, $expectedClass)
     {
-        $uri = \Zend\Uri\UriFactory::factory($uri);
-        $locationHeader = new Location;
+        $uri = UriFactory::factory($uri);
+        $locationHeader = new Location();
         $locationHeader->setUri($uri);
-        $this->assertAttributeInstanceof($expectedClass, 'uri', $locationHeader);
+        $this->assertAttributeInstanceOf($expectedClass, 'uri', $locationHeader);
     }
 
     /**
@@ -73,10 +80,10 @@ class LocationTest extends \PHPUnit_Framework_TestCase
     public function locationCanSetDifferentSchemeUrisProvider()
     {
         return [
-            ['http://www.example.com', '\Zend\Uri\Http'],
-            ['https://www.example.com', '\Zend\Uri\Http'],
-            ['mailto://www.example.com', '\Zend\Uri\Mailto'],
-            ['file://www.example.com', '\Zend\Uri\File'],
+            ['http://www.example.com', Http::class],
+            ['https://www.example.com', Http::class],
+            ['mailto://www.example.com', Mailto::class],
+            ['file://www.example.com', File::class],
         ];
     }
 
@@ -98,13 +105,13 @@ class LocationTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('Location: http://www.example.com/path?query', $locationHeader->toString());
     }
 
-    /** Implementation specific tests  */
+    /** Implementation specific tests here */
 
     public function testLocationCanSetAndAccessAbsoluteUri()
     {
         $locationHeader = Location::fromString('Location: http://www.example.com/path');
         $uri = $locationHeader->uri();
-        $this->assertInstanceOf('Zend\Uri\Http', $uri);
+        $this->assertInstanceOf(Http::class, $uri);
         $this->assertTrue($uri->isAbsolute());
         $this->assertEquals('http://www.example.com/path', $locationHeader->getUri());
     }
@@ -113,7 +120,7 @@ class LocationTest extends \PHPUnit_Framework_TestCase
     {
         $locationHeader = Location::fromString('Location: /path/to');
         $uri = $locationHeader->uri();
-        $this->assertInstanceOf('Zend\Uri\Uri', $uri);
+        $this->assertInstanceOf(Uri::class, $uri);
         $this->assertFalse($uri->isAbsolute());
         $this->assertEquals('/path/to', $locationHeader->getUri());
     }
@@ -124,7 +131,7 @@ class LocationTest extends \PHPUnit_Framework_TestCase
      */
     public function testCRLFAttack()
     {
-        $this->setExpectedException('Zend\Http\Header\Exception\InvalidArgumentException');
-        $header = Location::fromString("Location: http://www.example.com/path\r\n\r\nevilContent");
+        $this->expectException(InvalidArgumentException::class);
+        Location::fromString("Location: http://www.example.com/path\r\n\r\nevilContent");
     }
 }

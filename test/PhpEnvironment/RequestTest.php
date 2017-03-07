@@ -1,18 +1,18 @@
 <?php
 /**
- * Zend Framework (http://framework.zend.com/)
- *
- * @link      http://github.com/zendframework/zf2 for the canonical source repository
- * @copyright Copyright (c) 2005-2015 Zend Technologies USA Inc. (http://www.zend.com)
- * @license   http://framework.zend.com/license/new-bsd New BSD License
+ * @see       https://github.com/zendframework/zend-http for the canonical source repository
+ * @copyright Copyright (c) 2005-2017 Zend Technologies USA Inc. (http://www.zend.com)
+ * @license   https://github.com/zendframework/zend-http/blob/master/LICENSE.md New BSD License
  */
 
 namespace ZendTest\Http\PhpEnvironment;
 
-use PHPUnit_Framework_TestCase as TestCase;
-use Zend\Http\Headers;
+use PHPUnit\Framework\TestCase;
+use Zend\Http\Exception\InvalidArgumentException;
 use Zend\Http\Header\GenericHeader;
+use Zend\Http\Headers;
 use Zend\Http\PhpEnvironment\Request;
+use Zend\Stdlib\Parameters;
 
 class RequestTest extends TestCase
 {
@@ -73,7 +73,7 @@ class RequestTest extends TestCase
                     'SCRIPT_FILENAME' => '/var/web/html/index.php',
                 ],
                 '/index.php',
-                ''
+                '',
             ],
             [
                 [
@@ -84,7 +84,7 @@ class RequestTest extends TestCase
                     'SCRIPT_FILENAME' => '/var/web/html/public/index.php',
                 ],
                 '/public/index.php',
-                '/public'
+                '/public',
             ],
             [
                 [
@@ -94,7 +94,7 @@ class RequestTest extends TestCase
                     'SCRIPT_FILENAME' => '/var/web/html/index.php',
                 ],
                 '/index.php',
-                ''
+                '',
             ],
             [
                 [
@@ -105,7 +105,7 @@ class RequestTest extends TestCase
                     'SCRIPT_FILENAME'  => '/var/web/html/index.php',
                 ],
                 '/index.php',
-                ''
+                '',
             ],
             [
                 [
@@ -114,7 +114,7 @@ class RequestTest extends TestCase
                     'SCRIPT_FILENAME' => '/var/web/html/index.php',
                 ],
                 '/index.php',
-                ''
+                '',
             ],
             [
                 [
@@ -123,7 +123,7 @@ class RequestTest extends TestCase
                     'SCRIPT_FILENAME'    => '/var/web/html/index.php',
                 ],
                 '/index.php',
-                ''
+                '',
             ],
             [
                 [
@@ -133,7 +133,7 @@ class RequestTest extends TestCase
                     'SCRIPT_FILENAME' => '/var/web/html/index.php',
                 ],
                 '/index.php',
-                ''
+                '',
             ],
             [
                 [
@@ -142,7 +142,7 @@ class RequestTest extends TestCase
                     'SCRIPT_FILENAME' => '/var/www/zftests/index.php',
                 ],
                 '',
-                ''
+                '',
             ],
             [
                 [
@@ -151,7 +151,7 @@ class RequestTest extends TestCase
                     'SCRIPT_FILENAME' => '/var/web/html/index.php',
                 ],
                 '/html/index.php',
-                '/html'
+                '/html',
             ],
             [
                 [
@@ -160,7 +160,7 @@ class RequestTest extends TestCase
                     'SCRIPT_FILENAME' => '/var/web/dir/index.php',
                 ],
                 '/dir',
-                '/dir'
+                '/dir',
             ],
             [
                 [
@@ -168,10 +168,10 @@ class RequestTest extends TestCase
                     'REQUEST_URI'     => '/~username/public/',
                     'PHP_SELF'        => '/~username/public/index.php',
                     'SCRIPT_FILENAME' => '/Users/username/Sites/public/index.php',
-                    'ORIG_SCRIPT_NAME' => null
+                    'ORIG_SCRIPT_NAME' => null,
                 ],
                 '/~username/public',
-                '/~username/public'
+                '/~username/public',
             ],
             // ZF2-206
             [
@@ -180,10 +180,10 @@ class RequestTest extends TestCase
                     'REQUEST_URI'     => '/zf2tut/',
                     'PHP_SELF'        => '/zf2tut/index.php',
                     'SCRIPT_FILENAME' => 'c:/ZF2Tutorial/public/index.php',
-                    'ORIG_SCRIPT_NAME' => null
+                    'ORIG_SCRIPT_NAME' => null,
                 ],
                 '/zf2tut',
-                '/zf2tut'
+                '/zf2tut',
             ],
             [
                 [
@@ -192,7 +192,7 @@ class RequestTest extends TestCase
                     'SCRIPT_FILENAME' => '/var/web/html/index.php',
                 ],
                 '/html/index.php',
-                '/html'
+                '/html',
             ],
             [
                 [
@@ -201,10 +201,9 @@ class RequestTest extends TestCase
                     'SCRIPT_FILENAME' => '/var/web/html/index.php',
                 ],
                 '/html/index.php',
-                '/html'
+                '/html',
             ],
-
-            //Test when url quert contains a full http url
+            // Test when url quert contains a full http url
             [
                 [
                     'REQUEST_URI' => '/html/index.php?url=http://test.example.com/path/&foo=bar',
@@ -212,13 +211,14 @@ class RequestTest extends TestCase
                     'SCRIPT_FILENAME' => '/var/web/html/index.php',
                 ],
                 '/html/index.php',
-                '/html'
+                '/html',
             ],
         ];
     }
 
     /**
      * @dataProvider baseUrlAndPathProvider
+     *
      * @param array  $server
      * @param string $baseUrl
      * @param string $basePath
@@ -240,58 +240,59 @@ class RequestTest extends TestCase
         return [
             [
                 [
-                    'HTTP_USER_AGENT'     => 'Dummy',
+                    'HTTP_USER_AGENT' => 'Dummy',
                 ],
                 'User-Agent',
-                'Dummy'
+                'Dummy',
             ],
             [
                 [
-                    'HTTP_CUSTOM_COUNT'     => '0',
+                    'HTTP_CUSTOM_COUNT' => '0',
                 ],
                 'Custom-Count',
-                '0'
+                '0',
             ],
             [
                 [
-                    'CONTENT_TYPE'     => 'text/html',
+                    'CONTENT_TYPE' => 'text/html',
                 ],
                 'Content-Type',
-                'text/html'
+                'text/html',
             ],
             [
                 [
-                    'CONTENT_LENGTH'     => 0,
+                    'CONTENT_LENGTH' => 0,
                 ],
                 'Content-Length',
-                0
+                0,
             ],
             [
                 [
-                    'CONTENT_LENGTH'     => 0,
+                    'CONTENT_LENGTH' => 0,
                 ],
                 'Content-Length',
-                0
+                0,
             ],
             [
                 [
-                    'CONTENT_LENGTH'     => 12,
+                    'CONTENT_LENGTH' => 12,
                 ],
                 'Content-Length',
-                12
+                12,
             ],
             [
                 [
-                    'CONTENT_MD5'     => md5('a'),
+                    'CONTENT_MD5' => md5('a'),
                 ],
                 'Content-MD5',
-                md5('a')
+                md5('a'),
             ],
         ];
     }
 
     /**
      * @dataProvider serverHeaderProvider
+     *
      * @param array  $server
      * @param string $name
      * @param string $value
@@ -309,6 +310,7 @@ class RequestTest extends TestCase
 
     /**
      * @dataProvider serverHeaderProvider
+     *
      * @param array  $server
      * @param string $name
      */
@@ -375,7 +377,7 @@ class RequestTest extends TestCase
                 '80',
                 '/news',
             ],
-               // Test for broken $_SERVER implementation from Windows-Safari
+            // Test for broken $_SERVER implementation from Windows-Safari
             [
                 [
                     'SERVER_NAME' => '[1:2:3:4:5:6:]',
@@ -420,8 +422,7 @@ class RequestTest extends TestCase
                 '443',
                 '/news',
             ],
-
-            //Test when url quert contains a full http url
+            // Test when url query contains a full http url
             [
                 [
                     'SERVER_NAME' => 'test.example.com',
@@ -431,15 +432,16 @@ class RequestTest extends TestCase
                 '80',
                 '/html/index.php?url=http://test.example.com/path/&foo=bar',
             ],
-
         ];
     }
 
     /**
      * @dataProvider serverHostnameProvider
-     * @param array  $server
-     * @param string $name
-     * @param string $value
+     *
+     * @param array $server
+     * @param string $expectedHost
+     * @param string $expectedPort
+     * @param string $expectedRequestUri
      */
     public function testServerHostnameProvider(array $server, $expectedHost, $expectedPort, $expectedRequestUri)
     {
@@ -491,7 +493,6 @@ class RequestTest extends TestCase
                     ],
                 ],
             ],
-
             // file name with brackets and int keys
             // file[], file[]
             [
@@ -538,7 +539,6 @@ class RequestTest extends TestCase
                     ],
                 ],
             ],
-
             // file name with brackets and string keys
             // file[one], file[two]
             [
@@ -585,7 +585,6 @@ class RequestTest extends TestCase
                     ],
                 ],
             ],
-
             // multilevel file name
             // file[], file[][], file[][][]
             [
@@ -646,7 +645,7 @@ class RequestTest extends TestCase
                                 ],
                             ],
                         ],
-                    ]
+                    ],
                 ],
                 [
                     'file' => [
@@ -677,16 +676,17 @@ class RequestTest extends TestCase
                                 ],
                             ],
                         ],
-                    ]
+                    ],
                 ],
             ],
         ];
     }
 
     /**
+     * @dataProvider filesProvider
+     *
      * @param array $files
      * @param array $expectedFiles
-     * @dataProvider filesProvider
      */
     public function testRequestMapsPhpFies(array $files, array $expectedFiles)
     {
@@ -698,8 +698,8 @@ class RequestTest extends TestCase
     public function testParameterRetrievalDefaultValue()
     {
         $request = new Request();
-        $p = new \Zend\Stdlib\Parameters([
-            'foo' => 'bar'
+        $p = new Parameters([
+            'foo' => 'bar',
         ]);
         $request->setQuery($p);
         $request->setPost($p);
@@ -720,8 +720,8 @@ class RequestTest extends TestCase
     public function testRetrievingASingleValueForParameters()
     {
         $request = new Request();
-        $p = new \Zend\Stdlib\Parameters([
-            'foo' => 'bar'
+        $p = new Parameters([
+            'foo' => 'bar',
         ]);
         $request->setQuery($p);
         $request->setPost($p);
@@ -765,12 +765,10 @@ class RequestTest extends TestCase
     {
         $_SERVER['REQUEST_METHOD'] = 'xcustomx';
 
-        $this->setExpectedException(
-            'Zend\Http\Exception\InvalidArgumentException',
-            'Invalid HTTP method passed'
-        );
+        $this->expectException(InvalidArgumentException::class);
+        $this->expectExceptionMessage('Invalid HTTP method passed');
 
-        $request = new Request(false);
+        new Request(false);
     }
 
     /**

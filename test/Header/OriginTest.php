@@ -1,17 +1,19 @@
 <?php
 /**
- * Zend Framework (http://framework.zend.com/)
- *
- * @link      http://github.com/zendframework/zf2 for the canonical source repository
- * @copyright Copyright (c) 2005-2015 Zend Technologies USA Inc. (http://www.zend.com)
- * @license   http://framework.zend.com/license/new-bsd New BSD License
+ * @see       https://github.com/zendframework/zend-http for the canonical source repository
+ * @copyright Copyright (c) 2005-2017 Zend Technologies USA Inc. (http://www.zend.com)
+ * @license   https://github.com/zendframework/zend-http/blob/master/LICENSE.md New BSD License
  */
 
 namespace ZendTest\Http\Header;
 
+use PHPUnit\Framework\TestCase;
+use Zend\Http\Header\Exception\InvalidArgumentException;
+use Zend\Http\Header\HeaderInterface;
 use Zend\Http\Header\Origin;
+use Zend\Uri\Exception\InvalidUriPartException;
 
-class OriginTest extends \PHPUnit_Framework_TestCase
+class OriginTest extends TestCase
 {
     /**
      * @group 6484
@@ -25,31 +27,31 @@ class OriginTest extends \PHPUnit_Framework_TestCase
 
     public function testOriginFromStringCreatesValidOriginHeader()
     {
-        $OriginHeader = Origin::fromString('Origin: http://zend.org');
-        $this->assertInstanceOf('Zend\Http\Header\HeaderInterface', $OriginHeader);
-        $this->assertInstanceOf('Zend\Http\Header\Origin', $OriginHeader);
+        $originHeader = Origin::fromString('Origin: http://zend.org');
+        $this->assertInstanceOf(HeaderInterface::class, $originHeader);
+        $this->assertInstanceOf(Origin::class, $originHeader);
     }
 
     public function testOriginGetFieldNameReturnsHeaderName()
     {
-        $OriginHeader = new Origin();
-        $this->assertEquals('Origin', $OriginHeader->getFieldName());
+        $originHeader = new Origin();
+        $this->assertEquals('Origin', $originHeader->getFieldName());
     }
 
     public function testOriginGetFieldValueReturnsProperValue()
     {
-        $OriginHeader = Origin::fromString('Origin: http://zend.org');
-        $this->assertEquals('http://zend.org', $OriginHeader->getFieldValue());
+        $originHeader = Origin::fromString('Origin: http://zend.org');
+        $this->assertEquals('http://zend.org', $originHeader->getFieldValue());
     }
 
     /**
      * @see http://en.wikipedia.org/wiki/HTTP_response_splitting
      * @group ZF2015-04
-     * @expectedException Zend\Uri\Exception\InvalidUriPartException
      */
     public function testPreventsCRLFAttackViaFromString()
     {
-        $header = Origin::fromString("Origin: http://zend.org\r\n\r\nevilContent");
+        $this->expectException(InvalidUriPartException::class);
+        Origin::fromString("Origin: http://zend.org\r\n\r\nevilContent");
     }
 
     /**
@@ -57,7 +59,7 @@ class OriginTest extends \PHPUnit_Framework_TestCase
      */
     public function testPreventsCRLFAttackViaConstructor()
     {
-        $this->setExpectedException('Zend\Http\Header\Exception\InvalidArgumentException');
-        $header = new Origin("http://zend.org\r\n\r\nevilContent");
+        $this->expectException(InvalidArgumentException::class);
+        new Origin("http://zend.org\r\n\r\nevilContent");
     }
 }

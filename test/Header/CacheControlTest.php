@@ -1,23 +1,24 @@
 <?php
 /**
- * Zend Framework (http://framework.zend.com/)
- *
- * @link      http://github.com/zendframework/zf2 for the canonical source repository
- * @copyright Copyright (c) 2005-2015 Zend Technologies USA Inc. (http://www.zend.com)
- * @license   http://framework.zend.com/license/new-bsd New BSD License
+ * @see       https://github.com/zendframework/zend-http for the canonical source repository
+ * @copyright Copyright (c) 2005-2017 Zend Technologies USA Inc. (http://www.zend.com)
+ * @license   https://github.com/zendframework/zend-http/blob/master/LICENSE.md New BSD License
  */
 
 namespace ZendTest\Http\Header;
 
+use PHPUnit\Framework\TestCase;
 use Zend\Http\Header\CacheControl;
+use Zend\Http\Header\Exception\InvalidArgumentException;
+use Zend\Http\Header\HeaderInterface;
 
-class CacheControlTest extends \PHPUnit_Framework_TestCase
+class CacheControlTest extends TestCase
 {
     public function testCacheControlFromStringCreatesValidCacheControlHeader()
     {
         $cacheControlHeader = CacheControl::fromString('Cache-Control: xxx');
-        $this->assertInstanceOf('Zend\Http\Header\HeaderInterface', $cacheControlHeader);
-        $this->assertInstanceOf('Zend\Http\Header\CacheControl', $cacheControlHeader);
+        $this->assertInstanceOf(HeaderInterface::class, $cacheControlHeader);
+        $this->assertInstanceOf(CacheControl::class, $cacheControlHeader);
     }
 
     public function testCacheControlGetFieldNameReturnsHeaderName()
@@ -105,8 +106,8 @@ class CacheControlTest extends \PHPUnit_Framework_TestCase
      */
     public function testPreventsCRLFAttackViaFromString()
     {
-        $this->setExpectedException('Zend\Http\Header\Exception\InvalidArgumentException');
-        $header = CacheControl::fromString("Cache-Control: xxx\r\n\r\n");
+        $this->expectException(InvalidArgumentException::class);
+        CacheControl::fromString("Cache-Control: xxx\r\n\r\n");
     }
 
     /**
@@ -116,7 +117,7 @@ class CacheControlTest extends \PHPUnit_Framework_TestCase
     public function testProtectsFromCRLFAttackViaSetters()
     {
         $header = new CacheControl();
-        $this->setExpectedException('Zend\Http\Header\Exception\InvalidArgumentException');
+        $this->expectException(InvalidArgumentException::class);
         $header->addDirective("\rsome\r\ninvalid\nkey", "\ra\r\nCRLF\ninjection");
     }
 }

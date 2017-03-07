@@ -1,15 +1,17 @@
 <?php
 /**
- * Zend Framework (http://framework.zend.com/)
- *
- * @link      http://github.com/zendframework/zf2 for the canonical source repository
- * @copyright Copyright (c) 2005-2015 Zend Technologies USA Inc. (http://www.zend.com)
- * @license   http://framework.zend.com/license/new-bsd New BSD License
+ * @see       https://github.com/zendframework/zend-http for the canonical source repository
+ * @copyright Copyright (c) 2005-2017 Zend Technologies USA Inc. (http://www.zend.com)
+ * @license   https://github.com/zendframework/zend-http/blob/master/LICENSE.md New BSD License
  */
 
 namespace ZendTest\Http\Header;
 
+use ArrayObject;
+use PHPUnit\Framework\TestCase;
 use Zend\Http\Header\Cookie;
+use Zend\Http\Header\Exception\InvalidArgumentException;
+use Zend\Http\Header\HeaderInterface;
 use Zend\Http\Header\SetCookie;
 
 /**
@@ -18,14 +20,14 @@ use Zend\Http\Header\SetCookie;
  * @group      Zend_Http
  * @group      Zend_Http_Cookie
  */
-class CookieTest extends \PHPUnit_Framework_TestCase
+class CookieTest extends TestCase
 {
     public function testCookieFromStringCreatesValidCookieHeader()
     {
         $cookieHeader = Cookie::fromString('Cookie: name=value');
-        $this->assertInstanceOf('Zend\Http\Header\HeaderInterface', $cookieHeader);
-        $this->assertInstanceOf('ArrayObject', $cookieHeader);
-        $this->assertInstanceOf('Zend\Http\Header\Cookie', $cookieHeader);
+        $this->assertInstanceOf(HeaderInterface::class, $cookieHeader);
+        $this->assertInstanceOf(ArrayObject::class, $cookieHeader);
+        $this->assertInstanceOf(Cookie::class, $cookieHeader);
     }
 
     public function testCookieFromStringCreatesValidCookieHeadersWithMultipleValues()
@@ -39,7 +41,7 @@ class CookieTest extends \PHPUnit_Framework_TestCase
     {
         $setCookies = [
             new SetCookie('foo', 'bar'),
-            new SetCookie('name', 'value')
+            new SetCookie('name', 'value'),
         ];
 
         $cookie = Cookie::fromSetCookieArray($setCookies);
@@ -73,14 +75,16 @@ class CookieTest extends \PHPUnit_Framework_TestCase
      */
     public function testPreventsCRLFAttackViaFromString()
     {
-        $this->setExpectedException('Zend\Http\Header\Exception\InvalidArgumentException');
-        $header = Cookie::fromString("Cookie: foo=bar\r\n\r\nevilContent");
+        $this->expectException(InvalidArgumentException::class);
+        Cookie::fromString("Cookie: foo=bar\r\n\r\nevilContent");
     }
 
     /**
      * @see http://en.wikipedia.org/wiki/HTTP_response_splitting
      * @group ZF2015-04
+     *
      * @dataProvider valuesProvider
+     *
      * @param mixed $value
      * @param string $serialized
      */
@@ -97,6 +101,7 @@ class CookieTest extends \PHPUnit_Framework_TestCase
             'CRLF characters' => ["foo=bar\r\n\r\nevilContent", '0=foo%3Dbar%0D%0A%0D%0AevilContent'],
         ];
     }
+
 // @codingStandardsIgnoreStart
 //    /**
 //     * Cookie creation and data accessors tests
@@ -106,12 +111,13 @@ class CookieTest extends \PHPUnit_Framework_TestCase
 //     * Make sure we can't set invalid names
 //     *
 //     * @dataProvider invalidCookieNameCharProvider
+//     *
+//     * @param string $char
 //     */
 //    public function testSetInvalidName($char)
 //    {
-//        $this->setExpectedException(
-//            'Zend\Http\Exception\InvalidArgumentException',
-//            'Cookie name cannot contain these characters');
+//        $this->expectException(InvalidArgumentException::class);
+//        $this->expectExceptionMessage('Cookie name cannot contain these characters');
 //
 //        $cookie = new Http\Cookie("cookie_$char", 'foo', 'example.com');
 //    }
@@ -120,8 +126,11 @@ class CookieTest extends \PHPUnit_Framework_TestCase
 //     * Test we get the cookie name properly
 //     *
 //     * @dataProvider validCookieWithInfoProvider
+//     *
+//     * @param string $cStr
+//     * @param array $cInfo
 //     */
-//    public function testGetName($cStr, $cInfo)
+//    public function testGetName($cStr, array $cInfo)
 //    {
 //        $cookie = Http\Cookie::fromString($cStr);
 //        if (! $cookie instanceof Http\Cookie) {
@@ -136,8 +145,9 @@ class CookieTest extends \PHPUnit_Framework_TestCase
 //    /**
 //     * Make sure we get the correct value if it was set through the constructor
 //     *
-//     * @param        string $value
 //     * @dataProvider validCookieValueProvider
+//     *
+//     * @param string $value
 //     */
 //    public function testGetValueConstructor($val)
 //    {
@@ -148,8 +158,9 @@ class CookieTest extends \PHPUnit_Framework_TestCase
 //    /**
 //     * Make sure we get the correct value if it was set through fromString()
 //     *
-//     * @param        string $value
 //     * @dataProvider validCookieValueProvider
+//     *
+//     * @param string $value
 //     */
 //    public function testGetValueFromString($val)
 //    {
@@ -160,8 +171,9 @@ class CookieTest extends \PHPUnit_Framework_TestCase
 //    /**
 //     * Make sure we get the correct value if it was set through fromString()
 //     *
-//     * @param        string $value
 //     * @dataProvider validCookieValueProvider
+//     *
+//     * @param string $value
 //     */
 //    public function testGetRawValueFromString($val)
 //    {
@@ -174,8 +186,9 @@ class CookieTest extends \PHPUnit_Framework_TestCase
 //    /**
 //     * Make sure we get the correct value if it was set through fromString()
 //     *
-//     * @param        string $value
 //     * @dataProvider validCookieValueProvider
+//     *
+//     * @param string $value
 //     */
 //    public function testGetRawValueFromStringToString($val)
 //    {
@@ -188,8 +201,9 @@ class CookieTest extends \PHPUnit_Framework_TestCase
 //    /**
 //     * Make sure we get the correct value if it was set through fromString()
 //     *
-//     * @param        string $value
 //     * @dataProvider validCookieValueProvider
+//     *
+//     * @param string $value
 //     */
 //    public function testGetValueFromStringEncodedToString($val)
 //    {
@@ -203,8 +217,11 @@ class CookieTest extends \PHPUnit_Framework_TestCase
 //     * Make sure we get the correct domain when it's set in the cookie string
 //     *
 //     * @dataProvider validCookieWithInfoProvider
+//     *
+//     * @param string $cStr
+//     * @param array $cInfo
 //     */
-//    public function testGetDomainInStr($cStr, $cInfo)
+//    public function testGetDomainInStr($cStr, array $cInfo)
 //    {
 //        $cookie = Http\Cookie::fromString($cStr);
 //        if (! $cookie instanceof Http\Cookie) {
@@ -220,6 +237,8 @@ class CookieTest extends \PHPUnit_Framework_TestCase
 //     * Make sure we get the correct domain when it's set in a reference URL
 //     *
 //     * @dataProvider refUrlProvider
+//     *
+//     * @param Uri\Uri $uri
 //     */
 //    public function testGetDomainInRefUrl(Uri\Uri $uri)
 //    {
@@ -236,8 +255,11 @@ class CookieTest extends \PHPUnit_Framework_TestCase
 //     * Make sure we get the correct path when it's set in the cookie string
 //     *
 //     * @dataProvider validCookieWithInfoProvider
+//     *
+//     * @param string $cStr
+//     * @param array $cInfo
 //     */
-//    public function testGetPathInStr($cStr, $cInfo)
+//    public function testGetPathInStr($cStr, array $cInfo)
 //    {
 //        $cookie = Http\Cookie::fromString($cStr);
 //        if (! $cookie instanceof Http\Cookie) {
@@ -253,6 +275,8 @@ class CookieTest extends \PHPUnit_Framework_TestCase
 //     * Make sure we get the correct path when it's set a reference URL
 //     *
 //     * @dataProvider refUrlProvider
+//     *
+//     * @param Uri\Uri $uri
 //     */
 //    public function testGetPathInRefUrl(Uri\Uri $uri)
 //    {
@@ -275,8 +299,11 @@ class CookieTest extends \PHPUnit_Framework_TestCase
 //     * Test we get the correct expiry time
 //     *
 //     * @dataProvider validCookieWithInfoProvider
+//     *
+//     * @param string $cStr
+//     * @param array $cInfo
 //     */
-//    public function testGetExpiryTime($cStr, $cInfo)
+//    public function testGetExpiryTime($cStr, array $cInfo)
 //    {
 //        $cookie = Http\Cookie::fromString($cStr);
 //        if (! $cookie instanceof Http\Cookie) {
@@ -292,8 +319,11 @@ class CookieTest extends \PHPUnit_Framework_TestCase
 //     * Make sure the "is secure" flag is correctly set
 //     *
 //     * @dataProvider validCookieWithInfoProvider
+//     *
+//     * @param string $cStr
+//     * @param array $cInfo
 //     */
-//    public function testIsSecure($cStr, $cInfo)
+//    public function testIsSecure($cStr, array $cInfo)
 //    {
 //        $cookie = Http\Cookie::fromString($cStr);
 //        if (! $cookie instanceof Http\Cookie) {
@@ -313,6 +343,9 @@ class CookieTest extends \PHPUnit_Framework_TestCase
 //     * Make sure we get the correct value for 'isExpired'
 //     *
 //     * @dataProvider cookieWithExpiredFlagProvider
+//     *
+//     * @param string $cStr
+//     * @param bool $expired
 //     */
 //    public function testIsExpired($cStr, $expired)
 //    {
@@ -332,10 +365,10 @@ class CookieTest extends \PHPUnit_Framework_TestCase
 //        $expired = time() - 3600;
 //        $now = time() + 7200;
 //
-//        $cookies = array(
+//        $cookies = [
 //            'cookie=foo; domain=example.com; expires=' . date(DATE_COOKIE, $notexpired),
-//            'cookie=foo; domain=example.com; expires=' . date(DATE_COOKIE, $expired)
-//        );
+//            'cookie=foo; domain=example.com; expires=' . date(DATE_COOKIE, $expired),
+//        ];
 //
 //        // Make sure all cookies are expired
 //        foreach ($cookies as $cstr) {
@@ -357,8 +390,11 @@ class CookieTest extends \PHPUnit_Framework_TestCase
 //     * Test we can properly check if a cookie is a session cookie (has no expiry time)
 //     *
 //     * @dataProvider validCookieWithInfoProvider
+//     *
+//     * @param string $cStr
+//     * @param array $cInfo
 //     */
-//    public function testIsSessionCookie($cStr, $cInfo)
+//    public function testIsSessionCookie($cStr, array $cInfo)
 //    {
 //        $cookie = Http\Cookie::fromString($cStr);
 //        if (! $cookie instanceof Http\Cookie) {
@@ -375,8 +411,11 @@ class CookieTest extends \PHPUnit_Framework_TestCase
 //     * Make sure cookies are properly converted back to strings
 //     *
 //     * @dataProvider validCookieWithInfoProvider
+//     *
+//     * @param string $cStr
+//     * @param array $cInfo
 //     */
-//    public function testToString($cStr, $cInfo)
+//    public function testToString($cStr, array $cInfo)
 //    {
 //        $cookie = Http\Cookie::fromString($cStr);
 //        if (! $cookie instanceof Http\Cookie) {
@@ -389,11 +428,11 @@ class CookieTest extends \PHPUnit_Framework_TestCase
 //
 //    public function testGarbageInStrIsIgnored()
 //    {
-//        $cookies = array(
+//        $cookies = [
 //            'name=value; domain=foo.com; silly=place; secure',
 //            'foo=value; someCrap; secure; domain=foo.com; ',
-//            'anothercookie=value; secure; has some crap; ignore=me; domain=foo.com; '
-//        );
+//            'anothercookie=value; secure; has some crap; ignore=me; domain=foo.com; ',
+//        ];
 //
 //        foreach ($cookies as $cstr) {
 //            $cookie = Http\Cookie::fromString($cstr);
@@ -408,6 +447,10 @@ class CookieTest extends \PHPUnit_Framework_TestCase
 //     * Test the match() method against a domain
 //     *
 //     * @dataProvider domainMatchTestProvider
+//     *
+//     * @param string $cookieStr
+//     * @param Uri\Uri|string $uri
+//     * @param bool $match
 //     */
 //    public function testMatchDomain($cookieStr, $uri, $match)
 //    {
@@ -419,15 +462,15 @@ class CookieTest extends \PHPUnit_Framework_TestCase
 //    {
 //        $uri = new Uri\Uri('http://www.foo.com/some/file.txt');
 //
-//        return array(
-//            array('foo=bar; domain=.example.com;', 'http://www.example.com/foo/bar.php', true),
-//            array('foo=bar; domain=.example.com;', 'http://example.com/foo/bar.php', true),
-//            array('foo=bar; domain=.example.com;', 'http://www.somexample.com/foo/bar.php', false),
-//            array('foo=bar; domain=example.com;', 'http://www.somexample.com/foo/bar.php', false),
-//            array('cookie=value; domain=www.foo.com', $uri, true),
-//            array('cookie=value; domain=www.foo.com', 'http://il.www.foo.com', true),
-//            array('cookie=value; domain=www.foo.com', 'http://bar.foo.com', false)
-//        );
+//        return [
+//            ['foo=bar; domain=.example.com;', 'http://www.example.com/foo/bar.php', true],
+//            ['foo=bar; domain=.example.com;', 'http://example.com/foo/bar.php', true],
+//            ['foo=bar; domain=.example.com;', 'http://www.somexample.com/foo/bar.php', false],
+//            ['foo=bar; domain=example.com;', 'http://www.somexample.com/foo/bar.php', false],
+//            ['cookie=value; domain=www.foo.com', $uri, true],
+//            ['cookie=value; domain=www.foo.com', 'http://il.www.foo.com', true],
+//            ['cookie=value; domain=www.foo.com', 'http://bar.foo.com', false],
+//        ];
 //    }
 //
 //    /**
@@ -528,16 +571,16 @@ class CookieTest extends \PHPUnit_Framework_TestCase
 //     */
 //    static public function invalidCookieNameCharProvider()
 //    {
-//        return array(
-//            array("="),
-//            array(","),
-//            array(";"),
-//            array("\t"),
-//            array("\r"),
-//            array("\n"),
-//            array("\013"),
-//            array("\014")
-//        );
+//        return [
+//            ["="],
+//            [","],
+//            [";"],
+//            ["\t"],
+//            ["\r"],
+//            ["\n"],
+//            ["\013"],
+//            ["\014"],
+//        ];
 //    }
 //
 //    /**
@@ -547,16 +590,16 @@ class CookieTest extends \PHPUnit_Framework_TestCase
 //     */
 //    static public function validCookieValueProvider()
 //    {
-//        return array(
-//            array('simpleCookie'),
-//            array('space cookie'),
-//            array('!@#$%^*&()* ][{}?;'),
-//            array("line\n\rbreaks"),
-//            array("0000j8CydACPu_-J9bE8uTX91YU:12a83ks4k"), // value from: Alexander Cheshchevik's comment on issue: ZF-1850
+//        return [
+//            ['simpleCookie'],
+//            ['space cookie'],
+//            ['!@#$%^*&()* ][{}?;'],
+//            ["line\n\rbreaks"],
+//            ["0000j8CydACPu_-J9bE8uTX91YU:12a83ks4k"], // value from: Alexander Cheshchevik's comment on issue: ZF-1850
 //
 //            // Long cookie value - 2kb
-//            array(str_repeat(md5(time()), 64))
-//        );
+//            [str_repeat(md5(time()), 64)],
+//        ];
 //    }
 //
 //    /**
@@ -566,13 +609,13 @@ class CookieTest extends \PHPUnit_Framework_TestCase
 //     */
 //    static public function refUrlProvider()
 //    {
-//        return array(
-//            array(new Uri\Uri('http://example.com/')),
-//            array(new Uri\Uri('http://www.example.com/foo/bar/')),
-//            array(new Uri\Uri('http://some.really.deep.domain.com')),
-//            array(new Uri\Uri('http://localhost/path/to/very/deep/file.php')),
-//            array(new Uri\Uri('http://arr.gr/some%20path/text%2Ffile'))
-//        );
+//        return [
+//            [new Uri\Uri('http://example.com/')],
+//            [new Uri\Uri('http://www.example.com/foo/bar/')],
+//            [new Uri\Uri('http://some.really.deep.domain.com')],
+//            [new Uri\Uri('http://localhost/path/to/very/deep/file.php')],
+//            [new Uri\Uri('http://arr.gr/some%20path/text%2Ffile')],
+//        ];
 //    }
 //
 //    /**
@@ -585,69 +628,68 @@ class CookieTest extends \PHPUnit_Framework_TestCase
 //        $now = time();
 //        $yesterday = $now - (3600 * 24);
 //
-//        return array(
-//            array(
+//        return [
+//            [
 //                'justacookie=foo; domain=example.com',
-//                array(
+//                [
 //                    'name'    => 'justacookie',
 //                    'domain'  => 'example.com',
 //                    'path'    => '/',
 //                    'expires' => null,
-//                    'secure'  => false
-//                )
-//            ),
-//            array(
+//                    'secure'  => false,
+//                ],
+//            ],
+//            [
 //                'expires=tomorrow; secure; path=/Space Out/; expires=Tue, 21-Nov-2006 08:33:44 GMT; domain=.example.com',
-//                array(
+//                [
 //                    'name'    => 'expires',
 //                    'domain'  => '.example.com',
 //                    'path'    => '/Space Out/',
 //                    'expires' => strtotime('Tue, 21-Nov-2006 08:33:44 GMT'),
-//                    'secure'  => true
-//                )
-//            ),
-//            array(
+//                    'secure'  => true,
+//                ],
+//            ],
+//            [
 //                'domain=unittests; expires=' . date(DATE_COOKIE, $now) . '; domain=example.com; path=/some%20value/',
-//                array(
+//                [
 //                    'name'    => 'domain',
 //                    'domain'  => 'example.com',
 //                    'path'    => '/some%20value/',
 //                    'expires' => $now,
 //                    'secure'  => false,
-//                )
-//            ),
-//            array(
+//                ],
+//            ],
+//            [
 //                'path=indexAction; path=/; domain=.foo.com; expires=' . date(DATE_COOKIE, $yesterday),
-//                array(
+//                [
 //                    'name'    => 'path',
 //                    'domain'  => '.foo.com',
 //                    'path'    => '/',
 //                    'expires' => $yesterday,
-//                    'secure'  => false
-//                )
-//            ),
-//
-//            array(
+//                    'secure'  => false,
+//                ],
+//            ],
+//            [
 //                'secure=sha1; secure; SECURE; domain=some.really.deep.domain.com',
-//                array(
+//                [
 //                    'name'    => 'secure',
 //                    'domain'  => 'some.really.deep.domain.com',
 //                    'path'    => '/',
 //                    'expires' => null,
-//                    'secure'  => true
-//                )
-//            ),
-//            array(
+//                    'secure'  => true,
+//                ],
+//            ],
+//            [
 //                'PHPSESSID=123456789+abcd%2Cef; secure; domain=.localdomain; path=/foo/baz; expires=Tue, 21-Nov-2006 08:33:44 GMT;',
-//                array(
+//                [
 //                    'name'    => 'PHPSESSID',
 //                    'domain'  => '.localdomain',
 //                    'path'    => '/foo/baz',
 //                    'expires' => strtotime('Tue, 21-Nov-2006 08:33:44 GMT'),
-//                    'secure'  => true
-//                )
-//            ),
-//        );
+//                    'secure'  => true,
+//                ],
+//            ],
+//        ];
 //    }
 //
 //    /**
@@ -658,13 +700,13 @@ class CookieTest extends \PHPUnit_Framework_TestCase
 //     */
 //    public static function cookieWithExpiredFlagProvider()
 //    {
-//        return array(
-//            array('cookie=foo;domain=example.com;expires=' . date(DATE_COOKIE, time() +  12 * 3600), false),
-//            array('cookie=foo;domain=example.com;expires=' . date(DATE_COOKIE, time() - 15), true),
-//            array('cookie=foo;domain=example.com;', false),
-//            // array('cookie=foo;domain=example.com;expires=Fri, 01-Mar-2109 00:19:21 GMT', false),
-//            // array('cookie=foo;domain=example.com;expires=Fri, 06-Jun-1966 00:19:21 GMT', true),
-//        );
+//        return [
+//            ['cookie=foo;domain=example.com;expires=' . date(DATE_COOKIE, time() +  12 * 3600), false],
+//            ['cookie=foo;domain=example.com;expires=' . date(DATE_COOKIE, time() - 15), true],
+//            ['cookie=foo;domain=example.com;', false],
+//            // ['cookie=foo;domain=example.com;expires=Fri, 01-Mar-2109 00:19:21 GMT', false],
+//            // ['cookie=foo;domain=example.com;expires=Fri, 06-Jun-1966 00:19:21 GMT', true],
+//        ];
 //    }
 // @codingStandardsIgnoreEnd
 }

@@ -1,15 +1,15 @@
 <?php
 /**
- * Zend Framework (http://framework.zend.com/)
- *
- * @link      http://github.com/zendframework/zf2 for the canonical source repository
- * @copyright Copyright (c) 2005-2015 Zend Technologies USA Inc. (http://www.zend.com)
- * @license   http://framework.zend.com/license/new-bsd New BSD License
+ * @see       https://github.com/zendframework/zend-http for the canonical source repository
+ * @copyright Copyright (c) 2005-2017 Zend Technologies USA Inc. (http://www.zend.com)
+ * @license   https://github.com/zendframework/zend-http/blob/master/LICENSE.md New BSD License
  */
 
 namespace ZendTest\Http\Client;
 
 use Zend\Http\Client;
+use Zend\Http\Client\Adapter\Proxy;
+use Zend\Http\Client\Adapter\Socket;
 
 /**
  * Zend_Http_Client_Adapter_Proxy test suite.
@@ -34,8 +34,9 @@ class ProxyAdapterTest extends SocketTest
      */
     protected function setUp()
     {
-        if (getenv('TESTS_ZEND_HTTP_CLIENT_HTTP_PROXY') &&
-              filter_var(getenv('TESTS_ZEND_HTTP_CLIENT_BASEURI'), FILTER_VALIDATE_BOOLEAN)) {
+        if (getenv('TESTS_ZEND_HTTP_CLIENT_HTTP_PROXY')
+            && filter_var(getenv('TESTS_ZEND_HTTP_CLIENT_BASEURI'), FILTER_VALIDATE_BOOLEAN)
+        ) {
             list($host, $port) = explode(':', getenv('TESTS_ZEND_HTTP_CLIENT_HTTP_PROXY'), 2);
 
             if (! $host) {
@@ -49,7 +50,10 @@ class ProxyAdapterTest extends SocketTest
                 $port = 8080;
             } else {
                 if (($port < 1 || $port > 65535)) {
-                    $this->markTestSkipped("$port is not a valid proxy port number. Should be between 1 and 65535.");
+                    $this->markTestSkipped(sprintf(
+                        '%s is not a valid proxy port number. Should be between 1 and 65535.',
+                        $port
+                    ));
                 }
             }
 
@@ -57,19 +61,20 @@ class ProxyAdapterTest extends SocketTest
 
             $user = '';
             $pass = '';
-            if (getenv('TESTS_ZEND_HTTP_CLIENT_HTTP_PROXY_USER') &&
-                getenv('TESTS_ZEND_HTTP_CLIENT_HTTP_PROXY_USER')) {
+            if (getenv('TESTS_ZEND_HTTP_CLIENT_HTTP_PROXY_USER')
+                && getenv('TESTS_ZEND_HTTP_CLIENT_HTTP_PROXY_USER')
+            ) {
                 $user = getenv('TESTS_ZEND_HTTP_CLIENT_HTTP_PROXY_USER');
             }
 
-            if (getenv('TESTS_ZEND_HTTP_CLIENT_HTTP_PROXY_PASS') &&
-                getenv('TESTS_ZEND_HTTP_CLIENT_HTTP_PROXY_PASS')) {
+            if (getenv('TESTS_ZEND_HTTP_CLIENT_HTTP_PROXY_PASS')
+                && getenv('TESTS_ZEND_HTTP_CLIENT_HTTP_PROXY_PASS')
+            ) {
                 $pass = getenv('TESTS_ZEND_HTTP_CLIENT_HTTP_PROXY_PASS');
             }
 
-
             $this->config = [
-                'adapter'    => '\Zend\Http\Client\Adapter\Proxy',
+                'adapter'    => Proxy::class,
                 'proxy_host' => $host,
                 'proxy_port' => $port,
                 'proxy_user' => $user,
@@ -78,7 +83,10 @@ class ProxyAdapterTest extends SocketTest
 
             parent::setUp();
         } else {
-            $this->markTestSkipped('Zend\Http\Client proxy server tests are not enabled in phpunit.xml');
+            $this->markTestSkipped(sprintf(
+                '%s proxy server tests are not enabled in phpunit.xml',
+                Client::class
+            ));
         }
     }
 
@@ -106,11 +114,9 @@ class ProxyAdapterTest extends SocketTest
 
     public function testGetLastRequest()
     {
-        /**
-         * This test will never work for the proxy adapter (and shouldn't!)
-         * because the proxy server modifies the request which is sent back in
-         * the TRACE response
-         */
+        // This test will never work for the proxy adapter (and shouldn't!)
+        // because the proxy server modifies the request which is sent back in
+        // the TRACE response
     }
 
     public function testDefaultConfig()
@@ -135,15 +141,15 @@ class ProxyAdapterTest extends SocketTest
 
     public function testProxyHasAllSocketConfigs()
     {
-        $socket = new \Zend\Http\Client\Adapter\Socket();
+        $socket = new Socket();
         $socketConfig = $socket->getConfig();
-        $proxy = new \Zend\Http\Client\Adapter\Proxy();
+        $proxy = new Proxy();
         $proxyConfig = $proxy->getConfig();
         foreach (array_keys($socketConfig) as $socketConfigKey) {
             $this->assertArrayHasKey(
                 $socketConfigKey,
                 $proxyConfig,
-                "Proxy adapter should have all the Socket configuration keys"
+                'Proxy adapter should have all the Socket configuration keys'
             );
         }
     }

@@ -1,23 +1,24 @@
 <?php
 /**
- * Zend Framework (http://framework.zend.com/)
- *
- * @link      http://github.com/zendframework/zf2 for the canonical source repository
- * @copyright Copyright (c) 2005-2015 Zend Technologies USA Inc. (http://www.zend.com)
- * @license   http://framework.zend.com/license/new-bsd New BSD License
+ * @see       https://github.com/zendframework/zend-http for the canonical source repository
+ * @copyright Copyright (c) 2005-2017 Zend Technologies USA Inc. (http://www.zend.com)
+ * @license   https://github.com/zendframework/zend-http/blob/master/LICENSE.md New BSD License
  */
 
 namespace ZendTest\Http\Header;
 
+use PHPUnit\Framework\TestCase;
 use Zend\Http\Header\Allow;
+use Zend\Http\Header\Exception\InvalidArgumentException;
+use Zend\Http\Header\HeaderInterface;
 
-class AllowTest extends \PHPUnit_Framework_TestCase
+class AllowTest extends TestCase
 {
     public function testAllowFromStringCreatesValidAllowHeader()
     {
         $allowHeader = Allow::fromString('Allow: GET, POST, PUT');
-        $this->assertInstanceOf('Zend\Http\Header\HeaderInterface', $allowHeader);
-        $this->assertInstanceOf('Zend\Http\Header\Allow', $allowHeader);
+        $this->assertInstanceOf(HeaderInterface::class, $allowHeader);
+        $this->assertInstanceOf(Allow::class, $allowHeader);
         $this->assertEquals(['GET', 'POST', 'PUT'], $allowHeader->getAllowedMethods());
     }
 
@@ -89,11 +90,10 @@ class AllowTest extends \PHPUnit_Framework_TestCase
      */
     public function testPreventsCRLFAttackViaFromString()
     {
-        $this->setExpectedException(
-            'Zend\Http\Header\Exception\InvalidArgumentException',
-            'Invalid header value detected'
-        );
-        $header = Allow::fromString("Allow: GET\r\n\r\nevilContent");
+        $this->expectException(InvalidArgumentException::class);
+        $this->expectExceptionMessage('Invalid header value detected');
+
+        Allow::fromString("Allow: GET\r\n\r\nevilContent");
     }
 
     public function injectionMethods()
@@ -106,25 +106,35 @@ class AllowTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @see http://en.wikipedia.org/wiki/HTTP_response_splitting
-     * @dataProvider injectionMethods
      * @group ZF2015-04
+     *
+     * @dataProvider injectionMethods
+     *
+     * @param array|string $methods
      */
     public function testPreventsCRLFAttackViaAllowMethods($methods)
     {
         $header = new Allow();
-        $this->setExpectedException('Zend\Http\Header\Exception\InvalidArgumentException', 'valid method');
+        $this->expectException(InvalidArgumentException::class);
+        $this->expectExceptionMessage('valid method');
+
         $header->allowMethods($methods);
     }
 
     /**
      * @see http://en.wikipedia.org/wiki/HTTP_response_splitting
-     * @dataProvider injectionMethods
      * @group ZF2015-04
+     *
+     * @dataProvider injectionMethods
+     *
+     * @param array|string $methods
      */
     public function testPreventsCRLFAttackViaDisallowMethods($methods)
     {
         $header = new Allow();
-        $this->setExpectedException('Zend\Http\Header\Exception\InvalidArgumentException', 'valid method');
+        $this->expectException(InvalidArgumentException::class);
+        $this->expectExceptionMessage('valid method');
+
         $header->disallowMethods($methods);
     }
 }

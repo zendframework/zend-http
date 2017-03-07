@@ -1,23 +1,24 @@
 <?php
 /**
- * Zend Framework (http://framework.zend.com/)
- *
- * @link      http://github.com/zendframework/zf2 for the canonical source repository
- * @copyright Copyright (c) 2005-2015 Zend Technologies USA Inc. (http://www.zend.com)
- * @license   http://framework.zend.com/license/new-bsd New BSD License
+ * @see       https://github.com/zendframework/zend-http for the canonical source repository
+ * @copyright Copyright (c) 2005-2017 Zend Technologies USA Inc. (http://www.zend.com)
+ * @license   https://github.com/zendframework/zend-http/blob/master/LICENSE.md New BSD License
  */
 
 namespace ZendTest\Http\Header;
 
+use PHPUnit\Framework\TestCase;
 use Zend\Http\Header\AuthenticationInfo;
+use Zend\Http\Header\Exception\InvalidArgumentException;
+use Zend\Http\Header\HeaderInterface;
 
-class AuthenticationInfoTest extends \PHPUnit_Framework_TestCase
+class AuthenticationInfoTest extends TestCase
 {
     public function testAuthenticationInfoFromStringCreatesValidAuthenticationInfoHeader()
     {
         $authenticationInfoHeader = AuthenticationInfo::fromString('Authentication-Info: xxx');
-        $this->assertInstanceOf('Zend\Http\Header\HeaderInterface', $authenticationInfoHeader);
-        $this->assertInstanceOf('Zend\Http\Header\AuthenticationInfo', $authenticationInfoHeader);
+        $this->assertInstanceOf(HeaderInterface::class, $authenticationInfoHeader);
+        $this->assertInstanceOf(AuthenticationInfo::class, $authenticationInfoHeader);
     }
 
     public function testAuthenticationInfoGetFieldNameReturnsHeaderName()
@@ -52,7 +53,7 @@ class AuthenticationInfoTest extends \PHPUnit_Framework_TestCase
      */
     public function testPreventsCRLFAttackViaFromString()
     {
-        $this->setExpectedException('Zend\Http\Header\Exception\InvalidArgumentException');
+        $this->expectException(InvalidArgumentException::class);
         $header = AuthenticationInfo::fromString("Authentication-Info: xxx\r\n\r\nevilContent");
     }
 
@@ -62,7 +63,7 @@ class AuthenticationInfoTest extends \PHPUnit_Framework_TestCase
      */
     public function testPreventsCRLFAttackViaConstructor()
     {
-        $this->setExpectedException('Zend\Http\Header\Exception\InvalidArgumentException');
-        $header = new AuthenticationInfo("xxx\r\n\r\nevilContent");
+        $this->expectException(InvalidArgumentException::class);
+        new AuthenticationInfo("xxx\r\n\r\nevilContent");
     }
 }

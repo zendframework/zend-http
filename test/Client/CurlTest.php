@@ -1,16 +1,18 @@
 <?php
 /**
- * Zend Framework (http://framework.zend.com/)
- *
- * @link      http://github.com/zendframework/zf2 for the canonical source repository
- * @copyright Copyright (c) 2005-2015 Zend Technologies USA Inc. (http://www.zend.com)
- * @license   http://framework.zend.com/license/new-bsd New BSD License
+ * @see       https://github.com/zendframework/zend-http for the canonical source repository
+ * @copyright Copyright (c) 2005-2017 Zend Technologies USA Inc. (http://www.zend.com)
+ * @license   https://github.com/zendframework/zend-http/blob/master/LICENSE.md New BSD License
  */
 
 namespace ZendTest\Http\Client;
 
 use Zend\Config\Config;
+use Zend\Http\Client;
 use Zend\Http\Client\Adapter;
+use Zend\Http\Client\Adapter\Curl;
+use Zend\Http\Client\Adapter\Exception\InvalidArgumentException;
+use Zend\Http\Client\Adapter\Exception\RuntimeException;
 use Zend\Http\Client\Adapter\Exception\TimeoutException;
 
 /**
@@ -37,7 +39,7 @@ class CurlTest extends CommonHttpTests
      * @var array
      */
     protected $config = [
-        'adapter'     => 'Zend\Http\Client\Adapter\Curl',
+        'adapter'     => Curl::class,
         'curloptions' => [
             CURLOPT_INFILESIZE => 102400000,
         ],
@@ -57,13 +59,12 @@ class CurlTest extends CommonHttpTests
 
     /**
      * Test that we can set a valid configuration array with some options
-     *
      */
     public function testConfigSetAsArray()
     {
         $config = [
             'timeout'    => 500,
-            'someoption' => 'hasvalue'
+            'someoption' => 'hasvalue',
         ];
 
         $this->_adapter->setOptions($config);
@@ -85,7 +86,7 @@ class CurlTest extends CommonHttpTests
             'timeout'  => 400,
             'nested'   => [
                 'item' => 'value',
-            ]
+            ],
         ]);
 
         $this->_adapter->setOptions($config);
@@ -99,13 +100,13 @@ class CurlTest extends CommonHttpTests
      * Check that an exception is thrown when trying to set invalid config
      *
      * @dataProvider invalidConfigProvider
+     *
+     * @param mixed $config
      */
     public function testSetConfigInvalidConfig($config)
     {
-        $this->setExpectedException(
-            'Zend\Http\Client\Adapter\Exception\InvalidArgumentException',
-            'Array or Traversable object expected'
-        );
+        $this->expectException(InvalidArgumentException::class);
+        $this->expectExceptionMessage('Array or Traversable object expected');
 
         $this->_adapter->setOptions($config);
     }
@@ -123,15 +124,13 @@ class CurlTest extends CommonHttpTests
         }
 
         $config = [
-            'adapter'     => 'Zend\Http\Client\Adapter\Curl',
+            'adapter'     => Curl::class,
             'curloptions' => [CURLOPT_CLOSEPOLICY => true],
         ];
-        $this->client = new \Zend\Http\Client($this->client->getUri(true), $config);
+        $this->client = new Client($this->client->getUri(true), $config);
 
-        $this->setExpectedException(
-            'Zend\Http\Client\Adapter\Exception\RuntimeException',
-            'Unknown or erroreous cURL option'
-        );
+        $this->expectException(RuntimeException::class);
+        $this->expectExceptionMessage('Unknown or erroreous cURL option');
         $this->client->send();
     }
 
@@ -159,7 +158,6 @@ class CurlTest extends CommonHttpTests
      *
      * Set CURLOPT_FOLLOWLOCATION = false for this type of request and let the Zend_Http_Client handle redirects
      * in his own loop.
-     *
      */
     public function testRedirectPostToGetWithCurlFollowLocationOptionLeadsToTimeout()
     {
@@ -168,8 +166,9 @@ class CurlTest extends CommonHttpTests
         $adapter->setOptions([
             'curloptions' => [
                 CURLOPT_FOLLOWLOCATION => true,
-                CURLOPT_TIMEOUT => 1,
-            ]]);
+                CURLOPT_TIMEOUT        => 1,
+            ],
+        ]);
 
         $this->client->setUri($this->baseuri . 'testRedirections.php');
 
@@ -177,8 +176,8 @@ class CurlTest extends CommonHttpTests
         $this->client->setParameterGet(['swallow' => 'african']);
         $this->client->setParameterPost(['Camelot' => 'A silly place']);
         $this->client->setMethod('POST');
-        $this->setExpectedException(
-            'Zend\Http\Client\Adapter\Exception\RuntimeException',
+        $this->expectException(RuntimeException::class);
+        $this->expectExceptionMessage(
             'Error in cURL request: Operation timed out after 1000 milliseconds with 0 bytes received'
         );
         $this->client->send();
@@ -192,8 +191,11 @@ class CurlTest extends CommonHttpTests
     {
         // Method 1: Using the binary string of a file to PUT
         $this->client->setUri($this->baseuri . 'testRawPostData.php');
-        $putFileContents = file_get_contents(dirname(realpath(__FILE__)) . DIRECTORY_SEPARATOR .
-            '_files' . DIRECTORY_SEPARATOR . 'staticFile.jpg');
+        $putFileContents = file_get_contents(
+            dirname(realpath(__FILE__))
+            . DIRECTORY_SEPARATOR . '_files'
+            . DIRECTORY_SEPARATOR . 'staticFile.jpg'
+        );
 
         $this->client->setRawBody($putFileContents);
         $this->client->setMethod('PUT');
@@ -208,19 +210,26 @@ class CurlTest extends CommonHttpTests
     public function testPutFileHandleWithHttpClient()
     {
         $this->client->setUri($this->baseuri . 'testRawPostData.php');
-        $putFileContents = file_get_contents(dirname(realpath(__FILE__)) . DIRECTORY_SEPARATOR .
-            '_files' . DIRECTORY_SEPARATOR . 'staticFile.jpg');
+        $putFileContents = file_get_contents(
+            dirname(realpath(__FILE__))
+            . DIRECTORY_SEPARATOR . '_files'
+            . DIRECTORY_SEPARATOR . 'staticFile.jpg'
+        );
 
         // Method 2: Using a File-Handle to the file to PUT the data
-        $putFilePath = dirname(realpath(__FILE__)) . DIRECTORY_SEPARATOR .
-            '_files' . DIRECTORY_SEPARATOR . 'staticFile.jpg';
-        $putFileHandle = fopen($putFilePath, "r");
+        $putFilePath = dirname(realpath(__FILE__))
+            . DIRECTORY_SEPARATOR . '_files'
+            . DIRECTORY_SEPARATOR . 'staticFile.jpg';
+        $putFileHandle = fopen($putFilePath, 'r');
         $putFileSize = filesize($putFilePath);
 
         $adapter = new Adapter\Curl();
         $this->client->setAdapter($adapter);
         $adapter->setOptions([
-            'curloptions' => [CURLOPT_INFILE => $putFileHandle, CURLOPT_INFILESIZE => $putFileSize]
+            'curloptions' => [
+                CURLOPT_INFILE     => $putFileHandle,
+                CURLOPT_INFILESIZE => $putFileSize,
+            ],
         ]);
         $this->client->setMethod('PUT');
         $this->client->send();
@@ -230,18 +239,16 @@ class CurlTest extends CommonHttpTests
     public function testWritingAndNotConnectedWithCurlHandleThrowsException()
     {
         $adapter = new Adapter\Curl();
-        $this->setExpectedException(
-            'Zend\Http\Client\Adapter\Exception\RuntimeException',
-            'Trying to write but we are not connected'
-        );
-        $adapter->write("GET", "someUri");
+        $this->expectException(RuntimeException::class);
+        $this->expectExceptionMessage('Trying to write but we are not connected');
+        $adapter->write('GET', 'someUri');
     }
 
     public function testSetConfigIsNotArray()
     {
         $adapter = new Adapter\Curl();
-        $this->setExpectedException('Zend\Http\Client\Adapter\Exception\InvalidArgumentException');
-        $adapter->setOptions("foo");
+        $this->expectException(InvalidArgumentException::class);
+        $adapter->setOptions('foo');
     }
 
     public function testSetCurlOptions()
@@ -309,12 +316,12 @@ class CurlTest extends CommonHttpTests
     {
         $adapter = new Adapter\Curl();
         $adapter->setOptions([
-            'sslverifypeer' => true
+            'sslverifypeer' => true,
         ]);
 
         $expected = [
             'curloptions' => [
-                CURLOPT_SSL_VERIFYPEER => true
+                CURLOPT_SSL_VERIFYPEER => true,
             ],
         ];
 
@@ -331,7 +338,7 @@ class CurlTest extends CommonHttpTests
     {
         $adapter = new Adapter\Curl();
         $adapter->setOptions(['timeout' => 2, 'maxredirects' => 1]);
-        $adapter->connect("http://framework.zend.com");
+        $adapter->connect('http://framework.zend.com');
 
         $this->assertInternalType('resource', $adapter->getHandle());
     }
@@ -352,7 +359,7 @@ class CurlTest extends CommonHttpTests
     public function testAuthorizeHeader()
     {
         // We just need someone to talk to
-        $this->client->setUri($this->baseuri. 'testHttpAuth.php');
+        $this->client->setUri($this->baseuri . 'testHttpAuth.php');
         $adapter = new Adapter\Curl();
         $this->client->setAdapter($adapter);
 
@@ -408,7 +415,6 @@ class CurlTest extends CommonHttpTests
         $this->assertEquals('foo=bar', $this->client->getResponse()->getBody());
     }
 
-
     /**
      * @group ZF-7683
      * @see https://github.com/zendframework/zend-http/pull/53
@@ -440,7 +446,7 @@ class CurlTest extends CommonHttpTests
         $adapter = new Adapter\Curl();
         $options = [
             'sslcapath' => __DIR__ . DIRECTORY_SEPARATOR . '/_files',
-            'sslcafile' => 'ca-bundle.crt'
+            'sslcafile' => 'ca-bundle.crt',
         ];
         $adapter->setOptions($options);
 

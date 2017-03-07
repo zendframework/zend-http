@@ -1,23 +1,24 @@
 <?php
 /**
- * Zend Framework (http://framework.zend.com/)
- *
- * @link      http://github.com/zendframework/zf2 for the canonical source repository
- * @copyright Copyright (c) 2005-2015 Zend Technologies USA Inc. (http://www.zend.com)
- * @license   http://framework.zend.com/license/new-bsd New BSD License
+ * @see       https://github.com/zendframework/zend-http for the canonical source repository
+ * @copyright Copyright (c) 2005-2017 Zend Technologies USA Inc. (http://www.zend.com)
+ * @license   https://github.com/zendframework/zend-http/blob/master/LICENSE.md New BSD License
  */
 
 namespace ZendTest\Http\Header;
 
+use PHPUnit\Framework\TestCase;
+use Zend\Http\Header\Exception\InvalidArgumentException;
+use Zend\Http\Header\HeaderInterface;
 use Zend\Http\Header\Via;
 
-class ViaTest extends \PHPUnit_Framework_TestCase
+class ViaTest extends TestCase
 {
     public function testViaFromStringCreatesValidViaHeader()
     {
         $viaHeader = Via::fromString('Via: xxx');
-        $this->assertInstanceOf('Zend\Http\Header\HeaderInterface', $viaHeader);
-        $this->assertInstanceOf('Zend\Http\Header\Via', $viaHeader);
+        $this->assertInstanceOf(HeaderInterface::class, $viaHeader);
+        $this->assertInstanceOf(Via::class, $viaHeader);
     }
 
     public function testViaGetFieldNameReturnsHeaderName()
@@ -52,8 +53,8 @@ class ViaTest extends \PHPUnit_Framework_TestCase
      */
     public function testPreventsCRLFAttackViaFromString()
     {
-        $this->setExpectedException('Zend\Http\Header\Exception\InvalidArgumentException');
-        $header = Via::fromString("Via: xxx\r\n\r\nevilContent");
+        $this->expectException(InvalidArgumentException::class);
+        Via::fromString("Via: xxx\r\n\r\nevilContent");
     }
 
     /**
@@ -62,7 +63,7 @@ class ViaTest extends \PHPUnit_Framework_TestCase
      */
     public function testPreventsCRLFAttackViaConstructor()
     {
-        $this->setExpectedException('Zend\Http\Header\Exception\InvalidArgumentException');
-        $header = new Via("xxx\r\n\r\nevilContent");
+        $this->expectException(InvalidArgumentException::class);
+        new Via("xxx\r\n\r\nevilContent");
     }
 }

@@ -1,23 +1,24 @@
 <?php
 /**
- * Zend Framework (http://framework.zend.com/)
- *
- * @link      http://github.com/zendframework/zf2 for the canonical source repository
- * @copyright Copyright (c) 2005-2015 Zend Technologies USA Inc. (http://www.zend.com)
- * @license   http://framework.zend.com/license/new-bsd New BSD License
+ * @see       https://github.com/zendframework/zend-http for the canonical source repository
+ * @copyright Copyright (c) 2005-2017 Zend Technologies USA Inc. (http://www.zend.com)
+ * @license   https://github.com/zendframework/zend-http/blob/master/LICENSE.md New BSD License
  */
 
 namespace ZendTest\Http\Header;
 
+use PHPUnit\Framework\TestCase;
 use Zend\Http\Header\Connection;
+use Zend\Http\Header\Exception\InvalidArgumentException;
+use Zend\Http\Header\HeaderInterface;
 
-class ConnectionTest extends \PHPUnit_Framework_TestCase
+class ConnectionTest extends TestCase
 {
     public function testConnectionFromStringCreatesValidConnectionHeader()
     {
         $connectionHeader = Connection::fromString('Connection: close');
-        $this->assertInstanceOf('Zend\Http\Header\HeaderInterface', $connectionHeader);
-        $this->assertInstanceOf('Zend\Http\Header\Connection', $connectionHeader);
+        $this->assertInstanceOf(HeaderInterface::class, $connectionHeader);
+        $this->assertInstanceOf(Connection::class, $connectionHeader);
         $this->assertEquals('close', $connectionHeader->getFieldValue());
         $this->assertFalse($connectionHeader->isPersistent());
     }
@@ -59,8 +60,8 @@ class ConnectionTest extends \PHPUnit_Framework_TestCase
      */
     public function testPreventsCRLFAttackViaFromString()
     {
-        $this->setExpectedException('Zend\Http\Header\Exception\InvalidArgumentException');
-        $header = Connection::fromString("Connection: close\r\n\r\nevilContent");
+        $this->expectException(InvalidArgumentException::class);
+        Connection::fromString("Connection: close\r\n\r\nevilContent");
     }
 
     /**
@@ -70,7 +71,7 @@ class ConnectionTest extends \PHPUnit_Framework_TestCase
     public function testPreventsCRLFAttackViaSetters()
     {
         $header = new Connection();
-        $this->setExpectedException('Zend\Http\Header\Exception\InvalidArgumentException');
+        $this->expectException(InvalidArgumentException::class);
         $header->setValue("close\r\n\r\nevilContent");
     }
 }

@@ -1,23 +1,24 @@
 <?php
 /**
- * Zend Framework (http://framework.zend.com/)
- *
- * @link      http://github.com/zendframework/zf2 for the canonical source repository
- * @copyright Copyright (c) 2005-2015 Zend Technologies USA Inc. (http://www.zend.com)
- * @license   http://framework.zend.com/license/new-bsd New BSD License
+ * @see       https://github.com/zendframework/zend-http for the canonical source repository
+ * @copyright Copyright (c) 2005-2017 Zend Technologies USA Inc. (http://www.zend.com)
+ * @license   https://github.com/zendframework/zend-http/blob/master/LICENSE.md New BSD License
  */
 
 namespace ZendTest\Http\Header;
 
+use PHPUnit\Framework\TestCase;
+use Zend\Http\Header\Exception\InvalidArgumentException;
+use Zend\Http\Header\HeaderInterface;
 use Zend\Http\Header\IfNoneMatch;
 
-class IfNoneMatchTest extends \PHPUnit_Framework_TestCase
+class IfNoneMatchTest extends TestCase
 {
     public function testIfNoneMatchFromStringCreatesValidIfNoneMatchHeader()
     {
         $ifNoneMatchHeader = IfNoneMatch::fromString('If-None-Match: xxx');
-        $this->assertInstanceOf('Zend\Http\Header\HeaderInterface', $ifNoneMatchHeader);
-        $this->assertInstanceOf('Zend\Http\Header\IfNoneMatch', $ifNoneMatchHeader);
+        $this->assertInstanceOf(HeaderInterface::class, $ifNoneMatchHeader);
+        $this->assertInstanceOf(IfNoneMatch::class, $ifNoneMatchHeader);
     }
 
     public function testIfNoneMatchGetFieldNameReturnsHeaderName()
@@ -52,8 +53,8 @@ class IfNoneMatchTest extends \PHPUnit_Framework_TestCase
      */
     public function testPreventsCRLFAttackViaFromString()
     {
-        $this->setExpectedException('Zend\Http\Header\Exception\InvalidArgumentException');
-        $header = IfNoneMatch::fromString("If-None-Match: xxx\r\n\r\nevilContent");
+        $this->expectException(InvalidArgumentException::class);
+        IfNoneMatch::fromString("If-None-Match: xxx\r\n\r\nevilContent");
     }
 
     /**
@@ -62,7 +63,7 @@ class IfNoneMatchTest extends \PHPUnit_Framework_TestCase
      */
     public function testPreventsCRLFAttackViaConstructor()
     {
-        $this->setExpectedException('Zend\Http\Header\Exception\InvalidArgumentException');
-        $header = new IfNoneMatch("xxx\r\n\r\nevilContent");
+        $this->expectException(InvalidArgumentException::class);
+        new IfNoneMatch("xxx\r\n\r\nevilContent");
     }
 }

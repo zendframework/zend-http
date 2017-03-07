@@ -1,15 +1,18 @@
 <?php
 /**
- * Zend Framework (http://framework.zend.com/)
- *
- * @link      http://github.com/zendframework/zf2 for the canonical source repository
- * @copyright Copyright (c) 2005-2015 Zend Technologies USA Inc. (http://www.zend.com)
- * @license   http://framework.zend.com/license/new-bsd New BSD License
+ * @see       https://github.com/zendframework/zend-http for the canonical source repository
+ * @copyright Copyright (c) 2005-2017 Zend Technologies USA Inc. (http://www.zend.com)
+ * @license   https://github.com/zendframework/zend-http/blob/master/LICENSE.md New BSD License
  */
 
 namespace ZendTest\Http\Client;
 
+use stdClass;
+use Zend\Config\Config;
 use Zend\Http\Client\Adapter;
+use Zend\Http\Client\Adapter\Exception\InvalidArgumentException;
+use Zend\Http\Client\Adapter\Exception\RuntimeException;
+use Zend\Http\Client\Adapter\Socket;
 use Zend\Uri\Uri;
 
 /**
@@ -36,7 +39,7 @@ class SocketTest extends CommonHttpTests
      * @var array
      */
     protected $config = [
-        'adapter' => 'Zend\Http\Client\Adapter\Socket'
+        'adapter' => Socket::class,
     ];
 
     /**
@@ -51,7 +54,7 @@ class SocketTest extends CommonHttpTests
     {
         $config = [
             'timeout'    => 500,
-            'someoption' => 'hasvalue'
+            'someoption' => 'hasvalue',
         ];
 
         $this->_adapter->setOptions($config);
@@ -76,7 +79,7 @@ class SocketTest extends CommonHttpTests
         $this->_adapter->setOptions($config);
         try {
             $this->_adapter->connect('localhost', 443, true);
-        } catch (\Zend\Http\Client\Adapter\Exception\RuntimeException $e) {
+        } catch (RuntimeException $e) {
             // Test is designed to allow connect failure because we're interested
             // only in the stream context state created within that method.
         }
@@ -90,15 +93,15 @@ class SocketTest extends CommonHttpTests
     public function testConnectingViaSslWithCustomSslOptionsOnContext()
     {
         $config = [
-            'timeout' => 30,
-            'sslverifypeer' => false,
+            'timeout'            => 30,
+            'sslverifypeer'      => false,
             'sslallowselfsigned' => true,
-            'sslverifypeername' => false,
+            'sslverifypeername'  => false,
         ];
         $this->_adapter->setOptions($config);
         try {
             $this->_adapter->connect('localhost', 443, true);
-        } catch (\Zend\Http\Client\Adapter\Exception\RuntimeException $e) {
+        } catch (RuntimeException $e) {
             // Test is designed to allow connect failure because we're interested
             // only in the stream context state created within that method.
         }
@@ -109,7 +112,6 @@ class SocketTest extends CommonHttpTests
         $this->assertFalse($options['ssl']['verify_peer_name']);
     }
 
-
     /**
      * Test Certificate File Option
      * The configuration is set to a legitimate certificate bundle file,
@@ -118,13 +120,13 @@ class SocketTest extends CommonHttpTests
     public function testConnectingViaSslUsesCertificateFileContext()
     {
         $config = [
-          'timeout' => 30,
-          'sslcafile' => __DIR__ . '/_files/ca-bundle.crt',
+            'timeout'   => 30,
+            'sslcafile' => __DIR__ . '/_files/ca-bundle.crt',
         ];
         $this->_adapter->setOptions($config);
         try {
             $this->_adapter->connect('localhost', 443, true);
-        } catch (\Zend\Http\Client\Adapter\Exception\RuntimeException $e) {
+        } catch (RuntimeException $e) {
             // Test is designed to allow connect failure because we're interested
             // only in the stream context state created within that method.
         }
@@ -140,11 +142,11 @@ class SocketTest extends CommonHttpTests
      */
     public function testConfigSetAsZendConfig()
     {
-        $config = new \Zend\Config\Config([
+        $config = new Config([
             'timeout'  => 400,
             'nested'   => [
                 'item' => 'value',
-            ]
+            ],
         ]);
 
         $this->_adapter->setOptions($config);
@@ -158,13 +160,13 @@ class SocketTest extends CommonHttpTests
      * Check that an exception is thrown when trying to set invalid config
      *
      * @dataProvider invalidConfigProvider
+     *
+     * @param mixed $config
      */
     public function testSetConfigInvalidConfig($config)
     {
-        $this->setExpectedException(
-            'Zend\Http\Client\Adapter\Exception\InvalidArgumentException',
-            'Array or Zend\Config object expected'
-        );
+        $this->expectException(InvalidArgumentException::class);
+        $this->expectExceptionMessage('Array or Zend\Config object expected');
 
         $this->_adapter->setOptions($config);
     }
@@ -176,7 +178,7 @@ class SocketTest extends CommonHttpTests
     public function testGetNewStreamContext()
     {
         $adapterClass = $this->config['adapter'];
-        $adapter = new $adapterClass;
+        $adapter = new $adapterClass();
         $context = $adapter->getStreamContext();
 
         $this->assertEquals('stream-context', get_resource_type($context));
@@ -185,7 +187,7 @@ class SocketTest extends CommonHttpTests
     public function testSetNewStreamContextResource()
     {
         $adapterClass = $this->config['adapter'];
-        $adapter = new $adapterClass;
+        $adapter = new $adapterClass();
         $context = stream_context_create();
 
         $adapter->setStreamContext($context);
@@ -196,17 +198,17 @@ class SocketTest extends CommonHttpTests
     public function testSetNewStreamContextOptions()
     {
         $adapterClass = $this->config['adapter'];
-        $adapter = new $adapterClass;
+        $adapter = new $adapterClass();
         $options = [
             'socket' => [
-                'bindto' => '1.2.3.4:0'
+                'bindto' => '1.2.3.4:0',
             ],
             'ssl' => [
                 'capath'            => null,
                 'verify_peer'       => true,
                 'allow_self_signed' => false,
-                'verify_peer_name'  => true
-            ]
+                'verify_peer_name'  => true,
+            ],
         ];
 
         $adapter->setStreamContext($options);
@@ -217,17 +219,17 @@ class SocketTest extends CommonHttpTests
     /**
      * Test that setting invalid options / context causes an exception
      *
-     * @dataProvider      invalidContextProvider
+     * @dataProvider invalidContextProvider
+     *
+     * @param mixed $invalid
      */
     public function testSetInvalidContextOptions($invalid)
     {
-        $this->setExpectedException(
-            'Zend\Http\Client\Adapter\Exception\InvalidArgumentException',
-            'Expecting either a stream context resource or array'
-        );
+        $this->expectException(InvalidArgumentException::class);
+        $this->expectExceptionMessage('Expecting either a stream context resource or array');
 
         $adapterClass = $this->config['adapter'];
-        $adapter = new $adapterClass;
+        $adapter = new $adapterClass();
         $adapter->setStreamContext($invalid);
     }
 
@@ -238,12 +240,12 @@ class SocketTest extends CommonHttpTests
         }
 
         $adapterClass = $this->config['adapter'];
-        $adapter = new $adapterClass;
+        $adapter = new $adapterClass();
         $adapter->setStreamContext([
             'ssl' => [
                 'capture_peer_cert' => true,
-                'capture_peer_chain' => true
-            ]
+                'capture_peer_chain' => true,
+            ],
         ]);
 
         $this->client->setAdapter($adapter);
@@ -319,10 +321,10 @@ class SocketTest extends CommonHttpTests
     public static function invalidContextProvider()
     {
         return [
-            [new \stdClass()],
+            [new stdClass()],
             [fopen('data://text/plain,', 'r')],
             [false],
-            [null]
+            [null],
         ];
     }
 }

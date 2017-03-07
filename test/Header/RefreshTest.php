@@ -1,23 +1,24 @@
 <?php
 /**
- * Zend Framework (http://framework.zend.com/)
- *
- * @link      http://github.com/zendframework/zf2 for the canonical source repository
- * @copyright Copyright (c) 2005-2015 Zend Technologies USA Inc. (http://www.zend.com)
- * @license   http://framework.zend.com/license/new-bsd New BSD License
+ * @see       https://github.com/zendframework/zend-http for the canonical source repository
+ * @copyright Copyright (c) 2005-2017 Zend Technologies USA Inc. (http://www.zend.com)
+ * @license   https://github.com/zendframework/zend-http/blob/master/LICENSE.md New BSD License
  */
 
 namespace ZendTest\Http\Header;
 
+use PHPUnit\Framework\TestCase;
+use Zend\Http\Header\Exception\InvalidArgumentException;
+use Zend\Http\Header\HeaderInterface;
 use Zend\Http\Header\Refresh;
 
-class RefreshTest extends \PHPUnit_Framework_TestCase
+class RefreshTest extends TestCase
 {
     public function testRefreshFromStringCreatesValidRefreshHeader()
     {
         $refreshHeader = Refresh::fromString('Refresh: xxx');
-        $this->assertInstanceOf('Zend\Http\Header\HeaderInterface', $refreshHeader);
-        $this->assertInstanceOf('Zend\Http\Header\Refresh', $refreshHeader);
+        $this->assertInstanceOf(HeaderInterface::class, $refreshHeader);
+        $this->assertInstanceOf(Refresh::class, $refreshHeader);
     }
 
     public function testRefreshGetFieldNameReturnsHeaderName()
@@ -52,8 +53,8 @@ class RefreshTest extends \PHPUnit_Framework_TestCase
      */
     public function testPreventsCRLFAttackViaFromString()
     {
-        $this->setExpectedException('Zend\Http\Header\Exception\InvalidArgumentException');
-        $header = Refresh::fromString("Refresh: xxx\r\n\r\nevilContent");
+        $this->expectException(InvalidArgumentException::class);
+        Refresh::fromString("Refresh: xxx\r\n\r\nevilContent");
     }
 
     /**
@@ -62,7 +63,7 @@ class RefreshTest extends \PHPUnit_Framework_TestCase
      */
     public function testPreventsCRLFAttackViaConstructorValue()
     {
-        $this->setExpectedException('Zend\Http\Header\Exception\InvalidArgumentException');
-        $header = new Refresh("xxx\r\n\r\nevilContent");
+        $this->expectException(InvalidArgumentException::class);
+        new Refresh("xxx\r\n\r\nevilContent");
     }
 }

@@ -1,21 +1,20 @@
 <?php
 /**
- * Zend Framework (http://framework.zend.com/)
- *
- * @link      http://github.com/zendframework/zf2 for the canonical source repository
- * @copyright Copyright (c) 2005-2015 Zend Technologies USA Inc. (http://www.zend.com)
- * @license   http://framework.zend.com/license/new-bsd New BSD License
+ * @see       https://github.com/zendframework/zend-http for the canonical source repository
+ * @copyright Copyright (c) 2005-2017 Zend Technologies USA Inc. (http://www.zend.com)
+ * @license   https://github.com/zendframework/zend-http/blob/master/LICENSE.md New BSD License
  */
 
 namespace ZendTest\Http\Response;
 
+use PHPUnit\Framework\TestCase;
 use Zend\Http\Response\Stream;
 
-class ResponseStreamTest extends \PHPUnit_Framework_TestCase
+class ResponseStreamTest extends TestCase
 {
     public function testResponseFactoryFromStringCreatesValidResponse()
     {
-        $string = 'HTTP/1.0 200 OK' . "\r\n\r\n".'Foo Bar'."\r\n";
+        $string = 'HTTP/1.0 200 OK' . "\r\n\r\n" . 'Foo Bar' . "\r\n";
         $stream = fopen('php://temp', 'rb+');
         fwrite($stream, 'Bar Foo');
         rewind($stream);
@@ -33,7 +32,7 @@ class ResponseStreamTest extends \PHPUnit_Framework_TestCase
     public function testResponseFactoryFromEmptyStringCreatesValidResponse()
     {
         $stream = fopen('php://temp', 'rb+');
-        fwrite($stream, 'HTTP/1.0 200 OK' . "\r\n\r\n".'Foo Bar'."\r\n".'Bar Foo');
+        fwrite($stream, 'HTTP/1.0 200 OK' . "\r\n\r\n" . 'Foo Bar' . "\r\n" . 'Bar Foo');
         rewind($stream);
 
         $response = Stream::fromStream('', $stream);
@@ -53,8 +52,7 @@ class ResponseStreamTest extends \PHPUnit_Framework_TestCase
             }
         }
 
-
-        $headers .= fread($stream, 100); //Should accept also part of body as text
+        $headers .= fread($stream, 100); // Should accept also part of body as text
 
         $res = Stream::fromStream($headers, $stream);
 
@@ -62,7 +60,6 @@ class ResponseStreamTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('0b13cb193de9450aa70a6403e2c9902f', md5($res->getBody()));
         $this->assertEquals('f24dd075ba2ebfb3bf21270e3fdc5303', md5($res->getContent()));
     }
-
 
     public function test300isRedirect()
     {
@@ -99,8 +96,7 @@ class ResponseStreamTest extends \PHPUnit_Framework_TestCase
             }
         }
 
-
-        $data .= fread($stream, 100); //Should accept also part of body as text
+        $data .= fread($stream, 100); // Should accept also part of body as text
 
         $return = [];
         $return['stream'] = $stream;
