@@ -16,7 +16,8 @@ All notable changes to this project will be documented in this file, in reverse 
 
 ### Removed
 
-- Nothing.
+- [#115](https://github.com/zendframework/zend-http/pull/115) dropped php 5.5
+  support
 
 ### Fixed
 
