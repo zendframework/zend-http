@@ -131,9 +131,8 @@ class HeadersTest extends \PHPUnit_Framework_TestCase
         $this->assertInstanceOf('Zend\Http\Header\GenericHeader', $headers->get('Fake'));
     }
 
-    public function testHeadersAddHeaderLineThrowsExceptionOnMissingFieldValue()
+    public function testHeadersAddHeaderLineShouldntThrowAnExceptionOnMissedFieldValue()
     {
-        $this->setExpectedException('Zend\Http\Exception\InvalidArgumentException', 'without a field');
         $headers = new Headers();
         $headers->addHeaderLine('Foo');
     }
