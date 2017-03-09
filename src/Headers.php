@@ -179,17 +179,14 @@ class Headers implements Countable, Iterator
      * @param string $fieldValue optional
      * @return Headers
      */
-    public function addHeaderLine($headerFieldNameOrLine, $fieldValue = null)
+    public function addHeaderLine($headerFieldNameOrLine, $fieldValue = '')
     {
         $matches = null;
-        if (preg_match('/^(?P<name>[^()><@,;:\"\\/\[\]?=}{ \t]+):.*$/', $headerFieldNameOrLine, $matches)
-            && $fieldValue === null) {
+        if (preg_match('/^(?P<name>[^()><@,;:\"\\/\[\]?=}{ \t]+):.*$/', $headerFieldNameOrLine, $matches)) {
             // is a header
             $headerName = $matches['name'];
             $headerKey  = static::createKey($matches['name']);
             $line = $headerFieldNameOrLine;
-        } elseif ($fieldValue === null) {
-            throw new Exception\InvalidArgumentException('A field name was provided without a field value');
         } else {
             $headerName = $headerFieldNameOrLine;
             $headerKey  = static::createKey($headerFieldNameOrLine);
