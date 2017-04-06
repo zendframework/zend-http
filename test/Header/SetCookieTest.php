@@ -661,6 +661,33 @@ class SetCookieTest extends TestCase
                 ],
                 'emptykey=; Domain=docs.foo.com',
             ],
+            [
+                'Set-Cookie: emptykey; Domain=docs.foo.com; Max-Age=foo;',
+                [
+                    'name'    => 'myname',
+                    'value'   => '',
+                    'domain'  => 'docs.foo.com',
+                ],
+                'emptykey=; Domain=docs.foo.com'
+            ],
+            [
+                'Set-Cookie: emptykey; Domain=docs.foo.com; Max-Age=-1480312904;',
+                [
+                    'name'    => 'myname',
+                    'value'   => '',
+                    'domain'  => 'docs.foo.com',
+                ],
+                'emptykey=; Max-Age=0; Domain=docs.foo.com'
+            ],
+            [
+                'Set-Cookie: emptykey; Domain=docs.foo.com; Max-Age=100;',
+                [
+                    'name'    => 'myname',
+                    'value'   => '',
+                    'domain'  => 'docs.foo.com',
+                ],
+                'emptykey=; Max-Age=100; Domain=docs.foo.com'
+            ],
         ];
     }
 }
