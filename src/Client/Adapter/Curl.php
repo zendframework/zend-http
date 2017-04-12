@@ -202,9 +202,9 @@ class Curl implements HttpAdapter, StreamInterface
         }
 
         if (isset($this->config['connecttimeout'])) {
-            $connectTimeout = $this->config['connecttimeout'];
+            $connectTimeout = (int) $this->config['connecttimeout'];
         } elseif (isset($this->config['timeout'])) {
-            $connectTimeout = $this->config['timeout'];
+            $connectTimeout = (int) $this->config['timeout'];
         } else {
             $connectTimeout = null;
         }

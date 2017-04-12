@@ -97,6 +97,22 @@ class CurlTest extends CommonHttpTests
     }
 
     /**
+     * Test not integer timeout casted to int
+     *
+     */
+    public function testCastTimeOutConfig()
+    {
+        $config = new Config([
+            'timeout'  => "timeout",
+        ]);
+
+        $this->_adapter->setOptions($config);
+
+        $hasConfig = $this->_adapter->getConfig();
+        $this->assertEquals((int) $config->timeout, $hasConfig['timeout']);
+    }
+
+    /**
      * Check that an exception is thrown when trying to set invalid config
      *
      * @dataProvider invalidConfigProvider
