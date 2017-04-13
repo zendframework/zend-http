@@ -69,6 +69,11 @@ class Client implements Stdlib\DispatchableInterface
     protected $streamName = null;
 
     /**
+     * @var resource|null
+     */
+    protected $streamHandle = null;
+
+    /**
      * @var array of Header\SetCookie
      */
     protected $cookies = [];
@@ -918,11 +923,17 @@ class Client implements Stdlib\DispatchableInterface
                 throw new Client\Exception\RuntimeException('Adapter does not support streaming');
             }
 
+            $this->streamHandle = null;
             // calling protected method to allow extending classes
             // to wrap the interaction with the adapter
             $response = $this->doRequest($uri, $method, $secure, $headers, $body);
+            $stream = $this->streamHandle;
+            $this->streamHandle = null;
 
             if (! $response) {
+                if ($stream !== null) {
+                    fclose($stream);
+                }
                 throw new Exception\RuntimeException('Unable to read response, or response is empty');
             }
 
@@ -933,9 +944,11 @@ class Client implements Stdlib\DispatchableInterface
             }
 
             if ($this->config['outputstream']) {
-                $stream = $this->getStream();
-                if (! is_resource($stream) && is_string($stream)) {
-                    $stream = fopen($stream, 'r');
+                if ($stream === null) {
+                    $stream = $this->getStream();
+                    if (! is_resource($stream) && is_string($stream)) {
+                        $stream = fopen($stream, 'r');
+                    }
                 }
                 $streamMetaData = stream_get_meta_data($stream);
                 if ($streamMetaData['seekable']) {
@@ -1412,8 +1425,8 @@ class Client implements Stdlib\DispatchableInterface
 
         if ($this->config['outputstream']) {
             if ($this->adapter instanceof Client\Adapter\StreamInterface) {
-                $stream = $this->openTempStream();
-                $this->adapter->setOutputStream($stream);
+                $this->streamHandle = $this->openTempStream();
+                $this->adapter->setOutputStream($this->streamHandle);
             } else {
                 throw new Exception\RuntimeException('Adapter does not support streaming');
             }
