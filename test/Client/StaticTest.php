@@ -503,6 +503,36 @@ class StaticTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * Test if a downloaded file can be deleted
+     *
+     * @group ZF-9685
+     */
+    public function testDownloadedFileCanBeDeleted()
+    {
+        if (! getenv('TESTS_ZEND_HTTP_CLIENT_ONLINE')) {
+            $this->markTestSkipped('Zend\Http\Client online tests are not enabled');
+        }
+        $url = 'http://www.example.com/';
+        $outputFile = @tempnam(@sys_get_temp_dir(), 'zht');
+        if (!is_file($outputFile)) {
+            $this->markTestSkipped('Failed to create a temporary file');
+        }
+        $config = [
+            'outputstream' => $outputFile,
+        ];
+        $client = new HTTPClient($url, $config);
+
+        $result = $client->send();
+
+        $this->assertInstanceOf('Zend\Http\Response\Stream', $result);
+        if (DIRECTORY_SEPARATOR === '\\') {
+            $this->assertFalse(@unlink($outputFile), 'Deleting an open file should fail on Windows');
+        }
+        fclose($result->getStream());
+        $this->assertTrue(@unlink($outputFile), 'Failed to delete downloaded file');
+    }
+
+    /**
      * Testing if the connection can be closed
      *
      * @group ZF-9685
