@@ -513,7 +513,7 @@ class StaticTest extends TestCase
         }
         $url = 'http://www.example.com/';
         $outputFile = @tempnam(@sys_get_temp_dir(), 'zht');
-        if (!is_file($outputFile)) {
+        if (! is_file($outputFile)) {
             $this->markTestSkipped('Failed to create a temporary file');
         }
         $config = [
