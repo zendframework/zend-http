@@ -350,12 +350,7 @@ class SetCookie implements MultipleHeaderInterface
             return $this;
         }
 
-        $maxAge = (int) $maxAge;
-        if ($maxAge < 0) {
-            $maxAge = 0;
-        }
-
-        $this->maxAge = $maxAge;
+        $this->maxAge = max(0, (int) $maxAge);
         return $this;
     }
 
