@@ -1240,12 +1240,12 @@ class Client implements Stdlib\DispatchableInterface
         }
 
         $body = '';
-        $totalFiles = 0;
+        $hasFiles = false;
 
         if (! $this->getRequest()->getHeaders()->has('Content-Type')) {
-            $totalFiles = count($this->getRequest()->getFiles()->toArray());
+            $hasFiles = ! empty($this->getRequest()->getFiles()->toArray());
             // If we have files to upload, force encType to multipart/form-data
-            if ($totalFiles > 0) {
+            if ($hasFiles) {
                 $this->setEncType(self::ENC_FORMDATA);
             }
         } else {
@@ -1253,7 +1253,7 @@ class Client implements Stdlib\DispatchableInterface
         }
 
         // If we have POST parameters or files, encode and add them to the body
-        if (count($this->getRequest()->getPost()->toArray()) > 0 || $totalFiles > 0) {
+        if (! empty($this->getRequest()->getPost()->toArray()) || $hasFiles) {
             if (stripos($this->getEncType(), self::ENC_FORMDATA) === 0) {
                 $boundary = '---ZENDHTTPCLIENT-' . md5(microtime());
                 $this->setEncType(self::ENC_FORMDATA, $boundary);
