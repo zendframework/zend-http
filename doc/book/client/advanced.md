@@ -342,16 +342,16 @@ for storing it and send it out or write it to another file using regular stream
 functions.
 
 ```php
-$client-setStream(); // will use temp file
-$response = $client-send();
+$client->setStream(); // will use temp file
+$response = $client->send();
 
 // copy file:
-copy($response-getStreamName(), 'my/downloads/file');
+copy($response->getStreamName(), 'my/downloads/file');
 
 // use stream:
 $fp = fopen('my/downloads/file2', 'w');
-stream_copy_to_stream($response-getStream(), $fp);
+stream_copy_to_stream($response->getStream(), $fp);
 
 // write to an existing file:
-$client-setStream('my/downloads/myfile')-send();
+$client->setStream('my/downloads/myfile')->send();
 ```
