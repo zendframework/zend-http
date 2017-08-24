@@ -202,7 +202,7 @@ class Stream extends Response
             if ($header instanceof \Zend\Http\Header\ContentLength) {
                 $response->setContentLength((int) $header->getFieldValue());
                 $contentLength = $response->getContentLength();
-                if (strlen($response->content) > $contentLength) {
+                if (isset($response->content[$contentLength])) {
                     throw new Exception\OutOfRangeException(sprintf(
                         'Too much content was extracted from the stream (%d instead of %d bytes)',
                         strlen($response->content),

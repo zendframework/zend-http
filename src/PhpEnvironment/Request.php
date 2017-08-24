@@ -95,7 +95,7 @@ class Request extends HttpRequest
     {
         if (empty($this->content)) {
             $requestBody = file_get_contents('php://input');
-            if (strlen($requestBody) > 0) {
+            if (!empty($requestBody)) {
                 $this->content = $requestBody;
             }
         }
@@ -220,7 +220,7 @@ class Request extends HttpRequest
         $headers = [];
 
         foreach ($server as $key => $value) {
-            if ($value || (! is_array($value) && strlen($value))) {
+            if ($value || ! is_array($value)) {
                 if (strpos($key, 'HTTP_') === 0) {
                     if (strpos($key, 'HTTP_COOKIE') === 0) {
                         // Cookies are handled using the $_COOKIE superglobal
@@ -550,10 +550,12 @@ class Request extends HttpRequest
         // If using mod_rewrite or ISAPI_Rewrite strip the script filename
         // out of the base path. $pos !== 0 makes sure it is not matching a
         // value from PATH_INFO or QUERY_STRING.
-        if (strlen($requestUri) >= strlen($baseUrl)
+        $baseUrlLength = strlen($baseUrl);
+
+        if (isset($requestUri[$baseUrlLength-1])
             && (false !== ($pos = strpos($requestUri, $baseUrl)) && $pos !== 0)
         ) {
-            $baseUrl = substr($requestUri, 0, $pos + strlen($baseUrl));
+            $baseUrl = substr($requestUri, 0, $pos + $baseUrlLength);
         }
 
         return $baseUrl;

@@ -357,7 +357,7 @@ class Cookies extends Headers
      */
     public function isEmpty()
     {
-        return count($this) == 0;
+        return empty($this->headers);
     }
 
     /**

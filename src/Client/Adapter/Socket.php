@@ -499,7 +499,7 @@ class Socket implements HttpAdapter, StreamInterface
                             }
                         } else {
                             $line = fread($this->socket, $readTo - $currentPos);
-                            if ($line === false || strlen($line) === 0) {
+                            if (empty($line)) {
                                 $this->_checkSocketReadTimeout();
                                 break;
                             }
@@ -548,7 +548,7 @@ class Socket implements HttpAdapter, StreamInterface
                     }
                 } else {
                     $chunk = fread($this->socket, $readTo - $currentPos);
-                    if ($chunk === false || strlen($chunk) === 0) {
+                    if (empty($chunk)) {
                         $this->_checkSocketReadTimeout();
                         break;
                     }
@@ -572,7 +572,7 @@ class Socket implements HttpAdapter, StreamInterface
                     }
                 } else {
                     $buff = fread($this->socket, 8192);
-                    if ($buff === false || strlen($buff) === 0) {
+                    if (empty($buff)) {
                         $this->_checkSocketReadTimeout();
                         break;
                     } else {

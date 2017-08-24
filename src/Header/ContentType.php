@@ -54,7 +54,7 @@ class ContentType implements HeaderInterface
         $mediaType         = array_shift($parts);
         $header = new static($value, trim($mediaType));
 
-        if (count($parts) > 0) {
+        if (!empty($parts)) {
             $parameters = [];
             foreach ($parts as $parameter) {
                 $parameter = trim($parameter);
@@ -290,7 +290,7 @@ class ContentType implements HeaderInterface
         }
 
         $parts = explode('/', $string, 2);
-        if (1 == count($parts)) {
+        if (1 === count($parts)) {
             throw new Exception\DomainException(sprintf(
                 'Invalid mediatype "%s" provided',
                 $string

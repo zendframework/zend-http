@@ -170,7 +170,7 @@ abstract class AbstractAccept implements HeaderInterface
             foreach ($paramsStrings as $param) {
                 $explode = explode('=', $param, 2);
 
-                if (count($explode) === 2) {
+                if (isset($explode[1])) {
                     $value = trim($explode[1]);
                 } else {
                     $value = null;
@@ -349,7 +349,7 @@ abstract class AbstractAccept implements HeaderInterface
                         $pieces
                     );
 
-                    if (count($pieces) == 3 &&
+                    if (count($pieces) === 3 &&
                         (version_compare($pieces[1], $match1->params[$key], '<=')  xor
                          version_compare($pieces[2], $match1->params[$key], '>=')
                         )
@@ -438,10 +438,12 @@ abstract class AbstractAccept implements HeaderInterface
             //@todo count number of dots in case of type==application in subtype
 
             // So far they're still the same. Longest string length may be more specific
-            if (strlen($a->raw) == strlen($b->raw)) {
+            $aLength = strlen($a->raw);
+            $bLength = strlen($b->raw);
+            if ($aLength === $bLength) {
                 return 0;
             }
-            return (strlen($a->raw) > strlen($b->raw)) ? -1 : 1;
+            return ($aLength > $bLength) ? -1 : 1;
         };
 
         usort($this->fieldValueParts, $sort);

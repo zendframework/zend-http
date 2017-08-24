@@ -153,12 +153,22 @@ class Headers implements Countable, Iterator
             if (is_int($name)) {
                 if (is_string($value)) {
                     $this->addHeaderLine($value);
-                } elseif (is_array($value) && count($value) == 1) {
-                    $this->addHeaderLine(key($value), current($value));
-                } elseif (is_array($value) && count($value) == 2) {
-                    $this->addHeaderLine($value[0], $value[1]);
-                } elseif ($value instanceof Header\HeaderInterface) {
+                    continue;
+                }
+                if (is_array($value)) {
+                    $valueCount = count($value);
+                    if ($valueCount === 1) {
+                        $this->addHeaderLine(key($value), current($value));
+                        continue;
+                    } elseif ($valueCount === 2) {
+                        $this->addHeaderLine($value[0], $value[1]);
+                        continue;
+                    }
+                }
+
+                if ($value instanceof Header\HeaderInterface) {
                     $this->addHeader($value);
+                    continue;
                 }
             } elseif (is_string($name)) {
                 $this->addHeaderLine($name, $value);

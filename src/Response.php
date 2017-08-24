@@ -172,7 +172,7 @@ class Response extends AbstractMessage implements ResponseInterface
     public static function fromString($string)
     {
         $lines = explode("\r\n", $string);
-        if (! is_array($lines) || count($lines) === 1) {
+        if (!isset($lines[1])) {
             $lines = explode("\n", $string);
         }
 

@@ -49,7 +49,7 @@ class GenericHeader implements HeaderInterface
     public static function splitHeaderLine($headerLine)
     {
         $parts = explode(':', $headerLine, 2);
-        if (count($parts) !== 2) {
+        if (!isset($parts[1])) {
             throw new Exception\InvalidArgumentException('Header must match with the format "name:value"');
         }
 
