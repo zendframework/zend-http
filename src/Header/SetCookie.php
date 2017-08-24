@@ -165,7 +165,7 @@ class SetCookie implements MultipleHeaderInterface
 
         $multipleHeaders = preg_split('#(?<!Sun|Mon|Tue|Wed|Thu|Fri|Sat),\s*#', $value);
 
-        if (!isset($multipleHeaders[1])) {
+        if (! isset($multipleHeaders[1])) {
             return $setCookieProcessor(array_pop($multipleHeaders));
         } else {
             $headers = [];

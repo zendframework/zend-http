@@ -95,7 +95,7 @@ class Request extends HttpRequest
     {
         if (empty($this->content)) {
             $requestBody = file_get_contents('php://input');
-            if (!empty($requestBody)) {
+            if (! empty($requestBody)) {
                 $this->content = $requestBody;
             }
         }
@@ -552,7 +552,7 @@ class Request extends HttpRequest
         // value from PATH_INFO or QUERY_STRING.
         $baseUrlLength = strlen($baseUrl);
 
-        if (isset($requestUri[$baseUrlLength-1])
+        if (isset($requestUri[$baseUrlLength - 1])
             && (false !== ($pos = strpos($requestUri, $baseUrl)) && $pos !== 0)
         ) {
             $baseUrl = substr($requestUri, 0, $pos + $baseUrlLength);

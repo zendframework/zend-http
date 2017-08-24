@@ -60,7 +60,7 @@ class Cookie extends ArrayObject implements HeaderInterface
         $arrayInfo = [];
         foreach ($nvPairs as $nvPair) {
             $parts = explode('=', $nvPair, 2);
-            if (!isset($parts[1])) {
+            if (! isset($parts[1])) {
                 throw new Exception\RuntimeException('Malformed Cookie header found');
             }
             list($name, $value) = $parts;

@@ -54,7 +54,7 @@ class ContentType implements HeaderInterface
         $mediaType         = array_shift($parts);
         $header = new static($value, trim($mediaType));
 
-        if (!empty($parts)) {
+        if (! empty($parts)) {
             $parameters = [];
             foreach ($parts as $parameter) {
                 $parameter = trim($parameter);
