@@ -437,6 +437,8 @@ class Curl implements HttpAdapter, StreamInterface
             }
         }
 
+        $this->response = '';
+
         // send the request
 
         $response = curl_exec($this->curl);
