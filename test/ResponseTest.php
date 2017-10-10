@@ -451,6 +451,16 @@ class ResponseTest extends TestCase
         );
     }
 
+    public function test100ContinueFromString()
+    {
+        $fixture = 'TOKEN=EC%XXXXXXXXXXXXX&TIMESTAMP=2017%2d10%2d10T09%3a02%3a55Z'
+            ."&CORRELATIONID=XXXXXXXXXX&ACK=Success&VERSION=65%2e1&BUILD=XXXXXXXXXX\r\n";
+
+        $request = Response::fromString($this->readResponse('response_100_continue'));
+        $this->assertEquals(Response::STATUS_CODE_200, $request->getStatusCode());
+        $this->assertEquals($fixture, $request->getBody());
+    }
+
     /**
      * Helper function: read test response from file
      *
