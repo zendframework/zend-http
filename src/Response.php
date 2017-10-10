@@ -7,6 +7,7 @@
 
 namespace Zend\Http;
 
+use Zend\Http\Exception\RuntimeException;
 use Zend\Stdlib\ErrorHandler;
 use Zend\Stdlib\ResponseInterface;
 
@@ -190,19 +191,15 @@ class Response extends AbstractMessage implements ResponseInterface
 
         $response = new static();
 
-        $regex   = '/^HTTP\/(?P<version>1\.[01]) (?P<status>\d{3})(?:[ ]+(?P<reason>.*))?$/';
-        $matches = [];
-        if (! preg_match($regex, $firstLine, $matches)) {
-            throw new Exception\InvalidArgumentException(
-                'A valid response status line was not found in the provided string'
-            );
+        try {
+            $response->parseStatusLine($firstLine);
+        } catch (RuntimeException $e) {
+            array_shift($lines); // skip next empty line
+            $firstLine = array_shift($lines); // and try again
+            $response->parseStatusLine($firstLine);
         }
 
-        $response->version = $matches['version'];
-        $response->setStatusCode($matches['status']);
-        $response->setReasonPhrase((isset($matches['reason']) ? $matches['reason'] : ''));
-
-        if (empty($lines)) {
+        if (count($lines) === 0) {
             return $response;
         }
 
@@ -241,6 +238,31 @@ class Response extends AbstractMessage implements ResponseInterface
         }
 
         return $response;
+    }
+
+    /**
+     * @param string $line
+     * @throws Exception\InvalidArgumentException
+     * @throws Exception\RuntimeException
+     */
+    protected function parseStatusLine($line)
+    {
+        $regex   = '/^HTTP\/(?P<version>1\.[01]) (?P<status>\d{3})(?:[ ]+(?P<reason>.*))?$/';
+        $matches = [];
+        if (! preg_match($regex, $line, $matches)) {
+            throw new Exception\InvalidArgumentException(
+                'A valid response status line was not found in the provided string'
+            );
+        }
+
+        // check for `continue` status
+        if (static::STATUS_CODE_100 === (int)$matches['status']) {
+            throw new Exception\RuntimeException('Continue status found.');
+        }
+
+        $this->version = $matches['version'];
+        $this->setStatusCode($matches['status']);
+        $this->setReasonPhrase((isset($matches['reason']) ? $matches['reason'] : ''));
     }
 
     /**
