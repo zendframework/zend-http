@@ -69,7 +69,9 @@ All notable changes to this project will be documented in this file, in reverse 
 
 ### Fixed
 
-- Nothing.
+- [#120](https://github.com/zendframework/zend-http/pull/120) Fixed cURL
+  adapter not resetting headers from previous request when used with output
+  stream.
 
 ## 2.6.0 - 2017-01-31
 
