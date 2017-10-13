@@ -10,6 +10,14 @@ All notable changes to this project will be documented in this file, in reverse 
   codes 226, 308, 444, 499, 510, 599 with their corresponding constants and
   reason phrases.
 
+### Changed
+
+- [#120](https://github.com/zendframework/zend-http/pull/120) Changes handling
+  of Cookie Max-Age parameter to conform to specification
+  [rfc6265#section-5.2.2](https://tools.ietf.org/html/rfc6265#section-5.2.2).
+  Specifically, non-numeric values are ignored and negative numbers are changed
+  to 0.
+
 ### Deprecated
 
 - Nothing.
