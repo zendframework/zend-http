@@ -1,28 +1,35 @@
 {
     "name": "zendframework/zend-http",
     "description": "provides an easy interface for performing Hyper-Text Transfer Protocol (HTTP) requests",
+    "homepage": "https://github.com/zendframework/zend-http",
     "license": "BSD-3-Clause",
     "keywords": [
-        "zf2",
-        "http"
+        "zf",
+        "zend",
+        "zendframework",
+        "http",
+        "HTTP client"
     ],
-    "homepage": "https://github.com/zendframework/zend-http",
-    "extra": {
-        "branch-alias": {
-            "dev-master": "2.7-dev",
-            "dev-develop": "2.8-dev"
-        }
+    "support": {
+        "docs": "https://docs.zendframework.com/zend-http",
+        "issues": "https://github.com/zendframework/zend-http/issues",
+        "source": "https://github.com/zendframework/zend-http",
+        "rss": "https://github.com/zendframework/zend-http/releases.atom",
+        "slack": "https://zendframework-slack.herokuapp.com",
+        "forum": "https://discourse.zendframework.com/c/questions/components"
+    },
+    "config": {
+        "sort-packages": true
     },
     "require": {
         "php": "^5.6 || ^7.0",
         "zendframework/zend-loader": "^2.5.1",
         "zendframework/zend-stdlib": "^3.1 || ^2.7.7",
         "zendframework/zend-uri": "^2.5.2",
-        "zendframework/zend-validator": "^2.8.2"
+        "zendframework/zend-validator": "^2.10.1"
     },
     "require-dev": {
-        "malukenho/docheader": "^0.1.5",
-        "phpunit/phpunit": "^6.0.8 || ^5.7.15",
+        "phpunit/phpunit": "^6.4.1 || ^5.7.15",
         "zendframework/zend-coding-standard": "~1.0.0",
         "zendframework/zend-config": "^3.1 || ^2.6"
     },
@@ -36,9 +43,14 @@
             "ZendTest\\Http\\": "test/"
         }
     },
+    "extra": {
+        "branch-alias": {
+            "dev-master": "2.7-dev",
+            "dev-develop": "2.8-dev"
+        }
+    },
     "scripts": {
         "check": [
-            "@license-check",
             "@cs-check",
             "@test"
         ],
@@ -46,7 +58,6 @@
         "cs-fix": "phpcbf",
         "test": "phpunit --colors=always",
         "test-coverage": "phpunit --colors=always --coverage-clover clover.xml",
-        "license-check": "vendor/bin/docheader check src/",
         "upload-coverage": "coveralls -v"
     }
 }

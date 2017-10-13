@@ -30,10 +30,6 @@
              in order to work. -->
         <env name="TESTS_ZEND_OB_ENABLED" value="false" />
 
-        <!-- Enable this if you have installed Doctrine\Common on the
-             include_path or via composer. -->
-        <env name="TESTS_ZEND_FORM_ANNOTATION_SUPPORT" value="false" />
-
         <!-- Zend\Http\Client tests
 
              To enable the dynamic Zend\Http\Client tests, you will need to
