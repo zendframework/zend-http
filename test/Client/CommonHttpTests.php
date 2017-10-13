@@ -1,22 +1,23 @@
 <?php
 /**
- * Zend Framework (http://framework.zend.com/)
- *
- * @link      http://github.com/zendframework/zf2 for the canonical source repository
- * @copyright Copyright (c) 2005-2015 Zend Technologies USA Inc. (http://www.zend.com)
- * @license   http://framework.zend.com/license/new-bsd New BSD License
+ * @see       https://github.com/zendframework/zend-http for the canonical source repository
+ * @copyright Copyright (c) 2005-2017 Zend Technologies USA Inc. (http://www.zend.com)
+ * @license   https://github.com/zendframework/zend-http/blob/master/LICENSE.md New BSD License
  */
 
 namespace ZendTest\Http\Client;
 
-use Zend\Http\Client as HTTPClient;
-use Zend\Http;
-use Zend\Http\Client\Adapter;
-use Zend\Http\Client\Adapter\Exception as AdapterException;
-use Zend\Http\Request;
-use Zend\Http\Response;
-use Zend\Stdlib\Parameters;
 use Exception;
+use PHPUnit\Framework\TestCase;
+use stdClass;
+use Zend\Http\Client as HTTPClient;
+use Zend\Http\Client\Adapter;
+use Zend\Http\Client\Adapter\AdapterInterface;
+use Zend\Http\Client\Adapter\Exception as AdapterException;
+use Zend\Http\Client\Adapter\Socket;
+use Zend\Http\Request;
+use Zend\Http\Response\Stream;
+use Zend\Stdlib\Parameters;
 
 /**
  * This Testsuite includes all Zend_Http_Client that require a working web
@@ -34,7 +35,7 @@ use Exception;
  * @group      Zend_Http
  * @group      Zend_Http_Client
  */
-abstract class CommonHttpTests extends \PHPUnit_Framework_TestCase
+abstract class CommonHttpTests extends TestCase
 {
     /**
      * The bast URI for this test, containing all files in the files directory
@@ -47,17 +48,17 @@ abstract class CommonHttpTests extends \PHPUnit_Framework_TestCase
     /**
      * Common HTTP client
      *
-     * @var \Zend\Http\Client
+     * @var HTTPClient
      */
-    protected $client = null;
+    protected $client;
 
     // @codingStandardsIgnoreStart
     /**
      * Common HTTP client adapter
      *
-     * @var \Zend\Http\Client\Adapter\AdapterInterface
+     * @var AdapterInterface
      */
-    protected $_adapter = null;
+    protected $_adapter;
     // @codingStandardsIgnoreEnd
 
     /**
@@ -66,12 +67,11 @@ abstract class CommonHttpTests extends \PHPUnit_Framework_TestCase
      * @var array
      */
     protected $config = [
-        'adapter'     => 'Zend\Http\Client\Adapter\Socket'
+        'adapter' => Socket::class,
     ];
 
     /**
      * Set up the test case
-     *
      */
     protected function setUp()
     {
@@ -89,18 +89,20 @@ abstract class CommonHttpTests extends \PHPUnit_Framework_TestCase
 
             $uri = $this->baseuri . $name . '.php';
 
-            $this->_adapter = new $this->config['adapter'];
+            $this->_adapter = new $this->config['adapter']();
             $this->client = new HTTPClient($uri, $this->config);
             $this->client->setAdapter($this->_adapter);
         } else {
             // Skip tests
-            $this->markTestSkipped("Zend_Http_Client dynamic tests are not enabled in phpunit.xml");
+            $this->markTestSkipped(sprintf(
+                '%s dynamic tests are not enabled in phpunit.xml',
+                HTTPClient::class
+            ));
         }
     }
 
     /**
      * Clean up the test environment
-     *
      */
     protected function tearDown()
     {
@@ -128,17 +130,18 @@ abstract class CommonHttpTests extends \PHPUnit_Framework_TestCase
      * Test simple requests
      *
      * @dataProvider methodProvider
+     *
+     * @param string $method
      */
     public function testSimpleRequests($method)
     {
         $this->client->setMethod($method);
         $res = $this->client->send();
-        $this->assertTrue($res->isSuccess(), "HTTP {$method} request failed.");
+        $this->assertTrue($res->isSuccess(), sprintf('HTTP %s request failed.', $method));
     }
 
     /**
      * Test we can get the last request as string
-     *
      */
     public function testGetLastRawRequest()
     {
@@ -151,7 +154,7 @@ abstract class CommonHttpTests extends \PHPUnit_Framework_TestCase
         $this->client->setMethod('TRACE');
         $res = $this->client->send();
         if ($res->getStatusCode() == 405 || $res->getStatusCode() == 501) {
-            $this->markTestSkipped("Server does not allow the TRACE method");
+            $this->markTestSkipped('Server does not allow the TRACE method');
         }
 
         $this->assertEquals(
@@ -169,8 +172,10 @@ abstract class CommonHttpTests extends \PHPUnit_Framework_TestCase
      * Test we can properly send GET parameters
      *
      * @dataProvider parameterArrayProvider
+     *
+     * @param array $params
      */
-    public function testGetData($params)
+    public function testGetData(array $params)
     {
         $this->client->setUri($this->client->getUri() . '?name=Arthur');
         $this->client->setParameterGet($params);
@@ -183,8 +188,10 @@ abstract class CommonHttpTests extends \PHPUnit_Framework_TestCase
      * application/x-www-form-urlencoded content type
      *
      * @dataProvider parameterArrayProvider
+     *
+     * @param array $params
      */
-    public function testPostDataUrlEncoded($params)
+    public function testPostDataUrlEncoded(array $params)
     {
         $this->client->setUri($this->baseuri . 'testPostData.php');
         $this->client->setEncType(HTTPClient::ENC_URLENCODED);
@@ -194,7 +201,7 @@ abstract class CommonHttpTests extends \PHPUnit_Framework_TestCase
         $this->client->setMethod('POST');
         $this->assertFalse($this->client->getRequest()->isPatch());
         $res = $this->client->send();
-        $this->assertEquals(serialize($params), $res->getBody(), "POST data integrity test failed");
+        $this->assertEquals(serialize($params), $res->getBody(), 'POST data integrity test failed');
     }
 
     /**
@@ -202,8 +209,10 @@ abstract class CommonHttpTests extends \PHPUnit_Framework_TestCase
      * application/x-www-form-urlencoded content type
      *
      * @dataProvider parameterArrayProvider
+     *
+     * @param array $params
      */
-    public function testPatchData($params)
+    public function testPatchData(array $params)
     {
         $client = $this->client;
         $client->setUri($this->baseuri . 'testPatchData.php');
@@ -214,7 +223,7 @@ abstract class CommonHttpTests extends \PHPUnit_Framework_TestCase
         $this->assertEquals($client::ENC_URLENCODED, $this->client->getEncType());
         $this->assertTrue($client->getRequest()->isPatch());
         $res = $this->client->send();
-        $this->assertEquals(serialize($params), $res->getBody(), "PATCH data integrity test failed");
+        $this->assertEquals(serialize($params), $res->getBody(), 'PATCH data integrity test failed');
     }
 
     /**
@@ -222,8 +231,10 @@ abstract class CommonHttpTests extends \PHPUnit_Framework_TestCase
      * application/x-www-form-urlencoded content type
      *
      * @dataProvider parameterArrayProvider
+     *
+     * @param array $params
      */
-    public function testDeleteData($params)
+    public function testDeleteData(array $params)
     {
         $client = $this->client;
         $client->setUri($this->baseuri . 'testDeleteData.php');
@@ -234,7 +245,7 @@ abstract class CommonHttpTests extends \PHPUnit_Framework_TestCase
         $this->assertEquals($client::ENC_URLENCODED, $this->client->getEncType());
         $this->assertTrue($client->getRequest()->isDelete());
         $res = $this->client->send();
-        $this->assertEquals(serialize($params), $res->getBody(), "DELETE data integrity test failed");
+        $this->assertEquals(serialize($params), $res->getBody(), 'DELETE data integrity test failed');
     }
 
     /**
@@ -242,8 +253,10 @@ abstract class CommonHttpTests extends \PHPUnit_Framework_TestCase
      * application/x-www-form-urlencoded content type
      *
      * @dataProvider parameterArrayProvider
+     *
+     * @param array $params
      */
-    public function testOptionsData($params)
+    public function testOptionsData(array $params)
     {
         $client = $this->client;
         $client->setUri($this->baseuri . 'testOptionsData.php');
@@ -254,7 +267,7 @@ abstract class CommonHttpTests extends \PHPUnit_Framework_TestCase
         $this->assertEquals($client::ENC_URLENCODED, $this->client->getEncType());
         $this->assertTrue($client->getRequest()->isOptions());
         $res = $this->client->send();
-        $this->assertEquals(serialize($params), $res->getBody(), "OPTIONS data integrity test failed");
+        $this->assertEquals(serialize($params), $res->getBody(), 'OPTIONS data integrity test failed');
     }
 
     /**
@@ -262,24 +275,25 @@ abstract class CommonHttpTests extends \PHPUnit_Framework_TestCase
      * multipart/form-data content type
      *
      * @dataProvider parameterArrayProvider
+     *
+     * @param array $params
      */
-    public function testPostDataMultipart($params)
+    public function testPostDataMultipart(array $params)
     {
         $this->client->setUri($this->baseuri . 'testPostData.php');
         $this->client->setEncType(HTTPClient::ENC_FORMDATA);
         $this->client->setParameterPost($params);
         $this->client->setMethod('POST');
         $res = $this->client->send();
-        $this->assertEquals(serialize($params), $res->getBody(), "POST data integrity test failed");
+        $this->assertEquals(serialize($params), $res->getBody(), 'POST data integrity test failed');
     }
 
     /**
      * Test using raw HTTP POST data
-     *
      */
     public function testRawPostData()
     {
-        $data = "Chuck Norris never wet his bed as a child. The bed wet itself out of fear.";
+        $data = 'Chuck Norris never wet his bed as a child. The bed wet itself out of fear.';
 
         $this->client->setRawBody($data);
         $this->client->setEncType('text/html');
@@ -290,7 +304,6 @@ abstract class CommonHttpTests extends \PHPUnit_Framework_TestCase
 
     /**
      * Make sure we can reset the parameters between consecutive requests
-     *
      */
     public function testResetParameters()
     {
@@ -298,10 +311,10 @@ abstract class CommonHttpTests extends \PHPUnit_Framework_TestCase
             'quest' => 'To seek the holy grail',
             'YourMother' => 'Was a hamster',
             'specialChars' => '<>$+ &?=[]^%',
-            'array' => ['firstItem', 'secondItem', '3rdItem']
+            'array' => ['firstItem', 'secondItem', '3rdItem'],
         ];
 
-        $headers = ["X-Foo" => "bar"];
+        $headers = ['X-Foo' => 'bar'];
 
         $this->client->setParameterPost($params);
         $this->client->setParameterGet($params);
@@ -313,7 +326,7 @@ abstract class CommonHttpTests extends \PHPUnit_Framework_TestCase
         $this->assertContains(
             serialize($params) . "\n" . serialize($params),
             $res->getBody(),
-            "returned body does not contain all GET and POST parameters (it should!)"
+            'returned body does not contain all GET and POST parameters (it should!)'
         );
 
         $this->client->resetParameters();
@@ -325,13 +338,12 @@ abstract class CommonHttpTests extends \PHPUnit_Framework_TestCase
             $res->getBody(),
             "returned body contains GET or POST parameters (it shouldn't!)"
         );
-        $headerXFoo = $this->client->getHeader("X-Foo");
-        $this->assertEmpty($headerXFoo, "Header not preserved by reset");
+        $headerXFoo = $this->client->getHeader('X-Foo');
+        $this->assertEmpty($headerXFoo, 'Header not preserved by reset');
     }
 
     /**
      * Test parameters get reset when we unset them
-     *
      */
     public function testParameterUnset()
     {
@@ -344,7 +356,7 @@ abstract class CommonHttpTests extends \PHPUnit_Framework_TestCase
 
         $pparams = [
             'from' => 'bob',
-            'to'   => 'alice'
+            'to'   => 'alice',
         ];
 
         $this->client->setParameterGet($gparams)->setParameterPost($pparams);
@@ -365,7 +377,6 @@ abstract class CommonHttpTests extends \PHPUnit_Framework_TestCase
 
     /**
      * Make sure we can set a single header
-     *
      */
     public function testHeadersSingle()
     {
@@ -375,7 +386,7 @@ abstract class CommonHttpTests extends \PHPUnit_Framework_TestCase
             'Accept-encoding' => 'gzip,deflate',
             'X-baz' => 'Foo',
             'X-powered-by' => 'A large wooden badger',
-            'Accept' => 'text/xml,text/html,*/*'
+            'Accept' => 'text/xml,text/html,*/*',
         ];
 
         $this->client->setHeaders($headers);
@@ -383,19 +394,18 @@ abstract class CommonHttpTests extends \PHPUnit_Framework_TestCase
 
         $res = $this->client->send();
         if ($res->getStatusCode() == 405 || $res->getStatusCode() == 501) {
-            $this->markTestSkipped("Server does not allow the TRACE method");
+            $this->markTestSkipped('Server does not allow the TRACE method');
         }
 
         $body = strtolower($res->getBody());
 
         foreach ($headers as $key => $val) {
-            $this->assertContains(strtolower("$key: $val"), $body);
+            $this->assertContains(strtolower($key . ': ' . $val), $body);
         }
     }
 
     /**
      * Test we can set an array of headers
-     *
      */
     public function testHeadersArray()
     {
@@ -405,7 +415,7 @@ abstract class CommonHttpTests extends \PHPUnit_Framework_TestCase
             'Accept-encoding' => 'gzip,deflate',
             'X-baz' => 'Foo',
             'X-powered-by' => 'A large wooden badger',
-            'Accept: text/xml,text/html,*/*'
+            'Accept: text/xml,text/html,*/*',
         ];
 
         $this->client->setHeaders($headers);
@@ -413,39 +423,38 @@ abstract class CommonHttpTests extends \PHPUnit_Framework_TestCase
 
         $res = $this->client->send();
         if ($res->getStatusCode() == 405 || $res->getStatusCode() == 501) {
-            $this->markTestSkipped("Server does not allow the TRACE method");
+            $this->markTestSkipped('Server does not allow the TRACE method');
         }
 
         $body = strtolower($res->getBody());
 
         foreach ($headers as $key => $val) {
             if (is_string($key)) {
-                $this->assertContains(strtolower("$key: $val"), $body);
+                $this->assertContains(strtolower($key . ': ' . $val), $body);
             } else {
                 $this->assertContains(strtolower($val), $body);
             }
         }
     }
 
-     /**
-      * Test we can set a set of values for one header
-      *
-      */
+    /**
+     * Test we can set a set of values for one header
+     */
     public function testMultipleHeader()
     {
         $this->client->setUri($this->baseuri . 'testHeaders.php');
         $headers = [
-          'Accept-encoding' => 'gzip,deflate',
-          'X-baz' => 'Foo',
-          'X-powered-by' => [
-              'A large wooden badger',
-              'My Shiny Metal Ass',
-              'Dark Matter'
-          ],
-          'Cookie' => [
-              'foo=bar',
-              'baz=waka'
-          ]
+            'Accept-encoding' => 'gzip,deflate',
+            'X-baz' => 'Foo',
+            'X-powered-by' => [
+                'A large wooden badger',
+                'My Shiny Metal Ass',
+                'Dark Matter',
+            ],
+            'Cookie' => [
+                'foo=bar',
+                'baz=waka',
+            ],
         ];
 
         $this->client->setHeaders($headers);
@@ -453,7 +462,7 @@ abstract class CommonHttpTests extends \PHPUnit_Framework_TestCase
 
         $res = $this->client->send();
         if ($res->getStatusCode() == 405 || $res->getStatusCode() == 501) {
-            $this->markTestSkipped("Server does not allow the TRACE method");
+            $this->markTestSkipped('Server does not allow the TRACE method');
         }
         $body = strtolower($res->getBody());
 
@@ -462,18 +471,17 @@ abstract class CommonHttpTests extends \PHPUnit_Framework_TestCase
                 $val = implode(', ', $val);
             }
 
-            $this->assertContains(strtolower("$key: $val"), $body);
+            $this->assertContains(strtolower($key . ': ' . $val), $body);
         }
     }
 
-     /**
-      * Redirection tests
-      */
+    /**
+     * Redirection tests
+     */
 
-     /**
-      * Test the client properly redirects in default mode
-      *
-      */
+    /**
+     * Test the client properly redirects in default mode
+     */
     public function testRedirectDefault()
     {
         $this->client->setUri($this->baseuri . 'testRedirections.php');
@@ -501,35 +509,34 @@ abstract class CommonHttpTests extends \PHPUnit_Framework_TestCase
     {
         $this->client->setUri($this->baseuri . 'testRedirections.php');
 
-            // Set some parameters
-            $this->client->setParameterGet(['swallow' => 'african']);
+        // Set some parameters
+        $this->client->setParameterGet(['swallow' => 'african']);
         $this->client->setParameterPost(['Camelot' => 'A silly place']);
 
-            // Send POST request
-            $this->client->setMethod('POST');
+        // Send POST request
+        $this->client->setMethod('POST');
         $res = $this->client->send();
 
         $this->assertEquals(3, $this->client->getRedirectionsCount(), 'Redirection counter is not as expected');
 
-            // Make sure the body does *not* contain the set parameters
-            $this->assertNotContains('swallow', $res->getBody());
+        // Make sure the body does *not* contain the set parameters
+        $this->assertNotContains('swallow', $res->getBody());
         $this->assertNotContains('Camelot', $res->getBody());
 
-            // Check that we have received and persisted expected cookies
-            $cookies = $this->client->getCookies();
+        // Check that we have received and persisted expected cookies
+        $cookies = $this->client->getCookies();
         $this->assertInternalType('array', $cookies, 'Client is not sending cookies on redirect');
         $this->assertArrayHasKey('zf2testSessionCookie', $cookies, 'Client is not sending cookies on redirect');
         $this->assertArrayHasKey('zf2testLongLivedCookie', $cookies, 'Client is not sending cookies on redirect');
         $this->assertEquals('positive', $cookies['zf2testSessionCookie']->getValue());
         $this->assertEquals('positive', $cookies['zf2testLongLivedCookie']->getValue());
 
-            // Check that expired cookies are not passed on
-            $this->assertArrayNotHasKey('zf2testExpiredCookie', $cookies, 'Expired cookies are not removed.');
+        // Check that expired cookies are not passed on
+        $this->assertArrayNotHasKey('zf2testExpiredCookie', $cookies, 'Expired cookies are not removed.');
     }
 
     /**
      * Make sure the client properly redirects in strict mode
-     *
      */
     public function testRedirectStrict()
     {
@@ -555,7 +562,6 @@ abstract class CommonHttpTests extends \PHPUnit_Framework_TestCase
 
     /**
      * Make sure redirections stop when limit is exceeded
-     *
      */
     public function testMaxRedirectsExceeded()
     {
@@ -573,8 +579,12 @@ abstract class CommonHttpTests extends \PHPUnit_Framework_TestCase
         $res = $this->client->send();
         $this->assertTrue(
             $res->isRedirect(),
-            "Last response was not a redirection as expected. Response code: {$res->getStatusCode()}. "
-            . "Redirections counter: {$this->client->getRedirectionsCount()} (when strict redirects are on)"
+            sprintf(
+                'Last response was not a redirection as expected. Response code: %d. '
+                . 'Redirections counter: %d (when strict redirects are on)',
+                $res->getStatusCode(),
+                $this->client->getRedirectionsCount()
+            )
         );
 
         // Then try with normal redirections
@@ -584,14 +594,17 @@ abstract class CommonHttpTests extends \PHPUnit_Framework_TestCase
         $res = $this->client->send();
         $this->assertTrue(
             $res->isRedirect(),
-            "Last response was not a redirection as expected. Response code: {$res->getStatusCode()}. "
-            . "Redirections counter: {$this->client->getRedirectionsCount()} (when strict redirects are off)"
+            sprintf(
+                'Last response was not a redirection as expected. Response code: %d.'
+                . ' Redirections counter: %d (when strict redirects are off)',
+                $res->getStatusCode(),
+                $this->client->getRedirectionsCount()
+            )
         );
     }
 
     /**
      * Test we can properly redirect to an absolute path (not full URI)
-     *
      */
     public function testAbsolutePathRedirect()
     {
@@ -600,21 +613,20 @@ abstract class CommonHttpTests extends \PHPUnit_Framework_TestCase
         $this->client->setOptions(['maxredirects' => 1]);
 
         // Get the host and port part of our baseuri
-        $port = ($this->client->getUri()->getPort() == 80) ? '' : ':' .$this->client->getUri()->getPort();
+        $port = $this->client->getUri()->getPort() == 80 ? '' : ':' . $this->client->getUri()->getPort();
         $uri = $this->client->getUri()->getScheme() . '://' . $this->client->getUri()->getHost() . $port;
 
         $res = $this->client->send();
 
         $this->assertEquals(
-            "{$uri}/path/to/fake/file.ext?redirect=abpath",
+            sprintf('%s/path/to/fake/file.ext?redirect=abpath', $uri),
             $this->client->getUri()->toString(),
-            "The new location is not as expected: {$this->client->getUri()->toString()}"
+            sprintf('The new location is not as expected: %s', $this->client->getUri()->toString())
         );
     }
 
     /**
      * Test we can properly redirect to a relative path
-     *
      */
     public function testRelativePathRedirect()
     {
@@ -627,31 +639,29 @@ abstract class CommonHttpTests extends \PHPUnit_Framework_TestCase
         $uri->setPath(rtrim(dirname($uri->getPath()), '/') . '/path/to/fake/file.ext');
         $uri = $uri->__toString();
 
-        $res = $this->client->send();
+        $this->client->send();
 
         $this->assertEquals(
-            "{$uri}?redirect=relpath",
+            sprintf('%s?redirect=relpath', $uri),
             $this->client->getUri()->toString(),
-            "The new location is not as expected: {$this->client->getUri()->toString()}"
+            sprintf('The new location is not as expected: %s', $this->client->getUri()->toString())
         );
     }
 
     /**
      * HTTP Authentication Tests
-     *
      */
 
     /**
      * Test we can properly use Basic HTTP authentication
-     *
      */
     public function testHttpAuthBasic()
     {
-        $this->client->setUri($this->baseuri. 'testHttpAuth.php');
+        $this->client->setUri($this->baseuri . 'testHttpAuth.php');
         $this->client->setParameterGet([
             'user'   => 'alice',
             'pass'   => 'secret',
-            'method' => 'Basic'
+            'method' => 'Basic',
         ]);
 
         // First - fail password
@@ -668,7 +678,6 @@ abstract class CommonHttpTests extends \PHPUnit_Framework_TestCase
     /**
      * Test that we can properly use Basic HTTP authentication by specifying username and password
      * in the URI
-     *
      */
     public function testHttpAuthBasicWithCredentialsInUri()
     {
@@ -677,7 +686,7 @@ abstract class CommonHttpTests extends \PHPUnit_Framework_TestCase
         $this->client->setParameterGet([
             'user'   => 'alice',
             'pass'   => 'secret',
-            'method' => 'Basic'
+            'method' => 'Basic',
         ]);
 
         // First - fail password
@@ -695,20 +704,18 @@ abstract class CommonHttpTests extends \PHPUnit_Framework_TestCase
 
     /**
      * Cookie and Cookies Tests
-     *
      */
 
     /**
      * Test we can set string cookies with no jar
-     *
      */
     public function testCookiesStringNoJar()
     {
-        $this->client->setUri($this->baseuri. 'testCookies.php');
+        $this->client->setUri($this->baseuri . 'testCookies.php');
 
         $cookies = [
             'name'   => 'value',
-            'cookie' => 'crumble'
+            'cookie' => 'crumble',
         ];
 
         $this->client->setCookies($cookies);
@@ -722,20 +729,18 @@ abstract class CommonHttpTests extends \PHPUnit_Framework_TestCase
         );
     }
 
-
     /**
      * Make sure we can set an array of object cookies
-     *
      */
     public function testSetCookieObjectArray()
     {
-        $this->client->setUri($this->baseuri. 'testCookies.php');
+        $this->client->setUri($this->baseuri . 'testCookies.php');
         $refuri = $this->client->getUri();
 
         $cookies = [
             'chocolate' => 'chips',
             'crumble' => 'apple',
-            'another' => 'cookie'
+            'another' => 'cookie',
         ];
 
         $this->client->setCookies($cookies);
@@ -750,16 +755,15 @@ abstract class CommonHttpTests extends \PHPUnit_Framework_TestCase
 
     /**
      * Make sure we can set an array of string cookies
-     *
      */
     public function testSetCookieStringArray()
     {
-        $this->client->setUri($this->baseuri. 'testCookies.php');
+        $this->client->setUri($this->baseuri . 'testCookies.php');
 
         $cookies = [
             'chocolate' => 'chips',
             'crumble'   => 'apple',
-            'another'   => 'cookie'
+            'another'   => 'cookie',
         ];
 
         $this->client->setCookies($cookies);
@@ -774,12 +778,10 @@ abstract class CommonHttpTests extends \PHPUnit_Framework_TestCase
 
     /**
      * File Upload Tests
-     *
      */
 
     /**
      * Test we can upload raw data as a file
-     *
      */
     public function testUploadRawData()
     {
@@ -787,20 +789,19 @@ abstract class CommonHttpTests extends \PHPUnit_Framework_TestCase
             $this->markTestSkipped('File uploads disabled.');
         }
 
-        $this->client->setUri($this->baseuri. 'testUploads.php');
+        $this->client->setUri($this->baseuri . 'testUploads.php');
 
         $rawdata = file_get_contents(__FILE__);
         $this->client->setFileUpload('myfile.txt', 'uploadfile', $rawdata, 'text/plain');
         $this->client->setMethod('POST');
         $res = $this->client->send();
 
-        $body = 'uploadfile myfile.txt text/plain ' . strlen($rawdata) . "\n";
+        $body = sprintf('uploadfile myfile.txt text/plain %d' . "\n", strlen($rawdata));
         $this->assertEquals($body, $res->getBody(), 'Response body does not include expected upload parameters');
     }
 
     /**
      * Test we can upload an existing file
-     *
      */
     public function testUploadLocalFile()
     {
@@ -808,14 +809,14 @@ abstract class CommonHttpTests extends \PHPUnit_Framework_TestCase
             $this->markTestSkipped('File uploads disabled.');
         }
 
-        $this->client->setUri($this->baseuri. 'testUploads.php');
+        $this->client->setUri($this->baseuri . 'testUploads.php');
         $this->client->setFileUpload(__FILE__, 'uploadfile', null, 'text/x-foo-bar');
         $this->client->setMethod('POST');
         $res = $this->client->send();
 
         $size = filesize(__FILE__);
 
-        $body = "uploadfile " . basename(__FILE__) . " text/x-foo-bar $size\n";
+        $body = sprintf('uploadfile %s text/x-foo-bar %d' . "\n", basename(__FILE__), $size);
         $this->assertEquals($body, $res->getBody(), 'Response body does not include expected upload parameters');
     }
 
@@ -843,15 +844,17 @@ abstract class CommonHttpTests extends \PHPUnit_Framework_TestCase
             );
         }
 
-        $file = dirname(realpath(__FILE__)) . DIRECTORY_SEPARATOR . '_files' . DIRECTORY_SEPARATOR . 'staticFile.jpg';
+        $file = dirname(realpath(__FILE__))
+            . DIRECTORY_SEPARATOR . '_files'
+            . DIRECTORY_SEPARATOR . 'staticFile.jpg';
 
-        $this->client->setUri($this->baseuri. 'testUploads.php');
+        $this->client->setUri($this->baseuri . 'testUploads.php');
         $this->client->setFileUpload($file, 'uploadfile');
         $this->client->setMethod('POST');
         $res = $this->client->send();
 
         $size = filesize($file);
-        $body = "uploadfile " . basename($file) . " image/jpeg $size\n";
+        $body = sprintf('uploadfile %s image/jpeg %d' . "\n", basename($file), $size);
         $this->assertEquals(
             $body,
             $res->getBody(),
@@ -865,7 +868,7 @@ abstract class CommonHttpTests extends \PHPUnit_Framework_TestCase
             $this->markTestSkipped('File uploads disabled.');
         }
 
-        $this->client->setUri($this->baseuri. 'testUploads.php');
+        $this->client->setUri($this->baseuri . 'testUploads.php');
 
         $rawdata = file_get_contents(__FILE__);
         $this->client->setFileUpload('/some strage/path%/with[!@#$&]/myfile.txt', 'uploadfile', $rawdata, 'text/plain');
@@ -892,7 +895,7 @@ abstract class CommonHttpTests extends \PHPUnit_Framework_TestCase
      *
      * @link http://framework.zend.com/issues/browse/ZF-5744
      */
-    public function testMutipleFilesWithSameFormNameZF5744()
+    public function testMultipleFilesWithSameFormNameZF5744()
     {
         if (! ini_get('file_uploads')) {
             $this->markTestSkipped('File uploads disabled.');
@@ -907,7 +910,7 @@ abstract class CommonHttpTests extends \PHPUnit_Framework_TestCase
         $expectedBody = '';
         foreach ($files as $filename) {
             $this->client->setFileUpload($filename, 'uploadfile[]', $rawData, 'text/plain');
-            $expectedBody .= "uploadfile $filename text/plain " . strlen($rawData) . "\n";
+            $expectedBody .= sprintf('uploadfile %s text/plain %d' . "\n", $filename, strlen($rawData));
         }
         $this->client->setMethod('POST');
 
@@ -937,7 +940,7 @@ abstract class CommonHttpTests extends \PHPUnit_Framework_TestCase
 
     public function testStreamResponse()
     {
-        if (! ($this->client->getAdapter() instanceof Adapter\StreamInterface)) {
+        if (! $this->client->getAdapter() instanceof Adapter\StreamInterface) {
             $this->markTestSkipped('Current adapter does not support streaming');
             return;
         }
@@ -946,25 +949,25 @@ abstract class CommonHttpTests extends \PHPUnit_Framework_TestCase
 
         $response = $this->client->send();
 
-        $this->assertInstanceOf('Zend\Http\Response\Stream', $response, 'Request did not return stream response!');
+        $this->assertInstanceOf(Stream::class, $response, 'Request did not return stream response!');
         $this->assertInternalType('resource', $response->getStream(), 'Request does not contain stream!');
 
-        $stream_name = $response->getStreamName();
+        $streamName = $response->getStreamName();
 
-        $stream_read = stream_get_contents($response->getStream());
-        $file_read = file_get_contents($stream_name);
+        $streamRead = stream_get_contents($response->getStream());
+        $fileRead = file_get_contents($streamName);
 
         $expected = $this->_getTestFileContents('staticFile.jpg');
 
-        $this->assertEquals($expected, $stream_read, 'Downloaded stream does not seem to match!');
-        $this->assertEquals($expected, $file_read, 'Downloaded file does not seem to match!');
+        $this->assertEquals($expected, $streamRead, 'Downloaded stream does not seem to match!');
+        $this->assertEquals($expected, $fileRead, 'Downloaded file does not seem to match!');
     }
 
     public function testStreamResponseBody()
     {
         $this->markTestSkipped('To check with the new ZF2 implementation');
 
-        if (! ($this->client->getAdapter() instanceof Adapter\StreamInterface)) {
+        if (! $this->client->getAdapter() instanceof Adapter\StreamInterface) {
             $this->markTestSkipped('Current adapter does not support streaming');
             return;
         }
@@ -973,7 +976,7 @@ abstract class CommonHttpTests extends \PHPUnit_Framework_TestCase
 
         $response = $this->client->send();
 
-        $this->assertInstanceOf('Zend\Http\Response\Stream', $response, 'Request did not return stream response!');
+        $this->assertInstanceOf(Stream::class, $response, 'Request did not return stream response!');
         $this->assertInternalType('resource', $response->getStream(), 'Request does not contain stream!');
 
         $body = $response->getBody();
@@ -984,38 +987,42 @@ abstract class CommonHttpTests extends \PHPUnit_Framework_TestCase
 
     public function testStreamResponseNamed()
     {
-        if (! ($this->client->getAdapter() instanceof Adapter\StreamInterface)) {
+        if (! $this->client->getAdapter() instanceof Adapter\StreamInterface) {
             $this->markTestSkipped('Current adapter does not support streaming');
             return;
         }
         $this->client->setUri($this->baseuri . 'staticFile.jpg');
-        $outfile = tempnam(sys_get_temp_dir(), "outstream");
+        $outfile = tempnam(sys_get_temp_dir(), 'outstream');
         $this->client->setStream($outfile);
 
         $response = $this->client->send();
 
-        $this->assertInstanceOf('Zend\Http\Response\Stream', $response, 'Request did not return stream response!');
+        $this->assertInstanceOf(Stream::class, $response, 'Request did not return stream response!');
         $this->assertInternalType('resource', $response->getStream(), 'Request does not contain stream!');
 
         $this->assertEquals($outfile, $response->getStreamName());
 
-        $stream_read = stream_get_contents($response->getStream());
-        $file_read = file_get_contents($outfile);
+        $streamRead = stream_get_contents($response->getStream());
+        $fileRead = file_get_contents($outfile);
 
         $expected = $this->_getTestFileContents('staticFile.jpg');
 
-        $this->assertEquals($expected, $stream_read, 'Downloaded stream does not seem to match!');
-        $this->assertEquals($expected, $file_read, 'Downloaded file does not seem to match!');
+        $this->assertEquals($expected, $streamRead, 'Downloaded stream does not seem to match!');
+        $this->assertEquals($expected, $fileRead, 'Downloaded file does not seem to match!');
     }
 
     public function testStreamRequest()
     {
-        if (! ($this->client->getAdapter() instanceof Adapter\StreamInterface)) {
+        if (! $this->client->getAdapter() instanceof Adapter\StreamInterface) {
             $this->markTestSkipped('Current adapter does not support streaming');
             return;
         }
-        $data = fopen(dirname(realpath(__FILE__)) . DIRECTORY_SEPARATOR . '_files' . DIRECTORY_SEPARATOR
-            . 'staticFile.jpg', "r");
+        $data = fopen(
+            dirname(realpath(__FILE__))
+            . DIRECTORY_SEPARATOR . '_files'
+            . DIRECTORY_SEPARATOR . 'staticFile.jpg',
+            'r'
+        );
         $this->client->setRawBody($data);
         $this->client->setEncType('image/jpeg');
         $this->client->setMethod('PUT');
@@ -1032,12 +1039,15 @@ abstract class CommonHttpTests extends \PHPUnit_Framework_TestCase
     public function testZF9404DoubleContentLengthHeader()
     {
         $this->client->setUri($this->baseuri . 'ZF9404-doubleContentLength.php');
-        $expect = filesize(dirname(realpath(__FILE__)) . DIRECTORY_SEPARATOR . '_files' . DIRECTORY_SEPARATOR
-            . 'ZF9404-doubleContentLength.php');
+        $expect = filesize(
+            dirname(realpath(__FILE__))
+            . DIRECTORY_SEPARATOR . '_files'
+            . DIRECTORY_SEPARATOR . 'ZF9404-doubleContentLength.php'
+        );
 
         $response = $this->client->send();
         if (! $response->isSuccess()) {
-            throw new AdapterException\RuntimeException("Error requesting test URL");
+            throw new AdapterException\RuntimeException('Error requesting test URL');
         }
 
         $clen = $response->getHeaders()->get('Content-Length');
@@ -1049,27 +1059,29 @@ abstract class CommonHttpTests extends \PHPUnit_Framework_TestCase
         $this->assertEquals($expect, strlen($response->getBody()));
     }
 
-
     /**
      * @group ZF2-78
+     *
      * @dataProvider parameterArrayProvider
+     *
+     * @param array $params
      */
-    public function testContentTypeAdditionlInfo($params)
+    public function testContentTypeAdditionlInfo(array $params)
     {
-        $content_type = 'application/x-www-form-urlencoded; charset=UTF-8';
+        $contentType = 'application/x-www-form-urlencoded; charset=UTF-8';
 
         $this->client->setUri($this->baseuri . 'testPostData.php');
         $this->client->setHeaders([
-            'Content-Type' => $content_type
+            'Content-Type' => $contentType,
         ]);
-        $this->client->setMethod(\Zend\Http\Request::METHOD_POST);
+        $this->client->setMethod(Request::METHOD_POST);
 
         $this->client->setParameterPost($params);
 
         $this->client->send();
         $request = Request::fromString($this->client->getLastRawRequest());
         $this->assertEquals(
-            $content_type,
+            $contentType,
             $request->getHeaders()->get('Content-Type')->getFieldValue()
         );
     }
@@ -1090,7 +1102,7 @@ abstract class CommonHttpTests extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * Internal helpder function to get the contents of test files
+     * Internal helper function to get the contents of test files
      *
      * @param  string $file
      * @return string
@@ -1099,8 +1111,11 @@ abstract class CommonHttpTests extends \PHPUnit_Framework_TestCase
     protected function _getTestFileContents($file)
     {
         // @codingStandardsIgnoreEnd
-        return file_get_contents(dirname(realpath(__FILE__)) . DIRECTORY_SEPARATOR .
-           '_files' . DIRECTORY_SEPARATOR . $file);
+        return file_get_contents(
+            dirname(realpath(__FILE__))
+            . DIRECTORY_SEPARATOR . '_files'
+            . DIRECTORY_SEPARATOR . $file
+        );
     }
 
     /**
@@ -1116,31 +1131,29 @@ abstract class CommonHttpTests extends \PHPUnit_Framework_TestCase
                     'quest' => 'To seek the holy grail',
                     'YourMother' => 'Was a hamster',
                     'specialChars' => '<>$+ &?=[]^%',
-                    'array' => ['firstItem', 'secondItem', '3rdItem']
-                ]
+                    'array' => ['firstItem', 'secondItem', '3rdItem'],
+                ],
             ],
-
             [
                 [
                     'someData' => [
-                        "1",
-                        "2",
+                        '1',
+                        '2',
                         'key' => 'value',
                         'nesting' => [
                             'a' => 'AAA',
-                            'b' => 'BBB'
-                        ]
+                            'b' => 'BBB',
+                        ],
                     ],
-                    'someOtherData' => ['foo', 'bar']
-                ]
+                    'someOtherData' => ['foo', 'bar'],
+                ],
             ],
-
             [
                 [
                     'foo1' => 'bar',
-                    'foo2' => ['baz', 'w00t']
-                ]
-            ]
+                    'foo2' => ['baz', 'w00t'],
+                ],
+            ],
         ];
     }
 
@@ -1153,10 +1166,11 @@ abstract class CommonHttpTests extends \PHPUnit_Framework_TestCase
     {
         return [
             [false],
-            ['foo => bar'],
+            ['foobar'],
+            ['foo' => 'bar'],
             [null],
-            [new \stdClass],
-            [55]
+            [new stdClass()],
+            [55],
         ];
     }
 
@@ -1174,7 +1188,6 @@ abstract class CommonHttpTests extends \PHPUnit_Framework_TestCase
 
         return $notRespondingUri;
     }
-
 
     /**
      * Check connecttimeout/timeout: invalid URIs should timeout after 'connecttimeout' seconds.
@@ -1199,7 +1212,10 @@ abstract class CommonHttpTests extends \PHPUnit_Framework_TestCase
         }
         $endTime = microtime(true);
         if ($timeoutException === null) {
-            $this->markTestSkipped("There's something responding at ".$this->getNotRespondingUri());
+            $this->markTestSkipped(sprintf(
+                'There is something responding at %s',
+                $this->getNotRespondingUri()
+            ));
         }
         $deltaTime = ceil($endTime - $startTime);
         $this->assertGreaterThanOrEqual($connectTimeout, $deltaTime);

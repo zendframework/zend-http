@@ -1,16 +1,16 @@
 <?php
 /**
- * Zend Framework (http://framework.zend.com/)
- *
- * @link      http://github.com/zendframework/zf2 for the canonical source repository
- * @copyright Copyright (c) 2005-2015 Zend Technologies USA Inc. (http://www.zend.com)
- * @license   http://framework.zend.com/license/new-bsd New BSD License
+ * @see       https://github.com/zendframework/zend-http for the canonical source repository
+ * @copyright Copyright (c) 2005-2017 Zend Technologies USA Inc. (http://www.zend.com)
+ * @license   https://github.com/zendframework/zend-http/blob/master/LICENSE.md New BSD License
  */
 
 namespace ZendTest\Http\Client;
 
-use Zend\Http\ClientStatic as HTTPClient;
+use PHPUnit\Framework\TestCase;
+use ReflectionClass;
 use Zend\Http\Client;
+use Zend\Http\ClientStatic as HTTPClient;
 
 /**
  * This are the test for the prototype of Zend\Http\Client
@@ -18,7 +18,7 @@ use Zend\Http\Client;
  * @group      Zend\Http
  * @group      Zend\Http\Client
  */
-class StaticClientTest extends \PHPUnit_Framework_TestCase
+class StaticClientTest extends TestCase
 {
     /**
      * Uri for test
@@ -40,7 +40,10 @@ class StaticClientTest extends \PHPUnit_Framework_TestCase
             }
         } else {
             // Skip tests
-            $this->markTestSkipped("Zend_Http_Client dynamic tests are not enabled in phpunit.xml");
+            $this->markTestSkipped(sprintf(
+                '%s dynamic tests are not enabled in phpunit.xml',
+                HTTPClient::class
+            ));
         }
     }
 
@@ -148,12 +151,12 @@ class StaticClientTest extends \PHPUnit_Framework_TestCase
         $testUri = $this->baseuri . 'testSimpleRequests.php';
 
         $config = [
-            'useragent' => 'simplegettest'
+            'useragent' => 'simplegettest',
         ];
 
         HTTPClient::get($testUri, [], [], null, $config);
 
-        $reflectedClass = new \ReflectionClass('Zend\Http\ClientStatic');
+        $reflectedClass = new ReflectionClass(HTTPClient::class);
         $property = $reflectedClass->getProperty('client');
         $property->setAccessible(true);
         $client = $property->getValue();
@@ -173,12 +176,12 @@ class StaticClientTest extends \PHPUnit_Framework_TestCase
         $testUri = $this->baseuri . 'testPostData.php';
 
         $config = [
-            'useragent' => 'simpleposttest'
+            'useragent' => 'simpleposttest',
         ];
 
         HTTPClient::post($testUri, ['foo' => 'bar'], [], null, $config);
 
-        $reflectedClass = new \ReflectionClass('Zend\Http\ClientStatic');
+        $reflectedClass = new ReflectionClass(HTTPClient::class);
         $property = $reflectedClass->getProperty('client');
         $property->setAccessible(true);
         $client = $property->getValue();

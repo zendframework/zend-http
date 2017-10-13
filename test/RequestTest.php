@@ -1,19 +1,24 @@
 <?php
 /**
- * Zend Framework (http://framework.zend.com/)
- *
- * @link      http://github.com/zendframework/zf2 for the canonical source repository
- * @copyright Copyright (c) 2005-2015 Zend Technologies USA Inc. (http://www.zend.com)
- * @license   http://framework.zend.com/license/new-bsd New BSD License
+ * @see       https://github.com/zendframework/zend-http for the canonical source repository
+ * @copyright Copyright (c) 2005-2017 Zend Technologies USA Inc. (http://www.zend.com)
+ * @license   https://github.com/zendframework/zend-http/blob/master/LICENSE.md New BSD License
  */
 
 namespace ZendTest\Http;
 
-use Zend\Http\Request;
-use Zend\Http\Headers;
+use PHPUnit\Framework\TestCase;
+use ReflectionClass;
+use stdClass;
+use Zend\Http\Exception\InvalidArgumentException;
+use Zend\Http\Exception\RuntimeException;
 use Zend\Http\Header\GenericHeader;
+use Zend\Http\Headers;
+use Zend\Http\Request;
+use Zend\Stdlib\Parameters;
+use Zend\Uri\Uri;
 
-class RequestTest extends \PHPUnit_Framework_TestCase
+class RequestTest extends TestCase
 {
     public function testRequestFromStringFactoryCreatesValidRequest()
     {
@@ -30,15 +35,15 @@ class RequestTest extends \PHPUnit_Framework_TestCase
     public function testRequestUsesParametersContainerByDefault()
     {
         $request = new Request();
-        $this->assertInstanceOf('Zend\Stdlib\Parameters', $request->getQuery());
-        $this->assertInstanceOf('Zend\Stdlib\Parameters', $request->getPost());
-        $this->assertInstanceOf('Zend\Stdlib\Parameters', $request->getFiles());
+        $this->assertInstanceOf(Parameters::class, $request->getQuery());
+        $this->assertInstanceOf(Parameters::class, $request->getPost());
+        $this->assertInstanceOf(Parameters::class, $request->getFiles());
     }
 
     public function testRequestAllowsSettingOfParameterContainer()
     {
         $request = new Request();
-        $p = new \Zend\Stdlib\Parameters();
+        $p = new Parameters();
         $request->setQuery($p);
         $request->setPost($p);
         $request->setFiles($p);
@@ -55,8 +60,8 @@ class RequestTest extends \PHPUnit_Framework_TestCase
     public function testRetrievingASingleValueForParameters()
     {
         $request = new Request();
-        $p = new \Zend\Stdlib\Parameters([
-            'foo' => 'bar'
+        $p = new Parameters([
+            'foo' => 'bar',
         ]);
         $request->setQuery($p);
         $request->setPost($p);
@@ -79,8 +84,8 @@ class RequestTest extends \PHPUnit_Framework_TestCase
     public function testParameterRetrievalDefaultValue()
     {
         $request = new Request();
-        $p = new \Zend\Stdlib\Parameters([
-            'foo' => 'bar'
+        $p = new Parameters([
+            'foo' => 'bar',
         ]);
         $request->setQuery($p);
         $request->setPost($p);
@@ -104,16 +109,16 @@ class RequestTest extends \PHPUnit_Framework_TestCase
     public function testRequestUsesHeadersContainerByDefault()
     {
         $request = new Request();
-        $this->assertInstanceOf('Zend\Http\Headers', $request->getHeaders());
+        $this->assertInstanceOf(Headers::class, $request->getHeaders());
     }
 
     public function testRequestCanSetHeaders()
     {
         $request = new Request();
-        $headers = new \Zend\Http\Headers();
+        $headers = new Headers();
 
         $ret = $request->setHeaders($headers);
-        $this->assertInstanceOf('Zend\Http\Request', $ret);
+        $this->assertInstanceOf(Request::class, $ret);
         $this->assertSame($headers, $request->getHeaders());
     }
 
@@ -133,13 +138,15 @@ class RequestTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @dataProvider uriDataProvider
+     *
+     * @param string $uri
      */
     public function testRequestCanSetAndRetrieveUri($uri)
     {
         $request = new Request();
         $request->setUri($uri);
         $this->assertEquals($uri, $request->getUri());
-        $this->assertInstanceOf('Zend\Uri\Uri', $request->getUri());
+        $this->assertInstanceOf(Uri::class, $request->getUri());
         $this->assertEquals($uri, $request->getUri()->toString());
         $this->assertEquals($uri, $request->getUriString());
     }
@@ -149,7 +156,7 @@ class RequestTest extends \PHPUnit_Framework_TestCase
         return [
             ['/foo'],
             ['/foo#test'],
-            ['/hello?what=true#noway']
+            ['/hello?what=true#noway'],
         ];
     }
 
@@ -157,8 +164,9 @@ class RequestTest extends \PHPUnit_Framework_TestCase
     {
         $request = new Request();
 
-        $this->setExpectedException('Zend\Http\Exception\InvalidArgumentException', 'must be an instance of');
-        $request->setUri(new \stdClass());
+        $this->expectException(InvalidArgumentException::class);
+        $this->expectExceptionMessage('must be an instance of');
+        $request->setUri(new stdClass());
     }
 
     public function testRequestCanSetAndRetrieveVersion()
@@ -173,19 +181,19 @@ class RequestTest extends \PHPUnit_Framework_TestCase
     {
         $request = new Request();
 
-        $this->setExpectedException(
-            'Zend\Http\Exception\InvalidArgumentException',
-            'Not valid or not supported HTTP version'
-        );
+        $this->expectException(InvalidArgumentException::class);
+        $this->expectExceptionMessage('Not valid or not supported HTTP version');
         $request->setVersion('1.2');
     }
 
     /**
      * @dataProvider getMethods
+     *
+     * @param string $methodName
      */
     public function testRequestMethodCheckWorksForAllMethods($methodName)
     {
-        $request = new Request;
+        $request = new Request();
         $request->setMethod($methodName);
 
         foreach ($this->getMethods(false, $methodName) as $testMethodName => $testMethodValue) {
@@ -235,28 +243,26 @@ class RequestTest extends \PHPUnit_Framework_TestCase
      */
     public function testRequestsWithoutHttpVersionAreOK()
     {
-        $requestString = "GET http://www.domain.com/index.php";
+        $requestString = 'GET http://www.domain.com/index.php';
         $request = Request::fromString($requestString);
         $this->assertEquals($request::METHOD_GET, $request->getMethod());
     }
 
     /**
-     * PHPUNIT DATA PROVIDER
-     *
-     * @param $providerContext
-     * @param null $trueMethod
+     * @param bool $providerContext
+     * @param null|string $trueMethod
      * @return array
      */
     public function getMethods($providerContext, $trueMethod = null)
     {
-        $refClass = new \ReflectionClass('Zend\Http\Request');
+        $refClass = new ReflectionClass(Request::class);
         $return = [];
         foreach ($refClass->getConstants() as $cName => $cValue) {
             if (substr($cName, 0, 6) == 'METHOD') {
                 if ($providerContext) {
                     $return[] = [$cValue];
                 } else {
-                    $return[strtolower($cValue)] = ($trueMethod == $cValue);
+                    $return[strtolower($cValue)] = $trueMethod == $cValue;
                 }
             }
         }
@@ -277,10 +283,8 @@ class RequestTest extends \PHPUnit_Framework_TestCase
         $request = new Request();
         $request->setAllowCustomMethods(false);
 
-        $this->setExpectedException(
-            'Zend\Http\Exception\InvalidArgumentException',
-            'Invalid HTTP method passed'
-        );
+        $this->expectException(InvalidArgumentException::class);
+        $this->expectExceptionMessage('Invalid HTTP method passed');
 
         $request->setMethod('xcustom');
     }
@@ -295,12 +299,10 @@ class RequestTest extends \PHPUnit_Framework_TestCase
 
     public function testDisallowCustomMethodsFromString()
     {
-        $this->setExpectedException(
-            'Zend\Http\Exception\InvalidArgumentException',
-            'A valid request line was not found in the provided string'
-        );
+        $this->expectException(InvalidArgumentException::class);
+        $this->expectExceptionMessage('A valid request line was not found in the provided string');
 
-        $request = Request::fromString('X-CUS_TOM someurl', false);
+        Request::fromString('X-CUS_TOM someurl', false);
     }
 
     public function testAllowCustomMethodsFlagIsSetByFromString()
@@ -309,14 +311,14 @@ class RequestTest extends \PHPUnit_Framework_TestCase
         $this->assertFalse($request->getAllowCustomMethods());
     }
 
-    public function testromStringFactoryCreatesSingleObjectWithHeaderFolding()
+    public function testFromStringFactoryCreatesSingleObjectWithHeaderFolding()
     {
         $request = Request::fromString("GET /foo HTTP/1.1\r\nFake: foo\r\n -bar");
         $headers = $request->getHeaders();
         $this->assertEquals(1, $headers->count());
 
         $header = $headers->get('fake');
-        $this->assertInstanceOf('Zend\Http\Header\GenericHeader', $header);
+        $this->assertInstanceOf(GenericHeader::class, $header);
         $this->assertEquals('Fake', $header->getFieldName());
         $this->assertEquals('foo-bar', $header->getFieldValue());
     }
@@ -327,8 +329,8 @@ class RequestTest extends \PHPUnit_Framework_TestCase
      */
     public function testCRLFAttack()
     {
-        $this->setExpectedException('Zend\Http\Exception\RuntimeException');
-        $request = Request::fromString(
+        $this->expectException(RuntimeException::class);
+        Request::fromString(
             "GET /foo HTTP/1.1\r\nHost: example.com\r\nX-Foo: This\ris\r\n\r\nCRLF\nInjection"
         );
     }

@@ -1,23 +1,24 @@
 <?php
 /**
- * Zend Framework (http://framework.zend.com/)
- *
- * @link      http://github.com/zendframework/zf2 for the canonical source repository
- * @copyright Copyright (c) 2005-2015 Zend Technologies USA Inc. (http://www.zend.com)
- * @license   http://framework.zend.com/license/new-bsd New BSD License
+ * @see       https://github.com/zendframework/zend-http for the canonical source repository
+ * @copyright Copyright (c) 2005-2017 Zend Technologies USA Inc. (http://www.zend.com)
+ * @license   https://github.com/zendframework/zend-http/blob/master/LICENSE.md New BSD License
  */
 
 namespace ZendTest\Http\Header;
 
+use PHPUnit\Framework\TestCase;
+use Zend\Http\Header\Exception\InvalidArgumentException;
+use Zend\Http\Header\HeaderInterface;
 use Zend\Http\Header\IfModifiedSince;
 
-class IfModifiedSinceTest extends \PHPUnit_Framework_TestCase
+class IfModifiedSinceTest extends TestCase
 {
     public function testIfModifiedSinceFromStringCreatesValidIfModifiedSinceHeader()
     {
         $ifModifiedSinceHeader = IfModifiedSince::fromString('If-Modified-Since: Sun, 06 Nov 1994 08:49:37 GMT');
-        $this->assertInstanceOf('Zend\Http\Header\HeaderInterface', $ifModifiedSinceHeader);
-        $this->assertInstanceOf('Zend\Http\Header\IfModifiedSince', $ifModifiedSinceHeader);
+        $this->assertInstanceOf(HeaderInterface::class, $ifModifiedSinceHeader);
+        $this->assertInstanceOf(IfModifiedSince::class, $ifModifiedSinceHeader);
     }
 
     public function testIfModifiedSinceGetFieldNameReturnsHeaderName()
@@ -48,11 +49,11 @@ class IfModifiedSinceTest extends \PHPUnit_Framework_TestCase
     /**
      * @see http://en.wikipedia.org/wiki/HTTP_response_splitting
      * @group ZF2015-04
-     * @expectedException Zend\Http\Header\Exception\InvalidArgumentException
      */
     public function testPreventsCRLFAttackViaFromString()
     {
-        $header = IfModifiedSince::fromString(
+        $this->expectException(InvalidArgumentException::class);
+        IfModifiedSince::fromString(
             "If-Modified-Since: Sun, 06 Nov 1994 08:49:37 GMT\r\n\r\nevilContent"
         );
     }

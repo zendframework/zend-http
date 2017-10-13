@@ -1,23 +1,24 @@
 <?php
 /**
- * Zend Framework (http://framework.zend.com/)
- *
- * @link      http://github.com/zendframework/zf2 for the canonical source repository
- * @copyright Copyright (c) 2005-2015 Zend Technologies USA Inc. (http://www.zend.com)
- * @license   http://framework.zend.com/license/new-bsd New BSD License
+ * @see       https://github.com/zendframework/zend-http for the canonical source repository
+ * @copyright Copyright (c) 2005-2017 Zend Technologies USA Inc. (http://www.zend.com)
+ * @license   https://github.com/zendframework/zend-http/blob/master/LICENSE.md New BSD License
  */
 
 namespace ZendTest\Http\Header;
 
+use PHPUnit\Framework\TestCase;
 use Zend\Http\Header\ContentDisposition;
+use Zend\Http\Header\Exception\InvalidArgumentException;
+use Zend\Http\Header\HeaderInterface;
 
-class ContentDispositionTest extends \PHPUnit_Framework_TestCase
+class ContentDispositionTest extends TestCase
 {
     public function testContentDispositionFromStringCreatesValidContentDispositionHeader()
     {
         $contentDispositionHeader = ContentDisposition::fromString('Content-Disposition: xxx');
-        $this->assertInstanceOf('Zend\Http\Header\HeaderInterface', $contentDispositionHeader);
-        $this->assertInstanceOf('Zend\Http\Header\ContentDisposition', $contentDispositionHeader);
+        $this->assertInstanceOf(HeaderInterface::class, $contentDispositionHeader);
+        $this->assertInstanceOf(ContentDisposition::class, $contentDispositionHeader);
     }
 
     public function testContentDispositionGetFieldNameReturnsHeaderName()
@@ -52,8 +53,8 @@ class ContentDispositionTest extends \PHPUnit_Framework_TestCase
      */
     public function testPreventsCRLFAttackViaFromString()
     {
-        $this->setExpectedException('Zend\Http\Header\Exception\InvalidArgumentException');
-        $header = ContentDisposition::fromString("Content-Disposition: xxx\r\n\r\nevilContent");
+        $this->expectException(InvalidArgumentException::class);
+        ContentDisposition::fromString("Content-Disposition: xxx\r\n\r\nevilContent");
     }
 
     /**
@@ -62,7 +63,7 @@ class ContentDispositionTest extends \PHPUnit_Framework_TestCase
      */
     public function testPreventsCRLFAttackViaConstructor()
     {
-        $this->setExpectedException('Zend\Http\Header\Exception\InvalidArgumentException');
-        $header = new ContentDisposition("xxx\r\n\r\nevilContent");
+        $this->expectException(InvalidArgumentException::class);
+        new ContentDisposition("xxx\r\n\r\nevilContent");
     }
 }

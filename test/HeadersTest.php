@@ -1,39 +1,46 @@
 <?php
 /**
- * Zend Framework (http://framework.zend.com/)
- *
- * @link      http://github.com/zendframework/zf2 for the canonical source repository
- * @copyright Copyright (c) 2005-2015 Zend Technologies USA Inc. (http://www.zend.com)
- * @license   http://framework.zend.com/license/new-bsd New BSD License
+ * @see       https://github.com/zendframework/zend-http for the canonical source repository
+ * @copyright Copyright (c) 2005-2017 Zend Technologies USA Inc. (http://www.zend.com)
+ * @license   https://github.com/zendframework/zend-http/blob/master/LICENSE.md New BSD License
  */
 
 namespace ZendTest\Http;
 
-use Zend\Http\Headers;
+use Countable;
+use Iterator;
+use PHPUnit\Framework\TestCase;
+use Zend\Http\Exception\InvalidArgumentException;
+use Zend\Http\Exception\RuntimeException;
 use Zend\Http\Header;
+use Zend\Http\Header\GenericHeader;
+use Zend\Http\Header\GenericMultiHeader;
+use Zend\Http\Header\HeaderInterface;
+use Zend\Http\HeaderLoader;
+use Zend\Http\Headers;
 
-class HeadersTest extends \PHPUnit_Framework_TestCase
+class HeadersTest extends TestCase
 {
     public function testHeadersImplementsProperClasses()
     {
         $headers = new Headers();
-        $this->assertInstanceOf('Iterator', $headers);
-        $this->assertInstanceOf('Countable', $headers);
+        $this->assertInstanceOf(Iterator::class, $headers);
+        $this->assertInstanceOf(Countable::class, $headers);
     }
 
     public function testHeadersCanGetPluginClassLoader()
     {
         $headers = new Headers();
-        $this->assertInstanceOf('Zend\Http\HeaderLoader', $headers->getPluginClassLoader());
+        $this->assertInstanceOf(HeaderLoader::class, $headers->getPluginClassLoader());
     }
 
     public function testHeadersFromStringFactoryCreatesSingleObject()
     {
-        $headers = Headers::fromString("Fake: foo-bar");
+        $headers = Headers::fromString('Fake: foo-bar');
         $this->assertEquals(1, $headers->count());
 
         $header = $headers->get('fake');
-        $this->assertInstanceOf('Zend\Http\Header\GenericHeader', $header);
+        $this->assertInstanceOf(GenericHeader::class, $header);
         $this->assertEquals('Fake', $header->getFieldName());
         $this->assertEquals('foo-bar', $header->getFieldValue());
     }
@@ -44,7 +51,7 @@ class HeadersTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals(1, $headers->count());
 
         $header = $headers->get('fake');
-        $this->assertInstanceOf('Zend\Http\Header\GenericHeader', $header);
+        $this->assertInstanceOf(GenericHeader::class, $header);
         $this->assertEquals('Fake', $header->getFieldName());
         $this->assertEquals('foo-bar', $header->getFieldValue());
     }
@@ -55,14 +62,15 @@ class HeadersTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals(1, $headers->count());
 
         $header = $headers->get('fake');
-        $this->assertInstanceOf('Zend\Http\Header\GenericHeader', $header);
+        $this->assertInstanceOf(GenericHeader::class, $header);
         $this->assertEquals('Fake', $header->getFieldName());
         $this->assertEquals('foo-bar', $header->getFieldValue());
     }
 
     public function testHeadersFromStringFactoryThrowsExceptionOnMalformedHeaderLine()
     {
-        $this->setExpectedException('Zend\Http\Exception\RuntimeException', 'does not match');
+        $this->expectException(RuntimeException::class);
+        $this->expectExceptionMessage('does not match');
         Headers::fromString("Fake = foo-bar\r\n\r\n");
     }
 
@@ -72,12 +80,12 @@ class HeadersTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals(2, $headers->count());
 
         $header = $headers->get('fake');
-        $this->assertInstanceOf('Zend\Http\Header\GenericHeader', $header);
+        $this->assertInstanceOf(GenericHeader::class, $header);
         $this->assertEquals('Fake', $header->getFieldName());
         $this->assertEquals('foo-bar', $header->getFieldValue());
 
         $header = $headers->get('anotherfake');
-        $this->assertInstanceOf('Zend\Http\Header\GenericHeader', $header);
+        $this->assertInstanceOf(GenericHeader::class, $header);
         $this->assertEquals('Another-Fake', $header->getFieldName());
         $this->assertEquals('boo-baz', $header->getFieldValue());
     }
@@ -85,9 +93,8 @@ class HeadersTest extends \PHPUnit_Framework_TestCase
     public function testHeadersFromStringMultiHeaderWillAggregateLazyLoadedHeaders()
     {
         $headers = new Headers();
-        /* @var $pcl \Zend\Loader\PluginClassLoader */
         $pcl = $headers->getPluginClassLoader();
-        $pcl->registerPlugin('foo', 'Zend\Http\Header\GenericMultiHeader');
+        $pcl->registerPlugin('foo', GenericMultiHeader::class);
         $headers->addHeaderLine('foo: bar1,bar2,bar3');
         $headers->forceLoading();
         $this->assertEquals(3, $headers->count());
@@ -120,7 +127,7 @@ class HeadersTest extends \PHPUnit_Framework_TestCase
         $headers = new Headers();
         $headers->addHeader(new Header\GenericHeader('Fake', 'bar'));
         $this->assertEquals(1, $headers->count());
-        $this->assertInstanceOf('Zend\Http\Header\GenericHeader', $headers->get('Fake'));
+        $this->assertInstanceOf(GenericHeader::class, $headers->get('Fake'));
     }
 
     public function testHeadersAggregatesHeaderThroughAddHeaderLine()
@@ -128,12 +135,13 @@ class HeadersTest extends \PHPUnit_Framework_TestCase
         $headers = new Headers();
         $headers->addHeaderLine('Fake', 'bar');
         $this->assertEquals(1, $headers->count());
-        $this->assertInstanceOf('Zend\Http\Header\GenericHeader', $headers->get('Fake'));
+        $this->assertInstanceOf(GenericHeader::class, $headers->get('Fake'));
     }
 
     public function testHeadersAddHeaderLineThrowsExceptionOnMissingFieldValue()
     {
-        $this->setExpectedException('Zend\Http\Exception\InvalidArgumentException', 'without a field');
+        $this->expectException(InvalidArgumentException::class);
+        $this->expectExceptionMessage('without a field');
         $headers = new Headers();
         $headers->addHeaderLine('Foo');
     }
@@ -143,42 +151,43 @@ class HeadersTest extends \PHPUnit_Framework_TestCase
         $headers = new Headers();
         $headers->addHeaders([new Header\GenericHeader('Foo', 'bar'), new Header\GenericHeader('Baz', 'baz')]);
         $this->assertEquals(2, $headers->count());
-        $this->assertInstanceOf('Zend\Http\Header\GenericHeader', $headers->get('Foo'));
+        $this->assertInstanceOf(GenericHeader::class, $headers->get('Foo'));
         $this->assertEquals('bar', $headers->get('foo')->getFieldValue());
         $this->assertEquals('baz', $headers->get('baz')->getFieldValue());
 
         $headers = new Headers();
         $headers->addHeaders(['Foo: bar', 'Baz: baz']);
         $this->assertEquals(2, $headers->count());
-        $this->assertInstanceOf('Zend\Http\Header\GenericHeader', $headers->get('Foo'));
+        $this->assertInstanceOf(GenericHeader::class, $headers->get('Foo'));
         $this->assertEquals('bar', $headers->get('foo')->getFieldValue());
         $this->assertEquals('baz', $headers->get('baz')->getFieldValue());
 
         $headers = new Headers();
         $headers->addHeaders([['Foo' => 'bar'], ['Baz' => 'baz']]);
         $this->assertEquals(2, $headers->count());
-        $this->assertInstanceOf('Zend\Http\Header\GenericHeader', $headers->get('Foo'));
+        $this->assertInstanceOf(GenericHeader::class, $headers->get('Foo'));
         $this->assertEquals('bar', $headers->get('foo')->getFieldValue());
         $this->assertEquals('baz', $headers->get('baz')->getFieldValue());
 
         $headers = new Headers();
         $headers->addHeaders([['Foo', 'bar'], ['Baz', 'baz']]);
         $this->assertEquals(2, $headers->count());
-        $this->assertInstanceOf('Zend\Http\Header\GenericHeader', $headers->get('Foo'));
+        $this->assertInstanceOf(GenericHeader::class, $headers->get('Foo'));
         $this->assertEquals('bar', $headers->get('foo')->getFieldValue());
         $this->assertEquals('baz', $headers->get('baz')->getFieldValue());
 
         $headers = new Headers();
         $headers->addHeaders(['Foo' => 'bar', 'Baz' => 'baz']);
         $this->assertEquals(2, $headers->count());
-        $this->assertInstanceOf('Zend\Http\Header\GenericHeader', $headers->get('Foo'));
+        $this->assertInstanceOf(GenericHeader::class, $headers->get('Foo'));
         $this->assertEquals('bar', $headers->get('foo')->getFieldValue());
         $this->assertEquals('baz', $headers->get('baz')->getFieldValue());
     }
 
     public function testHeadersAddHeadersThrowsExceptionOnInvalidArguments()
     {
-        $this->setExpectedException('Zend\Http\Exception\InvalidArgumentException', 'Expected array or Trav');
+        $this->expectException(InvalidArgumentException::class);
+        $this->expectExceptionMessage('Expected array or Trav');
         $headers = new Headers();
         $headers->addHeaders('foo');
     }
@@ -208,10 +217,11 @@ class HeadersTest extends \PHPUnit_Framework_TestCase
         $headers = new Headers();
         $headers->addHeaders(['Foo' => 'bar', 'Baz' => 'baz']);
         $iterations = 0;
-        /** @var \Zend\Http\Header\HeaderInterface $header */
+
+        /** @var HeaderInterface $header */
         foreach ($headers as $index => $header) {
             $iterations++;
-            $this->assertInstanceOf('Zend\Http\Header\GenericHeader', $header);
+            $this->assertInstanceOf(GenericHeader::class, $header);
             switch ($index) {
                 case 0:
                     $this->assertEquals('bar', $header->getFieldValue());
@@ -285,7 +295,7 @@ class HeadersTest extends \PHPUnit_Framework_TestCase
      */
     public function testCRLFAttack()
     {
-        $this->setExpectedException('Zend\Http\Exception\RuntimeException');
-        $headers = Headers::fromString("Fake: foo-bar\r\n\r\nevilContent");
+        $this->expectException(RuntimeException::class);
+        Headers::fromString("Fake: foo-bar\r\n\r\nevilContent");
     }
 }

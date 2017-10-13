@@ -1,23 +1,24 @@
 <?php
 /**
- * Zend Framework (http://framework.zend.com/)
- *
- * @link      http://github.com/zendframework/zf2 for the canonical source repository
- * @copyright Copyright (c) 2005-2015 Zend Technologies USA Inc. (http://www.zend.com)
- * @license   http://framework.zend.com/license/new-bsd New BSD License
+ * @see       https://github.com/zendframework/zend-http for the canonical source repository
+ * @copyright Copyright (c) 2005-2017 Zend Technologies USA Inc. (http://www.zend.com)
+ * @license   https://github.com/zendframework/zend-http/blob/master/LICENSE.md New BSD License
  */
 
 namespace ZendTest\Http\Header;
 
+use PHPUnit\Framework\TestCase;
+use Zend\Http\Header\Exception\InvalidArgumentException;
+use Zend\Http\Header\HeaderInterface;
 use Zend\Http\Header\ProxyAuthenticate;
 
-class ProxyAuthenticateTest extends \PHPUnit_Framework_TestCase
+class ProxyAuthenticateTest extends TestCase
 {
     public function testProxyAuthenticateFromStringCreatesValidProxyAuthenticateHeader()
     {
         $proxyAuthenticateHeader = ProxyAuthenticate::fromString('Proxy-Authenticate: xxx');
-        $this->assertInstanceOf('Zend\Http\Header\HeaderInterface', $proxyAuthenticateHeader);
-        $this->assertInstanceOf('Zend\Http\Header\ProxyAuthenticate', $proxyAuthenticateHeader);
+        $this->assertInstanceOf(HeaderInterface::class, $proxyAuthenticateHeader);
+        $this->assertInstanceOf(ProxyAuthenticate::class, $proxyAuthenticateHeader);
     }
 
     public function testProxyAuthenticateGetFieldNameReturnsHeaderName()
@@ -52,8 +53,8 @@ class ProxyAuthenticateTest extends \PHPUnit_Framework_TestCase
      */
     public function testPreventsCRLFAttackViaFromString()
     {
-        $this->setExpectedException('Zend\Http\Header\Exception\InvalidArgumentException');
-        $header = ProxyAuthenticate::fromString("Proxy-Authenticate: xxx\r\n\r\nevilContent");
+        $this->expectException(InvalidArgumentException::class);
+        ProxyAuthenticate::fromString("Proxy-Authenticate: xxx\r\n\r\nevilContent");
     }
 
     /**
@@ -62,7 +63,7 @@ class ProxyAuthenticateTest extends \PHPUnit_Framework_TestCase
      */
     public function testPreventsCRLFAttackViaConstructor()
     {
-        $this->setExpectedException('Zend\Http\Header\Exception\InvalidArgumentException');
-        $header = new ProxyAuthenticate("xxx\r\n\r\nevilContent");
+        $this->expectException(InvalidArgumentException::class);
+        new ProxyAuthenticate("xxx\r\n\r\nevilContent");
     }
 }

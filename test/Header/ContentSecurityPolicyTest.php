@@ -1,21 +1,22 @@
 <?php
 /**
- * Zend Framework (http://framework.zend.com/)
- *
- * @link      http://github.com/zendframework/zf2 for the canonical source repository
- * @copyright Copyright (c) 2005-2015 Zend Technologies USA Inc. (http://www.zend.com)
- * @license   http://framework.zend.com/license/new-bsd New BSD License
+ * @see       https://github.com/zendframework/zend-http for the canonical source repository
+ * @copyright Copyright (c) 2005-2017 Zend Technologies USA Inc. (http://www.zend.com)
+ * @license   https://github.com/zendframework/zend-http/blob/master/LICENSE.md New BSD License
  */
 
 namespace ZendTest\Http\Header;
 
+use PHPUnit\Framework\TestCase;
 use Zend\Http\Header\ContentSecurityPolicy;
+use Zend\Http\Header\Exception\InvalidArgumentException;
+use Zend\Http\Header\HeaderInterface;
 
-class ContentSecurityPolicyTest extends \PHPUnit_Framework_TestCase
+class ContentSecurityPolicyTest extends TestCase
 {
     public function testContentSecurityPolicyFromStringThrowsExceptionIfImproperHeaderNameUsed()
     {
-        $this->setExpectedException('Zend\Http\Header\Exception\InvalidArgumentException');
+        $this->expectException(InvalidArgumentException::class);
         ContentSecurityPolicy::fromString('X-Content-Security-Policy: default-src *;');
     }
 
@@ -24,12 +25,14 @@ class ContentSecurityPolicyTest extends \PHPUnit_Framework_TestCase
         $csp = ContentSecurityPolicy::fromString(
             "Content-Security-Policy: default-src 'none'; script-src 'self'; img-src 'self'; style-src 'self';"
         );
-        $this->assertInstanceOf('Zend\Http\Header\HeaderInterface', $csp);
-        $this->assertInstanceOf('Zend\Http\Header\ContentSecurityPolicy', $csp);
-        $directives = ['default-src' => "'none'",
-                            'script-src'  => "'self'",
-                            'img-src'     => "'self'",
-                            'style-src'   => "'self'"];
+        $this->assertInstanceOf(HeaderInterface::class, $csp);
+        $this->assertInstanceOf(ContentSecurityPolicy::class, $csp);
+        $directives = [
+            'default-src' => "'none'",
+            'script-src'  => "'self'",
+            'img-src'     => "'self'",
+            'style-src'   => "'self'",
+        ];
         $this->assertEquals($directives, $csp->getDirectives());
     }
 
@@ -44,8 +47,8 @@ class ContentSecurityPolicyTest extends \PHPUnit_Framework_TestCase
         $csp = ContentSecurityPolicy::fromString(
             "Content-Security-Policy: default-src 'none'; img-src 'self' https://*.gravatar.com;"
         );
-        $this->assertInstanceOf('Zend\Http\Header\HeaderInterface', $csp);
-        $this->assertInstanceOf('Zend\Http\Header\ContentSecurityPolicy', $csp);
+        $this->assertInstanceOf(HeaderInterface::class, $csp);
+        $this->assertInstanceOf(ContentSecurityPolicy::class, $csp);
         $this->assertEquals(
             "Content-Security-Policy: default-src 'none'; img-src 'self' https://*.gravatar.com;",
             $csp->toString()
@@ -58,8 +61,8 @@ class ContentSecurityPolicyTest extends \PHPUnit_Framework_TestCase
         $csp->setDirective('default-src', ['https://*.google.com', 'http://foo.com'])
             ->setDirective('img-src', ["'self'"])
             ->setDirective('script-src', ['https://*.googleapis.com', 'https://*.bar.com']);
-        $header = "Content-Security-Policy: default-src https://*.google.com http://foo.com; "
-                . "img-src 'self'; script-src https://*.googleapis.com https://*.bar.com;";
+        $header = 'Content-Security-Policy: default-src https://*.google.com http://foo.com; '
+                . 'img-src \'self\'; script-src https://*.googleapis.com https://*.bar.com;';
         $this->assertEquals($header, $csp->toString());
     }
 
@@ -77,7 +80,7 @@ class ContentSecurityPolicyTest extends \PHPUnit_Framework_TestCase
 
     public function testContentSecurityPolicySetDirectiveThrowsExceptionIfInvalidDirectiveNameGiven()
     {
-        $this->setExpectedException('Zend\Http\Header\Exception\InvalidArgumentException');
+        $this->expectException(InvalidArgumentException::class);
         $csp = new ContentSecurityPolicy();
         $csp->setDirective('foo', []);
     }
@@ -96,8 +99,8 @@ class ContentSecurityPolicyTest extends \PHPUnit_Framework_TestCase
      */
     public function testPreventsCRLFAttackViaFromString()
     {
-        $this->setExpectedException('Zend\Http\Header\Exception\InvalidArgumentException');
-        $header = ContentSecurityPolicy::fromString("Content-Security-Policy: default-src 'none'\r\n\r\nevilContent");
+        $this->expectException(InvalidArgumentException::class);
+        ContentSecurityPolicy::fromString("Content-Security-Policy: default-src 'none'\r\n\r\nevilContent");
     }
 
     /**
@@ -107,7 +110,7 @@ class ContentSecurityPolicyTest extends \PHPUnit_Framework_TestCase
     public function testPreventsCRLFAttackViaDirective()
     {
         $header = new ContentSecurityPolicy();
-        $this->setExpectedException('Zend\Http\Header\Exception\InvalidArgumentException');
+        $this->expectException(InvalidArgumentException::class);
         $header->setDirective('default-src', ["\rsome\r\nCRLF\ninjection"]);
     }
 
@@ -116,7 +119,7 @@ class ContentSecurityPolicyTest extends \PHPUnit_Framework_TestCase
         $csp = new ContentSecurityPolicy();
         $csp->setDirective('report-uri', []);
         $this->assertEquals(
-            "Content-Security-Policy: ",
+            'Content-Security-Policy: ',
             $csp->toString()
         );
     }
@@ -126,13 +129,13 @@ class ContentSecurityPolicyTest extends \PHPUnit_Framework_TestCase
         $csp = new ContentSecurityPolicy();
         $csp->setDirective('report-uri', ['csp-error']);
         $this->assertEquals(
-            "Content-Security-Policy: report-uri csp-error;",
+            'Content-Security-Policy: report-uri csp-error;',
             $csp->toString()
         );
 
         $csp->setDirective('report-uri', []);
         $this->assertEquals(
-            "Content-Security-Policy: ",
+            'Content-Security-Policy: ',
             $csp->toString()
         );
     }

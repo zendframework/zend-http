@@ -1,23 +1,24 @@
 <?php
 /**
- * Zend Framework (http://framework.zend.com/)
- *
- * @link      http://github.com/zendframework/zf2 for the canonical source repository
- * @copyright Copyright (c) 2005-2015 Zend Technologies USA Inc. (http://www.zend.com)
- * @license   http://framework.zend.com/license/new-bsd New BSD License
+ * @see       https://github.com/zendframework/zend-http for the canonical source repository
+ * @copyright Copyright (c) 2005-2017 Zend Technologies USA Inc. (http://www.zend.com)
+ * @license   https://github.com/zendframework/zend-http/blob/master/LICENSE.md New BSD License
  */
 
 namespace ZendTest\Http\Header;
 
+use PHPUnit\Framework\TestCase;
 use Zend\Http\Header\Etag;
+use Zend\Http\Header\Exception\InvalidArgumentException;
+use Zend\Http\Header\HeaderInterface;
 
-class EtagTest extends \PHPUnit_Framework_TestCase
+class EtagTest extends TestCase
 {
     public function testEtagFromStringCreatesValidEtagHeader()
     {
         $etagHeader = Etag::fromString('Etag: xxx');
-        $this->assertInstanceOf('Zend\Http\Header\HeaderInterface', $etagHeader);
-        $this->assertInstanceOf('Zend\Http\Header\Etag', $etagHeader);
+        $this->assertInstanceOf(HeaderInterface::class, $etagHeader);
+        $this->assertInstanceOf(Etag::class, $etagHeader);
     }
 
     public function testEtagGetFieldNameReturnsHeaderName()
@@ -52,8 +53,8 @@ class EtagTest extends \PHPUnit_Framework_TestCase
      */
     public function testPreventsCRLFAttackViaFromString()
     {
-        $this->setExpectedException('Zend\Http\Header\Exception\InvalidArgumentException');
-        $header = Etag::fromString("Etag: xxx\r\n\r\nevilContent");
+        $this->expectException(InvalidArgumentException::class);
+        Etag::fromString("Etag: xxx\r\n\r\nevilContent");
     }
 
     /**
@@ -62,7 +63,7 @@ class EtagTest extends \PHPUnit_Framework_TestCase
      */
     public function testPreventsCRLFAttackViaConstructor()
     {
-        $this->setExpectedException('Zend\Http\Header\Exception\InvalidArgumentException');
-        $header = new Etag("xxx\r\n\r\nevilContent");
+        $this->expectException(InvalidArgumentException::class);
+        new Etag("xxx\r\n\r\nevilContent");
     }
 }

@@ -1,16 +1,16 @@
 <?php
 /**
- * Zend Framework (http://framework.zend.com/)
- *
- * @link      http://github.com/zendframework/zf2 for the canonical source repository
- * @copyright Copyright (c) 2005-2015 Zend Technologies USA Inc. (http://www.zend.com)
- * @license   http://framework.zend.com/license/new-bsd New BSD License
+ * @see       https://github.com/zendframework/zend-http for the canonical source repository
+ * @copyright Copyright (c) 2005-2017 Zend Technologies USA Inc. (http://www.zend.com)
+ * @license   https://github.com/zendframework/zend-http/blob/master/LICENSE.md New BSD License
  */
 
 namespace ZendTest\Http\Client;
 
+use PHPUnit\Framework\TestCase;
 use Zend\Http\Client as HTTPClient;
-use Zend\Http\Client\Adapter;
+use Zend\Http\Client\Adapter\AdapterInterface;
+use Zend\Http\Client\Adapter\Socket;
 use Zend\Http\Request;
 
 /**
@@ -19,7 +19,7 @@ use Zend\Http\Request;
  * @group      Zend_Http
  * @group      Zend_Http_Client
  */
-class UseCaseTest extends \PHPUnit_Framework_TestCase
+class UseCaseTest extends TestCase
 {
     /**
      * The bast URI for this test, containing all files in the files directory
@@ -32,16 +32,16 @@ class UseCaseTest extends \PHPUnit_Framework_TestCase
     /**
      * Common HTTP client
      *
-     * @var \Zend\Http\Client
+     * @var HTTPClient
      */
-    protected $client = null;
+    protected $client;
 
     /**
      * Common HTTP client adapter
      *
-     * @var \Zend\Http\Client\Adapter\AdapterInterface
+     * @var AdapterInterface
      */
-    protected $adapter = null;
+    protected $adapter;
 
     /**
      * Configuration array
@@ -49,7 +49,7 @@ class UseCaseTest extends \PHPUnit_Framework_TestCase
      * @var array
      */
     protected $config = [
-        'adapter'     => 'Zend\Http\Client\Adapter\Socket'
+        'adapter' => Socket::class,
     ];
 
     /**
@@ -64,13 +64,15 @@ class UseCaseTest extends \PHPUnit_Framework_TestCase
             $this->client  = new HTTPClient($this->baseuri);
         } else {
             // Skip tests
-            $this->markTestSkipped("Zend_Http_Client dynamic tests are not enabled in phpunit.xml");
+            $this->markTestSkipped(sprintf(
+                '%s dynamic tests are not enabled in phpunit.xml',
+                HTTPClient::class
+            ));
         }
     }
 
     /**
      * Clean up the test environment
-     *
      */
     protected function tearDown()
     {

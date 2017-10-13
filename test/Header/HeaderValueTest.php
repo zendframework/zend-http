@@ -1,15 +1,14 @@
 <?php
 /**
- * Zend Framework (http://framework.zend.com/)
- *
- * @link      http://github.com/zendframework/zf2 for the canonical source repository
- * @copyright Copyright (c) 2005-2015 Zend Technologies USA Inc. (http://www.zend.com)
- * @license   http://framework.zend.com/license/new-bsd New BSD License
+ * @see       https://github.com/zendframework/zend-http for the canonical source repository
+ * @copyright Copyright (c) 2005-2017 Zend Technologies USA Inc. (http://www.zend.com)
+ * @license   https://github.com/zendframework/zend-http/blob/master/LICENSE.md New BSD License
  */
 
 namespace ZendTest\Http\Header;
 
-use PHPUnit_Framework_TestCase as TestCase;
+use PHPUnit\Framework\TestCase;
+use Zend\Http\Header\Exception\InvalidArgumentException;
 use Zend\Http\Header\HeaderValue;
 
 class HeaderValueTest extends TestCase
@@ -20,23 +19,27 @@ class HeaderValueTest extends TestCase
     public function getFilterValues()
     {
         return [
-            ["This is a\n test", "This is a test"],
-            ["This is a\r test", "This is a test"],
-            ["This is a\n\r test", "This is a test"],
-            ["This is a\r\n  test", "This is a  test"],
-            ["This is a \r\ntest", "This is a test"],
-            ["This is a \r\n\n test", "This is a  test"],
-            ["This is a\n\n test", "This is a test"],
-            ["This is a\r\r test", "This is a test"],
-            ["This is a \r\r\n test", "This is a  test"],
-            ["This is a \r\n\r\ntest", "This is a test"],
-            ["This is a \r\n\n\r\n test", "This is a  test"]
+            ["This is a\n test", 'This is a test'],
+            ["This is a\r test", 'This is a test'],
+            ["This is a\n\r test", 'This is a test'],
+            ["This is a\r\n  test", 'This is a  test'],
+            ["This is a \r\ntest", 'This is a test'],
+            ["This is a \r\n\n test", 'This is a  test'],
+            ["This is a\n\n test", 'This is a test'],
+            ["This is a\r\r test", 'This is a test'],
+            ["This is a \r\r\n test", 'This is a  test'],
+            ["This is a \r\n\r\ntest", 'This is a test'],
+            ["This is a \r\n\n\r\n test", 'This is a  test'],
         ];
     }
 
     /**
-     * @dataProvider getFilterValues
      * @group ZF2015-04
+     *
+     * @dataProvider getFilterValues
+     *
+     * @param string $value
+     * @param string $expected
      */
     public function testFiltersValuesPerRfc7230($value, $expected)
     {
@@ -56,13 +59,17 @@ class HeaderValueTest extends TestCase
             ["This is a\r\r test", 'assertFalse'],
             ["This is a \r\r\n test", 'assertFalse'],
             ["This is a \r\n\r\ntest", 'assertFalse'],
-            ["This is a \r\n\n\r\n test", 'assertFalse']
+            ["This is a \r\n\n\r\n test", 'assertFalse'],
         ];
     }
 
     /**
-     * @dataProvider validateValues
      * @group ZF2015-04
+     *
+     * @dataProvider validateValues
+     *
+     * @param string $value
+     * @param string $assertion
      */
     public function testValidatesValuesPerRfc7230($value, $assertion)
     {
@@ -81,17 +88,20 @@ class HeaderValueTest extends TestCase
             ["This is a\r\r test"],
             ["This is a \r\r\n test"],
             ["This is a \r\n\r\ntest"],
-            ["This is a \r\n\n\r\n test"]
+            ["This is a \r\n\n\r\n test"],
         ];
     }
 
     /**
-     * @dataProvider assertValues
      * @group ZF2015-04
+     *
+     * @dataProvider assertValues
+     *
+     * @param string $value
      */
     public function testAssertValidRaisesExceptionForInvalidValue($value)
     {
-        $this->setExpectedException('Zend\Http\Header\Exception\InvalidArgumentException');
+        $this->expectException(InvalidArgumentException::class);
         HeaderValue::assertValid($value);
     }
 }

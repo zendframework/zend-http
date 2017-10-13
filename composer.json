@@ -14,16 +14,17 @@
         }
     },
     "require": {
-        "php": "^5.5 || ^7.0",
-        "zendframework/zend-loader": "^2.5",
-        "zendframework/zend-stdlib": "^2.5 || ^3.0",
-        "zendframework/zend-uri": "^2.5",
-        "zendframework/zend-validator": "^2.5"
+        "php": "^5.6 || ^7.0",
+        "zendframework/zend-loader": "^2.5.1",
+        "zendframework/zend-stdlib": "^3.1 || ^2.7.7",
+        "zendframework/zend-uri": "^2.5.2",
+        "zendframework/zend-validator": "^2.8.2"
     },
     "require-dev": {
-        "phpunit/PHPUnit": "^4.0",
-        "zendframework/zend-config": "^2.5",
-        "zendframework/zend-coding-standard": "~1.0.0"
+        "malukenho/docheader": "^0.1.5",
+        "phpunit/phpunit": "^6.0.8 || ^5.7.15",
+        "zendframework/zend-coding-standard": "~1.0.0",
+        "zendframework/zend-config": "^3.1 || ^2.6"
     },
     "autoload": {
         "psr-4": {
@@ -37,6 +38,7 @@
     },
     "scripts": {
         "check": [
+            "@license-check",
             "@cs-check",
             "@test"
         ],
@@ -44,6 +46,7 @@
         "cs-fix": "phpcbf",
         "test": "phpunit --colors=always",
         "test-coverage": "phpunit --colors=always --coverage-clover clover.xml",
+        "license-check": "vendor/bin/docheader check src/",
         "upload-coverage": "coveralls -v"
     }
 }

@@ -1,17 +1,20 @@
 <?php
 /**
- * Zend Framework (http://framework.zend.com/)
- *
- * @link      http://github.com/zendframework/zf2 for the canonical source repository
- * @copyright Copyright (c) 2005-2015 Zend Technologies USA Inc. (http://www.zend.com)
- * @license   http://framework.zend.com/license/new-bsd New BSD License
+ * @see       https://github.com/zendframework/zend-http for the canonical source repository
+ * @copyright Copyright (c) 2005-2017 Zend Technologies USA Inc. (http://www.zend.com)
+ * @license   https://github.com/zendframework/zend-http/blob/master/LICENSE.md New BSD License
  */
 
 namespace ZendTest\Http;
 
+use PHPUnit\Framework\TestCase;
+use Zend\Http\Exception\InvalidArgumentException;
+use Zend\Http\Exception\RuntimeException;
+use Zend\Http\Header\GenericHeader;
+use Zend\Http\Headers;
 use Zend\Http\Response;
 
-class ResponseTest extends \PHPUnit_Framework_TestCase
+class ResponseTest extends TestCase
 {
     public function testResponseFactoryFromStringCreatesValidResponse()
     {
@@ -23,7 +26,7 @@ class ResponseTest extends \PHPUnit_Framework_TestCase
 
     public function testResponseCanRenderStatusLine()
     {
-        $response = new Response;
+        $response = new Response();
         $response->setVersion(1.1);
         $response->setStatusCode(Response::STATUS_CODE_404);
         $this->assertEquals('HTTP/1.1 404 Not Found', $response->renderStatusLine());
@@ -35,22 +38,22 @@ class ResponseTest extends \PHPUnit_Framework_TestCase
     public function testResponseUsesHeadersContainerByDefault()
     {
         $response = new Response();
-        $this->assertInstanceOf('Zend\Http\Headers', $response->getHeaders());
+        $this->assertInstanceOf(Headers::class, $response->getHeaders());
     }
 
     public function testRequestCanSetHeaders()
     {
         $response = new Response();
-        $headers = new \Zend\Http\Headers();
+        $headers = new Headers();
 
         $ret = $response->setHeaders($headers);
-        $this->assertInstanceOf('Zend\Http\Response', $ret);
+        $this->assertInstanceOf(Response::class, $ret);
         $this->assertSame($headers, $response->getHeaders());
     }
 
     public function testResponseCanSetStatusCode()
     {
-        $response = new Response;
+        $response = new Response();
         $this->assertEquals(200, $response->getStatusCode());
         $response->setStatusCode('303');
         $this->assertEquals(303, $response->getStatusCode());
@@ -58,21 +61,22 @@ class ResponseTest extends \PHPUnit_Framework_TestCase
 
     public function testResponseSetStatusCodeThrowsExceptionOnInvalidCode()
     {
-        $response = new Response;
-        $this->setExpectedException('Zend\Http\Exception\InvalidArgumentException', 'Invalid status code');
+        $response = new Response();
+        $this->expectException(InvalidArgumentException::class);
+        $this->expectExceptionMessage('Invalid status code');
         $response->setStatusCode(606);
     }
 
     public function testResponseGetReasonPhraseWillReturnEmptyPhraseAsDefault()
     {
-        $response = new Response;
+        $response = new Response();
         $response->setCustomStatusCode(998);
         $this->assertSame('HTTP/1.1 998' . "\r\n\r\n", (string) $response);
     }
 
     public function testResponseCanSetCustomStatusCode()
     {
-        $response = new Response;
+        $response = new Response();
         $this->assertEquals(200, $response->getStatusCode());
         $response->setCustomStatusCode('999');
         $this->assertEquals(999, $response->getStatusCode());
@@ -80,11 +84,10 @@ class ResponseTest extends \PHPUnit_Framework_TestCase
 
     public function testResponseSetCustomStatusCodeThrowsExceptionOnInvalidCode()
     {
-        $response = new Response;
-        $this->setExpectedException(
-            'Zend\Http\Exception\InvalidArgumentException',
-            'Invalid status code provided: "foo"'
-        );
+        $response = new Response();
+        $this->expectException(InvalidArgumentException::class);
+        $this->expectExceptionMessage('Invalid status code provided: "foo"');
+
         $response->setStatusCode('foo');
     }
 
@@ -113,9 +116,9 @@ class ResponseTest extends \PHPUnit_Framework_TestCase
 
     public function testGzipResponse()
     {
-        $response_text = file_get_contents(__DIR__ . '/_files/response_gzip');
+        $responseTest = file_get_contents(__DIR__ . '/_files/response_gzip');
 
-        $res = Response::fromString($response_text);
+        $res = Response::fromString($responseTest);
 
         $this->assertEquals('gzip', $res->getHeaders()->get('Content-encoding')->getFieldValue());
         $this->assertEquals('0b13cb193de9450aa70a6403e2c9902f', md5($res->getBody()));
@@ -124,9 +127,9 @@ class ResponseTest extends \PHPUnit_Framework_TestCase
 
     public function testDeflateResponse()
     {
-        $response_text = file_get_contents(__DIR__ . '/_files/response_deflate');
+        $responseTest = file_get_contents(__DIR__ . '/_files/response_deflate');
 
-        $res = Response::fromString($response_text);
+        $res = Response::fromString($responseTest);
 
         $this->assertEquals('deflate', $res->getHeaders()->get('Content-encoding')->getFieldValue());
         $this->assertEquals('0b13cb193de9450aa70a6403e2c9902f', md5($res->getBody()));
@@ -145,9 +148,9 @@ class ResponseTest extends \PHPUnit_Framework_TestCase
     public function testNonStandardDeflateResponseZF6040()
     {
         $this->markTestSkipped('Not correctly handling non-RFC complient "deflate" responses');
-        $response_text = file_get_contents(__DIR__ . '/_files/response_deflate_iis');
+        $responseTest = file_get_contents(__DIR__ . '/_files/response_deflate_iis');
 
-        $res = Response::fromString($response_text);
+        $res = Response::fromString($responseTest);
 
         $this->assertEquals('deflate', $res->getHeaders()->get('Content-encoding')->getFieldValue());
         $this->assertEquals('d82c87e3d5888db0193a3fb12396e616', md5($res->getBody()));
@@ -156,9 +159,9 @@ class ResponseTest extends \PHPUnit_Framework_TestCase
 
     public function testChunkedResponse()
     {
-        $response_text = file_get_contents(__DIR__ . '/_files/response_chunked');
+        $responseTest = file_get_contents(__DIR__ . '/_files/response_chunked');
 
-        $res = Response::fromString($response_text);
+        $res = Response::fromString($responseTest);
 
         $this->assertEquals('chunked', $res->getHeaders()->get('Transfer-encoding')->getFieldValue());
         $this->assertEquals('0b13cb193de9450aa70a6403e2c9902f', md5($res->getBody()));
@@ -167,9 +170,9 @@ class ResponseTest extends \PHPUnit_Framework_TestCase
 
     public function testChunkedResponseCaseInsensitiveZF5438()
     {
-        $response_text = file_get_contents(__DIR__ . '/_files/response_chunked_case');
+        $responseTest = file_get_contents(__DIR__ . '/_files/response_chunked_case');
 
-        $res = Response::fromString($response_text);
+        $res = Response::fromString($responseTest);
 
         $this->assertEquals('chunked', strtolower($res->getHeaders()->get('Transfer-encoding')->getFieldValue()));
         $this->assertEquals('0b13cb193de9450aa70a6403e2c9902f', md5($res->getBody()));
@@ -178,26 +181,26 @@ class ResponseTest extends \PHPUnit_Framework_TestCase
 
     public function testLineBreaksCompatibility()
     {
-        $response_text_lf = $this->readResponse('response_lfonly');
-        $res_lf = Response::fromString($response_text_lf);
+        $responseTestLf = $this->readResponse('response_lfonly');
+        $resLf = Response::fromString($responseTestLf);
 
-        $response_text_crlf = $this->readResponse('response_crlf');
-        $res_crlf = Response::fromString($response_text_crlf);
+        $responseTestCrlf = $this->readResponse('response_crlf');
+        $resCrlf = Response::fromString($responseTestCrlf);
 
         $this->assertEquals(
-            $res_lf->getHeaders()->toString(),
-            $res_crlf->getHeaders()->toString(),
+            $resLf->getHeaders()->toString(),
+            $resCrlf->getHeaders()->toString(),
             'Responses headers do not match'
         );
 
         $this->markTestIncomplete('Something is fishy with the response bodies in the test responses');
-        $this->assertEquals($res_lf->getBody(), $res_crlf->getBody(), 'Response bodies do not match');
+        $this->assertEquals($resLf->getBody(), $resCrlf->getBody(), 'Response bodies do not match');
     }
 
     public function test404IsClientErrorAndNotFound()
     {
-        $response_text = $this->readResponse('response_404');
-        $response = Response::fromString($response_text);
+        $responseTest = $this->readResponse('response_404');
+        $response = Response::fromString($responseTest);
 
         $this->assertEquals(404, $response->getStatusCode(), 'Response code is expected to be 404, but it\'s not.');
         $this->assertTrue($response->isClientError(), 'Response is an error, but isClientError() returned false');
@@ -213,8 +216,8 @@ class ResponseTest extends \PHPUnit_Framework_TestCase
 
     public function test410IsGone()
     {
-        $response_text = $this->readResponse('response_410');
-        $response = Response::fromString($response_text);
+        $responseTest = $this->readResponse('response_410');
+        $response = Response::fromString($responseTest);
 
         $this->assertEquals(410, $response->getStatusCode(), 'Response code is expected to be 410, but it\'s not.');
         $this->assertTrue($response->isClientError(), 'Response is an error, but isClientError() returned false');
@@ -230,8 +233,8 @@ class ResponseTest extends \PHPUnit_Framework_TestCase
 
     public function test500isError()
     {
-        $response_text = $this->readResponse('response_500');
-        $response = Response::fromString($response_text);
+        $responseTest = $this->readResponse('response_500');
+        $response = Response::fromString($responseTest);
 
         $this->assertEquals(500, $response->getStatusCode(), 'Response code is expected to be 500, but it\'s not.');
         $this->assertFalse($response->isClientError(), 'Response is an error, but isClientError() returned true');
@@ -321,34 +324,34 @@ class ResponseTest extends \PHPUnit_Framework_TestCase
 
     public function testToString()
     {
-        $response_str = $this->readResponse('response_404');
-        $response = Response::fromString($response_str);
+        $responseStr = $this->readResponse('response_404');
+        $response = Response::fromString($responseStr);
 
         $this->assertEquals(
-            strtolower(str_replace("\n", "\r\n", $response_str)),
+            strtolower(str_replace("\n", "\r\n", $responseStr)),
             strtolower($response->toString()),
             'Response convertion to string does not match original string'
         );
         $this->assertEquals(
-            strtolower(str_replace("\n", "\r\n", $response_str)),
-            strtolower((string)$response),
+            strtolower(str_replace("\n", "\r\n", $responseStr)),
+            strtolower((string) $response),
             'Response convertion to string does not match original string'
         );
     }
 
     public function testToStringGzip()
     {
-        $response_str = $this->readResponse('response_gzip');
-        $response = Response::fromString($response_str);
+        $responseStr = $this->readResponse('response_gzip');
+        $response = Response::fromString($responseStr);
 
         $this->assertEquals(
-            strtolower($response_str),
+            strtolower($responseStr),
             strtolower($response->toString()),
             'Response convertion to string does not match original string'
         );
         $this->assertEquals(
-            strtolower($response_str),
-            strtolower((string)$response),
+            strtolower($responseStr),
+            strtolower((string) $response),
             'Response convertion to string does not match original string'
         );
     }
@@ -375,16 +378,16 @@ class ResponseTest extends \PHPUnit_Framework_TestCase
 
     public function testUnknownCode()
     {
-        $response_str = $this->readResponse('response_unknown');
-        $this->setExpectedException('InvalidArgumentException', 'Invalid status code provided: "550"');
-        $response = Response::fromString($response_str);
+        $responseStr = $this->readResponse('response_unknown');
+        $this->expectException(InvalidArgumentException::class);
+        $this->expectExceptionMessage('Invalid status code provided: "550"');
+        $response = Response::fromString($responseStr);
         $this->assertEquals(550, $response->getStatusCode());
     }
 
     /**
      * Make sure a response with some leading whitespace in the response body
      * does not get modified (see ZF-1924)
-     *
      */
     public function testLeadingWhitespaceBody()
     {
@@ -401,7 +404,6 @@ class ResponseTest extends \PHPUnit_Framework_TestCase
      *
      * This can potentially fail on different PHP environments - for example
      * when mbstring.func_overload is set to overload strlen().
-     *
      */
     public function testMultibyteChunkedResponse()
     {
@@ -432,7 +434,7 @@ class ResponseTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals(1, $headers->count());
 
         $header = $headers->get('fake');
-        $this->assertInstanceOf('Zend\Http\Header\GenericHeader', $header);
+        $this->assertInstanceOf(GenericHeader::class, $header);
         $this->assertEquals('Fake', $header->getFieldName());
         $this->assertEquals('foo-bar', $header->getFieldValue());
     }
@@ -443,8 +445,8 @@ class ResponseTest extends \PHPUnit_Framework_TestCase
      */
     public function testPreventsCRLFAttackWhenDeserializing()
     {
-        $this->setExpectedException('Zend\Http\Exception\RuntimeException');
-        $response = Response::fromString(
+        $this->expectException(RuntimeException::class);
+        Response::fromString(
             "HTTP/1.1 200 OK\r\nAllow: POST\r\nX-Foo: This\ris\r\n\r\nCRLF\nInjection"
         );
     }

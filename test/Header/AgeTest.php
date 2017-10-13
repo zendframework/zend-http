@@ -1,23 +1,24 @@
 <?php
 /**
- * Zend Framework (http://framework.zend.com/)
- *
- * @link      http://github.com/zendframework/zf2 for the canonical source repository
- * @copyright Copyright (c) 2005-2015 Zend Technologies USA Inc. (http://www.zend.com)
- * @license   http://framework.zend.com/license/new-bsd New BSD License
+ * @see       https://github.com/zendframework/zend-http for the canonical source repository
+ * @copyright Copyright (c) 2005-2017 Zend Technologies USA Inc. (http://www.zend.com)
+ * @license   https://github.com/zendframework/zend-http/blob/master/LICENSE.md New BSD License
  */
 
 namespace ZendTest\Http\Header;
 
+use PHPUnit\Framework\TestCase;
 use Zend\Http\Header\Age;
+use Zend\Http\Header\Exception\InvalidArgumentException;
+use Zend\Http\Header\HeaderInterface;
 
-class AgeTest extends \PHPUnit_Framework_TestCase
+class AgeTest extends TestCase
 {
     public function testAgeFromStringCreatesValidAgeHeader()
     {
         $ageHeader = Age::fromString('Age: 12');
-        $this->assertInstanceOf('Zend\Http\Header\HeaderInterface', $ageHeader);
-        $this->assertInstanceOf('Zend\Http\Header\Age', $ageHeader);
+        $this->assertInstanceOf(HeaderInterface::class, $ageHeader);
+        $this->assertInstanceOf(Age::class, $ageHeader);
         $this->assertEquals('12', $ageHeader->getDeltaSeconds());
     }
 
@@ -54,7 +55,7 @@ class AgeTest extends \PHPUnit_Framework_TestCase
      */
     public function testPreventsCRLFAttackViaFromString()
     {
-        $this->setExpectedException('Zend\Http\Header\Exception\InvalidArgumentException');
+        $this->expectException(InvalidArgumentException::class);
         $header = Age::fromString("Age: 100\r\n\r\nevilContent");
     }
 
@@ -64,7 +65,7 @@ class AgeTest extends \PHPUnit_Framework_TestCase
      */
     public function testPreventsCRLFAttackViaConstructor()
     {
-        $this->setExpectedException('Zend\Http\Header\Exception\InvalidArgumentException');
+        $this->expectException(InvalidArgumentException::class);
         $header = new Age("100\r\n\r\nevilContent");
     }
 }

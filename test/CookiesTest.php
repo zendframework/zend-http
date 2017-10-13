@@ -1,33 +1,32 @@
 <?php
 /**
- * Zend Framework (http://framework.zend.com/)
- *
- * @link      http://github.com/zendframework/zf2 for the canonical source repository
- * @copyright Copyright (c) 2005-2015 Zend Technologies USA Inc. (http://www.zend.com)
- * @license   http://framework.zend.com/license/new-bsd New BSD License
+ * @see       https://github.com/zendframework/zend-http for the canonical source repository
+ * @copyright Copyright (c) 2005-2017 Zend Technologies USA Inc. (http://www.zend.com)
+ * @license   https://github.com/zendframework/zend-http/blob/master/LICENSE.md New BSD License
  */
 
 namespace ZendTest\Http;
 
-use Zend\Http\Header\SetCookie;
-use Zend\Http\Response;
-use Zend\Http\Headers;
+use PHPUnit\Framework\TestCase;
 use Zend\Http\Cookies;
+use Zend\Http\Header\SetCookie;
+use Zend\Http\Headers;
 use Zend\Http\PhpEnvironment\Request;
+use Zend\Http\Response;
 
-class CookiesTest extends \PHPUnit_Framework_TestCase
+class CookiesTest extends TestCase
 {
     public function testFromResponseInSetCookie()
     {
         $response = new Response();
         $headers = new Headers();
-        $header = new SetCookie("foo", "bar");
-        $header->setDomain("www.zend.com");
-        $header->setPath("/");
+        $header = new SetCookie('foo', 'bar');
+        $header->setDomain('www.zend.com');
+        $header->setPath('/');
         $headers->addHeader($header);
         $response->setHeaders($headers);
 
-        $response = Cookies::fromResponse($response, "http://www.zend.com");
+        $response = Cookies::fromResponse($response, 'http://www.zend.com');
         $this->assertSame($header, $response->getCookie('http://www.zend.com', 'foo'));
     }
 
@@ -35,13 +34,13 @@ class CookiesTest extends \PHPUnit_Framework_TestCase
     {
         $response = new Response();
         $headers = new Headers();
-        $header = new SetCookie("foo", "bar");
-        $header->setDomain("www.zend.com");
-        $header->setPath("/");
+        $header = new SetCookie('foo', 'bar');
+        $header->setDomain('www.zend.com');
+        $header->setPath('/');
         $headers->addHeader($header);
         $response->setHeaders($headers);
 
-        $response = Cookies::fromResponse($response, "http://www.zend.com");
+        $response = Cookies::fromResponse($response, 'http://www.zend.com');
         $this->assertSame($header, $response->getCookie('http://www.zend.com', 'foo'));
     }
 
@@ -50,8 +49,8 @@ class CookiesTest extends \PHPUnit_Framework_TestCase
         $_COOKIE = [
             'test' => [
                 'a' => 'value_a',
-                'b' => 'value_b'
-            ]
+                'b' => 'value_b',
+            ],
         ];
         $request = new Request();
         $fieldValue = $request->getCookie('test')->getFieldValue();
@@ -61,13 +60,13 @@ class CookiesTest extends \PHPUnit_Framework_TestCase
             'test' => [
                 'a' => [
                     'a1' => 'va1',
-                    'a2' => 'va2'
+                    'a2' => 'va2',
                 ],
                 'b' => [
                     'b1' => 'vb1',
-                    'b2' => 'vb2'
+                    'b2' => 'vb2',
                 ],
-            ]
+            ],
         ];
         $request = new Request();
         $fieldValue = $request->getCookie('test')->getFieldValue();
