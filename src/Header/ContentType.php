@@ -298,7 +298,7 @@ class ContentType implements HeaderInterface
         $type    = array_shift($parts);
         $subtype = array_shift($parts);
         $format  = $subtype;
-        if (strstr($subtype, '+')) {
+        if (false !== strpos($subtype, '+')) {
             $parts   = explode('+', $subtype, 2);
             $subtype = array_shift($parts);
             $format  = array_shift($parts);
