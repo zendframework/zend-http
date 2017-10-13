@@ -252,7 +252,7 @@ PHP's built-in <code>fsockopen()</code> function, and does not require any speci
 extensions or compilation flags.</p>
 <p>The <code>Socket</code> adapter allows several extra configuration options that can be set
 via either the client's constructor or <code>setOptions()</code> method:</p>
-<div class="table-responsive"><table>
+<div class="table-responsive"><div class="table-responsive"><table>
 <thead>
 <tr>
 <th>Parameter</th>
@@ -311,7 +311,7 @@ via either the client's constructor or <code>setOptions()</code> method:</p>
 <td><code>FALSE</code></td>
 </tr>
 </tbody>
-</table></div>
+</table></div></div>
 <blockquote>
 <h3 id="persistent-tcp-connections">Persistent TCP connections</h3>
 <p>Using persistent TCP connections can potentially speed up HTTP requests, but
@@ -429,7 +429,7 @@ instead of a direct connection to the target server. This allows usage of
 security or performance reasons.</p>
 <p>Using the <code>Proxy</code> adapter requires several additional client configuration
 parameters to be set, in addition to the default <code>adapter</code> option:</p>
-<div class="table-responsive"><table>
+<div class="table-responsive"><div class="table-responsive"><table>
 <thead>
 <tr>
 <th>Parameter</th>
@@ -470,7 +470,7 @@ parameters to be set, in addition to the default <code>adapter</code> option:</p
 <td><code>Zend\Http\Client::AUTH_BASIC</code> (default)</td>
 </tr>
 </tbody>
-</table></div>
+</table></div></div>
 <p><code>proxy_host</code> should always be set; if it is not set, the client will fall back
 to a direct connection using <code>Zend\Http\Client\Adapter\Socket</code>. <code>proxy_port</code>
 defaults to '8080'; if your proxy listens on a different port, you must set this
@@ -536,7 +536,7 @@ constants of the cURL extension. You can get access to the underling cURL handle
 by calling <code>$adapter-&gt;getHandle();</code></p>
 <p>The cURL configuration options that can be set via <code>setCurlOption($name, $value)</code>
 method are:</p>
-<div class="table-responsive"><table>
+<div class="table-responsive"><div class="table-responsive"><table>
 <thead>
 <tr>
 <th>Parameter</th>
@@ -577,7 +577,7 @@ method are:</p>
 <td><code>TRUE</code></td>
 </tr>
 </tbody>
-</table></div>
+</table></div></div>
 <h3 id="transfering-files-by-handle">Transfering files by handle</h3>
 <p>You can use cURL to transfer very large files over HTTP by filehandle.</p>
 <pre class="codehilite"><code class="language-php linenums">use Zend\Http\Client;
