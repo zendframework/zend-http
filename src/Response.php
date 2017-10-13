@@ -202,7 +202,7 @@ class Response extends AbstractMessage implements ResponseInterface
         $response->setStatusCode($matches['status']);
         $response->setReasonPhrase((isset($matches['reason']) ? $matches['reason'] : ''));
 
-        if (count($lines) === 0) {
+        if (empty($lines)) {
             return $response;
         }
 

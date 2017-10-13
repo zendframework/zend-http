@@ -121,7 +121,7 @@ class Request extends AbstractMessage implements RequestInterface
             $request->setVersion($matches['version']);
         }
 
-        if (count($lines) == 0) {
+        if (empty($lines)) {
             return $request;
         }
 

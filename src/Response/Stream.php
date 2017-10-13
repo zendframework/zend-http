@@ -160,7 +160,7 @@ class Stream extends Response
             $responseArray = explode("\n", $responseString);
         }
 
-        while (count($responseArray)) {
+        while (! empty($responseArray)) {
             $nextLine        = array_shift($responseArray);
             $headersString  .= $nextLine . "\n";
             $nextLineTrimmed = trim($nextLine);
@@ -191,7 +191,7 @@ class Stream extends Response
             $response->setStream($stream);
         }
 
-        if (count($responseArray)) {
+        if (! empty($responseArray)) {
             $response->content = implode("\n", $responseArray);
         }
 
