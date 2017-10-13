@@ -2,7 +2,7 @@
 
 All notable changes to this project will be documented in this file, in reverse chronological order by release.
 
-## 2.7.0 - TBD
+## 2.7.0 - 2017-10-13
 
 ### Added
 
@@ -29,25 +29,9 @@ All notable changes to this project will be documented in this file, in reverse 
 
 ### Fixed
 
-- Nothing.
-
-## 2.6.1 - TBD
-
-### Added
-
-- Nothing.
-
-### Deprecated
-
-- Nothing.
-
-### Removed
-
-- Nothing.
-
-### Fixed
-
-- Nothing.
+- [#130](https://github.com/zendframework/zend-http/pull/130) Fixed cURL
+  adapter not resetting headers from previous request when used with output
+  stream.
 
 ## 2.6.0 - 2017-01-31
 
