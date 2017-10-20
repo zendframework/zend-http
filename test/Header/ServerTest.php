@@ -53,7 +53,7 @@ class ServerTest extends TestCase
      */
     public function testPreventsCRLFAttackViaFromString()
     {
-        $this->expectException(InvalidArgumentException::class);
+        $this->setExpectedException(InvalidArgumentException::class);
         Server::fromString("Server: xxx\r\n\r\nevilContent");
     }
 
@@ -63,7 +63,7 @@ class ServerTest extends TestCase
      */
     public function testPreventsCRLFAttackViaConstructor()
     {
-        $this->expectException(InvalidArgumentException::class);
+        $this->setExpectedException(InvalidArgumentException::class);
         new Server("xxx\r\n\r\nevilContent");
     }
 }

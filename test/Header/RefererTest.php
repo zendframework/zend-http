@@ -74,7 +74,7 @@ class RefererTest extends TestCase
      */
     public function testCRLFAttack()
     {
-        $this->expectException(InvalidArgumentException::class);
+        $this->setExpectedException(InvalidArgumentException::class);
         Referer::fromString("Referer: http://www.example.com/\r\n\r\nevilContent");
     }
 }

@@ -53,7 +53,7 @@ class ProxyAuthorizationTest extends TestCase
      */
     public function testPreventsCRLFAttackViaFromString()
     {
-        $this->expectException(InvalidArgumentException::class);
+        $this->setExpectedException(InvalidArgumentException::class);
         ProxyAuthorization::fromString("Proxy-Authorization: xxx\r\n\r\nevilContent");
     }
 
@@ -63,7 +63,7 @@ class ProxyAuthorizationTest extends TestCase
      */
     public function testPreventsCRLFAttackViaConstructor()
     {
-        $this->expectException(InvalidArgumentException::class);
+        $this->setExpectedException(InvalidArgumentException::class);
         new ProxyAuthorization("xxx\r\n\r\nevilContent");
     }
 }

@@ -52,7 +52,7 @@ class ExpiresTest extends TestCase
      */
     public function testPreventsCRLFAttackViaFromString()
     {
-        $this->expectException(InvalidArgumentException::class);
+        $this->setExpectedException(InvalidArgumentException::class);
         Expires::fromString("Expires: Sun, 06 Nov 1994 08:49:37 GMT\r\n\r\nevilContent");
     }
 

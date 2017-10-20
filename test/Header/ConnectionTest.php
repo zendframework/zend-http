@@ -60,7 +60,7 @@ class ConnectionTest extends TestCase
      */
     public function testPreventsCRLFAttackViaFromString()
     {
-        $this->expectException(InvalidArgumentException::class);
+        $this->setExpectedException(InvalidArgumentException::class);
         Connection::fromString("Connection: close\r\n\r\nevilContent");
     }
 
@@ -71,7 +71,7 @@ class ConnectionTest extends TestCase
     public function testPreventsCRLFAttackViaSetters()
     {
         $header = new Connection();
-        $this->expectException(InvalidArgumentException::class);
+        $this->setExpectedException(InvalidArgumentException::class);
         $header->setValue("close\r\n\r\nevilContent");
     }
 }

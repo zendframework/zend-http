@@ -53,7 +53,7 @@ class WWWAuthenticateTest extends TestCase
      */
     public function testPreventsCRLFAttackViaFromString()
     {
-        $this->expectException(InvalidArgumentException::class);
+        $this->setExpectedException(InvalidArgumentException::class);
         $header = WWWAuthenticate::fromString("WWW-Authenticate: xxx\r\n\r\nevilContent");
     }
 
@@ -63,7 +63,7 @@ class WWWAuthenticateTest extends TestCase
      */
     public function testPreventsCRLFAttackViaConstructor()
     {
-        $this->expectException(InvalidArgumentException::class);
+        $this->setExpectedException(InvalidArgumentException::class);
         $header = new WWWAuthenticate("xxx\r\n\r\nevilContent");
     }
 }

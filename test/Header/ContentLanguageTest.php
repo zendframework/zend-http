@@ -53,7 +53,7 @@ class ContentLanguageTest extends TestCase
      */
     public function testPreventsCRLFAttackViaFromString()
     {
-        $this->expectException(InvalidArgumentException::class);
+        $this->setExpectedException(InvalidArgumentException::class);
         ContentLanguage::fromString("Content-Language: xxx\r\n\r\nevilContent");
     }
 
@@ -63,7 +63,7 @@ class ContentLanguageTest extends TestCase
      */
     public function testPreventsCRLFAttackViaConstructor()
     {
-        $this->expectException(InvalidArgumentException::class);
+        $this->setExpectedException(InvalidArgumentException::class);
         new ContentLanguage("xxx\r\n\r\nevilContent");
     }
 }

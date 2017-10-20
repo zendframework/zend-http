@@ -53,7 +53,7 @@ class MaxForwardsTest extends TestCase
      */
     public function testPreventsCRLFAttackViaFromString()
     {
-        $this->expectException(InvalidArgumentException::class);
+        $this->setExpectedException(InvalidArgumentException::class);
         MaxForwards::fromString("Max-Forwards: xxx\r\n\r\nevilContent");
     }
 
@@ -63,7 +63,7 @@ class MaxForwardsTest extends TestCase
      */
     public function testPreventsCRLFAttackViaConstructorValue()
     {
-        $this->expectException(InvalidArgumentException::class);
+        $this->setExpectedException(InvalidArgumentException::class);
         new MaxForwards("xxx\r\n\r\nevilContent");
     }
 }

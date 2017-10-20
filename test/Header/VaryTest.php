@@ -53,7 +53,7 @@ class VaryTest extends TestCase
      */
     public function testPreventsCRLFAttackViaFromString()
     {
-        $this->expectException(InvalidArgumentException::class);
+        $this->setExpectedException(InvalidArgumentException::class);
         Vary::fromString("Vary: xxx\r\n\r\nevilContent");
     }
 
@@ -63,7 +63,7 @@ class VaryTest extends TestCase
      */
     public function testPreventsCRLFAttackViaConstructor()
     {
-        $this->expectException(InvalidArgumentException::class);
+        $this->setExpectedException(InvalidArgumentException::class);
         new Vary("xxx\r\n\r\nevilContent");
     }
 }

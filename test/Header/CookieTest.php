@@ -75,7 +75,7 @@ class CookieTest extends TestCase
      */
     public function testPreventsCRLFAttackViaFromString()
     {
-        $this->expectException(InvalidArgumentException::class);
+        $this->setExpectedException(InvalidArgumentException::class);
         Cookie::fromString("Cookie: foo=bar\r\n\r\nevilContent");
     }
 

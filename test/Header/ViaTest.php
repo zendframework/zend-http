@@ -53,7 +53,7 @@ class ViaTest extends TestCase
      */
     public function testPreventsCRLFAttackViaFromString()
     {
-        $this->expectException(InvalidArgumentException::class);
+        $this->setExpectedException(InvalidArgumentException::class);
         Via::fromString("Via: xxx\r\n\r\nevilContent");
     }
 
@@ -63,7 +63,7 @@ class ViaTest extends TestCase
      */
     public function testPreventsCRLFAttackViaConstructor()
     {
-        $this->expectException(InvalidArgumentException::class);
+        $this->setExpectedException(InvalidArgumentException::class);
         new Via("xxx\r\n\r\nevilContent");
     }
 }

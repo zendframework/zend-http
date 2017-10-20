@@ -55,7 +55,7 @@ class AgeTest extends TestCase
      */
     public function testPreventsCRLFAttackViaFromString()
     {
-        $this->expectException(InvalidArgumentException::class);
+        $this->setExpectedException(InvalidArgumentException::class);
         $header = Age::fromString("Age: 100\r\n\r\nevilContent");
     }
 
@@ -65,7 +65,7 @@ class AgeTest extends TestCase
      */
     public function testPreventsCRLFAttackViaConstructor()
     {
-        $this->expectException(InvalidArgumentException::class);
+        $this->setExpectedException(InvalidArgumentException::class);
         $header = new Age("100\r\n\r\nevilContent");
     }
 }

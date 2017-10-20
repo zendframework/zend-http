@@ -50,7 +50,7 @@ class OriginTest extends TestCase
      */
     public function testPreventsCRLFAttackViaFromString()
     {
-        $this->expectException(InvalidUriPartException::class);
+        $this->setExpectedException(InvalidUriPartException::class);
         Origin::fromString("Origin: http://zend.org\r\n\r\nevilContent");
     }
 
@@ -59,7 +59,7 @@ class OriginTest extends TestCase
      */
     public function testPreventsCRLFAttackViaConstructor()
     {
-        $this->expectException(InvalidArgumentException::class);
+        $this->setExpectedException(InvalidArgumentException::class);
         new Origin("http://zend.org\r\n\r\nevilContent");
     }
 }

@@ -53,7 +53,7 @@ class ContentEncodingTest extends TestCase
      */
     public function testPreventsCRLFAttackViaFromString()
     {
-        $this->expectException(InvalidArgumentException::class);
+        $this->setExpectedException(InvalidArgumentException::class);
         ContentEncoding::fromString("Content-Encoding: xxx\r\n\r\nevilContent");
     }
 
@@ -63,7 +63,7 @@ class ContentEncodingTest extends TestCase
      */
     public function testPreventsCRLFAttackViaConstructor()
     {
-        $this->expectException(InvalidArgumentException::class);
+        $this->setExpectedException(InvalidArgumentException::class);
         new ContentEncoding("xxx\r\n\r\nevilContent");
     }
 }

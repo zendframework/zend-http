@@ -69,8 +69,7 @@ class HeadersTest extends TestCase
 
     public function testHeadersFromStringFactoryThrowsExceptionOnMalformedHeaderLine()
     {
-        $this->expectException(RuntimeException::class);
-        $this->expectExceptionMessage('does not match');
+        $this->setExpectedException(RuntimeException::class, 'does not match');
         Headers::fromString("Fake = foo-bar\r\n\r\n");
     }
 
@@ -140,8 +139,7 @@ class HeadersTest extends TestCase
 
     public function testHeadersAddHeaderLineThrowsExceptionOnMissingFieldValue()
     {
-        $this->expectException(InvalidArgumentException::class);
-        $this->expectExceptionMessage('without a field');
+        $this->setExpectedException(InvalidArgumentException::class, 'without a field');
         $headers = new Headers();
         $headers->addHeaderLine('Foo');
     }
@@ -186,8 +184,7 @@ class HeadersTest extends TestCase
 
     public function testHeadersAddHeadersThrowsExceptionOnInvalidArguments()
     {
-        $this->expectException(InvalidArgumentException::class);
-        $this->expectExceptionMessage('Expected array or Trav');
+        $this->setExpectedException(InvalidArgumentException::class, 'Expected array or Trav');
         $headers = new Headers();
         $headers->addHeaders('foo');
     }
@@ -295,7 +292,7 @@ class HeadersTest extends TestCase
      */
     public function testCRLFAttack()
     {
-        $this->expectException(RuntimeException::class);
+        $this->setExpectedException(RuntimeException::class);
         Headers::fromString("Fake: foo-bar\r\n\r\nevilContent");
     }
 }

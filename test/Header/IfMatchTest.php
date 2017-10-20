@@ -53,7 +53,7 @@ class IfMatchTest extends TestCase
      */
     public function testPreventsCRLFAttackViaFromString()
     {
-        $this->expectException(InvalidArgumentException::class);
+        $this->setExpectedException(InvalidArgumentException::class);
         IfMatch::fromString("If-Match: xxx\r\n\r\nevilContent");
     }
 
@@ -63,7 +63,7 @@ class IfMatchTest extends TestCase
      */
     public function testPreventsCRLFAttackViaConstructor()
     {
-        $this->expectException(InvalidArgumentException::class);
+        $this->setExpectedException(InvalidArgumentException::class);
         new IfMatch("xxx\r\n\r\nevilContent");
     }
 }

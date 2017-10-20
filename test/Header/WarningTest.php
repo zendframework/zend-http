@@ -53,7 +53,7 @@ class WarningTest extends TestCase
      */
     public function testPreventsCRLFAttackViaFromString()
     {
-        $this->expectException(InvalidArgumentException::class);
+        $this->setExpectedException(InvalidArgumentException::class);
         Warning::fromString("Warning: xxx\r\n\r\nevilContent");
     }
 
@@ -63,7 +63,7 @@ class WarningTest extends TestCase
      */
     public function testPreventsCRLFAttackViaConstructor()
     {
-        $this->expectException(InvalidArgumentException::class);
+        $this->setExpectedException(InvalidArgumentException::class);
         new Warning("xxx\r\n\r\nevilContent");
     }
 }

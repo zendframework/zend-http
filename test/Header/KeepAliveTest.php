@@ -53,7 +53,7 @@ class KeepAliveTest extends TestCase
      */
     public function testPreventsCRLFAttackViaFromString()
     {
-        $this->expectException(InvalidArgumentException::class);
+        $this->setExpectedException(InvalidArgumentException::class);
         KeepAlive::fromString("Keep-Alive: xxx\r\n\r\nevilContent");
     }
 
@@ -63,7 +63,7 @@ class KeepAliveTest extends TestCase
      */
     public function testPreventsCRLFAttackViaConstructor()
     {
-        $this->expectException(InvalidArgumentException::class);
+        $this->setExpectedException(InvalidArgumentException::class);
         new KeepAlive("xxx\r\n\r\nevilContent");
     }
 }

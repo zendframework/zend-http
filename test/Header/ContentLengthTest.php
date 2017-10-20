@@ -53,7 +53,7 @@ class ContentLengthTest extends TestCase
      */
     public function testPreventsCRLFAttackViaFromString()
     {
-        $this->expectException(InvalidArgumentException::class);
+        $this->setExpectedException(InvalidArgumentException::class);
         ContentLength::fromString("Content-Length: xxx\r\n\r\nevilContent");
     }
 
@@ -63,7 +63,7 @@ class ContentLengthTest extends TestCase
      */
     public function testPreventsCRLFAttackViaConstructor()
     {
-        $this->expectException(InvalidArgumentException::class);
+        $this->setExpectedException(InvalidArgumentException::class);
         new ContentLength("Content-Length: xxx\r\n\r\nevilContent");
     }
 

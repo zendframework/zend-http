@@ -62,8 +62,7 @@ class ResponseTest extends TestCase
     public function testResponseSetStatusCodeThrowsExceptionOnInvalidCode()
     {
         $response = new Response();
-        $this->expectException(InvalidArgumentException::class);
-        $this->expectExceptionMessage('Invalid status code');
+        $this->setExpectedException(InvalidArgumentException::class, 'Invalid status code');
         $response->setStatusCode(606);
     }
 
@@ -85,8 +84,7 @@ class ResponseTest extends TestCase
     public function testResponseSetCustomStatusCodeThrowsExceptionOnInvalidCode()
     {
         $response = new Response();
-        $this->expectException(InvalidArgumentException::class);
-        $this->expectExceptionMessage('Invalid status code provided: "foo"');
+        $this->setExpectedException(InvalidArgumentException::class, 'Invalid status code provided: "foo"');
 
         $response->setStatusCode('foo');
     }
@@ -379,8 +377,7 @@ class ResponseTest extends TestCase
     public function testUnknownCode()
     {
         $responseStr = $this->readResponse('response_unknown');
-        $this->expectException(InvalidArgumentException::class);
-        $this->expectExceptionMessage('Invalid status code provided: "550"');
+        $this->setExpectedException(InvalidArgumentException::class, 'Invalid status code provided: "550"');
         $response = Response::fromString($responseStr);
         $this->assertEquals(550, $response->getStatusCode());
     }
@@ -445,7 +442,7 @@ class ResponseTest extends TestCase
      */
     public function testPreventsCRLFAttackWhenDeserializing()
     {
-        $this->expectException(RuntimeException::class);
+        $this->setExpectedException(RuntimeException::class);
         Response::fromString(
             "HTTP/1.1 200 OK\r\nAllow: POST\r\nX-Foo: This\ris\r\n\r\nCRLF\nInjection"
         );

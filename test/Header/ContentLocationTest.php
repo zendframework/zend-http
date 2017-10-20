@@ -66,7 +66,7 @@ class ContentLocationTest extends TestCase
      */
     public function testPreventsCRLFAttackViaFromString()
     {
-        $this->expectException(InvalidArgumentException::class);
+        $this->setExpectedException(InvalidArgumentException::class);
         ContentLocation::fromString("Content-Location: /path/to\r\n\r\nevilContent");
     }
 }

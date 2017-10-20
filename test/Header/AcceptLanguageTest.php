@@ -111,7 +111,7 @@ class AcceptLanguageTest extends TestCase
      */
     public function testPreventsCRLFAttackViaFromString()
     {
-        $this->expectException(InvalidArgumentException::class);
+        $this->setExpectedException(InvalidArgumentException::class);
         $header = AcceptLanguage::fromString("Accept-Language: da\r\n\r\nevilContent");
     }
 
@@ -122,8 +122,7 @@ class AcceptLanguageTest extends TestCase
     public function testPreventsCRLFAttackViaSetters()
     {
         $header = new AcceptLanguage();
-        $this->expectException(InvalidArgumentException::class);
-        $this->expectExceptionMessage('valid type');
+        $this->setExpectedException(InvalidArgumentException::class, 'valid type');
 
         $header->addLanguage("\nen\r-\r\nus");
     }

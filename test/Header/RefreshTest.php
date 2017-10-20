@@ -53,7 +53,7 @@ class RefreshTest extends TestCase
      */
     public function testPreventsCRLFAttackViaFromString()
     {
-        $this->expectException(InvalidArgumentException::class);
+        $this->setExpectedException(InvalidArgumentException::class);
         Refresh::fromString("Refresh: xxx\r\n\r\nevilContent");
     }
 
@@ -63,7 +63,7 @@ class RefreshTest extends TestCase
      */
     public function testPreventsCRLFAttackViaConstructorValue()
     {
-        $this->expectException(InvalidArgumentException::class);
+        $this->setExpectedException(InvalidArgumentException::class);
         new Refresh("xxx\r\n\r\nevilContent");
     }
 }

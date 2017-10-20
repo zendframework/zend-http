@@ -165,8 +165,7 @@ class SocketTest extends CommonHttpTests
      */
     public function testSetConfigInvalidConfig($config)
     {
-        $this->expectException(InvalidArgumentException::class);
-        $this->expectExceptionMessage('Array or Zend\Config object expected');
+        $this->setExpectedException(InvalidArgumentException::class, 'Array or Zend\Config object expected');
 
         $this->_adapter->setOptions($config);
     }
@@ -225,8 +224,10 @@ class SocketTest extends CommonHttpTests
      */
     public function testSetInvalidContextOptions($invalid)
     {
-        $this->expectException(InvalidArgumentException::class);
-        $this->expectExceptionMessage('Expecting either a stream context resource or array');
+        $this->setExpectedException(
+            InvalidArgumentException::class,
+            'Expecting either a stream context resource or array'
+        );
 
         $adapterClass = $this->config['adapter'];
         $adapter = new $adapterClass();

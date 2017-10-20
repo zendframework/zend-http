@@ -53,7 +53,7 @@ class ContentDispositionTest extends TestCase
      */
     public function testPreventsCRLFAttackViaFromString()
     {
-        $this->expectException(InvalidArgumentException::class);
+        $this->setExpectedException(InvalidArgumentException::class);
         ContentDisposition::fromString("Content-Disposition: xxx\r\n\r\nevilContent");
     }
 
@@ -63,7 +63,7 @@ class ContentDispositionTest extends TestCase
      */
     public function testPreventsCRLFAttackViaConstructor()
     {
-        $this->expectException(InvalidArgumentException::class);
+        $this->setExpectedException(InvalidArgumentException::class);
         new ContentDisposition("xxx\r\n\r\nevilContent");
     }
 }

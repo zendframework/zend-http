@@ -18,7 +18,7 @@ class AcceptTest extends TestCase
 {
     public function testInvalidHeaderLine()
     {
-        $this->expectException(InvalidArgumentException::class);
+        $this->setExpectedException(InvalidArgumentException::class);
         Accept::fromString('');
     }
 
@@ -60,7 +60,7 @@ class AcceptTest extends TestCase
             $acceptHeader->toString()
         );
 
-        $this->expectException(InvalidArgumentException::class);
+        $this->setExpectedException(InvalidArgumentException::class);
         $acceptHeader->addMediaType('\\', 0.9);
     }
 
@@ -464,7 +464,7 @@ class AcceptTest extends TestCase
      */
     public function testPreventsCRLFAttackViaFromString()
     {
-        $this->expectException(InvalidArgumentException::class);
+        $this->setExpectedException(InvalidArgumentException::class);
         Accept::fromString("Accept: application/text\r\n\r\nevilContent");
     }
 

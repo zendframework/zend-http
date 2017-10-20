@@ -53,7 +53,7 @@ class UpgradeTest extends TestCase
      */
     public function testPreventsCRLFAttackViaFromString()
     {
-        $this->expectException(InvalidArgumentException::class);
+        $this->setExpectedException(InvalidArgumentException::class);
         Upgrade::fromString("Upgrade: xxx\r\n\r\nevilContent");
     }
 
@@ -63,7 +63,7 @@ class UpgradeTest extends TestCase
      */
     public function testPreventsCRLFAttackViaConstructor()
     {
-        $this->expectException(InvalidArgumentException::class);
+        $this->setExpectedException(InvalidArgumentException::class);
         new Upgrade("xxx\r\n\r\nevilContent");
     }
 }

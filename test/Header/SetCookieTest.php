@@ -436,7 +436,7 @@ class SetCookieTest extends TestCase
      */
     public function testPreventsCRLFAttackViaFromString()
     {
-        $this->expectException(InvalidArgumentException::class);
+        $this->setExpectedException(InvalidArgumentException::class);
         SetCookie::fromString("Set-Cookie: leo_auth_token=example;\r\n\r\nevilContent");
     }
 
@@ -478,7 +478,7 @@ class SetCookieTest extends TestCase
     public function testPreventsCRLFAttackViaSetters($method, $value)
     {
         $header = new SetCookie();
-        $this->expectException(InvalidArgumentException::class);
+        $this->setExpectedException(InvalidArgumentException::class);
         $header->{$method}($value);
     }
 

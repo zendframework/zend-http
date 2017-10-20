@@ -60,7 +60,7 @@ class RetryAfterTest extends TestCase
      */
     public function testPreventsCRLFAttackViaFromString()
     {
-        $this->expectException(InvalidArgumentException::class);
+        $this->setExpectedException(InvalidArgumentException::class);
         RetryAfter::fromString("Retry-After: 10\r\n\r\nevilContent");
     }
 }

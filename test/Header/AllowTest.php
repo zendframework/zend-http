@@ -90,8 +90,7 @@ class AllowTest extends TestCase
      */
     public function testPreventsCRLFAttackViaFromString()
     {
-        $this->expectException(InvalidArgumentException::class);
-        $this->expectExceptionMessage('Invalid header value detected');
+        $this->setExpectedException(InvalidArgumentException::class, 'Invalid header value detected');
 
         Allow::fromString("Allow: GET\r\n\r\nevilContent");
     }
@@ -115,8 +114,7 @@ class AllowTest extends TestCase
     public function testPreventsCRLFAttackViaAllowMethods($methods)
     {
         $header = new Allow();
-        $this->expectException(InvalidArgumentException::class);
-        $this->expectExceptionMessage('valid method');
+        $this->setExpectedException(InvalidArgumentException::class, 'valid method');
 
         $header->allowMethods($methods);
     }
@@ -132,8 +130,7 @@ class AllowTest extends TestCase
     public function testPreventsCRLFAttackViaDisallowMethods($methods)
     {
         $header = new Allow();
-        $this->expectException(InvalidArgumentException::class);
-        $this->expectExceptionMessage('valid method');
+        $this->setExpectedException(InvalidArgumentException::class, 'valid method');
 
         $header->disallowMethods($methods);
     }

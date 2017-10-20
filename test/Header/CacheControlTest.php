@@ -106,7 +106,7 @@ class CacheControlTest extends TestCase
      */
     public function testPreventsCRLFAttackViaFromString()
     {
-        $this->expectException(InvalidArgumentException::class);
+        $this->setExpectedException(InvalidArgumentException::class);
         CacheControl::fromString("Cache-Control: xxx\r\n\r\n");
     }
 
@@ -117,7 +117,7 @@ class CacheControlTest extends TestCase
     public function testProtectsFromCRLFAttackViaSetters()
     {
         $header = new CacheControl();
-        $this->expectException(InvalidArgumentException::class);
+        $this->setExpectedException(InvalidArgumentException::class);
         $header->addDirective("\rsome\r\ninvalid\nkey", "\ra\r\nCRLF\ninjection");
     }
 }

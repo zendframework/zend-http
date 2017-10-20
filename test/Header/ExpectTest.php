@@ -53,7 +53,7 @@ class ExpectTest extends TestCase
      */
     public function testPreventsCRLFAttackViaFromString()
     {
-        $this->expectException(InvalidArgumentException::class);
+        $this->setExpectedException(InvalidArgumentException::class);
         Expect::fromString("Expect: xxx\r\n\r\nevilContent");
     }
 
@@ -63,7 +63,7 @@ class ExpectTest extends TestCase
      */
     public function testPreventsCRLFAttackViaConstructor()
     {
-        $this->expectException(InvalidArgumentException::class);
+        $this->setExpectedException(InvalidArgumentException::class);
         new Expect("xxx\r\n\r\nevilContent");
     }
 }

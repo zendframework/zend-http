@@ -190,13 +190,15 @@ class Response extends AbstractMessage implements ResponseInterface
         $firstLine = array_shift($lines);
 
         $response = new static();
+        $response->parseStatusLine($firstLine);
 
-        try {
-            $response->parseStatusLine($firstLine);
-        } catch (RuntimeException $e) {
-            array_shift($lines); // skip next empty line
-            $firstLine = array_shift($lines); // and try again
-            $response->parseStatusLine($firstLine);
+        /**
+         * @link https://tools.ietf.org/html/rfc7231#section-6.2.1
+         */
+        if ($response->statusCode === static::STATUS_CODE_100) {
+            $next = array_shift($lines); // take next line
+            $next = !empty($next) ? $next : array_shift($lines); // take next or skip if empty
+            $response->parseStatusLine($next);
         }
 
         if (count($lines) === 0) {
@@ -253,11 +255,6 @@ class Response extends AbstractMessage implements ResponseInterface
             throw new Exception\InvalidArgumentException(
                 'A valid response status line was not found in the provided string'
             );
-        }
-
-        // check for `continue` status
-        if (static::STATUS_CODE_100 === (int)$matches['status']) {
-            throw new Exception\RuntimeException('Continue status found.');
         }
 
         $this->version = $matches['version'];

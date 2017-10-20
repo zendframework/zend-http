@@ -50,8 +50,7 @@ class TestAdapterTest extends TestCase
      */
     public function testSetConfigThrowsOnInvalidConfig()
     {
-        $this->expectException(InvalidArgumentException::class);
-        $this->expectExceptionMessage('Array or Traversable object expected');
+        $this->setExpectedException(InvalidArgumentException::class, 'Array or Traversable object expected');
 
         $this->adapter->setOptions('foo');
     }

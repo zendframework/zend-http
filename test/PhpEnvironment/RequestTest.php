@@ -765,8 +765,7 @@ class RequestTest extends TestCase
     {
         $_SERVER['REQUEST_METHOD'] = 'xcustomx';
 
-        $this->expectException(InvalidArgumentException::class);
-        $this->expectExceptionMessage('Invalid HTTP method passed');
+        $this->setExpectedException(InvalidArgumentException::class, 'Invalid HTTP method passed');
 
         new Request(false);
     }
