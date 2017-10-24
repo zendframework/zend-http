@@ -7,7 +7,6 @@
 
 namespace Zend\Http;
 
-use Zend\Uri\Exception as UriException;
 use Zend\Uri\Http as Http;
 
 class HttpsUri extends Http

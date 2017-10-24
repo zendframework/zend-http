@@ -325,10 +325,15 @@ class RequestTest extends TestCase
 
     public function testRequestUriRespectsXForwardedProtoHeader()
     {
-        $request = new Request();
+        $request = Request::fromString("GET /foo HTTP/1.1");
         $request->setUri("http://someurl.test");
-        $request->getHeaders()->addHeaderLine('X_FORWARDED_PROTO', 'https');
+
+        $headers = new Headers();
+        $h = new GenericHeader('X-Forwarded-Proto', 'https');
+        $headers->addHeader($h);
+        $request->setHeaders($headers);
         $this->assertEquals('https', $request->getUri()->getScheme());
+        echo "End of my test";
     }
 
     public function testRequestUriSchemeWithoutXForwardedProtoHeader()

@@ -227,11 +227,12 @@ class Request extends AbstractMessage implements RequestInterface
     public function getUri()
     {
         if ($this->uri === null || is_string($this->uri)) {
-            if ($this->getHeader('x-forwarded-proto') === 'https') {
-                $this->uri = new HttpsUri($this->uri);
-            } else {
-                $this->uri = new HttpUri($this->uri);
-            }
+            $this->uri = new HttpUri($this->uri);
+        }
+
+        $headers = $this->getHeaders()->toArray();
+        if (array_key_exists('X-Forwarded-Proto', $headers) && $headers['X-Forwarded-Proto'] === 'https') {
+            $this->uri = new HttpsUri($this->uri);
         }
         return $this->uri;
     }
