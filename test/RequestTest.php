@@ -323,6 +323,21 @@ class RequestTest extends TestCase
         $this->assertEquals('foo-bar', $header->getFieldValue());
     }
 
+    public function testRequestUriRespectsXForwardedProtoHeader()
+    {
+        $request = new Request();
+        $request->setUri("http://someurl.test");
+        $request->getHeaders()->addHeaderLine('X_FORWARDED_PROTO', 'https');
+        $this->assertEquals('https', $request->getUri()->getScheme());
+    }
+
+    public function testRequestUriSchemeWithoutXForwardedProtoHeader()
+    {
+        $request = new Request();
+        $request->setUri("http://someurl.test");
+        $this->assertEquals('http', $request->getUri()->getScheme());
+    }
+
     /**
      * @see http://en.wikipedia.org/wiki/HTTP_response_splitting
      * @group ZF2015-04
