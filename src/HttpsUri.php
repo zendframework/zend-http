@@ -21,4 +21,3 @@ class HttpsUri extends Http
         return 'https';
     }
 }
-
