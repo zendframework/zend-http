@@ -89,30 +89,6 @@ All notable changes to this project will be documented in this file, in reverse 
 
 ### Fixed
 
-- [#120](https://github.com/zendframework/zend-http/pull/120) Fixed cURL
-  adapter not resetting headers from previous request when used with output
-  stream.
-
-## 2.6.0 - 2017-01-31
-
-### Added
-- [#99](https://github.com/zendframework/zend-http/pull/99) added
-  TimeoutException for cURL adapter.
-- [#98](https://github.com/zendframework/zend-http/pull/98) added connection
-  timeout (`connecttimeout`) for cURL and Socket adapters.
-- [#97](https://github.com/zendframework/zend-http/pull/97) added support to
-  `sslcafile` and `sslcapath` to cURL adapter.
-
-### Deprecated
-
-- Nothing.
-
-### Removed
-
-- Nothing.
-
-### Fixed
-
 - Nothing.
 
 ## 2.5.6 - 2017-01-31
