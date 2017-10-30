@@ -36,7 +36,8 @@ All notable changes to this project will be documented in this file, in reverse 
 
 ### Fixed
 
-- Nothing.
+- [#133](https://github.com/zendframework/zend-http/pull/133) Adds back missing
+  sprintf placeholder in CacheControl exception message
 
 ## 2.7.0 - 2017-10-13
 
