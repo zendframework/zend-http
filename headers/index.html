@@ -4,35 +4,15 @@
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">  
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="zend-http">  
     <link rel="shortcut icon" href="../img/favicon.ico">
 
     <title>Headers - zend-http</title>
 
-    <link href="../css/bootstrap-custom.min.css" rel="stylesheet">
-    <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="//cdn.jsdelivr.net/font-hack/2.018/css/hack.min.css">
-    <link href="//fonts.googleapis.com/css?family=PT+Sans:400,400italic,700,700italic&subset=latin-ext,latin" rel="stylesheet" type="text/css">
-    <link href="//fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,700italic,400,300,600,700&subset=latin-ext,latin" rel="stylesheet" type="text/css">
-    <link href="//fonts.googleapis.com/css?family=Libre+Baskerville:400,400italic,700&subset=latin,latin-ext" rel="stylesheet" type="text/css">
-    <link href="../css/base.css" rel="stylesheet">
-    <link href="../css/zf.css" rel="stylesheet">
-    <link href="../css/prism-zf.css" rel="stylesheet">
-
-    <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
-    <!--[if lt IE 9]>
-            <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
-            <script src="https://oss.maxcdn.com/libs/respond.js/1.3.0/respond.min.js"></script>
-        <![endif]-->
-
-    <script src="https://ajax.googleapis.com/ajax/libs/webfont/1.5.18/webfont.js"></script>
-    <script>
-    WebFont.load({
-        google: {
-            families: ['Open Sans', 'PT Sans']
-        }
-    });
-    </script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="../css/styles-482aa2add1.css">
 
     
 </head>
@@ -56,8 +36,8 @@
 
             <!-- Main title -->
             <span class="navbar-brand">
-              <a class="logo-link" href="http://framework.zend.com" data-toggle="tooltip" data-placement="bottom" title="Zend Framework"><img src="../img/zf-logo-mark.png" height="28" alt="Zend Framework" /></a>
-              <a href="..">zend-http</a>
+                <a class="logo-link" href="https://framework.zend.com/" data-toggle="tooltip" data-placement="bottom" title="Go to the ZF homepage"><img src="../img/zf-logo-mark.svg" height="28" alt="Zend Framework" /></a>
+                <a href="..">zend-http</a>
             </span>
         </div>
 
@@ -176,7 +156,7 @@
 </div>
 
     <!-- content:begin -->
-    <div class="container">
+    <div id="page-top" class="container docs">
         
         <div class="col-md-3"><div class="bs-sidebar hidden-print affix well" role="complementary">
     <ul class="nav bs-sidenav">
@@ -218,11 +198,11 @@
         <div class="col-md-9" role="main">
 
 <ol class="breadcrumb" role="navigation" aria-label="breadcrumbs navigation">
-  <li><a href="..">Docs</a> &raquo;</li>
+  <li><a href="..">zend-http</a></li>
   
     
       
-        <li>Reference &raquo;</li>
+        <li>Reference</li>
       
     
   
@@ -244,7 +224,7 @@ header type.</p>
 <h2 id="quick-start">Quick Start</h2>
 <p>The quickest way to get started interacting with header objects is by retrieving
 an already populated <code>Headers</code> container from a request or response instance.</p>
-<pre class="codehilite"><code class="language-php linenums">// $client is an instance of Zend\Http\Client
+<pre class="codehilite"><code class="language-php">// $client is an instance of Zend\Http\Client
 
 // You can retrieve the request headers by first retrieving
 // the Request object and then calling getHeaders on it
@@ -254,7 +234,7 @@ $requestHeaders  = $client-&gt;getRequest()-&gt;getHeaders();
 $responseHeaders = $client-&gt;getResponse()-&gt;getHeaders();</code></pre>
 
 <p><code>Zend\Http\Headers</code> can also extract headers from a string:</p>
-<pre class="codehilite"><code class="language-php linenums">use Zend\Http\Headers;
+<pre class="codehilite"><code class="language-php">use Zend\Http\Headers;
 
 $headerString = &lt;&lt;&lt;EOB
 Host: www.example.com
@@ -281,7 +261,7 @@ brevity, we map the following references to the following classes or namespaces:
 <li><code>Headers</code>: <code>Zend\Http\Headers</code></li>
 <li><code>PluginClassLocator</code>: <code>Zend\Loader\PluginClassLocator</code></li>
 </ul>
-<div class="table-responsive"><div class="table-responsive"><table>
+<div class="table-responsive"><table>
 <thead>
 <tr>
 <th>Method signature</th>
@@ -366,10 +346,10 @@ brevity, we map the following references to the following classes or namespaces:
 <td>By calling this, it will force parsing and loading of all headers, ensuring <code>count()</code> is accurate.</td>
 </tr>
 </tbody>
-</table></div></div>
+</table></div>
 <h2 id="headerinterface-methods">HeaderInterface Methods</h2>
 <p>The following are methods available to all <code>HeaderInterface</code> implementations.</p>
-<div class="table-responsive"><div class="table-responsive"><table>
+<div class="table-responsive"><table>
 <thead>
 <tr>
 <th>Method signature</th>
@@ -394,7 +374,7 @@ brevity, we map the following references to the following classes or namespaces:
 <td>Cast the header to a well-formed HTTP header line (<code>Name: Value</code>).</td>
 </tr>
 </tbody>
-</table></div></div>
+</table></div>
 <h2 id="abstractaccept-methods">AbstractAccept Methods</h2>
 <p><code>Zend\Http\Header\AbstractAccept</code> defines the following methods in addition to
 those it inherits from the <a href="#headerinterface-methods">HeaderInterface</a>. The
@@ -406,7 +386,7 @@ namespaces:</p>
 <li><code>AcceptFieldValuePart</code>: <code>Zend\Http\Header\Accept\FieldValuePart\AcceptFieldValuePart</code></li>
 <li><code>InvalidArgumentException</code>: <code>Zend\Http\Header\Exception\InvalidArgumentException</code></li>
 </ul>
-<div class="table-responsive"><div class="table-responsive"><table>
+<div class="table-responsive"><table>
 <thead>
 <tr>
 <th>Method signature</th>
@@ -435,7 +415,7 @@ namespaces:</p>
 <td>Returns all the keys, values and parameters this header represents.</td>
 </tr>
 </tbody>
-</table></div></div>
+</table></div>
 <h2 id="abstractdate-methods">AbstractDate Methods</h2>
 <p><code>Zend\Http\Header\AbstractDate</code> defines the following methods in addition to
 those it inherits from the <a href="#headerinterface-methods">HeaderInterface</a>. The 
@@ -446,7 +426,7 @@ namespaces:</p>
 <ul>
 <li><code>InvalidArgumentException</code>: <code>Zend\Http\Header\Exception\InvalidArgumentException</code></li>
 </ul>
-<div class="table-responsive"><div class="table-responsive"><table>
+<div class="table-responsive"><table>
 <thead>
 <tr>
 <th>Method signature</th>
@@ -487,7 +467,7 @@ namespaces:</p>
 <td>Return date for this header as an instance of <code>DateTime</code>.</td>
 </tr>
 </tbody>
-</table></div></div>
+</table></div>
 <h2 id="abstractlocation-methods">AbstractLocation Methods</h2>
 <p><code>Zend\Http\Header\AbstractLocation</code> defines the following methods in addition to
 those it inherits from the <a href="#headerinterface-methods">HeaderInterface</a>. The
@@ -498,7 +478,7 @@ namespaces:</p>
 <li><code>Uri</code>: <code>Zend\Uri\UriInterface</code></li>
 <li><code>InvalidArgumentException</code>: <code>Zend\Http\Header\Exception\InvalidArgumentException</code></li>
 </ul>
-<div class="table-responsive"><div class="table-responsive"><table>
+<div class="table-responsive"><table>
 <thead>
 <tr>
 <th>Method signature</th>
@@ -519,7 +499,7 @@ namespaces:</p>
 <td>Return the <code>Uri</code> instance for this header.</td>
 </tr>
 </tbody>
-</table></div></div>
+</table></div>
 <h2 id="list-of-http-header-types">List of HTTP Header Types</h2>
 <p>Some header classes expose methods for manipulating their value. The following
 list contains all of the classes available in the <code>Zend\Http\Header\*</code>
@@ -527,7 +507,7 @@ namespace, as well as any specific methods they contain. Each class implements
 <code>Zend\Http\Header\HeaderInterface</code>.</p>
 <h3 id="accept">Accept</h3>
 <p>Extends <a href="#abstractaccept-methods">AbstractAccept</a>.</p>
-<div class="table-responsive"><div class="table-responsive"><table>
+<div class="table-responsive"><table>
 <thead>
 <tr>
 <th>Method signature</th>
@@ -544,10 +524,10 @@ namespace, as well as any specific methods they contain. Each class implements
 <td>Does the header have the requested media type?</td>
 </tr>
 </tbody>
-</table></div></div>
+</table></div>
 <h3 id="acceptcharset">AcceptCharset</h3>
 <p>Extends <a href="#abstractaccept-methods">AbstractAccept</a>.</p>
-<div class="table-responsive"><div class="table-responsive"><table>
+<div class="table-responsive"><table>
 <thead>
 <tr>
 <th>Method signature</th>
@@ -564,10 +544,10 @@ namespace, as well as any specific methods they contain. Each class implements
 <td>Does the header have the requested charset?</td>
 </tr>
 </tbody>
-</table></div></div>
+</table></div>
 <h3 id="acceptencoding">AcceptEncoding</h3>
 <p>Extends <a href="#abstractaccept-methods">AbstractAccept</a>.</p>
-<div class="table-responsive"><div class="table-responsive"><table>
+<div class="table-responsive"><table>
 <thead>
 <tr>
 <th>Method signature</th>
@@ -584,10 +564,10 @@ namespace, as well as any specific methods they contain. Each class implements
 <td>Does the header have the requested encoding?</td>
 </tr>
 </tbody>
-</table></div></div>
+</table></div>
 <h3 id="acceptlanguage">AcceptLanguage</h3>
 <p>Extends <a href="#abstractaccept-methods">AbstractAccept</a>.</p>
-<div class="table-responsive"><div class="table-responsive"><table>
+<div class="table-responsive"><table>
 <thead>
 <tr>
 <th>Method signature</th>
@@ -604,9 +584,9 @@ namespace, as well as any specific methods they contain. Each class implements
 <td>Does the header have the requested language?</td>
 </tr>
 </tbody>
-</table></div></div>
+</table></div>
 <h3 id="acceptranges">AcceptRanges</h3>
-<div class="table-responsive"><div class="table-responsive"><table>
+<div class="table-responsive"><table>
 <thead>
 <tr>
 <th>Method signature</th>
@@ -623,9 +603,9 @@ namespace, as well as any specific methods they contain. Each class implements
 <td>(unkown)</td>
 </tr>
 </tbody>
-</table></div></div>
+</table></div>
 <h3 id="age">Age</h3>
-<div class="table-responsive"><div class="table-responsive"><table>
+<div class="table-responsive"><table>
 <thead>
 <tr>
 <th>Method signature</th>
@@ -642,9 +622,9 @@ namespace, as well as any specific methods they contain. Each class implements
 <td>Set number of seconds</td>
 </tr>
 </tbody>
-</table></div></div>
+</table></div>
 <h3 id="allow">Allow</h3>
-<div class="table-responsive"><div class="table-responsive"><table>
+<div class="table-responsive"><table>
 <thead>
 <tr>
 <th>Method signature</th>
@@ -677,13 +657,13 @@ namespace, as well as any specific methods they contain. Each class implements
 <td>Check whether method is allowed.</td>
 </tr>
 </tbody>
-</table></div></div>
+</table></div>
 <h3 id="authenticationinfo">AuthenticationInfo</h3>
 <p>No additional methods.</p>
 <h3 id="authorization">Authorization</h3>
 <p>No additional methods.</p>
 <h3 id="cachecontrol">CacheControl</h3>
-<div class="table-responsive"><div class="table-responsive"><table>
+<div class="table-responsive"><table>
 <thead>
 <tr>
 <th>Method signature</th>
@@ -712,9 +692,9 @@ namespace, as well as any specific methods they contain. Each class implements
 <td>Remove a directive.</td>
 </tr>
 </tbody>
-</table></div></div>
+</table></div>
 <h3 id="connection">Connection</h3>
-<div class="table-responsive"><div class="table-responsive"><table>
+<div class="table-responsive"><table>
 <thead>
 <tr>
 <th>Method signature</th>
@@ -735,7 +715,7 @@ namespace, as well as any specific methods they contain. Each class implements
 <td>Set Connection header to define persistent connection.</td>
 </tr>
 </tbody>
-</table></div></div>
+</table></div>
 <h3 id="contentdisposition">ContentDisposition</h3>
 <p>No additional methods.</p>
 <h3 id="contentencoding">ContentEncoding</h3>
@@ -751,7 +731,7 @@ namespace, as well as any specific methods they contain. Each class implements
 <h3 id="contentrange">ContentRange</h3>
 <p>No additional methods.</p>
 <h3 id="contentsecuritypolicy">ContentSecurityPolicy</h3>
-<div class="table-responsive"><div class="table-responsive"><table>
+<div class="table-responsive"><table>
 <thead>
 <tr>
 <th>Method signature</th>
@@ -768,12 +748,12 @@ namespace, as well as any specific methods they contain. Each class implements
 <td>Set the directive with the given name to include the sources. See below for an example.</td>
 </tr>
 </tbody>
-</table></div></div>
+</table></div>
 <p>As an example: an auction site wishes to load images from any URI, plugin
 content from a list of trusted media providers (including a content distribution
 network), and scripts only from a server under its control hosting sanitized
 Javacript:</p>
-<pre class="codehilite"><code class="language-php linenums">// http://www.w3.org/TR/2012/CR-CSP-20121115/#sample-policy-definitions
+<pre class="codehilite"><code class="language-php">// http://www.w3.org/TR/2012/CR-CSP-20121115/#sample-policy-definitions
 $csp = new ContentSecurityPolicy();
 $csp-&gt;setDirective('default-src', []); // No sources
 $csp-&gt;setDirective('img-src', ['*']);
@@ -783,7 +763,7 @@ $csp-&gt;setDirective('script-src', ['trustedscripts.example.com']);</code></pre
 <h3 id="contenttransferencoding">ContentTransferEncoding</h3>
 <p>No additional methods.</p>
 <h3 id="contenttype">ContentType</h3>
-<div class="table-responsive"><div class="table-responsive"><table>
+<div class="table-responsive"><table>
 <thead>
 <tr>
 <th>Method signature</th>
@@ -820,10 +800,10 @@ $csp-&gt;setDirective('script-src', ['trustedscripts.example.com']);</code></pre
 <td>Set the content-type character set encoding.</td>
 </tr>
 </tbody>
-</table></div></div>
+</table></div>
 <h3 id="cookie">Cookie</h3>
 <p>Extends <code>ArrayObject</code>.</p>
-<div class="table-responsive"><div class="table-responsive"><table>
+<div class="table-responsive"><table>
 <thead>
 <tr>
 <th>Method signature</th>
@@ -844,7 +824,7 @@ $csp-&gt;setDirective('script-src', ['trustedscripts.example.com']);</code></pre
 <td>Get flag indicating whether or not to <code>urlencode()</code> the cookie values.</td>
 </tr>
 </tbody>
-</table></div></div>
+</table></div>
 <h3 id="date">Date</h3>
 <p>See <a href="#abstractdate-methods">AbstractDate</a>.</p>
 <h3 id="etag">Etag</h3>
@@ -880,7 +860,7 @@ $csp-&gt;setDirective('script-src', ['trustedscripts.example.com']);</code></pre
 <h3 id="pragma">Pragma</h3>
 <p>No additional methods.</p>
 <h3 id="proxyauthenticate">ProxyAuthenticate</h3>
-<div class="table-responsive"><div class="table-responsive"><table>
+<div class="table-responsive"><table>
 <thead>
 <tr>
 <th>Method signature</th>
@@ -893,7 +873,7 @@ $csp-&gt;setDirective('script-src', ['trustedscripts.example.com']);</code></pre
 <td>Creates a string representation when multiple values are present.</td>
 </tr>
 </tbody>
-</table></div></div>
+</table></div>
 <h3 id="proxyauthorization">ProxyAuthorization</h3>
 <p>No additional methods.</p>
 <h3 id="range">Range</h3>
@@ -904,7 +884,7 @@ $csp-&gt;setDirective('script-src', ['trustedscripts.example.com']);</code></pre
 <p>No additional methods.</p>
 <h3 id="retryafter">RetryAfter</h3>
 <p>See <a href="#abstractdate-methods">AbstractDate</a>.</p>
-<div class="table-responsive"><div class="table-responsive"><table>
+<div class="table-responsive"><table>
 <thead>
 <tr>
 <th>Method signature</th>
@@ -921,11 +901,11 @@ $csp-&gt;setDirective('script-src', ['trustedscripts.example.com']);</code></pre
 <td>Get number of seconds.</td>
 </tr>
 </tbody>
-</table></div></div>
+</table></div>
 <h3 id="server">Server</h3>
 <p>No additional methods.</p>
 <h3 id="setcookie">SetCookie</h3>
-<div class="table-responsive"><div class="table-responsive"><table>
+<div class="table-responsive"><table>
 <thead>
 <tr>
 <th>Method signature</th>
@@ -1042,7 +1022,7 @@ $csp-&gt;setDirective('script-src', ['trustedscripts.example.com']);</code></pre
 <td>Returns string representation when multiple values are present.</td>
 </tr>
 </tbody>
-</table></div></div>
+</table></div>
 <h3 id="te">TE</h3>
 <p>No additional methods.</p>
 <h3 id="trailer">Trailer</h3>
@@ -1064,7 +1044,7 @@ $csp-&gt;setDirective('script-src', ['trustedscripts.example.com']);</code></pre
 string when multiple values are present.</p>
 <h2 id="examples">Examples</h2>
 <h3 id="retrieving-headers-from-a-headers-object">Retrieving headers from a Headers object</h3>
-<pre class="codehilite"><code class="language-php linenums">// $client is an instance of Zend\Http\Client
+<pre class="codehilite"><code class="language-php">// $client is an instance of Zend\Http\Client
 $response = $client-&gt;send();
 $headers = $response-&gt;getHeaders();
 
@@ -1087,7 +1067,7 @@ $contentTypeHeaders = $headers-&gt;get('Content-Type');</code></pre>
   instance per header.</li>
 </ul>
 <h3 id="adding-headers-to-a-headers-object">Adding headers to a Headers object</h3>
-<pre class="codehilite"><code class="language-php linenums">use Zend\Http\Header;
+<pre class="codehilite"><code class="language-php">use Zend\Http\Header;
 use Zend\Http\Headers;
 
 $headers = new Headers();
@@ -1121,7 +1101,7 @@ $headers-&gt;addHeaders([
 <h3 id="removing-headers-from-a-headers-object">Removing headers from a Headers object</h3>
 <p>We can remove all headers of a specific type using the <code>removeHeader</code> method,
 which accepts a single object implementing <code>Zend\Http\Header\HeaderInterface</code></p>
-<pre class="codehilite"><code class="language-php linenums">use ArrayIterator;
+<pre class="codehilite"><code class="language-php">use ArrayIterator;
 use Zend\Http\Header\HeaderInterface;
 
 // $headers is a pre-configured instance of Zend\Http\Headers
@@ -1162,21 +1142,55 @@ $matches-&gt;clearHeaders();</code></pre>
     </div>
     <!-- content:end -->
 
-    <footer class="col-md-12 text-center">
-        <hr>
-        <p>
-        <small>Copyright (c) 2016 <a href="http://www.zend.com/">Zend Technologies USA Inc.</a><br></small>
-        </p>
-        <p><small><a href="http://framework.zend.com">Learn more about Zend Framework</a></small></p>
-    </footer>
+    <div id="footerwrap">
+    <div class="container">
+        <div class="row site-map">
+            <div class="col-lg-3">
+              <p>
+                <strong>Zend Framework</strong><br />
+                <a href="https://framework.zend.com/">framework.zend.com</a><br />
+                <a href="https://docs.zendframework.com">docs.zendframework.com</a><br />
+                <a href="https://packages.zendframework.com">packages.zendframework.com</a><br />
+                <a href="https://apigility.org">apigility.org</a><br />
+              </p>
+            </div>
+        </div>
 
-    <script src="../js/jquery-1.10.2.min.js"></script>
-    <script src="../js/bootstrap-3.0.3.min.js"></script>
-    <script src="../js/prism-zf.js"></script>
+        <div class="row">
+            <div class="col-lg-12 centered">
+                <a class="back-to-top" href="#page-top"><i class="fa fa-chevron-circle-up fa-4" aria-hidden="true"></i></a>
+            </div>
+        </div>
 
+        <div class="spacing"></div>
+
+        <div class="row">
+            <div class="col-lg-8">
+                <h4>Copyright</h4>
+                <div class="hline-w"></div>
+
+                <p>&copy; 2006-2017 by <a href="https://www.zend.com/">Zend</a>, a <a href="https://www.roguewave.com/">Rogue Wave Company</a>.</p>
+            </div>
+
+            <div class="col-lg-4">
+                <h4>Contacts</h4>
+                <div class="hline-w"></div>
+                <p>
+                    <a href="https://discourse.zendframework.com" class="btn-social btn-outline" alt="Forum" title="Forum"><i class="fa fa-comments"></i></a>
+                    <a href="https://zendframework-slack.herokuapp.com" class="btn-social btn-outline" alt="Slack" title="Slack"><i class="fa fa-slack"></i></a>
+                    <a href="https://github.com/zendframework" class="btn-social btn-outline" alt="Github" title="Github"><i class="fa fa-github"></i></a>
+                    <a href="https://twitter.com/zfdevteam" class="btn-social btn-outline" alt="Twitter" title="Twitter"><i class="fa fa-twitter"></i></a>
+                </p>
+            </div>
+        </div>
+    </div>
+</div>
+
+    <script src="https://cdn.jsdelivr.net/npm/jquery@2.2.4/dist/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/dist/js/bootstrap.min.js"></script>
     <script>var base_url = '..';</script>
+    <script src="../js/scripts-0b6185f4a5.js"></script>
     <script data-main="../mkdocs/js/search.js" src="../mkdocs/js/require.js"></script>
-    <script src="../js/base.js"></script>
 
     <div class="modal" id="mkdocs_search_modal" tabindex="-1" role="dialog" aria-labelledby="Search Modal" aria-hidden="true">
         <div class="modal-dialog">
@@ -1208,7 +1222,7 @@ $matches-&gt;clearHeaders();</code></pre>
     <div class="zf-components">
   <div class="zf-components-grid">
     <div class="zf-logo">
-      <a href="http://framework.zend.com" data-toggle="tooltip" data-placement="bottom" title="Go to the ZF homepage"><img src="http://framework.zend.com/images/logos/zf-logo-mark.png" alt="Zend Framework" width="250" /></a>
+      <a href="https://framework.zend.com" data-toggle="tooltip" data-placement="bottom" title="Go to the ZF homepage"><img src="../img/zf-logo-mark.svg" alt="Zend Framework" width="250" /></a>
     </div>
 
     <div class="component-list"></div>
@@ -1217,112 +1231,6 @@ $matches-&gt;clearHeaders();</code></pre>
   </div>
 </div>
 
-    <script>
-  // Prepare the component list dropdown for display
-  $(function () {
-    var components = $(".zf-components"),
-        componentList = components.find(".component-list"),
-        sidebar = $(".bs-sidebar.affix"),
-        sidebarInitialPos = sidebar.css("position"),
-        hidden,
-        componentToggle = $(".component-toggle"),
-        navbar = $(".navbar-fixed-top"),
-        rollUpLink = $(".zf-components-rollup a");
-
-    // Initial setup on document load
-    components.insertBefore(navbar);
-    $(".zf-logo a").tooltip();
-    componentToggle.tooltip();
-    rollUpLink.attr({ href: "#", alt: "Hide component list" });
-
-    // Cast initial sidebar position value
-    if (undefined === sidebarInitialPos) {
-      sidebarInitialPos = "fixed";
-    }
-
-    // Setup onclick events to toggle list
-    componentToggle.click(toggleComponentList);
-    rollUpLink.click(toggleComponentList);
-
-    // Toggle the component list display
-    function toggleComponentList(event) {
-      event.preventDefault();
-
-      if (hidden === undefined) {
-        // Not loaded yet; load and display.
-        loadComponentList();
-        return;
-      }
-
-      if (hidden) {
-        // Hidden; display.
-        showComponentList();
-        return;
-      }
-
-      // Currently visible; hide
-      hideComponentList();
-    }
-
-    // Show the component list
-    function showComponentList() {
-      navbar.css({position: "relative"});
-      sidebar.css({position: "relative"});
-      components
-        .css({"margin-top": "-" + components.outerHeight() + "px"})
-        .show()
-        .animate({"margin-top": 0}, {
-          complete: function () {
-            componentToggle
-              .data("placement", "top")
-              .attr("data-original-title", "Hide component list");
-            hidden = false;
-          },
-          queue: false
-        });
-    }
-
-    // Hide the component list
-    function hideComponentList() {
-      components.animate({"margin-top": "-" + components.outerHeight() + "px"}, {
-        complete: function () {
-          navbar.css({position: "fixed"});
-          sidebar.css({position: sidebarInitialPos});
-          componentToggle
-            .data("placement", "bottom")
-            .attr("data-original-title", "Show component list");
-          components.hide();
-          hidden = true;
-        },
-        queue: false
-      });
-      sidebar.animate({ top: sidebarInitialTop + "px" }, { queue: false});
-    }
-
-    // Inject a component into the componet list DOM.
-    function injectComponent(index, component) {
-      componentList.append('<div class="component"><h4><a href="' + component.url + '">' + component.name + '</a></h4><p>' + component.description + '</p></div>');
-    }
-
-    // Parse the component list, build the DOM, and display it.
-    function parseComponentList(components) {
-      $.each(components, injectComponent);
-      showComponentList();
-    }
-
-    // Fetch the component list and display it.
-    function loadComponentList () {
-      $.ajax({
-        url: "//zendframework.github.io/zf-mkdoc-theme/scripts/zf-component-list.json",
-        dataType: "text json",
-        success: parseComponentList,
-        error: function (e) {
-          console.log("Error occurred with XHR call", e);
-        }
-      });
-    }
-  });
-</script>
-    </body>
+</body>
 
 </html>

@@ -4,35 +4,15 @@
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">  
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="zend-http">  
     <link rel="shortcut icon" href="../../img/favicon.ico">
 
     <title>Advanced - zend-http</title>
 
-    <link href="../../css/bootstrap-custom.min.css" rel="stylesheet">
-    <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="//cdn.jsdelivr.net/font-hack/2.018/css/hack.min.css">
-    <link href="//fonts.googleapis.com/css?family=PT+Sans:400,400italic,700,700italic&subset=latin-ext,latin" rel="stylesheet" type="text/css">
-    <link href="//fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,700italic,400,300,600,700&subset=latin-ext,latin" rel="stylesheet" type="text/css">
-    <link href="//fonts.googleapis.com/css?family=Libre+Baskerville:400,400italic,700&subset=latin,latin-ext" rel="stylesheet" type="text/css">
-    <link href="../../css/base.css" rel="stylesheet">
-    <link href="../../css/zf.css" rel="stylesheet">
-    <link href="../../css/prism-zf.css" rel="stylesheet">
-
-    <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
-    <!--[if lt IE 9]>
-            <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
-            <script src="https://oss.maxcdn.com/libs/respond.js/1.3.0/respond.min.js"></script>
-        <![endif]-->
-
-    <script src="https://ajax.googleapis.com/ajax/libs/webfont/1.5.18/webfont.js"></script>
-    <script>
-    WebFont.load({
-        google: {
-            families: ['Open Sans', 'PT Sans']
-        }
-    });
-    </script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="../../css/styles-482aa2add1.css">
 
     
 </head>
@@ -56,8 +36,8 @@
 
             <!-- Main title -->
             <span class="navbar-brand">
-              <a class="logo-link" href="http://framework.zend.com" data-toggle="tooltip" data-placement="bottom" title="Zend Framework"><img src="../../img/zf-logo-mark.png" height="28" alt="Zend Framework" /></a>
-              <a href="../..">zend-http</a>
+                <a class="logo-link" href="https://framework.zend.com/" data-toggle="tooltip" data-placement="bottom" title="Go to the ZF homepage"><img src="../../img/zf-logo-mark.svg" height="28" alt="Zend Framework" /></a>
+                <a href="../..">zend-http</a>
             </span>
         </div>
 
@@ -176,7 +156,7 @@
 </div>
 
     <!-- content:begin -->
-    <div class="container">
+    <div id="page-top" class="container docs">
         
         <div class="col-md-3"><div class="bs-sidebar hidden-print affix well" role="complementary">
     <ul class="nav bs-sidenav">
@@ -203,28 +183,19 @@
     </ul>
 
     
-    <ul class="pager hidden-print">
-      <li class="previous">
-        <a rel="prev" href="../cookies/"><i class="fa fa-arrow-left"></i> Previous</a>
-      </li>
-      <li class="next disabled ">
-        <a rel="next" >Next <i class="fa fa-arrow-right"></i></a>
-      </li>
-    </ul>
-    
 </div></div>
         <div class="col-md-9" role="main">
 
 <ol class="breadcrumb" role="navigation" aria-label="breadcrumbs navigation">
-  <li><a href="../..">Docs</a> &raquo;</li>
+  <li><a href="../..">zend-http</a></li>
   
     
       
-        <li>Reference &raquo;</li>
+        <li>Reference</li>
       
     
       
-        <li>Client &raquo;</li>
+        <li>Client</li>
       
     
   
@@ -244,7 +215,7 @@ when redirecting on a 301 or 302 response, all query and body parameters are
 reset, and a <code>GET</code> request is sent to the new location. This behavior can be
 changed by setting the <code>strictredirects</code> configuration parameter to boolean
 <code>TRUE</code>:</p>
-<pre class="codehilite"><code class="language-php linenums">// Strict Redirections
+<pre class="codehilite"><code class="language-php">// Strict Redirections
 $client-&gt;setOptions(['strictredirects' =&gt; true]);
 
 // Non-strict Redirections
@@ -258,7 +229,7 @@ that no direct header modification is required. Cookies can be added using
 either the addCookie() or <code>setCookies()</code> method. <code>addCookie()</code> can accept
 either a name and value, a <code>SetCookie</code> header instance, or an array of
 <code>SetCookie</code> header instances.</p>
-<pre class="codehilite"><code class="language-php linenums">use Zend\Http\Header\SetCookie;
+<pre class="codehilite"><code class="language-php">use Zend\Http\Header\SetCookie;
 
 // Basic usage: provide a cookie name and cookie value:
 $client-&gt;addCookie('flavor', 'chocolate chips');
@@ -278,7 +249,7 @@ $client-&gt;addCookie($cookies);</code></pre>
 <p>The <code>setCookies()</code> method works in a similar manner, except that it requires an
 array of cookie name/value pairs as its only argument, and also clears the
 cookie container before adding the new cookies:</p>
-<pre class="codehilite"><code class="language-php linenums">// setCookies accepts an array of cookie values as $name =&gt; $value
+<pre class="codehilite"><code class="language-php">// setCookies accepts an array of cookie values as $name =&gt; $value
 $client-&gt;setCookies([
     'flavor' =&gt; 'chocolate chips',
     'amount' =&gt; 10,
@@ -292,7 +263,7 @@ $client-&gt;setCookies([
 and resending them on subsequent requests. &mdash; via the <code>Zend\Http\Cookies</code>
 class. This is useful when you need to log in to a remote site first and
 receive an authentication or session ID cookie before sending further requests.</p>
-<pre class="codehilite"><code class="language-php linenums">$headers = $client-&gt;getRequest()-&gt;getHeaders();
+<pre class="codehilite"><code class="language-php">$headers = $client-&gt;getRequest()-&gt;getHeaders();
 $cookies = new Zend\Http\Cookies($headers);
 
 // First request: log in and start a session
@@ -313,7 +284,7 @@ $client-&gt;setMethod('GET');</code></pre>
 <p>Setting custom headers is performed by first fetching the header container from
 the client's <code>Zend\Http\Request</code> instance. This <code>Headers</code> container offers a
 number of methods for setting headers:</p>
-<pre class="codehilite"><code class="language-php linenums">use Zend\Http\Header;
+<pre class="codehilite"><code class="language-php">use Zend\Http\Header;
 
 // Fetch the container
 $headers = $client-&gt;getRequest()-&gt;getHeaders();
@@ -346,7 +317,7 @@ headers, <code>setHeaders()</code>.  This method will create a new header contai
 the specified headers, and then store the new header container in its
 <code>Zend\Http\Request</code> instance. As a consequence, any pre-existing headers will
 be erased:</p>
-<pre class="codehilite"><code class="language-php linenums">use Zend\Http\Header;
+<pre class="codehilite"><code class="language-php">use Zend\Http\Header;
 
 // Setting multiple headers via the client; removes all existing headers,
 // replacing the request header container with the following:
@@ -370,7 +341,7 @@ optional parameter provides the file's <code>Content-Type</code>. If not specifi
 <code>Zend\Http\Client</code> reads the file from the disk, the <code>mime_content_type()</code>
 function will be used to guess the file's content type, if it is available. In
 any case, the default MIME type will be <code>application/octet-stream</code>.</p>
-<pre class="codehilite"><code class="language-php linenums">// Uploading arbitrary data as a file:
+<pre class="codehilite"><code class="language-php">// Uploading arbitrary data as a file:
 $text = 'this is some plain text';
 $client-&gt;setFileUpload('some_text.txt', 'upload', $text, 'text/plain');
 
@@ -398,7 +369,7 @@ request methods.</p>
 method. This method takes one parameter: the data to send in the request body.
 When sending raw POST data, it is advisable to also set the encoding type using
 <code>setEncType()</code>.</p>
-<pre class="codehilite"><code class="language-php linenums">$xml = '&lt;book&gt;'
+<pre class="codehilite"><code class="language-php">$xml = '&lt;book&gt;'
     . '  &lt;title&gt;Islands in the Stream&lt;/title&gt;'
     . '  &lt;author&gt;Ernest Hemingway&lt;/author&gt;'
     . '  &lt;year&gt;1970&lt;/year&gt;'
@@ -422,7 +393,7 @@ request.</p>
 using the <code>setAuth()</code> method, or by specifying a username and a password in the URI. The <code>setAuth()</code>
 method takes 3 parameters: the user name, the password and an optional authentication type
 parameter.</p>
-<pre class="codehilite"><code class="language-php linenums">use Zend\Http\Client;
+<pre class="codehilite"><code class="language-php">use Zend\Http\Client;
 
 // Using basic authentication
 $client-&gt;setAuth('shahar', 'myPassword!', Client::AUTH_BASIC);
@@ -464,7 +435,7 @@ application, it might be a good idea to store the <code>Cookies</code> object in
 session. This way, you will only need to authenticate the user once every
 session.</p>
 <h3 id="performing-consecutive-requests-with-one-client">Performing consecutive requests with one client</h3>
-<pre class="codehilite"><code class="language-php linenums">use Zend\Http\Client;
+<pre class="codehilite"><code class="language-php">use Zend\Http\Client;
 use Zend\Http\Cookies;
 
 // First, instantiate the client
@@ -519,52 +490,75 @@ will return the name of the file where the response is stored, and
 <p>You can either write the response to pre-defined file, or use temporary file
 for storing it and send it out or write it to another file using regular stream
 functions.</p>
-<pre class="codehilite"><code class="language-php linenums">$client-setStream(); // will use temp file
-$response = $client-send();
+<pre class="codehilite"><code class="language-php">$client-&gt;setStream(); // will use temp file
+$response = $client-&gt;send();
 
 // copy file:
-copy($response-getStreamName(), 'my/downloads/file');
+copy($response-&gt;getStreamName(), 'my/downloads/file');
 
 // use stream:
 $fp = fopen('my/downloads/file2', 'w');
-stream_copy_to_stream($response-getStream(), $fp);
+stream_copy_to_stream($response-&gt;getStream(), $fp);
 
 // write to an existing file:
-$client-setStream('my/downloads/myfile')-send();</code></pre>
+$client-&gt;setStream('my/downloads/myfile')-&gt;send();</code></pre>
 
 <hr />
 
-
-<nav>
-  <ul class="pager hidden-print">
-    <li class="previous">
-      <a rel="prev" href="../cookies/"><i class="fa fa-arrow-left"></i> Previous</a>
-    </li>
-    <li class="next disabled ">
-      <a rel="next" >Next <i class="fa fa-arrow-right"></i></a>
-    </li>
-  </ul>
-</nav>
 </div>
         
     </div>
     <!-- content:end -->
 
-    <footer class="col-md-12 text-center">
-        <hr>
-        <p>
-        <small>Copyright (c) 2016 <a href="http://www.zend.com/">Zend Technologies USA Inc.</a><br></small>
-        </p>
-        <p><small><a href="http://framework.zend.com">Learn more about Zend Framework</a></small></p>
-    </footer>
+    <div id="footerwrap">
+    <div class="container">
+        <div class="row site-map">
+            <div class="col-lg-3">
+              <p>
+                <strong>Zend Framework</strong><br />
+                <a href="https://framework.zend.com/">framework.zend.com</a><br />
+                <a href="https://docs.zendframework.com">docs.zendframework.com</a><br />
+                <a href="https://packages.zendframework.com">packages.zendframework.com</a><br />
+                <a href="https://apigility.org">apigility.org</a><br />
+              </p>
+            </div>
+        </div>
 
-    <script src="../../js/jquery-1.10.2.min.js"></script>
-    <script src="../../js/bootstrap-3.0.3.min.js"></script>
-    <script src="../../js/prism-zf.js"></script>
+        <div class="row">
+            <div class="col-lg-12 centered">
+                <a class="back-to-top" href="#page-top"><i class="fa fa-chevron-circle-up fa-4" aria-hidden="true"></i></a>
+            </div>
+        </div>
 
+        <div class="spacing"></div>
+
+        <div class="row">
+            <div class="col-lg-8">
+                <h4>Copyright</h4>
+                <div class="hline-w"></div>
+
+                <p>&copy; 2006-2017 by <a href="https://www.zend.com/">Zend</a>, a <a href="https://www.roguewave.com/">Rogue Wave Company</a>.</p>
+            </div>
+
+            <div class="col-lg-4">
+                <h4>Contacts</h4>
+                <div class="hline-w"></div>
+                <p>
+                    <a href="https://discourse.zendframework.com" class="btn-social btn-outline" alt="Forum" title="Forum"><i class="fa fa-comments"></i></a>
+                    <a href="https://zendframework-slack.herokuapp.com" class="btn-social btn-outline" alt="Slack" title="Slack"><i class="fa fa-slack"></i></a>
+                    <a href="https://github.com/zendframework" class="btn-social btn-outline" alt="Github" title="Github"><i class="fa fa-github"></i></a>
+                    <a href="https://twitter.com/zfdevteam" class="btn-social btn-outline" alt="Twitter" title="Twitter"><i class="fa fa-twitter"></i></a>
+                </p>
+            </div>
+        </div>
+    </div>
+</div>
+
+    <script src="https://cdn.jsdelivr.net/npm/jquery@2.2.4/dist/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/dist/js/bootstrap.min.js"></script>
     <script>var base_url = '../..';</script>
+    <script src="../../js/scripts-0b6185f4a5.js"></script>
     <script data-main="../../mkdocs/js/search.js" src="../../mkdocs/js/require.js"></script>
-    <script src="../../js/base.js"></script>
 
     <div class="modal" id="mkdocs_search_modal" tabindex="-1" role="dialog" aria-labelledby="Search Modal" aria-hidden="true">
         <div class="modal-dialog">
@@ -596,7 +590,7 @@ $client-setStream('my/downloads/myfile')-send();</code></pre>
     <div class="zf-components">
   <div class="zf-components-grid">
     <div class="zf-logo">
-      <a href="http://framework.zend.com" data-toggle="tooltip" data-placement="bottom" title="Go to the ZF homepage"><img src="http://framework.zend.com/images/logos/zf-logo-mark.png" alt="Zend Framework" width="250" /></a>
+      <a href="https://framework.zend.com" data-toggle="tooltip" data-placement="bottom" title="Go to the ZF homepage"><img src="../../img/zf-logo-mark.svg" alt="Zend Framework" width="250" /></a>
     </div>
 
     <div class="component-list"></div>
@@ -605,112 +599,6 @@ $client-setStream('my/downloads/myfile')-send();</code></pre>
   </div>
 </div>
 
-    <script>
-  // Prepare the component list dropdown for display
-  $(function () {
-    var components = $(".zf-components"),
-        componentList = components.find(".component-list"),
-        sidebar = $(".bs-sidebar.affix"),
-        sidebarInitialPos = sidebar.css("position"),
-        hidden,
-        componentToggle = $(".component-toggle"),
-        navbar = $(".navbar-fixed-top"),
-        rollUpLink = $(".zf-components-rollup a");
-
-    // Initial setup on document load
-    components.insertBefore(navbar);
-    $(".zf-logo a").tooltip();
-    componentToggle.tooltip();
-    rollUpLink.attr({ href: "#", alt: "Hide component list" });
-
-    // Cast initial sidebar position value
-    if (undefined === sidebarInitialPos) {
-      sidebarInitialPos = "fixed";
-    }
-
-    // Setup onclick events to toggle list
-    componentToggle.click(toggleComponentList);
-    rollUpLink.click(toggleComponentList);
-
-    // Toggle the component list display
-    function toggleComponentList(event) {
-      event.preventDefault();
-
-      if (hidden === undefined) {
-        // Not loaded yet; load and display.
-        loadComponentList();
-        return;
-      }
-
-      if (hidden) {
-        // Hidden; display.
-        showComponentList();
-        return;
-      }
-
-      // Currently visible; hide
-      hideComponentList();
-    }
-
-    // Show the component list
-    function showComponentList() {
-      navbar.css({position: "relative"});
-      sidebar.css({position: "relative"});
-      components
-        .css({"margin-top": "-" + components.outerHeight() + "px"})
-        .show()
-        .animate({"margin-top": 0}, {
-          complete: function () {
-            componentToggle
-              .data("placement", "top")
-              .attr("data-original-title", "Hide component list");
-            hidden = false;
-          },
-          queue: false
-        });
-    }
-
-    // Hide the component list
-    function hideComponentList() {
-      components.animate({"margin-top": "-" + components.outerHeight() + "px"}, {
-        complete: function () {
-          navbar.css({position: "fixed"});
-          sidebar.css({position: sidebarInitialPos});
-          componentToggle
-            .data("placement", "bottom")
-            .attr("data-original-title", "Show component list");
-          components.hide();
-          hidden = true;
-        },
-        queue: false
-      });
-      sidebar.animate({ top: sidebarInitialTop + "px" }, { queue: false});
-    }
-
-    // Inject a component into the componet list DOM.
-    function injectComponent(index, component) {
-      componentList.append('<div class="component"><h4><a href="' + component.url + '">' + component.name + '</a></h4><p>' + component.description + '</p></div>');
-    }
-
-    // Parse the component list, build the DOM, and display it.
-    function parseComponentList(components) {
-      $.each(components, injectComponent);
-      showComponentList();
-    }
-
-    // Fetch the component list and display it.
-    function loadComponentList () {
-      $.ajax({
-        url: "//zendframework.github.io/zf-mkdoc-theme/scripts/zf-component-list.json",
-        dataType: "text json",
-        success: parseComponentList,
-        error: function (e) {
-          console.log("Error occurred with XHR call", e);
-        }
-      });
-    }
-  });
-</script>
-    </body>
+</body>
 
 </html>

@@ -4,35 +4,15 @@
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">  
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="zend-http">  
     <link rel="shortcut icon" href="../../img/favicon.ico">
 
     <title>Adapters - zend-http</title>
 
-    <link href="../../css/bootstrap-custom.min.css" rel="stylesheet">
-    <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="//cdn.jsdelivr.net/font-hack/2.018/css/hack.min.css">
-    <link href="//fonts.googleapis.com/css?family=PT+Sans:400,400italic,700,700italic&subset=latin-ext,latin" rel="stylesheet" type="text/css">
-    <link href="//fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,700italic,400,300,600,700&subset=latin-ext,latin" rel="stylesheet" type="text/css">
-    <link href="//fonts.googleapis.com/css?family=Libre+Baskerville:400,400italic,700&subset=latin,latin-ext" rel="stylesheet" type="text/css">
-    <link href="../../css/base.css" rel="stylesheet">
-    <link href="../../css/zf.css" rel="stylesheet">
-    <link href="../../css/prism-zf.css" rel="stylesheet">
-
-    <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
-    <!--[if lt IE 9]>
-            <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
-            <script src="https://oss.maxcdn.com/libs/respond.js/1.3.0/respond.min.js"></script>
-        <![endif]-->
-
-    <script src="https://ajax.googleapis.com/ajax/libs/webfont/1.5.18/webfont.js"></script>
-    <script>
-    WebFont.load({
-        google: {
-            families: ['Open Sans', 'PT Sans']
-        }
-    });
-    </script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="../../css/styles-482aa2add1.css">
 
     
 </head>
@@ -56,8 +36,8 @@
 
             <!-- Main title -->
             <span class="navbar-brand">
-              <a class="logo-link" href="http://framework.zend.com" data-toggle="tooltip" data-placement="bottom" title="Zend Framework"><img src="../../img/zf-logo-mark.png" height="28" alt="Zend Framework" /></a>
-              <a href="../..">zend-http</a>
+                <a class="logo-link" href="https://framework.zend.com/" data-toggle="tooltip" data-placement="bottom" title="Go to the ZF homepage"><img src="../../img/zf-logo-mark.svg" height="28" alt="Zend Framework" /></a>
+                <a href="../..">zend-http</a>
             </span>
         </div>
 
@@ -176,7 +156,7 @@
 </div>
 
     <!-- content:begin -->
-    <div class="container">
+    <div id="page-top" class="container docs">
         
         <div class="col-md-3"><div class="bs-sidebar hidden-print affix well" role="complementary">
     <ul class="nav bs-sidenav">
@@ -210,15 +190,15 @@
         <div class="col-md-9" role="main">
 
 <ol class="breadcrumb" role="navigation" aria-label="breadcrumbs navigation">
-  <li><a href="../..">Docs</a> &raquo;</li>
+  <li><a href="../..">zend-http</a></li>
   
     
       
-        <li>Reference &raquo;</li>
+        <li>Reference</li>
       
     
       
-        <li>Client &raquo;</li>
+        <li>Client</li>
       
     
   
@@ -252,7 +232,7 @@ PHP's built-in <code>fsockopen()</code> function, and does not require any speci
 extensions or compilation flags.</p>
 <p>The <code>Socket</code> adapter allows several extra configuration options that can be set
 via either the client's constructor or <code>setOptions()</code> method:</p>
-<div class="table-responsive"><div class="table-responsive"><table>
+<div class="table-responsive"><table>
 <thead>
 <tr>
 <th>Parameter</th>
@@ -311,7 +291,7 @@ via either the client's constructor or <code>setOptions()</code> method:</p>
 <td><code>FALSE</code></td>
 </tr>
 </tbody>
-</table></div></div>
+</table></div>
 <blockquote>
 <h3 id="persistent-tcp-connections">Persistent TCP connections</h3>
 <p>Using persistent TCP connections can potentially speed up HTTP requests, but
@@ -333,7 +313,7 @@ connecting to requires special client setup. If so, please read the
 <a href="http://php.net/transports.inet">PHP manual chapter on SSL and TLS transport options</a>.</p>
 </blockquote>
 <h3 id="changing-the-https-transport-layer">Changing the HTTPS transport layer</h3>
-<pre class="codehilite"><code class="language-php linenums">use Zend\Http\Client;
+<pre class="codehilite"><code class="language-php">use Zend\Http\Client;
 
 // Set the configuration parameters
 $config = [
@@ -349,7 +329,7 @@ $response = $client-&gt;send();</code></pre>
 
 <p>The result of the example above will be similar to opening a TCP connection
 using the following PHP command:</p>
-<pre class="codehilite"><code class="language-php linenums">fsockopen('tls://www.example.com', 443);</code></pre>
+<pre class="codehilite"><code class="language-php">fsockopen('tls://www.example.com', 443);</code></pre>
 
 <h3 id="customizing-and-accessing-the-socket-adapter-stream-context">Customizing and accessing the Socket adapter stream context</h3>
 <p><code>Zend\Http\Client\Adapter\Socket</code> provides direct access to the underlying
@@ -371,7 +351,7 @@ stream, and to the SSL wrapper in case of HTTPS connections.</p>
   using regular PHP stream context functions.</li>
 </ul>
 <h4 id="setting-stream-context-options-for-the-socket-adapter">Setting stream context options for the Socket adapter</h4>
-<pre class="codehilite"><code class="language-php linenums">use Zend\Http\Client;
+<pre class="codehilite"><code class="language-php">use Zend\Http\Client;
 
 // Array of options
 $options = [
@@ -429,7 +409,7 @@ instead of a direct connection to the target server. This allows usage of
 security or performance reasons.</p>
 <p>Using the <code>Proxy</code> adapter requires several additional client configuration
 parameters to be set, in addition to the default <code>adapter</code> option:</p>
-<div class="table-responsive"><div class="table-responsive"><table>
+<div class="table-responsive"><table>
 <thead>
 <tr>
 <th>Parameter</th>
@@ -470,7 +450,7 @@ parameters to be set, in addition to the default <code>adapter</code> option:</p
 <td><code>Zend\Http\Client::AUTH_BASIC</code> (default)</td>
 </tr>
 </tbody>
-</table></div></div>
+</table></div>
 <p><code>proxy_host</code> should always be set; if it is not set, the client will fall back
 to a direct connection using <code>Zend\Http\Client\Adapter\Socket</code>. <code>proxy_port</code>
 defaults to '8080'; if your proxy listens on a different port, you must set this
@@ -484,7 +464,7 @@ authentication.  Possible values are similar to the ones accepted by the
 <code>Zend\Http\Client::setAuth()</code> method. Currently, only basic authentication
 (<code>Zend\Http\Client::AUTH_BASIC</code>) is supported.</p>
 <h3 id="using-zend92http92client-behind-a-proxy-server">Using Zend\Http\Client behind a proxy server</h3>
-<pre class="codehilite"><code class="language-php linenums">use Zend\Http\Client;
+<pre class="codehilite"><code class="language-php">use Zend\Http\Client;
 
 // Set the configuration parameters
 $config = [
@@ -519,7 +499,7 @@ choice for a HTTP adapter. It supports secure connections, proxies, and multiple
 authentication mechanisms. In particular, it is very performant with regards to
 transfering large files.</p>
 <h3 id="setting-curl-options">Setting cURL options</h3>
-<pre class="codehilite"><code class="language-php linenums">use Zend\Http\Client;
+<pre class="codehilite"><code class="language-php">use Zend\Http\Client;
 
 $config = [
     'adapter'     =&gt; Client\Adapter\Curl::class,
@@ -536,7 +516,7 @@ constants of the cURL extension. You can get access to the underling cURL handle
 by calling <code>$adapter-&gt;getHandle();</code></p>
 <p>The cURL configuration options that can be set via <code>setCurlOption($name, $value)</code>
 method are:</p>
-<div class="table-responsive"><div class="table-responsive"><table>
+<div class="table-responsive"><table>
 <thead>
 <tr>
 <th>Parameter</th>
@@ -577,10 +557,10 @@ method are:</p>
 <td><code>TRUE</code></td>
 </tr>
 </tbody>
-</table></div></div>
+</table></div>
 <h3 id="transfering-files-by-handle">Transfering files by handle</h3>
 <p>You can use cURL to transfer very large files over HTTP by filehandle.</p>
-<pre class="codehilite"><code class="language-php linenums">use Zend\Http\Client;
+<pre class="codehilite"><code class="language-php">use Zend\Http\Client;
 
 $putFileSize   = filesize('filepath');
 $putFileHandle = fopen('filepath', 'r');
@@ -613,7 +593,7 @@ an individual response to always return from any request; <code>addResponse()</c
 aggregating a sequence of responses. In both cases, responses are returned
 without performing actual HTTP requests.</p>
 <h3 id="testing-against-a-single-http-response-stub">Testing against a single HTTP response stub</h3>
-<pre class="codehilite"><code class="language-php linenums">use Zend\Http\Client;
+<pre class="codehilite"><code class="language-php">use Zend\Http\Client;
 
 // Instantiate a new adapter and client
 $adapter = new Client\Adapter\Test();
@@ -651,7 +631,7 @@ performing multiple HTTP transactions. In this case, it's not possible to use
 <code>setResponse()</code> alone because there's no opportunity to set the next response(s)
 your program might need before returning to the caller.</p>
 <h3 id="testing-against-multiple-http-response-stubs">Testing Against Multiple HTTP Response Stubs</h3>
-<pre class="codehilite"><code class="language-php linenums">use Zend\Http\Client;
+<pre class="codehilite"><code class="language-php">use Zend\Http\Client;
 
 // Instantiate a new adapter and client
 $adapter = new Client\Adapter\Test();
@@ -706,7 +686,7 @@ your object under test and test its behavior.</p>
 <code>connect()</code> to throw an <code>Zend\Http\Client\Adapter\Exception\RuntimeException</code>.
 This can be useful when our application caches content from an external site (in
 case the site goes down) and you want to test this feature.</p>
-<pre class="codehilite"><code class="language-php linenums">use Zend\Http\Client;
+<pre class="codehilite"><code class="language-php">use Zend\Http\Client;
 
 // Instantiate a new adapter and client
 $adapter = new Client\Adapter\Test();
@@ -737,7 +717,7 @@ them as needed in your application.</p>
 <code>Zend\Http\Client\Adapter\AdapterInterface</code>. The following example shows the
 skeleton of a user-implemented adapter class. All the public functions defined
 in this example must be defined in your adapter as well.</p>
-<pre class="codehilite"><code class="language-php linenums">namespace MyApp\Http\Client\Adapter;
+<pre class="codehilite"><code class="language-php">namespace MyApp\Http\Client\Adapter;
 
 use Zend\Http\Client\Adapter\AdapterInterface;
 
@@ -809,7 +789,7 @@ class BananaProtocol implements AdapterInterface
 }</code></pre>
 
 <p>Use the adapter as you would any other:</p>
-<pre class="codehilite"><code class="language-php linenums">use MyApp\Http\Client\Adapter\BananaProtocol;
+<pre class="codehilite"><code class="language-php">use MyApp\Http\Client\Adapter\BananaProtocol;
 use Zend\Http\Client;
 
 $client = new Client([
@@ -834,21 +814,55 @@ $client = new Client([
     </div>
     <!-- content:end -->
 
-    <footer class="col-md-12 text-center">
-        <hr>
-        <p>
-        <small>Copyright (c) 2016 <a href="http://www.zend.com/">Zend Technologies USA Inc.</a><br></small>
-        </p>
-        <p><small><a href="http://framework.zend.com">Learn more about Zend Framework</a></small></p>
-    </footer>
+    <div id="footerwrap">
+    <div class="container">
+        <div class="row site-map">
+            <div class="col-lg-3">
+              <p>
+                <strong>Zend Framework</strong><br />
+                <a href="https://framework.zend.com/">framework.zend.com</a><br />
+                <a href="https://docs.zendframework.com">docs.zendframework.com</a><br />
+                <a href="https://packages.zendframework.com">packages.zendframework.com</a><br />
+                <a href="https://apigility.org">apigility.org</a><br />
+              </p>
+            </div>
+        </div>
 
-    <script src="../../js/jquery-1.10.2.min.js"></script>
-    <script src="../../js/bootstrap-3.0.3.min.js"></script>
-    <script src="../../js/prism-zf.js"></script>
+        <div class="row">
+            <div class="col-lg-12 centered">
+                <a class="back-to-top" href="#page-top"><i class="fa fa-chevron-circle-up fa-4" aria-hidden="true"></i></a>
+            </div>
+        </div>
 
+        <div class="spacing"></div>
+
+        <div class="row">
+            <div class="col-lg-8">
+                <h4>Copyright</h4>
+                <div class="hline-w"></div>
+
+                <p>&copy; 2006-2017 by <a href="https://www.zend.com/">Zend</a>, a <a href="https://www.roguewave.com/">Rogue Wave Company</a>.</p>
+            </div>
+
+            <div class="col-lg-4">
+                <h4>Contacts</h4>
+                <div class="hline-w"></div>
+                <p>
+                    <a href="https://discourse.zendframework.com" class="btn-social btn-outline" alt="Forum" title="Forum"><i class="fa fa-comments"></i></a>
+                    <a href="https://zendframework-slack.herokuapp.com" class="btn-social btn-outline" alt="Slack" title="Slack"><i class="fa fa-slack"></i></a>
+                    <a href="https://github.com/zendframework" class="btn-social btn-outline" alt="Github" title="Github"><i class="fa fa-github"></i></a>
+                    <a href="https://twitter.com/zfdevteam" class="btn-social btn-outline" alt="Twitter" title="Twitter"><i class="fa fa-twitter"></i></a>
+                </p>
+            </div>
+        </div>
+    </div>
+</div>
+
+    <script src="https://cdn.jsdelivr.net/npm/jquery@2.2.4/dist/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/dist/js/bootstrap.min.js"></script>
     <script>var base_url = '../..';</script>
+    <script src="../../js/scripts-0b6185f4a5.js"></script>
     <script data-main="../../mkdocs/js/search.js" src="../../mkdocs/js/require.js"></script>
-    <script src="../../js/base.js"></script>
 
     <div class="modal" id="mkdocs_search_modal" tabindex="-1" role="dialog" aria-labelledby="Search Modal" aria-hidden="true">
         <div class="modal-dialog">
@@ -880,7 +894,7 @@ $client = new Client([
     <div class="zf-components">
   <div class="zf-components-grid">
     <div class="zf-logo">
-      <a href="http://framework.zend.com" data-toggle="tooltip" data-placement="bottom" title="Go to the ZF homepage"><img src="http://framework.zend.com/images/logos/zf-logo-mark.png" alt="Zend Framework" width="250" /></a>
+      <a href="https://framework.zend.com" data-toggle="tooltip" data-placement="bottom" title="Go to the ZF homepage"><img src="../../img/zf-logo-mark.svg" alt="Zend Framework" width="250" /></a>
     </div>
 
     <div class="component-list"></div>
@@ -889,112 +903,6 @@ $client = new Client([
   </div>
 </div>
 
-    <script>
-  // Prepare the component list dropdown for display
-  $(function () {
-    var components = $(".zf-components"),
-        componentList = components.find(".component-list"),
-        sidebar = $(".bs-sidebar.affix"),
-        sidebarInitialPos = sidebar.css("position"),
-        hidden,
-        componentToggle = $(".component-toggle"),
-        navbar = $(".navbar-fixed-top"),
-        rollUpLink = $(".zf-components-rollup a");
-
-    // Initial setup on document load
-    components.insertBefore(navbar);
-    $(".zf-logo a").tooltip();
-    componentToggle.tooltip();
-    rollUpLink.attr({ href: "#", alt: "Hide component list" });
-
-    // Cast initial sidebar position value
-    if (undefined === sidebarInitialPos) {
-      sidebarInitialPos = "fixed";
-    }
-
-    // Setup onclick events to toggle list
-    componentToggle.click(toggleComponentList);
-    rollUpLink.click(toggleComponentList);
-
-    // Toggle the component list display
-    function toggleComponentList(event) {
-      event.preventDefault();
-
-      if (hidden === undefined) {
-        // Not loaded yet; load and display.
-        loadComponentList();
-        return;
-      }
-
-      if (hidden) {
-        // Hidden; display.
-        showComponentList();
-        return;
-      }
-
-      // Currently visible; hide
-      hideComponentList();
-    }
-
-    // Show the component list
-    function showComponentList() {
-      navbar.css({position: "relative"});
-      sidebar.css({position: "relative"});
-      components
-        .css({"margin-top": "-" + components.outerHeight() + "px"})
-        .show()
-        .animate({"margin-top": 0}, {
-          complete: function () {
-            componentToggle
-              .data("placement", "top")
-              .attr("data-original-title", "Hide component list");
-            hidden = false;
-          },
-          queue: false
-        });
-    }
-
-    // Hide the component list
-    function hideComponentList() {
-      components.animate({"margin-top": "-" + components.outerHeight() + "px"}, {
-        complete: function () {
-          navbar.css({position: "fixed"});
-          sidebar.css({position: sidebarInitialPos});
-          componentToggle
-            .data("placement", "bottom")
-            .attr("data-original-title", "Show component list");
-          components.hide();
-          hidden = true;
-        },
-        queue: false
-      });
-      sidebar.animate({ top: sidebarInitialTop + "px" }, { queue: false});
-    }
-
-    // Inject a component into the componet list DOM.
-    function injectComponent(index, component) {
-      componentList.append('<div class="component"><h4><a href="' + component.url + '">' + component.name + '</a></h4><p>' + component.description + '</p></div>');
-    }
-
-    // Parse the component list, build the DOM, and display it.
-    function parseComponentList(components) {
-      $.each(components, injectComponent);
-      showComponentList();
-    }
-
-    // Fetch the component list and display it.
-    function loadComponentList () {
-      $.ajax({
-        url: "//zendframework.github.io/zf-mkdoc-theme/scripts/zf-component-list.json",
-        dataType: "text json",
-        success: parseComponentList,
-        error: function (e) {
-          console.log("Error occurred with XHR call", e);
-        }
-      });
-    }
-  });
-</script>
-    </body>
+</body>
 
 </html>
