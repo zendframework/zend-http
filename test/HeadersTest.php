@@ -119,6 +119,17 @@ class HeadersTest extends TestCase
         $this->assertSame($f, $headers->get('foo'));
     }
 
+    public function testHeadersGetReturnsLastAddedHeaderValue()
+    {
+        $headers = new Headers();
+        $headers->addHeaders([
+            new Header\GenericHeader('Foo', 'bar'),
+        ]);
+        $headers->addHeader(new Header\GenericHeader('Foo', $value = 'baz'));
+
+        $this->assertEquals($value, $headers->get('foo')->getFieldValue());
+    }
+
     public function testHeadersAggregatesHeaderObjects()
     {
         $fakeHeader = new Header\GenericHeader('Fake', 'bar');
