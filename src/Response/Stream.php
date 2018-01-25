@@ -113,6 +113,7 @@ class Stream extends Response
     public function setCleanup($cleanup = true)
     {
         $this->cleanup = $cleanup;
+        return $this;
     }
 
     /**
