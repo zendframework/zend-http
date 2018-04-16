@@ -12,4 +12,4 @@ it predates that specification. For PSR-7 support, please see our
 [Diactoros component](https://docs.zendframework.com/zend-diactoros/).
 
 - File issues at https://github.com/zendframework/zend-http/issues
-- Documentation is at https://zendframework.github.io/zend-http/
+- Documentation is at https://docs.zendframework.com/zend-http/
