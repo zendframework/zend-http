@@ -1,7 +1,7 @@
 # zend-http
 
 [![Build Status](https://secure.travis-ci.org/zendframework/zend-http.svg?branch=master)](https://secure.travis-ci.org/zendframework/zend-http)
-[![Coverage Status](https://coveralls.io/repos/zendframework/zend-http/badge.svg?branch=master)](https://coveralls.io/r/zendframework/zend-http?branch=master)
+[![Coverage Status](https://coveralls.io/repos/github/zendframework/zend-http/badge.svg?branch=master)](https://coveralls.io/github/zendframework/zend-http?branch=master)
 
 zend-http provides the HTTP message abstraction used by
 [zend-mvc](https://docs.zendframework.com/zend-mvc/), and also provides an
