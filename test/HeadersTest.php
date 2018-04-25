@@ -84,10 +84,16 @@ class HeadersTest extends TestCase
         $this->assertEquals('Fake', $header->getFieldName());
         $this->assertEquals('foo-bar', $header->getFieldValue());
 
-        $header = $headers->get('anotherfake');
+        $this->assertFalse($headers->get('anotherfake'));
+
+        $header = $headers->get('another-fake');
         $this->assertInstanceOf(GenericHeader::class, $header);
         $this->assertEquals('Another-Fake', $header->getFieldName());
         $this->assertEquals('boo-baz', $header->getFieldValue());
+
+        $this->assertSame($header, $headers->get('another fake'));
+        $this->assertSame($header, $headers->get('another_fake'));
+        $this->assertSame($header, $headers->get('another.fake'));
     }
 
     public function testHeadersFromStringMultiHeaderWillAggregateLazyLoadedHeaders()
