@@ -343,5 +343,10 @@ class RequestTest extends TestCase
         $this->assertFalse($headers->has('User-Agent'));
         $this->assertFalse($headers->get('User-Agent'));
         $this->assertSame('bar-baz', $request->getHeader('User-Agent', 'bar-baz'));
+
+        $this->assertTrue($headers->has('useragent'));
+        $this->assertInstanceOf(GenericHeader::class, $headers->get('useragent'));
+        $this->assertSame('h4ckerbot', $headers->get('useragent')->getFieldValue());
+        $this->assertSame('h4ckerbot', $request->getHeader('useragent')->getFieldValue());
     }
 }

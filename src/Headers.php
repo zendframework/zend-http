@@ -12,6 +12,7 @@ use Countable;
 use Iterator;
 use Traversable;
 use Zend\Http\Header\Exception;
+use Zend\Http\Header\GenericHeader;
 use Zend\Loader\PluginClassLocator;
 
 /**
@@ -262,7 +263,7 @@ class Headers implements Countable, Iterator
             return false;
         }
 
-        $class = ($this->getPluginClassLoader()->load($key)) ?: 'Zend\Http\Header\GenericHeader';
+        $class = ($this->getPluginClassLoader()->load(str_replace('-', '', $key))) ?: 'Zend\Http\Header\GenericHeader';
 
         if (in_array('Zend\Http\Header\MultipleHeaderInterface', class_implements($class, true))) {
             $headers = [];
@@ -296,22 +297,7 @@ class Headers implements Countable, Iterator
      */
     public function has($name)
     {
-        $key = static::createKey($name);
-
-        $index = array_search($key, $this->headersKeys);
-        if ($index === false) {
-            return false;
-        }
-
-        if (is_array($this->headers[$index])) {
-            try {
-                $this->lazyLoadHeader($index);
-            } catch (Exception\InvalidArgumentException $ex) {
-                return false;
-            }
-        }
-
-        return true;
+        return in_array(static::createKey($name), $this->headersKeys);
     }
 
     /**
@@ -449,17 +435,25 @@ class Headers implements Countable, Iterator
 
     /**
      * @param $index
+     * @param bool $isGeneric
      * @return mixed|void
      */
-    protected function lazyLoadHeader($index)
+    protected function lazyLoadHeader($index, $isGeneric = false)
     {
         $current = $this->headers[$index];
 
         $key = $this->headersKeys[$index];
         /* @var $class Header\HeaderInterface */
-        $class = ($this->getPluginClassLoader()->load($key)) ?: 'Zend\Http\Header\GenericHeader';
+        $class = $this->getPluginClassLoader()->load(str_replace('-', '', $key));
+        if ($isGeneric || ! $class) {
+            $class = GenericHeader::class;
+        }
 
-        $headers = $class::fromString($current['line']);
+        try {
+            $headers = $class::fromString($current['line']);
+        } catch (Exception\InvalidArgumentException $exception) {
+            return $this->lazyLoadHeader($index, true);
+        }
         if (is_array($headers)) {
             $this->headers[$index] = $current = array_shift($headers);
             foreach ($headers as $header) {
@@ -481,6 +475,6 @@ class Headers implements Countable, Iterator
      */
     protected static function createKey($name)
     {
-        return str_replace(['-', '_', ' ', '.'], '', strtolower($name));
+        return str_replace(['_', ' ', '.'], '-', strtolower($name));
     }
 }
