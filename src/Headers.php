@@ -11,6 +11,7 @@ use ArrayIterator;
 use Countable;
 use Iterator;
 use Traversable;
+use Zend\Http\Header\Exception;
 use Zend\Loader\PluginClassLocator;
 
 /**
@@ -257,7 +258,7 @@ class Headers implements Countable, Iterator
     public function get($name)
     {
         $key = static::createKey($name);
-        if (! in_array($key, $this->headersKeys)) {
+        if (! $this->has($name)) {
             return false;
         }
 
@@ -295,7 +296,22 @@ class Headers implements Countable, Iterator
      */
     public function has($name)
     {
-        return (in_array(static::createKey($name), $this->headersKeys));
+        $key = static::createKey($name);
+
+        $index = array_search($key, $this->headersKeys);
+        if ($index === false) {
+            return false;
+        }
+
+        if (is_array($this->headers[$index])) {
+            try {
+                $this->lazyLoadHeader($index);
+            } catch (Exception\InvalidArgumentException $ex) {
+                return false;
+            }
+        }
+
+        return true;
     }
 
     /**
