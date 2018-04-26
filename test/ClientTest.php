@@ -203,8 +203,8 @@ class ClientTest extends TestCase
 
         $rawRequest = $client->getLastRawRequest();
 
-        $this->assertNotContains('Accept-Encoding: gzip, deflate', $rawRequest, null, true);
-        $this->assertNotContains('Accept-Encoding: identity', $rawRequest, null, true);
+        $this->assertNotContains('Accept-Encoding: gzip, deflate', $rawRequest, '', true);
+        $this->assertNotContains('Accept-Encoding: identity', $rawRequest, '', true);
 
         $this->assertContains('Accept-Encoding: foo', $rawRequest);
     }
