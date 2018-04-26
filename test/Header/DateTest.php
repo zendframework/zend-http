@@ -57,13 +57,13 @@ class DateTest extends TestCase
 
     public function testDateFromTimeStringDetectsBadInput()
     {
-        $this->expectException(InvalidArgumentException::class);
+        $this->setExpectedException(InvalidArgumentException::class);
         Date::fromTimeString('3 Days of the Condor');
     }
 
     public function testDateFromTimestampDetectsBadInput()
     {
-        $this->expectException(InvalidArgumentException::class);
+        $this->setExpectedException(InvalidArgumentException::class);
         Date::fromTimestamp('The Day of the Jackal');
     }
 
@@ -113,8 +113,7 @@ class DateTest extends TestCase
 
     public function testDateThrowsExceptionForInvalidDate()
     {
-        $this->expectException(InvalidArgumentException::class);
-        $this->expectExceptionMessage('Invalid date');
+        $this->setExpectedException(InvalidArgumentException::class, 'Invalid date');
         $dateHeader = new Date();
         $dateHeader->setDate('~~~~');
     }
@@ -142,7 +141,7 @@ class DateTest extends TestCase
      */
     public function testPreventsCRLFAttackViaFromString()
     {
-        $this->expectException(InvalidArgumentException::class);
+        $this->setExpectedException(InvalidArgumentException::class);
         Date::fromString("Date: Sun, 06 Nov 1994 08:49:37 GMT\r\n\r\nevilContent");
     }
 }

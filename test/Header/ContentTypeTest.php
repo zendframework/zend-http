@@ -157,7 +157,7 @@ class ContentTypeTest extends TestCase
      */
     public function testPreventsCRLFAttackViaFromString()
     {
-        $this->expectException(InvalidArgumentException::class);
+        $this->setExpectedException(InvalidArgumentException::class);
         ContentType::fromString("Content-Type: foo/bar;\r\n\r\nevilContent");
     }
 
@@ -167,7 +167,7 @@ class ContentTypeTest extends TestCase
      */
     public function testPreventsCRLFAttackViaConstructor()
     {
-        $this->expectException(InvalidArgumentException::class);
+        $this->setExpectedException(InvalidArgumentException::class);
         new ContentType("foo/bar\r\n\r\nevilContent");
     }
 }

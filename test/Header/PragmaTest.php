@@ -53,7 +53,7 @@ class PragmaTest extends TestCase
      */
     public function testPreventsCRLFAttackViaFromString()
     {
-        $this->expectException(InvalidArgumentException::class);
+        $this->setExpectedException(InvalidArgumentException::class);
         Pragma::fromString("Pragma: xxx\r\n\r\nevilContent");
     }
 
@@ -63,7 +63,7 @@ class PragmaTest extends TestCase
      */
     public function testPreventsCRLFAttackViaConstructor()
     {
-        $this->expectException(InvalidArgumentException::class);
+        $this->setExpectedException(InvalidArgumentException::class);
         new Pragma("xxx\r\n\r\nevilContent");
     }
 }

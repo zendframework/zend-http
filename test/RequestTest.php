@@ -164,8 +164,7 @@ class RequestTest extends TestCase
     {
         $request = new Request();
 
-        $this->expectException(InvalidArgumentException::class);
-        $this->expectExceptionMessage('must be an instance of');
+        $this->setExpectedException(InvalidArgumentException::class, 'must be an instance of');
         $request->setUri(new stdClass());
     }
 
@@ -181,8 +180,7 @@ class RequestTest extends TestCase
     {
         $request = new Request();
 
-        $this->expectException(InvalidArgumentException::class);
-        $this->expectExceptionMessage('Not valid or not supported HTTP version');
+        $this->setExpectedException(InvalidArgumentException::class, 'Not valid or not supported HTTP version');
         $request->setVersion('1.2');
     }
 
@@ -283,8 +281,7 @@ class RequestTest extends TestCase
         $request = new Request();
         $request->setAllowCustomMethods(false);
 
-        $this->expectException(InvalidArgumentException::class);
-        $this->expectExceptionMessage('Invalid HTTP method passed');
+        $this->setExpectedException(InvalidArgumentException::class, 'Invalid HTTP method passed');
 
         $request->setMethod('xcustom');
     }
@@ -299,8 +296,10 @@ class RequestTest extends TestCase
 
     public function testDisallowCustomMethodsFromString()
     {
-        $this->expectException(InvalidArgumentException::class);
-        $this->expectExceptionMessage('A valid request line was not found in the provided string');
+        $this->setExpectedException(
+            InvalidArgumentException::class,
+            'A valid request line was not found in the provided string'
+        );
 
         Request::fromString('X-CUS_TOM someurl', false);
     }
@@ -329,7 +328,7 @@ class RequestTest extends TestCase
      */
     public function testCRLFAttack()
     {
-        $this->expectException(RuntimeException::class);
+        $this->setExpectedException(RuntimeException::class);
         Request::fromString(
             "GET /foo HTTP/1.1\r\nHost: example.com\r\nX-Foo: This\ris\r\n\r\nCRLF\nInjection"
         );

@@ -51,7 +51,7 @@ class AcceptRangesTest extends TestCase
      */
     public function testPreventsCRLFAttackViaFromString()
     {
-        $this->expectException(InvalidArgumentException::class);
+        $this->setExpectedException(InvalidArgumentException::class);
         $header = AcceptRanges::fromString("Accept-Ranges: bytes;\r\n\r\nevilContent");
     }
 
@@ -61,7 +61,7 @@ class AcceptRangesTest extends TestCase
      */
     public function testPreventsCRLFAttackViaConstructor()
     {
-        $this->expectException(InvalidArgumentException::class);
+        $this->setExpectedException(InvalidArgumentException::class);
         $header = new AcceptRanges("bytes;\r\n\r\nevilContent");
     }
 }

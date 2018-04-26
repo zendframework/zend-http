@@ -53,7 +53,7 @@ class TransferEncodingTest extends TestCase
      */
     public function testPreventsCRLFAttackViaFromString()
     {
-        $this->expectException(InvalidArgumentException::class);
+        $this->setExpectedException(InvalidArgumentException::class);
         TransferEncoding::fromString("Transfer-Encoding: xxx\r\n\r\nevilContent");
     }
 
@@ -63,7 +63,7 @@ class TransferEncodingTest extends TestCase
      */
     public function testPreventsCRLFAttackViaConstructor()
     {
-        $this->expectException(InvalidArgumentException::class);
+        $this->setExpectedException(InvalidArgumentException::class);
         new TransferEncoding("xxx\r\n\r\nevilContent");
     }
 }

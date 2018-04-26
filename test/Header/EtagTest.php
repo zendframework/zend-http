@@ -53,7 +53,7 @@ class EtagTest extends TestCase
      */
     public function testPreventsCRLFAttackViaFromString()
     {
-        $this->expectException(InvalidArgumentException::class);
+        $this->setExpectedException(InvalidArgumentException::class);
         Etag::fromString("Etag: xxx\r\n\r\nevilContent");
     }
 
@@ -63,7 +63,7 @@ class EtagTest extends TestCase
      */
     public function testPreventsCRLFAttackViaConstructor()
     {
-        $this->expectException(InvalidArgumentException::class);
+        $this->setExpectedException(InvalidArgumentException::class);
         new Etag("xxx\r\n\r\nevilContent");
     }
 }

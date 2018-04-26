@@ -53,7 +53,7 @@ class HostTest extends TestCase
      */
     public function testPreventsCRLFAttackViaFromString()
     {
-        $this->expectException(InvalidArgumentException::class);
+        $this->setExpectedException(InvalidArgumentException::class);
         Host::fromString("Host: xxx\r\n\r\nevilContent");
     }
 
@@ -63,7 +63,7 @@ class HostTest extends TestCase
      */
     public function testPreventsCRLFAttackViaConstructor()
     {
-        $this->expectException(InvalidArgumentException::class);
+        $this->setExpectedException(InvalidArgumentException::class);
         new Host("xxx\r\n\r\nevilContent");
     }
 }

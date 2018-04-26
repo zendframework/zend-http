@@ -95,7 +95,7 @@ class AcceptEncodingTest extends TestCase
      */
     public function testPreventsCRLFAttackViaFromString()
     {
-        $this->expectException(InvalidArgumentException::class);
+        $this->setExpectedException(InvalidArgumentException::class);
         $header = AcceptEncoding::fromString("Accept-Encoding: compress\r\n\r\nevilContent");
     }
 
@@ -106,8 +106,7 @@ class AcceptEncodingTest extends TestCase
     public function testPreventsCRLFAttackViaSetters()
     {
         $header = new AcceptEncoding();
-        $this->expectException(InvalidArgumentException::class);
-        $this->expectExceptionMessage('valid type');
+        $this->setExpectedException(InvalidArgumentException::class, 'valid type');
 
         $header->addEncoding("\nc\rom\r\npress");
     }

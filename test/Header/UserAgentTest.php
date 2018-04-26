@@ -53,7 +53,7 @@ class UserAgentTest extends TestCase
      */
     public function testPreventsCRLFAttackViaFromString()
     {
-        $this->expectException(InvalidArgumentException::class);
+        $this->setExpectedException(InvalidArgumentException::class);
         UserAgent::fromString("User-Agent: xxx\r\n\r\nevilContent");
     }
 
@@ -63,7 +63,7 @@ class UserAgentTest extends TestCase
      */
     public function testPreventsCRLFAttackViaConstructor()
     {
-        $this->expectException(InvalidArgumentException::class);
+        $this->setExpectedException(InvalidArgumentException::class);
         new UserAgent("xxx\r\n\r\nevilContent");
     }
 }

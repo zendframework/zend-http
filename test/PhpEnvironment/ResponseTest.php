@@ -96,7 +96,7 @@ class ResponseTest extends TestCase
         $response->setVersion(Response::VERSION_10);
         $this->assertSame(Response::VERSION_10, $response->getVersion());
 
-        $this->expectException(InvalidArgumentException::class);
+        $this->setExpectedException(InvalidArgumentException::class);
         $response->setVersion('zf/2.0');
     }
 }

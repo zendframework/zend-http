@@ -16,7 +16,7 @@ class ContentSecurityPolicyTest extends TestCase
 {
     public function testContentSecurityPolicyFromStringThrowsExceptionIfImproperHeaderNameUsed()
     {
-        $this->expectException(InvalidArgumentException::class);
+        $this->setExpectedException(InvalidArgumentException::class);
         ContentSecurityPolicy::fromString('X-Content-Security-Policy: default-src *;');
     }
 
@@ -80,7 +80,7 @@ class ContentSecurityPolicyTest extends TestCase
 
     public function testContentSecurityPolicySetDirectiveThrowsExceptionIfInvalidDirectiveNameGiven()
     {
-        $this->expectException(InvalidArgumentException::class);
+        $this->setExpectedException(InvalidArgumentException::class);
         $csp = new ContentSecurityPolicy();
         $csp->setDirective('foo', []);
     }
@@ -99,7 +99,7 @@ class ContentSecurityPolicyTest extends TestCase
      */
     public function testPreventsCRLFAttackViaFromString()
     {
-        $this->expectException(InvalidArgumentException::class);
+        $this->setExpectedException(InvalidArgumentException::class);
         ContentSecurityPolicy::fromString("Content-Security-Policy: default-src 'none'\r\n\r\nevilContent");
     }
 
@@ -110,7 +110,7 @@ class ContentSecurityPolicyTest extends TestCase
     public function testPreventsCRLFAttackViaDirective()
     {
         $header = new ContentSecurityPolicy();
-        $this->expectException(InvalidArgumentException::class);
+        $this->setExpectedException(InvalidArgumentException::class);
         $header->setDirective('default-src', ["\rsome\r\nCRLF\ninjection"]);
     }
 

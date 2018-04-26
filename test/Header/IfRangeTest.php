@@ -53,7 +53,7 @@ class IfRangeTest extends TestCase
      */
     public function testPreventsCRLFAttackViaFromString()
     {
-        $this->expectException(InvalidArgumentException::class);
+        $this->setExpectedException(InvalidArgumentException::class);
         IfRange::fromString("If-Range: xxx\r\n\r\nevilContent");
     }
 
@@ -63,7 +63,7 @@ class IfRangeTest extends TestCase
      */
     public function testPreventsCRLFAttackViaConstructor()
     {
-        $this->expectException(InvalidArgumentException::class);
+        $this->setExpectedException(InvalidArgumentException::class);
         new IfRange("xxx\r\n\r\nevilContent");
     }
 }

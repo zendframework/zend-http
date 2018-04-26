@@ -94,7 +94,7 @@ class AcceptCharsetTest extends TestCase
      */
     public function testPreventsCRLFAttackViaFromString()
     {
-        $this->expectException(InvalidArgumentException::class);
+        $this->setExpectedException(InvalidArgumentException::class);
         AcceptCharset::fromString("Accept-Charset: iso-8859-5\r\n\r\nevilContent");
     }
 
@@ -105,8 +105,7 @@ class AcceptCharsetTest extends TestCase
     public function testPreventsCRLFAttackViaSetters()
     {
         $header = new AcceptCharset();
-        $this->expectException(InvalidArgumentException::class);
-        $this->expectExceptionMessage('valid type');
+        $this->setExpectedException(InvalidArgumentException::class, 'valid type');
         $header->addCharset("\niso\r-8859-\r\n5");
     }
 }

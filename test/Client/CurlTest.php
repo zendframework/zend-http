@@ -105,8 +105,7 @@ class CurlTest extends CommonHttpTests
      */
     public function testSetConfigInvalidConfig($config)
     {
-        $this->expectException(InvalidArgumentException::class);
-        $this->expectExceptionMessage('Array or Traversable object expected');
+        $this->setExpectedException(InvalidArgumentException::class, 'Array or Traversable object expected');
 
         $this->_adapter->setOptions($config);
     }
@@ -129,8 +128,7 @@ class CurlTest extends CommonHttpTests
         ];
         $this->client = new Client($this->client->getUri(true), $config);
 
-        $this->expectException(RuntimeException::class);
-        $this->expectExceptionMessage('Unknown or erroreous cURL option');
+        $this->setExpectedException(RuntimeException::class, 'Unknown or erroreous cURL option');
         $this->client->send();
     }
 
@@ -176,9 +174,8 @@ class CurlTest extends CommonHttpTests
         $this->client->setParameterGet(['swallow' => 'african']);
         $this->client->setParameterPost(['Camelot' => 'A silly place']);
         $this->client->setMethod('POST');
-        $this->expectException(RuntimeException::class);
-        $this->expectExceptionMessage(
-            'Error in cURL request: Operation timed out after 1000 milliseconds with 0 bytes received'
+        $this->setExpectedException(
+            RuntimeException::class, 'Error in cURL request: Operation timed out after 1000 milliseconds with 0 bytes received'
         );
         $this->client->send();
     }
@@ -239,15 +236,14 @@ class CurlTest extends CommonHttpTests
     public function testWritingAndNotConnectedWithCurlHandleThrowsException()
     {
         $adapter = new Adapter\Curl();
-        $this->expectException(RuntimeException::class);
-        $this->expectExceptionMessage('Trying to write but we are not connected');
+        $this->setExpectedException(RuntimeException::class, 'Trying to write but we are not connected');
         $adapter->write('GET', 'someUri');
     }
 
     public function testSetConfigIsNotArray()
     {
         $adapter = new Adapter\Curl();
-        $this->expectException(InvalidArgumentException::class);
+        $this->setExpectedException(InvalidArgumentException::class);
         $adapter->setOptions('foo');
     }
 

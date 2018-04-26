@@ -153,8 +153,10 @@ class StaticTest extends TestCase
      */
     public function testExceptUnsupportedAuthDynamic()
     {
-        $this->expectException(InvalidArgumentException::class);
-        $this->expectExceptionMessage('Invalid or not supported authentication type: \'SuperStrongAlgo\'');
+        $this->setExpectedException(
+            InvalidArgumentException::class,
+            'Invalid or not supported authentication type: \'SuperStrongAlgo\''
+        );
 
         $this->_client->setAuth('shahar', '1234', 'SuperStrongAlgo');
     }
@@ -200,8 +202,10 @@ class StaticTest extends TestCase
      */
     public function testSetInvalidCookies()
     {
-        $this->expectException(InvalidArgumentException::class);
-        $this->expectExceptionMessage('Invalid parameter type passed as Cookie');
+        $this->setExpectedException(
+            InvalidArgumentException::class,
+            'Invalid parameter type passed as Cookie'
+        );
 
         $this->_client->addCookie('cookie');
     }
@@ -259,8 +263,7 @@ class StaticTest extends TestCase
      */
     public function testConfigSetInvalid($config)
     {
-        $this->expectException(ClientException\InvalidArgumentException::class);
-        $this->expectExceptionMessage('Config parameter is not valid');
+        $this->setExpectedException(ClientException\InvalidArgumentException::class, 'Config parameter is not valid');
 
         $this->_client->setOptions($config);
     }
@@ -345,8 +348,7 @@ class StaticTest extends TestCase
                 HTTPClient::class
             ));
         }
-        $this->expectException(RuntimeException::class);
-        $this->expectExceptionMessage('Cannot handle content type \'x-foo/something-fake\' automatically');
+        $this->setExpectedException(RuntimeException::class, 'Cannot handle content type \'x-foo/something-fake\' automatically');
 
         $this->_client->setEncType('x-foo/something-fake');
         $this->_client->setParameterPost(['parameter' => 'value']);
@@ -366,8 +368,10 @@ class StaticTest extends TestCase
                 HTTPClient::class
             ));
         }
-        $this->expectException(ClientAdapterException\RuntimeException::class);
-        $this->expectExceptionMessage('Unable to connect to 255.255.255.255:80');
+        $this->setExpectedException(
+            ClientAdapterException\RuntimeException::class,
+            'Unable to connect to 255.255.255.255:80'
+        );
 
         // Try to connect to an invalid host
         $this->_client->setUri('http://255.255.255.255');
@@ -389,8 +393,7 @@ class StaticTest extends TestCase
      */
     public function testSettingInvalidMethodThrowsException($method)
     {
-        $this->expectException(InvalidArgumentException::class);
-        $this->expectExceptionMessage('Invalid HTTP method passed');
+        $this->setExpectedException(InvalidArgumentException::class, 'Invalid HTTP method passed');
 
         $this->_client->setMethod($method);
     }
@@ -552,8 +555,7 @@ class StaticTest extends TestCase
         $client = new HTTPClient($url, $config);
         $client->setMethod('GET');
 
-        $this->expectException(RuntimeException::class);
-        $this->expectExceptionMessage('Could not open temp file /path/to/bogus/file.ext');
+        $this->setExpectedException(RuntimeException::class, 'Could not open temp file /path/to/bogus/file.ext');
         $client->send();
     }
 

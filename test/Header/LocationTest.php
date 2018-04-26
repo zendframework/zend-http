@@ -131,7 +131,7 @@ class LocationTest extends TestCase
      */
     public function testCRLFAttack()
     {
-        $this->expectException(InvalidArgumentException::class);
+        $this->setExpectedException(InvalidArgumentException::class);
         Location::fromString("Location: http://www.example.com/path\r\n\r\nevilContent");
     }
 }

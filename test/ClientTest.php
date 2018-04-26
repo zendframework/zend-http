@@ -122,7 +122,8 @@ class ClientTest extends TestCase
     {
         $client = new Client();
 
-        $this->expectException(HttpException\InvalidArgumentException::class);
+        $this->setExpectedException(HttpException\InvalidArgumentException::class);
+
         $client->addCookie('test', null);
     }
 
@@ -217,13 +218,13 @@ class ClientTest extends TestCase
 
     public function testEncodeAuthHeaderThrowsExceptionWhenUsernameContainsSemiColon()
     {
-        $this->expectException(ClientException\InvalidArgumentException::class);
+        $this->setExpectedException(ClientException\InvalidArgumentException::class);
         Client::encodeAuthHeader('test:', 'test');
     }
 
     public function testEncodeAuthHeaderThrowsExceptionWhenInvalidAuthTypeIsUsed()
     {
-        $this->expectException(ClientException\InvalidArgumentException::class);
+        $this->setExpectedException(ClientException\InvalidArgumentException::class);
         Client::encodeAuthHeader('test', 'test', 'test');
     }
 
@@ -453,7 +454,7 @@ class ClientTest extends TestCase
     {
         $client = new Client();
 
-        $adapter = $this->createMock(AdapterInterface::class);
+        $adapter = $this->getMock(AdapterInterface::class);
 
         $client->setAdapter($adapter);
 

@@ -53,7 +53,7 @@ class ContentMD5Test extends TestCase
      */
     public function testPreventsCRLFAttackViaFromString()
     {
-        $this->expectException(InvalidArgumentException::class);
+        $this->setExpectedException(InvalidArgumentException::class);
         ContentMD5::fromString("Content-MD5: xxx\r\n\r\nevilContent");
     }
 
@@ -63,7 +63,7 @@ class ContentMD5Test extends TestCase
      */
     public function testPreventsCRLFAttackViaConstructor()
     {
-        $this->expectException(InvalidArgumentException::class);
+        $this->setExpectedException(InvalidArgumentException::class);
         new ContentMD5("xxx\r\n\r\nevilContent");
     }
 }

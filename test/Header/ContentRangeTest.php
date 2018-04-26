@@ -53,7 +53,7 @@ class ContentRangeTest extends TestCase
      */
     public function testPreventsCRLFAttackViaFromString()
     {
-        $this->expectException(InvalidArgumentException::class);
+        $this->setExpectedException(InvalidArgumentException::class);
         ContentRange::fromString("Content-Range: xxx\r\n\r\nevilContent");
     }
 
@@ -63,7 +63,7 @@ class ContentRangeTest extends TestCase
      */
     public function testPreventsCRLFAttackViaConstructor()
     {
-        $this->expectException(InvalidArgumentException::class);
+        $this->setExpectedException(InvalidArgumentException::class);
         new ContentRange("xxx\r\n\r\nevilContent");
     }
 }

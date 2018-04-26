@@ -52,7 +52,7 @@ class IfUnmodifiedSinceTest extends TestCase
      */
     public function testCRLFAttack()
     {
-        $this->expectException(InvalidArgumentException::class);
+        $this->setExpectedException(InvalidArgumentException::class);
         IfUnmodifiedSince::fromString(
             "If-Unmodified-Since: Sun, 06 Nov 1994 08:49:37 GMT\r\n\r\nevilContent"
         );

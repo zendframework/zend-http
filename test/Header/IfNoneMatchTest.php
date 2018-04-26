@@ -53,7 +53,7 @@ class IfNoneMatchTest extends TestCase
      */
     public function testPreventsCRLFAttackViaFromString()
     {
-        $this->expectException(InvalidArgumentException::class);
+        $this->setExpectedException(InvalidArgumentException::class);
         IfNoneMatch::fromString("If-None-Match: xxx\r\n\r\nevilContent");
     }
 
@@ -63,7 +63,7 @@ class IfNoneMatchTest extends TestCase
      */
     public function testPreventsCRLFAttackViaConstructor()
     {
-        $this->expectException(InvalidArgumentException::class);
+        $this->setExpectedException(InvalidArgumentException::class);
         new IfNoneMatch("xxx\r\n\r\nevilContent");
     }
 }

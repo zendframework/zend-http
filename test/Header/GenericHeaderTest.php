@@ -64,7 +64,7 @@ class GenericHeaderTest extends TestCase
      */
     public function testPreventsCRLFAttackViaFromString()
     {
-        $this->expectException(InvalidArgumentException::class);
+        $this->setExpectedException(InvalidArgumentException::class);
         GenericHeader::fromString("X_Foo_Bar: Bar\r\n\r\nevilContent");
     }
 
@@ -74,7 +74,7 @@ class GenericHeaderTest extends TestCase
      */
     public function testPreventsCRLFAttackViaConstructor()
     {
-        $this->expectException(InvalidArgumentException::class);
+        $this->setExpectedException(InvalidArgumentException::class);
         new GenericHeader('X_Foo_Bar', "Bar\r\n\r\nevilContent");
     }
 
@@ -85,8 +85,7 @@ class GenericHeaderTest extends TestCase
     public function testProtectsFromCRLFAttackViaSetFieldName()
     {
         $header = new GenericHeader();
-        $this->expectException(InvalidArgumentException::class);
-        $this->expectExceptionMessage('valid');
+        $this->setExpectedException(InvalidArgumentException::class, 'valid');
         $header->setFieldName("\rX-\r\nFoo-\nBar");
     }
 
@@ -97,7 +96,7 @@ class GenericHeaderTest extends TestCase
     public function testProtectsFromCRLFAttackViaSetFieldValue()
     {
         $header = new GenericHeader();
-        $this->expectException(InvalidArgumentException::class);
+        $this->setExpectedException(InvalidArgumentException::class);
         $header->setFieldValue("\rSome\r\nCLRF\nAttack");
     }
 

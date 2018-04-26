@@ -53,7 +53,7 @@ class AuthenticationInfoTest extends TestCase
      */
     public function testPreventsCRLFAttackViaFromString()
     {
-        $this->expectException(InvalidArgumentException::class);
+        $this->setExpectedException(InvalidArgumentException::class);
         $header = AuthenticationInfo::fromString("Authentication-Info: xxx\r\n\r\nevilContent");
     }
 
@@ -63,7 +63,7 @@ class AuthenticationInfoTest extends TestCase
      */
     public function testPreventsCRLFAttackViaConstructor()
     {
-        $this->expectException(InvalidArgumentException::class);
+        $this->setExpectedException(InvalidArgumentException::class);
         new AuthenticationInfo("xxx\r\n\r\nevilContent");
     }
 }
