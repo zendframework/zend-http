@@ -40,6 +40,9 @@ All notable changes to this project will be documented in this file, in reverse 
 
 ### Fixed
 
+- [#122](https://github.com/zendframework/zend-http/pull/122) fixes an issue with the stream response whereby if the `outputstream`
+  option is set, the output file was opened twice; it is now opened exactly once.
+
 - [#147](https://github.com/zendframework/zend-http/pull/147) fixes an issue with header retrieval when the header line is malformed.
   Previously, an exception would be raised if a specific `HeaderInterface` implementation determined
   the header line was invalid. Now, `Header::has()` will return false for such headers, allowing
