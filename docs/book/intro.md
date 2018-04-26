@@ -1,7 +1,7 @@
 # Introduction
 
 zend-http provides the HTTP message abstraction used by
-[zend-mvc](https://zendframework.github.io/zend-mvc/), and also provides an
+[zend-mvc](https://docs.zendframework.com/zend-mvc/), and also provides an
 extensible, adapter-driven HTTP client library. It provides the following
 abstractions:
 
@@ -18,7 +18,7 @@ abstractions:
 >
 > This library **does not** support [PSR-7](http://www.php-fig.org/psr/psr-7), as
 > it predates that specification. For PSR-7 support, please see our
-> [Diactoros component](https://zendframework.github.io/zend-diactoros/).
+> [Diactoros component](https://docs.zendframework.com/zend-diactoros/).
 
 ## Zend\Http Request, Response and Headers
 

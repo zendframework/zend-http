@@ -1,7 +1,6 @@
 {
     "name": "zendframework/zend-http",
-    "description": "provides an easy interface for performing Hyper-Text Transfer Protocol (HTTP) requests",
-    "homepage": "https://github.com/zendframework/zend-http",
+    "description": "Provides an easy interface for performing Hyper-Text Transfer Protocol (HTTP) requests",
     "license": "BSD-3-Clause",
     "keywords": [
         "zf",
@@ -11,15 +10,12 @@
         "HTTP client"
     ],
     "support": {
-        "docs": "https://docs.zendframework.com/zend-http",
+        "docs": "https://docs.zendframework.com/zend-http/",
         "issues": "https://github.com/zendframework/zend-http/issues",
         "source": "https://github.com/zendframework/zend-http",
         "rss": "https://github.com/zendframework/zend-http/releases.atom",
-        "slack": "https://zendframework-slack.herokuapp.com",
+        "chat": "https://zendframework-slack.herokuapp.com",
         "forum": "https://discourse.zendframework.com/c/questions/components"
-    },
-    "config": {
-        "sort-packages": true
     },
     "require": {
         "php": "^5.6 || ^7.0",
@@ -43,10 +39,13 @@
             "ZendTest\\Http\\": "test/"
         }
     },
+    "config": {
+        "sort-packages": true
+    },
     "extra": {
         "branch-alias": {
-            "dev-master": "2.7-dev",
-            "dev-develop": "2.8-dev"
+            "dev-master": "2.7.x-dev",
+            "dev-develop": "2.8.x-dev"
         }
     },
     "scripts": {
