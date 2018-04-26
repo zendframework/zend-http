@@ -334,4 +334,19 @@ class RequestTest extends TestCase
             "GET /foo HTTP/1.1\r\nHost: example.com\r\nX-Foo: This\ris\r\n\r\nCRLF\nInjection"
         );
     }
+
+    public function testGetHeadersDoesNotRaiseExceptionForInvalidHeaderLines()
+    {
+        $request = Request::fromString("GET /foo HTTP/1.1\r\nHost: example.com\r\nUseragent: h4ckerbot");
+
+        $headers = $request->getHeaders();
+        $this->assertFalse($headers->has('User-Agent'));
+        $this->assertFalse($headers->get('User-Agent'));
+        $this->assertSame('bar-baz', $request->getHeader('User-Agent', 'bar-baz'));
+
+        $this->assertTrue($headers->has('useragent'));
+        $this->assertInstanceOf(GenericHeader::class, $headers->get('useragent'));
+        $this->assertSame('h4ckerbot', $headers->get('useragent')->getFieldValue());
+        $this->assertSame('h4ckerbot', $request->getHeader('useragent')->getFieldValue());
+    }
 }

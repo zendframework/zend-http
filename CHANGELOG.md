@@ -40,6 +40,14 @@ All notable changes to this project will be documented in this file, in reverse 
 
 ### Fixed
 
+- [#147](https://github.com/zendframework/zend-http/pull/147) fixes an issue with header retrieval when the header line is malformed.
+  Previously, an exception would be raised if a specific `HeaderInterface` implementation determined
+  the header line was invalid. Now, `Header::has()` will return false for such headers, allowing
+  `Request::getHeader()` to return `false` or the provided default value. Additionally, in cases
+  where the header name is malformed (e.g., `Useragent` instead of `User-Agent`, users can still
+  retrieve by the submitted header name; they will receive a `GenericHeader` instance in such
+  cases, however.
+
 - [#133](https://github.com/zendframework/zend-http/pull/133) Adds back missing
   sprintf placeholder in CacheControl exception message
 
