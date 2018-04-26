@@ -25,6 +25,10 @@ All notable changes to this project will be documented in this file, in reverse 
 
 ### Fixed
 
+- [#140](https://github.com/zendframework/zend-http/pull/140) fixes retrieval of headers when multiple headers of the same name
+  are added to the `Headers` instance; it now ensures that the last header added of the same
+  type is retrieved when it is not a multi-value type. Previous values are overwritten.
+
 - [#112](https://github.com/zendframework/zend-http/pull/112) provides performance improvements when parsing large chunked messages.
 
 - introduces changes to `Response::fromString()` to pull the next line of the response
