@@ -213,8 +213,27 @@ class Headers implements Countable, Iterator
      */
     public function addHeader(Header\HeaderInterface $header)
     {
-        $this->headersKeys[] = static::createKey($header->getFieldName());
-        $this->headers[]     = $header;
+        $key = static::createKey($header->getFieldName());
+        $index = array_search($key, $this->headersKeys);
+
+        // No header by that key presently; append key and header to list.
+        if ($index === false) {
+            $this->headersKeys[] = $key;
+            $this->headers[]     = $header;
+            return $this;
+        }
+
+        // Header exists, and is a multi-value header; append key and header to
+        // list (as multi-value headers are aggregated on retrieval)
+        $class = ($this->getPluginClassLoader()->load(str_replace('-', '', $key))) ?: Header\GenericHeader::class;
+        if (in_array(Header\MultipleHeaderInterface::class, class_implements($class, true))) {
+            $this->headersKeys[] = $key;
+            $this->headers[] = $header;
+            return $this;
+        }
+
+        // Otherwise, we replace the current instance.
+        $this->headers[$index] = $header;
 
         return $this;
     }
@@ -286,6 +305,7 @@ class Headers implements Countable, Iterator
         if (is_array($this->headers[$index])) {
             return $this->lazyLoadHeader($index);
         }
+
         return $this->headers[$index];
     }
 
