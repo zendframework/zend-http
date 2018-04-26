@@ -24,6 +24,9 @@ All notable changes to this project will be documented in this file, in reverse 
 
 ### Added
 
+- [#135](https://github.com/zendframework/zend-http/pull/135) adds a package suggestion of paragonie/certainty, which provides automated
+  management of cacert.pem files.
+
 - [#143](https://github.com/zendframework/zend-http/pull/143) adds support for PHP 7.2.
 
 ### Changed
