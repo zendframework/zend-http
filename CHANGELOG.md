@@ -24,6 +24,10 @@ All notable changes to this project will be documented in this file, in reverse 
 
 ### Added
 
+- [#143](https://github.com/zendframework/zend-http/pull/143) adds support for PHP 7.2.
+
+### Changed
+
 - Nothing.
 
 ### Deprecated
@@ -117,7 +121,7 @@ All notable changes to this project will be documented in this file, in reverse 
   Security Policy CSP HTTP header when it is `none` (empty value).
 - [#92](https://github.com/zendframework/zend-http/pull/92) fixes the flatten
   cookies value for array value (also multidimensional).
-- [#34](https://github.com/zendframework/zend-http/issues/33) fixes the
+- [#34](https://github.com/zendframework/zend-http/pull/34) fixes the
   standard separator (&) for application/x-www-form-urlencoded.
 
 ## 2.5.5 - 2016-08-08

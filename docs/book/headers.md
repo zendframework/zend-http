@@ -121,7 +121,7 @@ Method signature                                                | Description
 ## AbstractDate Methods
 
 `Zend\Http\Header\AbstractDate` defines the following methods in addition to
-those it inherits from the [HeaderInterface](#headerinterface-methods). The 
+those it inherits from the [HeaderInterface](#headerinterface-methods). The
 `Date`, `Expires`, `IfModifiedSince`, `IfUnmodifiedSince`, `LastModified`, and
 `RetryAfter` header types inherit from it.
 
