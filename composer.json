@@ -29,6 +29,9 @@
         "zendframework/zend-coding-standard": "~1.0.0",
         "zendframework/zend-config": "^3.1 || ^2.6"
     },
+    "suggest": {
+        "paragonie/certainty": "For automated management of cacert.pem"
+    },
     "autoload": {
         "psr-4": {
             "Zend\\Http\\": "src/"
