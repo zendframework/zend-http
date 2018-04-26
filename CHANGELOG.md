@@ -22,6 +22,8 @@ All notable changes to this project will be documented in this file, in reverse 
 
 ### Fixed
 
+- [#112](https://github.com/zendframework/zend-http/pull/112) provides performance improvements when parsing large chunked messages.
+
 - introduces changes to `Response::fromString()` to pull the next line of the response
   and parse it for the status when a 100 status code is initially encountered, per https://tools.ietf.org/html/rfc7231\#section-6.2.1
 
