@@ -185,8 +185,7 @@ class ResponseTest extends TestCase
      */
     private function makeChunk($chunksize)
     {
-        $chunkdata = str_repeat('W', $chunksize);
-        return sprintf("%d\r\n%s\r\n", $chunksize, $chunkdata);
+        return sprintf("%d\r\n%s\r\n", $chunksize, str_repeat('W', $chunksize));
     }
 
     /**
