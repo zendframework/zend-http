@@ -204,10 +204,18 @@ class ResponseTest extends TestCase
      */
     public function testChunkedResponsePerformance()
     {
-        $response = new Response();
+        $headers = new Headers();
+        $headers->addHeaders([
+            'Date'              => 'Sun, 25 Jun 2006 19:55:19 GMT',
+            'Server'            => 'Apache',
+            'X-powered-by'      => 'PHP/5.1.4-pl3-gentoo',
+            'Connection'        => 'close',
+            'Transfer-encoding' => 'chunked',
+            'Content-type'      => 'text/html',
+        ]);
 
-        $headers = file_get_contents(__DIR__ . '/_files/response_chunked_head');
-        $response->setHeaders(Headers::fromString($headers));
+        $response = new Response();
+        $response->setHeaders($headers);
 
         // avoid flakiness, repeat test
         $timings = [];
