@@ -6,6 +6,10 @@ All notable changes to this project will be documented in this file, in reverse 
 
 ### Added
 
+- [#143](https://github.com/zendframework/zend-http/pull/143) adds support for PHP 7.2.
+
+### Changed
+
 - Nothing.
 
 ### Deprecated
