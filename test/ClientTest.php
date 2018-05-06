@@ -528,7 +528,7 @@ class ClientTest extends TestCase
     public function uriDataProvider()
     {
         return [
-            ['example', true],
+            ['/example', true],
             ['http://localhost/example', false]
         ];
     }
