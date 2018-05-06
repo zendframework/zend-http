@@ -106,7 +106,7 @@ All notable changes to this project will be documented in this file, in reverse 
 
 ### Fixed
 
-- Nothing.
+- [#149](https://github.com/zendframework/zend-http/pull/149) Client::setUri() should keep relative uri status
 
 ## 2.8.0 - 2018-04-26
 
