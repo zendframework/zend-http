@@ -330,7 +330,7 @@ class Client implements Stdlib\DispatchableInterface
             }
 
             // We have no ports, set the defaults
-            if (! $this->getUri()->getPort()) {
+            if (! $this->getUri()->getPort() && $this->getUri()->isAbsolute()) {
                 $this->getUri()->setPort(($this->getUri()->getScheme() == 'https' ? 443 : 80));
             }
         }

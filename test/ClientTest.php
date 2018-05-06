@@ -524,4 +524,21 @@ class ClientTest extends TestCase
         $rawRequest = $client->getLastRawRequest();
         $this->assertContains('foo=bar&baz=foo', $rawRequest);
     }
+
+    public function uriDataProvider()
+    {
+        return [
+            ['example', true],
+            ['http://localhost/example', false]
+        ];
+    }
+
+    /**
+     * @dataProvider uriDataProvider
+     */
+    public function testValidRelativeURI($uri, $isValidRelativeURI)
+    {
+        $client = new Client($uri);
+        $this->assertSame($isValidRelativeURI, $client->getUri()->isValidRelative());
+    }
 }
