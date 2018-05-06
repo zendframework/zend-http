@@ -903,7 +903,7 @@ class Client implements Stdlib\DispatchableInterface
                 }
             }
             // If we have no ports, set the defaults
-            if (! $uri->getPort()) {
+            if (! $uri->getPort() && $uri->isAbsolute()) {
                 $uri->setPort($uri->getScheme() == 'https' ? 443 : 80);
             }
 

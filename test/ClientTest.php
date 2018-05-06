@@ -541,4 +541,11 @@ class ClientTest extends TestCase
         $client = new Client($uri);
         $this->assertSame($isValidRelativeURI, $client->getUri()->isValidRelative());
     }
+
+    public function testSendRequestWithRelativeURI()
+    {
+        $client = new Client('/example');
+        $client->setAdapter(Test::class);
+        $client->send();
+    }
 }
