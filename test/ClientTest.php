@@ -549,4 +549,12 @@ class ClientTest extends TestCase
         $client->send();
         $this->assertTrue($client->getUri()->isValidRelative());
     }
+
+    public function testSendRequestWithAbsoluteURI()
+    {
+        $client = new Client('http://localhost/example');
+        $client->setAdapter(Test::class);
+        $client->send();
+        $this->assertFalse($client->getUri()->isValidRelative());
+    }
 }
