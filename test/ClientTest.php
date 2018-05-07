@@ -547,5 +547,6 @@ class ClientTest extends TestCase
         $client = new Client('/example');
         $client->setAdapter(Test::class);
         $client->send();
+        $this->assertTrue($client->getUri()->isValidRelative());
     }
 }
