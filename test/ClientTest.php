@@ -570,10 +570,10 @@ class ClientTest extends TestCase
     public function testRelativeURIDoesnotSetPort()
     {
         $client = new Client('/example');
-        $this->assertSame(null, $client->getUri()->getPort());
+        $this->assertNull($client->getUri()->getPort());
 
         $client->setAdapter(Test::class);
         $client->send();
-        $this->assertSame(null, $client->getUri()->getPort());
+        $this->assertNull($client->getUri()->getPort());
     }
 }
