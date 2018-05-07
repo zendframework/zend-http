@@ -559,8 +559,10 @@ class ClientTest extends TestCase
      */
     public function testAbsoluteSetPortWhenNoPort($absoluteURI, $port)
     {
-        $client = new Client($absoluteURI);
+        $client = new Client();
         $client->getUri()->setPort(null);
+
+        $client->setUri($absoluteURI);
         $this->assertSame($port, $client->getUri()->getPort());
 
         $client->setAdapter(Test::class);
