@@ -540,21 +540,40 @@ class ClientTest extends TestCase
     {
         $client = new Client($uri);
         $this->assertSame($isValidRelativeURI, $client->getUri()->isValidRelative());
+
+        $client->setAdapter(Test::class);
+        $client->send();
+        $this->assertSame($isValidRelativeURI, $client->getUri()->isValidRelative());
     }
 
-    public function testSendRequestWithRelativeURI()
+    public function portChangeDataProvider()
+    {
+        return [
+            ['https://localhost/example', 443],
+            ['http://localhost/example', 80]
+        ];
+    }
+
+    /**
+     * @dataProvider portChangeDataProvider
+     */
+    public function testAbsoluteSetPort443OnHttps($absoluteURI, $port)
+    {
+        $client = new Client($absoluteURI);
+        $this->assertSame($port, $client->getUri()->getPort());
+
+        $client->setAdapter(Test::class);
+        $client->send();
+        $this->assertSame($port, $client->getUri()->getPort());
+    }
+
+    public function testRelativeURIDoesnotSetPort()
     {
         $client = new Client('/example');
-        $client->setAdapter(Test::class);
-        $client->send();
-        $this->assertTrue($client->getUri()->isValidRelative());
-    }
+        $this->assertSame(null, $client->getUri()->getPort());
 
-    public function testSendRequestWithAbsoluteURI()
-    {
-        $client = new Client('http://localhost/example');
         $client->setAdapter(Test::class);
         $client->send();
-        $this->assertFalse($client->getUri()->isValidRelative());
+        $this->assertSame(null, $client->getUri()->getPort());
     }
 }
