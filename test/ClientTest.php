@@ -557,9 +557,10 @@ class ClientTest extends TestCase
     /**
      * @dataProvider portChangeDataProvider
      */
-    public function testAbsoluteSetPort443OnHttps($absoluteURI, $port)
+    public function testAbsoluteSetPortWhenNoPort($absoluteURI, $port)
     {
         $client = new Client($absoluteURI);
+        $client->setPort(null);
         $this->assertSame($port, $client->getUri()->getPort());
 
         $client->setAdapter(Test::class);
