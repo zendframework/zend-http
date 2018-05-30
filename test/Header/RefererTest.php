@@ -77,4 +77,17 @@ class RefererTest extends TestCase
         $this->expectException(InvalidArgumentException::class);
         Referer::fromString("Referer: http://www.example.com/\r\n\r\nevilContent");
     }
+
+    public function testInvalidUriShouldWrapException()
+    {
+        $headerString = "Referer: unknown-scheme://test";
+
+        $headers = \Zend\Http\Headers::fromString($headerString);
+
+        $result = $headers->get('Referer');
+
+        $this->assertInstanceOf(\Zend\Http\Header\GenericHeader::class, $result);
+        $this->assertNotInstanceOf(\Zend\Http\Header\Referer::class, $result);
+        $this->assertEquals('unknown-scheme://test', $result->getFieldValue());
+    }
 }
