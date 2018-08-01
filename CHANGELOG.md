@@ -24,7 +24,7 @@ All notable changes to this project will be documented in this file, in reverse 
 
 - Nothing.
 
-## 2.8.1 - TBD
+## 2.8.1 - 2018-08-01
 
 ### Added
 
@@ -32,7 +32,42 @@ All notable changes to this project will be documented in this file, in reverse 
 
 ### Changed
 
-- Nothing.
+- This release modifies how `Zend\Http\PhpEnvironment\Request` marshals the
+  request URI. In prior releases, we would attempt to inspect the
+  `X-Rewrite-Url` and `X-Original-Url` headers, using their values, if present.
+  These headers are issued by the ISAPI_Rewrite module for IIS (developed by
+  HeliconTech). However, we have no way of guaranteeing that the module is what
+  issued the headers, making it an unreliable source for discovering the URI. As
+  such, we have removed this feature in this release of zend-http.
+
+  If you are developing a zend-mvc application, you can mimic the
+  functionality by adding a bootstrap listener like the following:
+
+  ```php
+  public function onBootstrap(MvcEvent $mvcEvent)
+  {
+      $request = $mvcEvent->getRequest();
+      $requestUri = null;
+
+      $httpXRewriteUrl = $request->getHeader('X-Rewrite-Url');
+      if ($httpXRewriteUrl) {
+          $requestUri = $httpXRewriteUrl->getFieldValue();
+      }
+
+      $httpXOriginalUrl = $request->getHeader('X-Original-Url');
+      if ($httpXOriginalUrl) {
+          $requestUri = $httpXOriginalUrl->getFieldValue();
+      }
+
+      if ($requestUri) {
+          $request->setUri($requestUri)
+      }
+  }
+  ```
+
+  If you use a listener such as the above, make sure you also instruct your web
+  server to strip any incoming headers of the same name so that you can
+  guarantee they are issued by the ISAPI_Rewrite module.
 
 ### Deprecated
 
