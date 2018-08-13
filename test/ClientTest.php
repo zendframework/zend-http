@@ -570,7 +570,7 @@ class ClientTest extends TestCase
         $this->assertSame($port, $client->getUri()->getPort());
     }
 
-    public function testRelativeURIDoesnotSetPort()
+    public function testUriPortIsNotSetWhenUriIsRelative()
     {
         $client = new Client('/example');
         $this->assertNull($client->getUri()->getPort());
