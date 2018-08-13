@@ -536,7 +536,7 @@ class ClientTest extends TestCase
     /**
      * @dataProvider uriDataProvider
      */
-    public function testValidRelativeURI($uri, $isValidRelativeURI)
+    public function testUriCorrectlyDeterminesWhetherOrNotItIsAValidRelativeUri($uri, $isValidRelativeURI)
     {
         $client = new Client($uri);
         $this->assertSame($isValidRelativeURI, $client->getUri()->isValidRelative());
