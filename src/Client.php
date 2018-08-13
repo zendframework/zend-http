@@ -325,9 +325,11 @@ class Client implements Stdlib\DispatchableInterface
             }
 
             $uri = $this->getUri();
+            $user = $uri->getUser();
+            $password = $uri->getPassword();
 
             // Set auth if username and password has been specified in the uri
-            if (($user = $uri->getUser()) && ($password = $uri->getPassword())) {
+            if ($user && $password) {
                 $this->setAuth($user, $password);
             }
 
