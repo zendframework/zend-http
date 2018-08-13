@@ -10,7 +10,7 @@ All notable changes to this project will be documented in this file, in reverse 
 
 ### Changed
 
-- Nothing.
+- [#153](https://github.com/zendframework/zend-diactoros/pull/153) changes the reason phrase associated with the status code 425 to "Too Early", corresponding to a new definition of the code as specified by the IANA.
 
 ### Deprecated
 
