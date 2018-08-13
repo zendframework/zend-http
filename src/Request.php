@@ -12,6 +12,7 @@ use Zend\Stdlib\ParametersInterface;
 use Zend\Stdlib\RequestInterface;
 use Zend\Uri\Exception as UriException;
 use Zend\Uri\Http as HttpUri;
+use Zend\Http\HttpsUri;
 
 /**
  * HTTP Request
@@ -227,6 +228,11 @@ class Request extends AbstractMessage implements RequestInterface
     {
         if ($this->uri === null || is_string($this->uri)) {
             $this->uri = new HttpUri($this->uri);
+        }
+
+        $headers = $this->getHeaders()->toArray();
+        if (array_key_exists('X-Forwarded-Proto', $headers) && $headers['X-Forwarded-Proto'] === 'https') {
+            $this->uri = new HttpsUri($this->uri);
         }
         return $this->uri;
     }
