@@ -557,7 +557,7 @@ class ClientTest extends TestCase
     /**
      * @dataProvider portChangeDataProvider
      */
-    public function testUriPortIsSetToAppropriateDefaultValueWhenAnAbsoluteUriOmittingThePortIsProvided($absoluteURI, $port)
+    public function testUriPortIsSetToAppropriateDefaultValueWhenAnUriOmittingThePortIsProvided($absoluteURI, $port)
     {
         $client = new Client();
         $client->getUri()->setPort(null);
