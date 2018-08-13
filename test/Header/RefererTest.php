@@ -9,8 +9,10 @@ namespace ZendTest\Http\Header;
 
 use PHPUnit\Framework\TestCase;
 use Zend\Http\Header\Exception\InvalidArgumentException;
+use Zend\Http\Header\GenericHeader;
 use Zend\Http\Header\HeaderInterface;
 use Zend\Http\Header\Referer;
+use Zend\Http\Headers;
 use Zend\Uri\Http;
 use Zend\Uri\Uri;
 
@@ -76,5 +78,18 @@ class RefererTest extends TestCase
     {
         $this->expectException(InvalidArgumentException::class);
         Referer::fromString("Referer: http://www.example.com/\r\n\r\nevilContent");
+    }
+
+    public function testInvalidUriShouldWrapException()
+    {
+        $headerString = "Referer: unknown-scheme://test";
+
+        $headers = Headers::fromString($headerString);
+
+        $result = $headers->get('Referer');
+
+        $this->assertInstanceOf(GenericHeader::class, $result);
+        $this->assertNotInstanceOf(Referer::class, $result);
+        $this->assertEquals('unknown-scheme://test', $result->getFieldValue());
     }
 }

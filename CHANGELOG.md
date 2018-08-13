@@ -22,7 +22,10 @@ All notable changes to this project will be documented in this file, in reverse 
 
 ### Fixed
 
-- Nothing.
+- [#151](https://github.com/zendframework/zend-http/pull/151) fixes how Referer and other location-based headers report problems with
+  invalid URLs provided in the header value, raising a `Zend\Http\Exception\InvalidArgumentException`
+  in such cases. This change ensures the behavior is consistent with behavior
+  prior to the 2.8.0 release.
 
 ## 2.8.1 - 2018-08-01
 
