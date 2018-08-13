@@ -528,8 +528,8 @@ class ClientTest extends TestCase
     public function uriDataProvider()
     {
         return [
-            ['valid-relative' => ['/example', true]],
-            ['invalid-absolute' => ['http://localhost/example', false]]
+            'valid-relative' => ['/example', true],
+            'invalid-absolute' => ['http://localhost/example', false],
         ];
     }
 
@@ -549,8 +549,8 @@ class ClientTest extends TestCase
     public function portChangeDataProvider()
     {
         return [
-            ['https://localhost/example', 443],
-            ['http://localhost/example', 80]
+            'default-https' => ['https://localhost/example', 443],
+            'default-http' => ['http://localhost/example', 80]
         ];
     }
 
