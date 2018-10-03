@@ -96,20 +96,34 @@ class CurlTest extends CommonHttpTests
         $this->assertEquals($config->nested->item, $hasConfig['nested']['item']);
     }
 
-    /**
-     * Test not integer timeout casted to int
-     *
-     */
-    public function testCastTimeOutConfig()
+    public function provideValidTimeoutConfig()
     {
-        $config = new Config([
-            'timeout'  => "timeout",
-        ]);
+        return [
+            'integer' => [10],
+            'numeric' => ['10'],
+        ];
+    }
 
-        $this->_adapter->setOptions($config);
+    /**
+     * @dataProvider provideValidTimeoutConfig
+     */
+    public function testPassValidTimeout($timeout)
+    {
+        $adapter = new Adapter\Curl();
+        $adapter->setOptions(['timeout' => $timeout]);
 
-        $hasConfig = $this->_adapter->getConfig();
-        $this->assertEquals((int) $config->timeout, $hasConfig['timeout']);
+        $adapter->connect('http://framework.zend.com');
+    }
+
+    public function testThrowInvalidArgumentExceptionOnNonIntegerAndNonNumericStringTimeout()
+    {
+        $adapter = new Adapter\Curl();
+        $adapter->setOptions(['timeout' => 'timeout']);
+
+        $this->expectException(InvalidArgumentException::class);
+        $this->expectExceptionMessage('integer or numeric string expected, got string');
+
+        $adapter->connect('http://framework.zend.com');
     }
 
     /**
