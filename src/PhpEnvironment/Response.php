@@ -81,6 +81,12 @@ class Response extends HttpResponse
     public function sendHeaders()
     {
         if ($this->headersSent()) {
+            trigger_error(
+                'Method ' . __CLASS__ . '::' . __METHOD__ . ' was called but headers are already sent; '
+                . 'an exception will be throw in the future',
+                E_USER_DEPRECATED
+            );
+
             return $this;
         }
 
