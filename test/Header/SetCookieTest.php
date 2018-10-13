@@ -50,6 +50,14 @@ class SetCookieTest extends TestCase
         $this->assertEquals('myname=quotedValue', $setCookieHeader->getFieldValue());
     }
 
+    public function testSetCookieFromStringWithNotEncodedValue()
+    {
+        $setCookieHeader = SetCookie::fromString('Set-Cookie: foo=a:b; Path=/');
+        $this->assertFalse($setCookieHeader->getEncodeValue());
+        $this->assertEquals('a:b', $setCookieHeader->getValue());
+        $this->assertEquals('foo=a:b; Path=/', $setCookieHeader->getFieldValue());
+    }
+
     public function testSetCookieFromStringCreatesValidSetCookieHeader()
     {
         $setCookieHeader = SetCookie::fromString('Set-Cookie: xxx');
@@ -455,6 +463,25 @@ class SetCookieTest extends TestCase
         $header = new SetCookie('leo_auth_token');
         $header->setValue("example\r\n\r\nevilContent");
         $this->assertEquals('Set-Cookie: leo_auth_token=example%0D%0A%0D%0AevilContent', $header->toString());
+    }
+
+    public function testSetCookieWithEncodeValue()
+    {
+        $header = new SetCookie('test');
+        $header->setValue('a:b');
+
+        $this->assertSame('a:b', $header->getValue());
+        $this->assertSame('test=a%3Ab', $header->getFieldValue());
+    }
+
+    public function testSetCookieWithNoEncodeValue()
+    {
+        $header = new SetCookie('test');
+        $header->setValue('a:b');
+        $header->setEncodeValue(false);
+
+        $this->assertSame('a:b', $header->getValue());
+        $this->assertSame('test=a:b', $header->getFieldValue());
     }
 
     public function setterInjections()
