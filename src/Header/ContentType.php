@@ -16,7 +16,7 @@ use stdClass;
 class ContentType implements HeaderInterface
 {
     /**
-     * @var string
+     * @var null|string
      */
     protected $mediaType;
 
@@ -26,7 +26,7 @@ class ContentType implements HeaderInterface
     protected $parameters = [];
 
     /**
-     * @var string
+     * @var null|string
      */
     protected $value;
 
@@ -49,6 +49,7 @@ class ContentType implements HeaderInterface
         }
 
         $parts     = explode(';', $value);
+        /** @var string $mediaType */
         $mediaType = array_shift($parts);
         $header    = new static($value, trim($mediaType));
 
@@ -168,7 +169,7 @@ class ContentType implements HeaderInterface
     /**
      * Get the media type
      *
-     * @return string
+     * @return null|string
      */
     public function getMediaType()
     {
@@ -238,7 +239,7 @@ class ContentType implements HeaderInterface
     {
         $mediaType = $this->getMediaType();
         if (empty($this->parameters)) {
-            return $mediaType;
+            return $mediaType ?: '';
         }
 
         $parameters = [];
@@ -275,7 +276,7 @@ class ContentType implements HeaderInterface
      * - subtype
      * - format
      *
-     * @param  string $string
+     * @param  null|string $string
      * @return stdClass
      */
     protected function getMediaTypeObjectFromString($string)
@@ -287,15 +288,18 @@ class ContentType implements HeaderInterface
             ));
         }
 
+        /** @var string[] $parts */
         $parts = explode('/', $string, 2);
-        if (1 == count($parts)) {
+        if (1 === count($parts)) {
             throw new Exception\DomainException(sprintf(
                 'Invalid mediatype "%s" provided',
                 $string
             ));
         }
 
+        /** @var string $type */
         $type    = array_shift($parts);
+        /** @var string $subtype */
         $subtype = array_shift($parts);
         $format  = $subtype;
         if (false !== strpos($subtype, '+')) {
@@ -356,17 +360,17 @@ class ContentType implements HeaderInterface
      *
      * Validate that the right side format matches what the left side defines.
      *
-     * @param  string $right
-     * @param  string $left
+     * @param  stdClass $right
+     * @param  stdClass $left
      * @return bool
      */
     protected function validateFormat($right, $left)
     {
         if ($right->format && $left->format) {
-            if ($right->format == '*') {
+            if ($right->format === '*') {
                 return true;
             }
-            if ($right->format == $left->format) {
+            if ($right->format === $left->format) {
                 return true;
             }
             return false;

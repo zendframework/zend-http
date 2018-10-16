@@ -69,7 +69,7 @@ abstract class AbstractFieldValuePart
      */
     public function getTypeString()
     {
-        return $this->getInternalValues()->typeString;
+        return $this->typeString;
     }
 
     /**
@@ -77,7 +77,7 @@ abstract class AbstractFieldValuePart
      */
     public function getPriority()
     {
-        return (float) $this->getInternalValues()->priority;
+        return (float) $this->priority;
     }
 
     /**
@@ -85,7 +85,7 @@ abstract class AbstractFieldValuePart
      */
     public function getParams()
     {
-        return (object) $this->getInternalValues()->params;
+        return (object) $this->params;
     }
 
     /**
@@ -93,7 +93,16 @@ abstract class AbstractFieldValuePart
      */
     public function getRaw()
     {
-        return $this->getInternalValues()->raw;
+        return $this->raw;
+    }
+
+    /**
+     * @param string $key
+     * @return mixed
+     */
+    public function getInternalType($key)
+    {
+        return $this->getInternalValues()->$key;
     }
 
     /**

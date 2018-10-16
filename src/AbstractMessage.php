@@ -30,7 +30,7 @@ abstract class AbstractMessage extends Message
     protected $version = self::VERSION_11;
 
     /**
-     * @var Headers|null
+     * @var Headers|string|null
      */
     protected $headers;
 

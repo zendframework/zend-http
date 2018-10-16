@@ -8,6 +8,7 @@
 namespace Zend\Http;
 
 use ArrayIterator;
+use Zend\Http\Exception\InvalidArgumentException;
 use Zend\Http\Header\SetCookie;
 use Zend\Uri;
 
@@ -71,7 +72,7 @@ class Cookies extends Headers
     /**
      * @static
      * @throws Exception\RuntimeException
-     * @param $string
+     * @param string $string
      * @return void
      */
     public static function fromString($string)
@@ -87,13 +88,13 @@ class Cookies extends Headers
      * or as a string - in which case an object is created from the string.
      *
      * @param SetCookie|string $cookie
-     * @param Uri\Uri|string $refUri Optional reference URI (for domain, path, secure)
+     * @param null|Uri\Uri|string $refUri Optional reference URI (for domain, path, secure)
      * @throws Exception\InvalidArgumentException
      */
     public function addCookie($cookie, $refUri = null)
     {
         if (is_string($cookie)) {
-            $cookie = SetCookie::fromString($cookie, $refUri);
+            $cookie = SetCookie::fromString($cookie);
         }
 
         if ($cookie instanceof SetCookie) {
@@ -120,14 +121,16 @@ class Cookies extends Headers
      */
     public function addCookiesFromResponse(Response $response, $refUri)
     {
-        $cookieHdrs = $response->getHeaders()->get('Set-Cookie');
+        /** @var Headers $headers */
+        $headers = $response->getHeaders();
+        $cookieHdrs = $headers->get('Set-Cookie');
 
-        if (is_array($cookieHdrs) || $cookieHdrs instanceof ArrayIterator) {
+        if ($cookieHdrs instanceof ArrayIterator) {
             foreach ($cookieHdrs as $cookie) {
-                $this->addCookie($cookie, $refUri);
+                $this->addCookie($cookie);
             }
         } elseif (is_string($cookieHdrs)) {
-            $this->addCookie($cookieHdrs, $refUri);
+            $this->addCookie($cookieHdrs);
         }
     }
 
@@ -197,7 +200,7 @@ class Cookies extends Headers
      * @param string $cookieName The cookie's name
      * @param int $retAs Whether to return cookies as objects of \Zend\Http\Header\SetCookie or as strings
      * @throws Exception\InvalidArgumentException if invalid URI specified or invalid $retAs value
-     * @return SetCookie|string
+     * @return SetCookie|string|bool
      */
     public function getCookie($uri, $cookieName, $retAs = self::COOKIE_OBJECT)
     {
@@ -213,7 +216,7 @@ class Cookies extends Headers
         }
 
         // Get correct cookie path
-        $path = $uri->getPath();
+        $path = $uri->getPath() ?: '';
         $lastSlashPos = strrpos($path, '/') ?: 0;
         $path = substr($path, 0, $lastSlashPos);
         if (! $path) {
@@ -221,6 +224,7 @@ class Cookies extends Headers
         }
 
         if (isset($this->cookies[$uri->getHost()][$path][$cookieName])) {
+            /** @var SetCookie $cookie */
             $cookie = $this->cookies[$uri->getHost()][$path][$cookieName];
 
             switch ($retAs) {
@@ -229,7 +233,7 @@ class Cookies extends Headers
 
                 case self::COOKIE_STRING_ARRAY:
                 case self::COOKIE_STRING_CONCAT:
-                    return $cookie->__toString();
+                    return $cookie->toString();
 
                 default:
                     throw new Exception\InvalidArgumentException(sprintf(
@@ -264,21 +268,22 @@ class Cookies extends Headers
                 }
             }
             return $ret;
-        } elseif ($ptr instanceof SetCookie) {
+        }
+
+        if ($ptr instanceof SetCookie) {
             switch ($retAs) {
                 case self::COOKIE_STRING_ARRAY:
-                    return [$ptr->__toString()];
+                    return [$ptr->toString()];
 
                 case self::COOKIE_STRING_CONCAT:
-                    return $ptr->__toString();
+                case self::COOKIE_STRING_CONCAT_STRICT:
+                    return $ptr->toString();
 
                 case self::COOKIE_OBJECT:
                 default:
                     return [$ptr];
             }
         }
-
-        return;
     }
 
     /**
@@ -316,7 +321,11 @@ class Cookies extends Headers
         $ret = [];
 
         foreach ($domains as $dom => $pathsArray) {
-            foreach (array_keys($pathsArray) as $cpath) {
+            $keys = array_keys($pathsArray);
+            foreach ($keys as $cpath) {
+                if (! \is_string($cpath)) {
+                    throw new InvalidArgumentException('Domains is not a valid array');
+                }
                 if (SetCookie::matchCookiePath($cpath, $path)) {
                     if (! isset($ret[$dom])) {
                         $ret[$dom] = [];

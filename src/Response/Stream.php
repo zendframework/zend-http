@@ -19,7 +19,7 @@ class Stream extends Response
     /**
      * The Content-Length value, if set
      *
-     * @var int
+     * @var null|int
      */
     protected $contentLength;
 
@@ -33,7 +33,7 @@ class Stream extends Response
     /**
      * Response as stream
      *
-     * @var resource
+     * @var null|resource
      */
     protected $stream;
 
@@ -42,7 +42,7 @@ class Stream extends Response
      *
      * Will be empty if stream is not file-based.
      *
-     * @var string
+     * @var null|string
      */
     protected $streamName;
 
@@ -51,7 +51,7 @@ class Stream extends Response
      *
      * @var bool
      */
-    protected $cleanup;
+    protected $cleanup = false;
 
     /**
      * Set content length
@@ -76,7 +76,7 @@ class Stream extends Response
     /**
      * Get the response as stream
      *
-     * @return resource
+     * @return null|resource
      */
     public function getStream()
     {
@@ -118,7 +118,7 @@ class Stream extends Response
     /**
      * Get file name associated with the stream
      *
-     * @return string
+     * @return null|string
      */
     public function getStreamName()
     {
@@ -161,22 +161,25 @@ class Stream extends Response
         }
 
         while (! empty($responseArray)) {
+            /** @var string $nextLine */
             $nextLine        = array_shift($responseArray);
             $headersString  .= $nextLine . "\n";
             $nextLineTrimmed = trim($nextLine);
-            if ($nextLineTrimmed == '') {
+            if ($nextLineTrimmed === '') {
                 $headerComplete = true;
                 break;
             }
         }
 
         if (! $headerComplete) {
-            while (false !== ($nextLine = fgets($stream))) {
+            $nextLine = fgets($stream);
+            while (false !== $nextLine) {
                 $headersString .= trim($nextLine) . "\r\n";
-                if ($nextLine == "\r\n" || $nextLine == "\n") {
+                if ($nextLine === "\r\n" || $nextLine === "\n") {
                     $headerComplete = true;
                     break;
                 }
+                $nextLine = fgets($stream);
             }
         }
 
@@ -266,14 +269,14 @@ class Stream extends Response
             $bytes = -1; // Read the whole buffer
         }
 
-        if (! is_resource($this->stream) || $bytes == 0) {
+        if (! is_resource($this->stream) || $bytes === 0) {
             return '';
         }
 
         $this->content         .= stream_get_contents($this->stream, $bytes);
         $this->contentStreamed += strlen($this->content);
 
-        if ($this->getContentLength() == $this->contentStreamed) {
+        if ($this->getContentLength() === $this->contentStreamed) {
             $this->stream = null;
         }
     }
@@ -286,7 +289,7 @@ class Stream extends Response
         if (is_resource($this->stream)) {
             $this->stream = null; //Could be listened by others
         }
-        if ($this->cleanup) {
+        if ($this->cleanup && $this->streamName) {
             ErrorHandler::start(E_WARNING);
             unlink($this->streamName);
             ErrorHandler::stop();

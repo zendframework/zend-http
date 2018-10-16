@@ -7,7 +7,10 @@
 
 namespace Zend\Http;
 
+use ArrayIterator;
 use Zend\Http\Exception\RuntimeException;
+use Zend\Http\Exception\UnexpectedValueException;
+use Zend\Http\Header\HeaderInterface;
 use Zend\Stdlib\ErrorHandler;
 use Zend\Stdlib\ResponseInterface;
 
@@ -197,6 +200,7 @@ class Response extends AbstractMessage implements ResponseInterface
             $lines = explode("\n", $string);
         }
 
+        /** @var string $firstLine */
         $firstLine = array_shift($lines);
 
         $response = new static();
@@ -208,6 +212,9 @@ class Response extends AbstractMessage implements ResponseInterface
         if ($response->statusCode === static::STATUS_CODE_100) {
             $next = array_shift($lines); // take next line
             $next = empty($next) ? array_shift($lines) : $next; // take next or skip if empty
+            if (null === $next) {
+                throw new RuntimeException('Invalid response content');
+            }
             $response->parseStatusLine($next);
         }
 
@@ -273,11 +280,14 @@ class Response extends AbstractMessage implements ResponseInterface
     }
 
     /**
-     * @return Header\SetCookie[]
+     * @return bool|Header\SetCookie[]
      */
     public function getCookie()
     {
-        return $this->getHeaders()->get('Set-Cookie');
+        /** @var false|Header\SetCookie[] $header */
+        $header = $this->getHeaders()->get('Set-Cookie');
+
+        return $header;
     }
 
     /**
@@ -361,7 +371,7 @@ class Response extends AbstractMessage implements ResponseInterface
     /**
      * Get HTTP status message
      *
-     * @return string
+     * @return null|string
      */
     public function getReasonPhrase()
     {
@@ -380,14 +390,17 @@ class Response extends AbstractMessage implements ResponseInterface
     {
         $body = (string) $this->getContent();
 
+        /** @var false|HeaderInterface $transferEncoding */
         $transferEncoding = $this->getHeaders()->get('Transfer-Encoding');
 
         if (! empty($transferEncoding)) {
-            if (strtolower($transferEncoding->getFieldValue()) === 'chunked') {
+            $transferEncoding = $transferEncoding->getFieldValue();
+            if (strtolower($transferEncoding) === 'chunked') {
                 $body = $this->decodeChunkedBody($body);
             }
         }
 
+        /** @var false|HeaderInterface $contentEncoding */
         $contentEncoding = $this->getHeaders()->get('Content-Encoding');
 
         if (! empty($contentEncoding)) {
@@ -552,7 +565,7 @@ class Response extends AbstractMessage implements ResponseInterface
                 break;
             }
 
-            $length   = hexdec(trim($m[1]));
+            $length   = (int) hexdec(trim($m[1]));
             $cut      = strlen($m[0]);
             $decBody .= substr($body, $offset + $cut, $length);
             $offset += $cut + $length + 2;
@@ -578,9 +591,10 @@ class Response extends AbstractMessage implements ResponseInterface
             );
         }
 
-        if ($body === ''
-            || ($this->getHeaders()->has('content-length')
-                && (int) $this->getHeaders()->get('content-length')->getFieldValue() === 0)
+        $contentLengthHeader = $body === ''
+            || ($this->getHeaders()->get('content-length');
+            if ($contentLengthHeader instanceof Header\ContentLength
+            && (int) $contentLengthHeader->getFieldValue() === 0)
         ) {
             return '';
         }
@@ -588,7 +602,7 @@ class Response extends AbstractMessage implements ResponseInterface
         ErrorHandler::start();
         $return = gzinflate(substr($body, 10));
         $test = ErrorHandler::stop();
-        if ($test) {
+        if ($test || false === $return) {
             throw new Exception\RuntimeException(
                 'Error occurred during gzip inflation',
                 0,
@@ -615,8 +629,9 @@ class Response extends AbstractMessage implements ResponseInterface
             );
         }
 
-        if ($this->getHeaders()->has('content-length')
-            && 0 === (int) $this->getHeaders()->get('content-length')->getFieldValue()) {
+        $contentLengthHeader = $this->getHeaders()->get('content-length');
+        if ($contentLengthHeader instanceof Header\ContentLength
+            && 0 === (int) $contentLengthHeader->getFieldValue()) {
             return '';
         }
 
@@ -634,8 +649,17 @@ class Response extends AbstractMessage implements ResponseInterface
         $zlibHeader = unpack('n', substr($body, 0, 2));
 
         if ($zlibHeader[1] % 31 === 0) {
-            return gzuncompress($body);
+            $uncompressed = gzuncompress($body);
+        } else {
+            $uncompressed = gzinflate($body);
         }
-        return gzinflate($body);
+
+        if (false === $uncompressed) {
+            throw new Exception\RuntimeException(
+                'An error occurred during inflation'
+            );
+        }
+
+        return $uncompressed;
     }
 }

@@ -96,7 +96,6 @@ class Response extends HttpResponse
             header($header->toString());
         }
 
-        $this->headersSent = true;
         return $this;
     }
 

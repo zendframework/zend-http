@@ -47,7 +47,9 @@ class AcceptCharset extends AbstractAccept
      */
     public function addCharset($type, $priority = 1)
     {
-        return $this->addType($type, $priority);
+        $this->addType($type, $priority);
+
+        return $this;
     }
 
     /**

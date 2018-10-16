@@ -1,0 +1,18 @@
+parameters:
+    level: max
+
+    excludes_analyse:
+        - %currentWorkingDirectory%/docs/*
+        - %currentWorkingDirectory%/test/*
+        - %currentWorkingDirectory%/vendor/*
+
+    universalObjectCratesClasses:
+        - Zend\Http\Header\Accept\FieldValuePart\AbstractFieldValuePart
+
+    ignoreErrors:
+        - "#Casting to [a-z]+ something that's already [a-z]+#"
+        - "#Negated boolean is always false#"
+        - "#Result of && is always false#"
+        - "#Strict comparison using === between 8 and 4 will always evaluate to false#"
+        - '#Parameter \#1 $port of method Zend\\Uri\\Uri::setPort() expects int, int|null given#'
+        - '#Access to an undefined property object::\$params#'

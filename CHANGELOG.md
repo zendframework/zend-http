@@ -14,7 +14,7 @@ All notable changes to this project will be documented in this file, in reverse 
 
 ### Deprecated
 
-- Nothing.
+- Nothing
 
 ### Removed
 
@@ -22,7 +22,8 @@ All notable changes to this project will be documented in this file, in reverse 
 
 ### Fixed
 
-- Nothing.
+- Fixed `Zend\Http\Cookies::getAllCookies(Zend\Http\Cookies::COOKIE_STRING_ARRAY)`.
+- Fixed `Zend\Http\Cookies::getAllCookies(Zend\Http\Cookies::COOKIE_STRING_CONCAT)`.
 
 ## 2.11.1 - TBD
 

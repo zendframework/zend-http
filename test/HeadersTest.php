@@ -441,4 +441,10 @@ class HeadersTest extends TestCase
         $this->expectExceptionMessage('Invalid header value detected');
         $headers->get('Location');
     }
+
+    public function testHeadersFromStringFactoryWithNoCurrentLineShouldThrowException()
+    {
+        $this->expectException(RuntimeException::class);
+        Headers::fromString(" Fake foo\r\n -bar");
+    }
 }

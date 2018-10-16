@@ -14,6 +14,7 @@ use Traversable;
 use Zend\Http\Header\Exception;
 use Zend\Http\Header\GenericHeader;
 use Zend\Loader\PluginClassLocator;
+use Zend\Http\Header\MultipleHeaderInterface;
 
 /**
  * Basic HTTP headers collection functionality
@@ -68,13 +69,13 @@ class Headers implements Countable, Iterator
                 continue;
             }
 
-            if ($emptyLine) {
+            if ($emptyLine > 0) {
                 throw new Exception\RuntimeException('Malformed header detected');
             }
 
             // check if a header name is present
             if (preg_match('/^(?P<name>[^()><@,;:\"\\/\[\]?={} \t]+):.*$/', $line, $matches)) {
-                if ($current) {
+                if (isset($current['name'])) {
                     // a header name was present, then store the current complete line
                     $headers->headersKeys[] = static::createKey($current['name']);
                     $headers->headers[]     = $current;
@@ -89,8 +90,10 @@ class Headers implements Countable, Iterator
 
             if (preg_match("/^[ \t][^\r\n]*$/", $line, $matches)) {
                 // continuation: append to current line
-                $current['line'] .= trim($line);
-                continue;
+                if (isset($current['line'])) {
+                    $current['line'] .= trim($line);
+                    continue;
+                }
             }
 
             // Line does not match header format!
@@ -99,7 +102,8 @@ class Headers implements Countable, Iterator
                 $line
             ));
         }
-        if ($current) {
+
+        if (isset($current['name'])) {
             $headers->headersKeys[] = static::createKey($current['name']);
             $headers->headers[]     = $current;
         }
@@ -154,7 +158,9 @@ class Headers implements Countable, Iterator
                 if (is_string($value)) {
                     $this->addHeaderLine($value);
                 } elseif (is_array($value) && count($value) == 1) {
-                    $this->addHeaderLine(key($value), current($value));
+                    /** @var string */
+                    $key = key($value);
+                    $this->addHeaderLine($key, current($value));
                 } elseif (is_array($value) && count($value) == 2) {
                     $this->addHeaderLine($value[0], $value[1]);
                 } elseif ($value instanceof Header\HeaderInterface) {
@@ -282,9 +288,9 @@ class Headers implements Countable, Iterator
             return false;
         }
 
-        $class = ($this->getPluginClassLoader()->load(str_replace('-', '', $key))) ?: 'Zend\Http\Header\GenericHeader';
+        $class = ($this->getPluginClassLoader()->load(str_replace('-', '', $key))) ?: GenericHeader::class;
 
-        if (in_array('Zend\Http\Header\MultipleHeaderInterface', class_implements($class, true))) {
+        if (in_array(MultipleHeaderInterface::class, class_implements($class, true))) {
             $headers = [];
             foreach (array_keys($this->headersKeys, $key) as $index) {
                 if (is_array($this->headers[$index])) {
@@ -368,8 +374,9 @@ class Headers implements Countable, Iterator
     public function current()
     {
         $current = current($this->headers);
-        if (is_array($current)) {
-            $current = $this->lazyLoadHeader(key($this->headers));
+        $key = key($this->headers);
+        if (null !== $key && is_array($current)) {
+            $current = $this->lazyLoadHeader($key);
         }
         return $current;
     }
@@ -452,9 +459,9 @@ class Headers implements Countable, Iterator
     }
 
     /**
-     * @param $index
+     * @param string|int $index
      * @param bool $isGeneric If true, there is no need to parse $index and call the ClassLoader.
-     * @return mixed|void
+     * @return Header\HeaderInterface
      */
     protected function lazyLoadHeader($index, $isGeneric = false)
     {

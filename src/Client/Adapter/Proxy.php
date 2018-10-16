@@ -118,11 +118,11 @@ class Proxy extends Socket
     /**
      * Send request to the proxy server
      *
-     * @param string        $method
-     * @param \Zend\Uri\Uri $uri
-     * @param string        $httpVer
-     * @param array         $headers
-     * @param string        $body
+     * @param string          $method
+     * @param \Zend\Uri\Uri   $uri
+     * @param string          $httpVer
+     * @param array           $headers
+     * @param string|resource $body
      * @throws AdapterException\RuntimeException
      * @return string Request as string
      */
@@ -159,9 +159,19 @@ class Proxy extends Socket
             );
         }
 
+        $host = $uri->getHost();
+        $scheme = $uri->getScheme();
+        $port = $uri->getPort();
+
+        if (null === $host || null === $scheme || null === $port) {
+            throw new AdapterException\InvalidArgumentException(
+                'Invalid Uri object'
+            );
+        }
+
         // if we are proxying HTTPS, preform CONNECT handshake with the proxy
         if ($isSecure && ! $this->negotiated) {
-            $this->connectHandshake($uri->getHost(), $uri->getPort(), $httpVer, $headers);
+            $this->connectHandshake($host, $port, $httpVer, $headers);
             $this->negotiated = true;
         }
 
@@ -226,6 +236,10 @@ class Proxy extends Socket
      */
     protected function connectHandshake($host, $port = 443, $httpVer = '1.1', array &$headers = [])
     {
+        if (null === $this->socket) {
+            throw new AdapterException\RuntimeException('Socket is not initialized');
+        }
+
         $request = 'CONNECT ' . $host . ':' . $port . ' HTTP/' . $httpVer . "\r\n"
             . 'Host: ' . $host . "\r\n";
 

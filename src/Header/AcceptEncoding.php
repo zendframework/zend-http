@@ -47,7 +47,9 @@ class AcceptEncoding extends AbstractAccept
      */
     public function addEncoding($type, $priority = 1)
     {
-        return $this->addType($type, $priority);
+        $this->addType($type, $priority);
+
+        return $this;
     }
 
     /**

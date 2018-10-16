@@ -47,7 +47,9 @@ class AcceptLanguage extends AbstractAccept
      */
     public function addLanguage($type, $priority = 1)
     {
-        return $this->addType($type, $priority);
+        $this->addType($type, $priority);
+
+        return $this;
     }
 
     /**

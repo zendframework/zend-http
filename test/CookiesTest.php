@@ -44,6 +44,49 @@ class CookiesTest extends TestCase
         $this->assertSame($header, $response->getCookie('http://www.zend.com', 'foo'));
     }
 
+    public function testGetAllCookiesStringObject()
+    {
+        $response = new Response();
+        $headers = new Headers();
+        $header = new SetCookie('foo', 'bar');
+        $header->setDomain('www.zend.com');
+        $header->setPath('/');
+        $header2 = new SetCookie('foo2', 'bar2');
+        $header2->setDomain('www.zend2.com');
+        $header2->setPath('/');
+        $headers->addHeader($header);
+        $headers->addHeader($header2);
+        $response->setHeaders($headers);
+
+        $response = Cookies::fromResponse($response, 'http://www.zend.com');
+        $result = $response->getAllCookies(Cookies::COOKIE_OBJECT);
+        $this->assertSame([$header, $header2], $result);
+    }
+
+    public function testGetAllCookiesStringArray()
+    {
+        $response = new Response();
+        $headers = new Headers();
+        $header = new SetCookie('foo', 'bar');
+        $header->setDomain('www.zend.com');
+        $header->setPath('/');
+        $header2 = new SetCookie('foo2', 'bar2');
+        $header2->setDomain('www.zend2.com');
+        $header2->setPath('/');
+        $headers->addHeader($header);
+        $headers->addHeader($header2);
+        $response->setHeaders($headers);
+
+        $expected = [
+            'Set-Cookie: foo=bar; Domain=www.zend.com; Path=/',
+            'Set-Cookie: foo2=bar2; Domain=www.zend2.com; Path=/',
+        ];
+
+        $response = Cookies::fromResponse($response, 'http://www.zend.com');
+        $result = $response->getAllCookies(Cookies::COOKIE_STRING_ARRAY);
+        $this->assertSame($expected, $result);
+    }
+
     public function testRequestCanHaveArrayCookies()
     {
         $_COOKIE = [

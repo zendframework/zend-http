@@ -7,7 +7,10 @@
 
 namespace Zend\Http\PhpEnvironment;
 
+use Zend\Http\Exception\RuntimeException;
 use Zend\Http\Header\Cookie;
+use Zend\Http\Header\HeaderInterface;
+use Zend\Http\Headers;
 use Zend\Http\Request as HttpRequest;
 use Zend\Stdlib\Parameters;
 use Zend\Stdlib\ParametersInterface;
@@ -93,7 +96,7 @@ class Request extends HttpRequest
     {
         if (empty($this->content)) {
             $requestBody = file_get_contents('php://input');
-            if (strlen($requestBody) > 0) {
+            if ($requestBody && strlen($requestBody) > 0) {
                 $this->content = $requestBody;
             }
         }
@@ -106,12 +109,14 @@ class Request extends HttpRequest
      *
      * Instantiate and set cookies.
      *
-     * @param $cookie
+     * @param ParametersInterface $cookie
      * @return $this
      */
     public function setCookies($cookie)
     {
-        $this->getHeaders()->addHeader(new Cookie((array) $cookie));
+        /** @var Headers $headers */
+        $headers = $this->getHeaders();
+        $headers->addHeader(new Cookie((array) $cookie));
         return $this;
     }
 
@@ -215,7 +220,7 @@ class Request extends HttpRequest
         }
 
         // set headers
-        $headers = [];
+        $headersArray = [];
 
         foreach ($server as $key => $value) {
             if ($value || (! is_array($value) && strlen($value))) {
@@ -225,15 +230,17 @@ class Request extends HttpRequest
                         continue;
                     }
 
-                    $headers[strtr(ucwords(strtolower(strtr(substr($key, 5), '_', ' '))), ' ', '-')] = $value;
+                    $headersArray[strtr(ucwords(strtolower(strtr(substr($key, 5), '_', ' '))), ' ', '-')] = $value;
                 } elseif (strpos($key, 'CONTENT_') === 0) {
                     $name = substr($key, 8); // Remove "Content-"
-                    $headers['Content-' . (($name == 'MD5') ? $name : ucfirst(strtolower($name)))] = $value;
+                    $headersArray['Content-' . (($name === 'MD5') ? $name : ucfirst(strtolower($name)))] = $value;
                 }
             }
         }
 
-        $this->getHeaders()->addHeaders($headers);
+        /** @var Headers $headers */
+        $headers = $this->getHeaders();
+        $headers->addHeaders($headersArray);
 
         // set method
         if (isset($this->serverParams['REQUEST_METHOD'])) {
@@ -266,9 +273,10 @@ class Request extends HttpRequest
         $port = null;
 
         // Set the host
-        $headerHost = $this->getHeaders()->get('host');
-        if ($headerHost) {
-            $host = $headerHost->getFieldValue();
+        /** @var false|HeaderInterface $hostHeader */
+        $hostHeader = $headers->get('host');
+        if ($hostHeader) {
+            $host = $hostHeader->getFieldValue();
 
             // works for regname, IPv4 & IPv6
             if (preg_match('|\:(\d+)$|', $host, $matches)) {
@@ -310,7 +318,8 @@ class Request extends HttpRequest
 
         // URI path
         $requestUri = $this->getRequestUri();
-        if (($qpos = strpos($requestUri, '?')) !== false) {
+        $qpos = strpos($requestUri, '?');
+        if ($qpos !== false) {
             $requestUri = substr($requestUri, 0, $qpos);
         }
 
@@ -448,7 +457,9 @@ class Request extends HttpRequest
         // HTTP proxy requests setup request URI with scheme and host [and port]
         // + the URL path, only use URL path.
         if ($requestUri !== null) {
-            return preg_replace('#^[^/:]+://[^/]+#', '', $requestUri);
+            /** @var string $uri */
+            $uri = preg_replace('#^[^/:]+://[^/]+#', '', $requestUri);
+            return $uri;
         }
 
         // IIS 5.0, PHP as CGI.
@@ -529,7 +540,8 @@ class Request extends HttpRequest
 
         $truncatedRequestUri = $requestUri;
 
-        if (false !== ($pos = strpos($requestUri, '?'))) {
+        $pos = strpos($requestUri, '?');
+        if (false !== $pos) {
             $truncatedRequestUri = substr($requestUri, 0, $pos);
         }
 

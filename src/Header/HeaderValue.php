@@ -26,7 +26,7 @@ final class HeaderValue
      * between visible characters.
      *
      * @see http://en.wikipedia.org/wiki/HTTP_response_splitting
-     * @param string $value
+     * @param null|string $value
      * @return string
      */
     public static function filter($value)
@@ -63,7 +63,7 @@ final class HeaderValue
      * between visible characters.
      *
      * @see http://en.wikipedia.org/wiki/HTTP_response_splitting
-     * @param string $value
+     * @param null|string $value
      * @return bool
      */
     public static function isValid($value)
@@ -92,7 +92,7 @@ final class HeaderValue
     /**
      * Assert a header value is valid.
      *
-     * @param string $value
+     * @param null|string $value
      * @throws Exception\RuntimeException for invalid values
      * @return void
      */
