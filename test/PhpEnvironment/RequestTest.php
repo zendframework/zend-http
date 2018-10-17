@@ -56,6 +56,8 @@ class RequestTest extends TestCase
         $_SERVER = $this->originalEnvironment['server'];
         $_ENV    = $this->originalEnvironment['env'];
         $_FILES  = $this->originalEnvironment['files'];
+
+        \error_reporting(E_ALL);
     }
 
     /**
@@ -699,6 +701,8 @@ class RequestTest extends TestCase
         $request->setEnv($p);
 
         $default = 15;
+
+        \error_reporting(E_ALL ^ \E_USER_DEPRECATED);
         $this->assertSame($default, $request->getQuery('baz', $default));
         $this->assertSame($default, $request->getPost('baz', $default));
         $this->assertSame($default, $request->getFiles('baz', $default));
@@ -706,6 +710,7 @@ class RequestTest extends TestCase
         $this->assertSame($default, $request->getEnv('baz', $default));
         $this->assertSame($default, $request->getHeaders('baz', $default));
         $this->assertSame($default, $request->getHeader('baz', $default));
+        \error_reporting(E_ALL);
     }
 
     public function testRetrievingASingleValueForParameters()
@@ -720,11 +725,13 @@ class RequestTest extends TestCase
         $request->setServer($p);
         $request->setEnv($p);
 
+        \error_reporting(E_ALL ^ \E_USER_DEPRECATED);
         $this->assertSame('bar', $request->getQuery('foo'));
         $this->assertSame('bar', $request->getPost('foo'));
         $this->assertSame('bar', $request->getFiles('foo'));
         $this->assertSame('bar', $request->getServer('foo'));
         $this->assertSame('bar', $request->getEnv('foo'));
+        \error_reporting(E_ALL);
 
         $headers = new Headers();
         $h = new GenericHeader('foo', 'bar');
@@ -733,7 +740,10 @@ class RequestTest extends TestCase
         $request->setHeaders($headers);
         $this->assertSame($headers, $request->getHeaders());
         $this->assertSame($h, $request->getHeaders()->get('foo'));
+
+        \error_reporting(E_ALL ^ \E_USER_DEPRECATED);
         $this->assertSame($h, $request->getHeader('foo'));
+        \error_reporting(E_ALL);
     }
 
     /**

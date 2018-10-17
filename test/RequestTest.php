@@ -20,6 +20,13 @@ use Zend\Uri\Uri;
 
 class RequestTest extends TestCase
 {
+    protected function tearDown()
+    {
+        parent::tearDown();
+
+        \error_reporting(E_ALL);
+    }
+
     public function testRequestFromStringFactoryCreatesValidRequest()
     {
         $string = "GET /foo?myparam=myvalue HTTP/1.1\r\n\r\nSome Content";
@@ -67,9 +74,11 @@ class RequestTest extends TestCase
         $request->setPost($p);
         $request->setFiles($p);
 
+        \error_reporting(E_ALL ^ \E_USER_DEPRECATED);
         $this->assertSame('bar', $request->getQuery('foo'));
         $this->assertSame('bar', $request->getPost('foo'));
         $this->assertSame('bar', $request->getFiles('foo'));
+        \error_reporting(E_ALL);
 
         $headers = new Headers();
         $h = new GenericHeader('foo', 'bar');
@@ -78,7 +87,10 @@ class RequestTest extends TestCase
         $request->setHeaders($headers);
         $this->assertSame($headers, $request->getHeaders());
         $this->assertSame($h, $request->getHeaders()->get('foo'));
+
+        \error_reporting(E_ALL ^ \E_USER_DEPRECATED);
         $this->assertSame($h, $request->getHeader('foo'));
+        \error_reporting(E_ALL);
     }
 
     public function testParameterRetrievalDefaultValue()
@@ -92,11 +104,14 @@ class RequestTest extends TestCase
         $request->setFiles($p);
 
         $default = 15;
+
+        \error_reporting(E_ALL ^ \E_USER_DEPRECATED);
         $this->assertSame($default, $request->getQuery('baz', $default));
         $this->assertSame($default, $request->getPost('baz', $default));
         $this->assertSame($default, $request->getFiles('baz', $default));
         $this->assertSame($default, $request->getHeaders('baz', $default));
         $this->assertSame($default, $request->getHeader('baz', $default));
+        \error_reporting(E_ALL);
     }
 
     public function testRequestPersistsRawBody()
@@ -342,11 +357,17 @@ class RequestTest extends TestCase
         $headers = $request->getHeaders();
         $this->assertFalse($headers->has('User-Agent'));
         $this->assertFalse($headers->get('User-Agent'));
+
+        \error_reporting(E_ALL ^ \E_USER_DEPRECATED);
         $this->assertSame('bar-baz', $request->getHeader('User-Agent', 'bar-baz'));
+        \error_reporting(E_ALL);
 
         $this->assertTrue($headers->has('useragent'));
         $this->assertInstanceOf(GenericHeader::class, $headers->get('useragent'));
         $this->assertSame('h4ckerbot', $headers->get('useragent')->getFieldValue());
+
+        \error_reporting(E_ALL ^ \E_USER_DEPRECATED);
         $this->assertSame('h4ckerbot', $request->getHeader('useragent')->getFieldValue());
+        \error_reporting(E_ALL);
     }
 }
