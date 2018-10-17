@@ -14,7 +14,11 @@ All notable changes to this project will be documented in this file, in reverse 
 
 ### Deprecated
 
-- Nothing.
+- `Zend\Http\Request::getHeader()` is deprecated
+- `Zend\Http\Request::getHeaders()` with arguments is deprecated
+- `Zend\Http\Request::getQuery()` with arguments is deprecated
+- `Zend\Http\Request::getPost()` with arguments is deprecated
+- `Zend\Http\Request::getFiles()` with arguments is deprecated
 
 ### Removed
 

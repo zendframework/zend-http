@@ -274,6 +274,11 @@ class Request extends AbstractMessage implements RequestInterface
             return $this->queryParams;
         }
 
+        trigger_error(
+            'Getting specific query parameter is deprecated',
+            E_USER_DEPRECATED
+        );
+
         return $this->queryParams->get($name, $default);
     }
 
@@ -306,6 +311,11 @@ class Request extends AbstractMessage implements RequestInterface
         if ($name === null) {
             return $this->postParams;
         }
+
+        trigger_error(
+            'Getting specific post parameter is deprecated',
+            E_USER_DEPRECATED
+        );
 
         return $this->postParams->get($name, $default);
     }
@@ -351,6 +361,11 @@ class Request extends AbstractMessage implements RequestInterface
             return $this->fileParams;
         }
 
+        trigger_error(
+            'Getting specific file parameter is deprecated',
+            E_USER_DEPRECATED
+        );
+
         return $this->fileParams->get($name, $default);
     }
 
@@ -373,6 +388,11 @@ class Request extends AbstractMessage implements RequestInterface
             return $this->headers;
         }
 
+        trigger_error(
+            'Getting specific header is deprecated',
+            E_USER_DEPRECATED
+        );
+
         if ($this->headers->has($name)) {
             return $this->headers->get($name);
         }
@@ -390,6 +410,16 @@ class Request extends AbstractMessage implements RequestInterface
      */
     public function getHeader($name, $default = false)
     {
+        trigger_error(
+            sprintf(
+                '%s::%s is deprecated Please get it from %s::getHeaders().',
+                __CLASS__,
+                __METHOD__,
+                __CLASS__
+            ),
+            E_USER_DEPRECATED
+        );
+
         return $this->getHeaders($name, $default);
     }
 
