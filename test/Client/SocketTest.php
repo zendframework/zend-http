@@ -310,6 +310,24 @@ class SocketTest extends CommonHttpTests
     }
 
     /**
+     * Verifies that the headers are being set as given without changing any
+     * character case.
+     */
+    public function testCaseInsensitiveHeaders()
+    {
+        $this->_adapter->connect('localhost');
+        $requestString = $this->_adapter->write(
+            'GET',
+            new Uri('tcp://localhost:80/'),
+            '1.1',
+            ['x-test-header' => 'someTestHeader'],
+            'someTestBody'
+        );
+
+        $this->assertContains('x-test-header', $requestString);
+    }
+
+    /**
      * Data Providers
      */
 
