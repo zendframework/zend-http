@@ -433,18 +433,6 @@ class Request extends HttpRequest
         $requestUri = null;
         $server     = $this->getServer();
 
-        // Check this first so IIS will catch.
-        $httpXRewriteUrl = $server->get('HTTP_X_REWRITE_URL');
-        if ($httpXRewriteUrl !== null) {
-            $requestUri = $httpXRewriteUrl;
-        }
-
-        // Check for IIS 7.0 or later with ISAPI_Rewrite
-        $httpXOriginalUrl = $server->get('HTTP_X_ORIGINAL_URL');
-        if ($httpXOriginalUrl !== null) {
-            $requestUri = $httpXOriginalUrl;
-        }
-
         // IIS7 with URL Rewrite: make sure we get the unencoded url
         // (double slash problem).
         $iisUrlRewritten = $server->get('IIS_WasUrlRewritten');
@@ -453,12 +441,10 @@ class Request extends HttpRequest
             return $unencodedUrl;
         }
 
+        $requestUri = $server->get('REQUEST_URI');
+
         // HTTP proxy requests setup request URI with scheme and host [and port]
         // + the URL path, only use URL path.
-        if (!$httpXRewriteUrl) {
-            $requestUri = $server->get('REQUEST_URI');
-        }
-
         if ($requestUri !== null) {
             return preg_replace('#^[^/:]+://[^/]+#', '', $requestUri);
         }

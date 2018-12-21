@@ -114,16 +114,7 @@ class RequestTest extends TestCase
                     'SCRIPT_FILENAME' => '/var/web/html/index.php',
                 ),
                 '/index.php',
-                ''
-            ),
-            array(
-                array(
-                    'HTTP_X_REWRITE_URL' => '/index.php/news/3?var1=val1&var2=val2',
-                    'PHP_SELF'           => '/index.php/news/3',
-                    'SCRIPT_FILENAME'    => '/var/web/html/index.php',
-                ),
-                '/index.php',
-                ''
+                '',
             ),
             array(
                 array(
