@@ -171,6 +171,36 @@ class SocketTest extends CommonHttpTests
         $this->_adapter->setOptions($config);
     }
 
+    public function provideValidTimeoutConfig()
+    {
+        return [
+            'integer' => [10],
+            'numeric' => ['10'],
+        ];
+    }
+
+    /**
+     * @dataProvider provideValidTimeoutConfig
+     */
+    public function testPassValidTimeout($timeout)
+    {
+        $adapter = new Adapter\Socket();
+        $adapter->setOptions(['timeout' => $timeout]);
+
+        $adapter->connect('http://framework.zend.com');
+    }
+
+    public function testThrowInvalidArgumentExceptionOnNonIntegerAndNonNumericStringTimeout()
+    {
+        $adapter = new Adapter\Socket();
+        $adapter->setOptions(['timeout' => 'timeout']);
+
+        $this->expectException(InvalidArgumentException::class);
+        $this->expectExceptionMessage('integer or numeric string expected, got string');
+
+        $adapter->connect('http://framework.zend.com');
+    }
+
     /**
      * Stream context related tests
      */
