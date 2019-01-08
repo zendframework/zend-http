@@ -22,6 +22,8 @@ All notable changes to this project will be documented in this file, in reverse 
 
 ### Fixed
 
+- [#165](https://github.com/zendframework/zend-http/pull/165) fixes detection of the base URL when operating under a CLI environment.
+
 - [#149](https://github.com/zendframework/zend-http/pull/149) provides fixes to `Client::setUri()` to ensure its status as a relative
   or absolute URI is correctly memoized.
 
