@@ -10,6 +10,10 @@ All notable changes to this project will be documented in this file, in reverse 
 
 ### Changed
 
+- [#161](https://github.com/zendframework/zend-http/pull/161) changes how the Socket and Test adapters aggregate headers. Previously,
+  they would `ucfirst()` the header name; now, they correctly leave the header
+  names untouched, as header names should be considered case-insensitive.
+
 - [#156](https://github.com/zendframework/zend-http/pull/156) changes how gzip and deflate decompression occur in responses, ensuring
   that if the Content-Length header reports 0, no decompression is attempted,
   and an empty string is returned.
