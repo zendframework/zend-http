@@ -125,6 +125,28 @@ class ResponseTest extends TestCase
         $this->assertEquals('f24dd075ba2ebfb3bf21270e3fdc5303', md5($res->getContent()));
     }
 
+    public function testGzipResponseWithEmptyBody()
+    {
+        $responseTest = <<<'REQ'
+HTTP/1.1 200 OK
+Date: Sun, 25 Jun 2006 19:36:47 GMT
+Server: Apache
+X-powered-by: PHP/5.1.4-pl3-gentoo
+Content-encoding: gzip
+Vary: Accept-Encoding
+Content-length: 0
+Connection: close
+Content-type: text/html
+
+REQ;
+
+        $res = Response::fromString($responseTest);
+
+        $this->assertEquals('gzip', $res->getHeaders()->get('Content-encoding')->getFieldValue());
+        $this->assertSame('', $res->getBody());
+        $this->assertSame('', $res->getContent());
+    }
+
     public function testDeflateResponse()
     {
         $responseTest = file_get_contents(__DIR__ . '/_files/response_deflate');
@@ -134,6 +156,28 @@ class ResponseTest extends TestCase
         $this->assertEquals('deflate', $res->getHeaders()->get('Content-encoding')->getFieldValue());
         $this->assertEquals('0b13cb193de9450aa70a6403e2c9902f', md5($res->getBody()));
         $this->assertEquals('ad62c21c3aa77b6a6f39600f6dd553b8', md5($res->getContent()));
+    }
+
+    public function testDeflateResponseWithEmptyBody()
+    {
+        $responseTest = <<<'REQ'
+HTTP/1.1 200 OK
+Date: Sun, 25 Jun 2006 19:38:02 GMT
+Server: Apache
+X-powered-by: PHP/5.1.4-pl3-gentoo
+Content-encoding: deflate
+Vary: Accept-Encoding
+Content-length: 0
+Connection: close
+Content-type: text/html
+
+REQ;
+
+        $res = Response::fromString($responseTest);
+
+        $this->assertEquals('deflate', $res->getHeaders()->get('Content-encoding')->getFieldValue());
+        $this->assertSame('', $res->getBody());
+        $this->assertSame('', $res->getContent());
     }
 
     /**
