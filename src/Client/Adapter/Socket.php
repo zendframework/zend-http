@@ -389,7 +389,7 @@ class Socket implements HttpAdapter, StreamInterface
         $request = $method . ' ' . $path . ' HTTP/' . $httpVer . "\r\n";
         foreach ($headers as $k => $v) {
             if (is_string($k)) {
-                $v = ucfirst($k) . ': ' . $v;
+                $v = $k . ': ' . $v;
             }
             $request .= $v . "\r\n";
         }

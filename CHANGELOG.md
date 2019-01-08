@@ -2,6 +2,44 @@
 
 All notable changes to this project will be documented in this file, in reverse chronological order by release.
 
+## 2.9.0 - 2019-01-08
+
+### Added
+
+- [#154](https://github.com/zendframework/zend-http/pull/154) adds the method `SetCookie::setEncodeValue()`. By default, Set-Cookie
+  values are passed through `urlencode()`; when a boolean `false` is provided to
+  this new method, the raw value will be used instead.
+
+- [#166](https://github.com/zendframework/zend-http/pull/166) adds support for PHP 7.3.
+
+### Changed
+
+- [#154](https://github.com/zendframework/zend-http/pull/154) changes the behavior of `SetCookie::fromString()` slightly: if the parsed
+  cookie value is the same as the one passed through `urldecode()`, the
+  `SetCookie` header's `$encodeValue` property will be toggled off to ensure the
+  value is not encoded in subsequent serializations, thus retaining the
+  integrity of the value between usages.
+
+- [#161](https://github.com/zendframework/zend-http/pull/161) changes how the Socket and Test adapters aggregate headers. Previously,
+  they would `ucfirst()` the header name; now, they correctly leave the header
+  names untouched, as header names should be considered case-insensitive.
+
+- [#156](https://github.com/zendframework/zend-http/pull/156) changes how gzip and deflate decompression occur in responses, ensuring
+  that if the Content-Length header reports 0, no decompression is attempted,
+  and an empty string is returned.
+
+### Deprecated
+
+- Nothing.
+
+### Removed
+
+- [#166](https://github.com/zendframework/zend-http/pull/166) removes support for zend-stdlib v2 releases.
+
+### Fixed
+
+- Nothing.
+
 ## 2.8.3 - 2019-01-08
 
 ### Added
