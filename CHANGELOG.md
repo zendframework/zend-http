@@ -10,7 +10,9 @@ All notable changes to this project will be documented in this file, in reverse 
 
 ### Changed
 
-- Nothing.
+- [#156](https://github.com/zendframework/zend-http/pull/156) changes how gzip and deflate decompression occur in responses, ensuring
+  that if the Content-Length header reports 0, no decompression is attempted,
+  and an empty string is returned.
 
 ### Deprecated
 
