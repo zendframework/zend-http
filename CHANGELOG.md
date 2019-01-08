@@ -22,7 +22,9 @@ All notable changes to this project will be documented in this file, in reverse 
 
 ### Fixed
 
-- Nothing.
+- [#121](https://github.com/zendframework/zend-http/pull/121) adds detection for non-numeric connection timeout values as well as
+  integer casting to ensure the timeout is set properly in both the Curl and
+  Socket adapters.
 
 ## 2.8.2 - 2018-08-13
 
