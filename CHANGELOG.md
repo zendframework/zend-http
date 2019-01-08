@@ -22,6 +22,8 @@ All notable changes to this project will be documented in this file, in reverse 
 
 ### Fixed
 
+- [#162](https://github.com/zendframework/zend-http/pull/162) fixes a typo in an exception message raised within `Cookies::fromString()`.
+
 - [#121](https://github.com/zendframework/zend-http/pull/121) adds detection for non-numeric connection timeout values as well as
   integer casting to ensure the timeout is set properly in both the Curl and
   Socket adapters.
