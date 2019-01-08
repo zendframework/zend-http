@@ -39,7 +39,13 @@ class DateTest extends TestCase
         $date     = new DateTime(null, new DateTimeZone('GMT'));
         $interval = $dateHeader->date()->diff($date, 1);
 
-        $this->assertSame('+12 hours 00 minutes 00 seconds', $interval->format('%R%H hours %I minutes %S seconds'));
+        if (PHP_VERSION_ID >= 70200) {
+            $this->assertSame('+11 hours 59 minutes 59 seconds', $interval->format('%R%H hours %I minutes %S seconds'));
+            $this->assertLessThan(1, $interval->f);
+            $this->assertGreaterThan(0, $interval->f);
+        } else {
+            $this->assertSame('+12 hours 00 minutes 00 seconds', $interval->format('%R%H hours %I minutes %S seconds'));
+        }
     }
 
     public function testDateFromTimestampCreatesValidDateHeader()
@@ -52,7 +58,13 @@ class DateTest extends TestCase
         $date     = new DateTime(null, new DateTimeZone('GMT'));
         $interval = $dateHeader->date()->diff($date, 1);
 
-        $this->assertSame('+12 hours 00 minutes 00 seconds', $interval->format('%R%H hours %I minutes %S seconds'));
+        if (PHP_VERSION_ID >= 70200) {
+            $this->assertSame('+11 hours 59 minutes 59 seconds', $interval->format('%R%H hours %I minutes %S seconds'));
+            $this->assertLessThan(1, $interval->f);
+            $this->assertGreaterThan(0, $interval->f);
+        } else {
+            $this->assertSame('+12 hours 00 minutes 00 seconds', $interval->format('%R%H hours %I minutes %S seconds'));
+        }
     }
 
     public function testDateFromTimeStringDetectsBadInput()
