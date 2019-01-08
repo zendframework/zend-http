@@ -794,11 +794,11 @@ class RequestTest extends TestCase
 
     public function testDetectCorrectBaseUrlForConsoleRequests()
     {
-        $_SERVER['argv'] = ['/home/user/package/vendor/bin/phpunit'];
-        $_SERVER['argc'] = 1;
+        $_SERVER['argv']            = ['/home/user/package/vendor/bin/phpunit'];
+        $_SERVER['argc']            = 1;
         $_SERVER['SCRIPT_FILENAME'] = '/home/user/package/vendor/bin/phpunit';
-        $_SERVER['SCRIPT_NAME'] = '/home/user/package/vendor/bin/phpunit';
-        $_SERVER['PHP_SELF'] = '/home/user/package/vendor/bin/phpunit';
+        $_SERVER['SCRIPT_NAME']     = '/home/user/package/vendor/bin/phpunit';
+        $_SERVER['PHP_SELF']        = '/home/user/package/vendor/bin/phpunit';
 
         $request = new Request();
         $request->setRequestUri('/path/query/phpunit');
