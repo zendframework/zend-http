@@ -44,6 +44,9 @@ All notable changes to this project will be documented in this file, in reverse 
 
 ### Fixed
 
+- [#149](https://github.com/zendframework/zend-http/pull/149) provides fixes to `Client::setUri()` to ensure its status as a relative
+  or absolute URI is correctly memoized.
+
 - [#162](https://github.com/zendframework/zend-http/pull/162) fixes a typo in an exception message raised within `Cookies::fromString()`.
 
 - [#121](https://github.com/zendframework/zend-http/pull/121) adds detection for non-numeric connection timeout values as well as

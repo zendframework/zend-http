@@ -524,4 +524,59 @@ class ClientTest extends TestCase
         $rawRequest = $client->getLastRawRequest();
         $this->assertContains('foo=bar&baz=foo', $rawRequest);
     }
+
+    public function uriDataProvider()
+    {
+        return [
+            'valid-relative' => ['/example', true],
+            'invalid-absolute' => ['http://localhost/example', false],
+        ];
+    }
+
+    /**
+     * @dataProvider uriDataProvider
+     */
+    public function testUriCorrectlyDeterminesWhetherOrNotItIsAValidRelativeUri($uri, $isValidRelativeURI)
+    {
+        $client = new Client($uri);
+        $this->assertSame($isValidRelativeURI, $client->getUri()->isValidRelative());
+
+        $client->setAdapter(Test::class);
+        $client->send();
+        $this->assertSame($isValidRelativeURI, $client->getUri()->isValidRelative());
+    }
+
+    public function portChangeDataProvider()
+    {
+        return [
+            'default-https' => ['https://localhost/example', 443],
+            'default-http' => ['http://localhost/example', 80]
+        ];
+    }
+
+    /**
+     * @dataProvider portChangeDataProvider
+     */
+    public function testUriPortIsSetToAppropriateDefaultValueWhenAnUriOmittingThePortIsProvided($absoluteURI, $port)
+    {
+        $client = new Client();
+        $client->getUri()->setPort(null);
+
+        $client->setUri($absoluteURI);
+        $this->assertSame($port, $client->getUri()->getPort());
+
+        $client->setAdapter(Test::class);
+        $client->send();
+        $this->assertSame($port, $client->getUri()->getPort());
+    }
+
+    public function testUriPortIsNotSetWhenUriIsRelative()
+    {
+        $client = new Client('/example');
+        $this->assertNull($client->getUri()->getPort());
+
+        $client->setAdapter(Test::class);
+        $client->send();
+        $this->assertNull($client->getUri()->getPort());
+    }
 }
