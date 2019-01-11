@@ -263,7 +263,7 @@ class Socket implements HttpAdapter, StreamInterface
                 $connectTimeout = $this->config['timeout'];
             }
 
-            if ($connectTimeout !== null && (! is_int($connectTimeout) || ! is_numeric($connectTimeout))) {
+            if ($connectTimeout !== null && !is_int($connectTimeout) && !is_numeric($connectTimeout)) {
                 throw new AdapterException\InvalidArgumentException(sprintf(
                     'integer or numeric string expected, got %s',
                     gettype($connectTimeout)
