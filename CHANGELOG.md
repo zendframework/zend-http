@@ -24,7 +24,7 @@ All notable changes to this project will be documented in this file, in reverse 
 
 - Nothing.
 
-## 2.9.1 - TBD
+## 2.9.1 - 2019-01-22
 
 ### Added
 
@@ -44,7 +44,9 @@ All notable changes to this project will be documented in this file, in reverse 
 
 ### Fixed
 
-- Nothing.
+- [#168](https://github.com/zendframework/zend-http/pull/168) fixes a problem when validating the connection timeout for the `Curl` and
+  `Socket` client adapters; it now correctly identifies both integer and string
+  integer values.
 
 ## 2.9.0 - 2019-01-08
 
