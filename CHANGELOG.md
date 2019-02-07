@@ -2,6 +2,30 @@
 
 All notable changes to this project will be documented in this file, in reverse chronological order by release.
 
+## 2.8.4 - 2019-02-07
+
+### Added
+
+- Nothing.
+
+### Changed
+
+- Nothing.
+
+### Deprecated
+
+- Nothing.
+
+### Removed
+
+- Nothing.
+
+### Fixed
+
+- [#168](https://github.com/zendframework/zend-http/pull/168) fixes a problem when validating the connection timeout for the `Curl` and
+  `Socket` client adapters; it now correctly identifies both integer and string
+  integer values.
+
 ## 2.8.3 - 2019-01-08
 
 ### Added
