@@ -27,7 +27,7 @@ class ResponseTest extends TestCase
     public function testResponseCanRenderStatusLine()
     {
         $response = new Response();
-        $response->setVersion(1.1);
+        $response->setVersion('1.1');
         $response->setStatusCode(Response::STATUS_CODE_404);
         $this->assertEquals('HTTP/1.1 404 Not Found', $response->renderStatusLine());
 
