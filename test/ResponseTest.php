@@ -22,6 +22,10 @@ class ResponseTest extends TestCase
         $response = Response::fromString($string);
         $this->assertEquals(200, $response->getStatusCode());
         $this->assertEquals('Foo Bar', $response->getContent());
+
+        $string = 'HTTP/2.0 200 OK' . "\r\n\r\n" . 'Foo Bar';
+        $response = Response::fromString($string);
+        $this->assertEquals('2.0', $response->getVersion());
     }
 
     public function testResponseCanRenderStatusLine()
@@ -33,6 +37,17 @@ class ResponseTest extends TestCase
 
         $response->setReasonPhrase('Foo Bar');
         $this->assertEquals('HTTP/1.1 404 Foo Bar', $response->renderStatusLine());
+
+        $response->setVersion('2.0');
+        $this->assertEquals('HTTP/2.0 404 Foo Bar', $response->renderStatusLine());
+    }
+
+    public function testInvalidHTTPVersion()
+    {
+        $this->expectException(InvalidArgumentException::class);
+        $this->expectExceptionMessage('A valid response status line was not found in the provided string');
+        $string = 'HTTP/2.1 200 OK' . "\r\n\r\n" . 'Foo Bar';
+        $response = \Zend\Http\Response::fromString($string);
     }
 
     public function testResponseUsesHeadersContainerByDefault()

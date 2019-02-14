@@ -249,7 +249,7 @@ class Response extends AbstractMessage implements ResponseInterface
      */
     protected function parseStatusLine($line)
     {
-        $regex   = '/^HTTP\/(?P<version>1\.[01]) (?P<status>\d{3})(?:[ ]+(?P<reason>.*))?$/';
+        $regex   = '/^HTTP\/(?P<version>1\.[01]|2\.0) (?P<status>\d{3})(?:[ ]+(?P<reason>.*))?$/';
         $matches = [];
         if (! preg_match($regex, $line, $matches)) {
             throw new Exception\InvalidArgumentException(

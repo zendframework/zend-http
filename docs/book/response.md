@@ -77,7 +77,7 @@ Method signature                                                       | Descrip
 `renderStatusLine() : string`                                          | Render the status line header
 `setHeaders(Headers $headers) : self`                                  | Provide an alternate Parameter Container implementation for headers in this object. (This is NOT the primary API for value setting; for that, see `getHeaders()`.)
 `getHeaders() : Headers`                                               | Return the container responsible for storing HTTP headers. This container exposes the primary API for manipulating headers set in the HTTP response. See the section on [Headers](headers.md) for more information.
-`setVersion(string $version) : self`                                   | Set the HTTP version for this object, one of 1.0 or 1.1 (`Response::VERSION_10`, `Response::VERSION_11`).
+`setVersion(string $version) : self`                                   | Set the HTTP version for this object, one of 1.0, 1.1 or 2.0 (`Response::VERSION_10`, `Response::VERSION_11`, `Response::VERSION_20`).
 `getVersion() : string`                                                | Return the HTTP version for this response.
 `setStatusCode(int $code) : self`                                      | Set HTTP status code.
 `getStatusCode() : int`                                                | Retrieve HTTP status code.
