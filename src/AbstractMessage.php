@@ -21,7 +21,7 @@ abstract class AbstractMessage extends Message
      */
     const VERSION_10 = '1.0';
     const VERSION_11 = '1.1';
-    const VERSION_20 = '2.0';
+    const VERSION_2  = '2';
     /**#@-*/
 
     /**
@@ -35,16 +35,16 @@ abstract class AbstractMessage extends Message
     protected $headers;
 
     /**
-     * Set the HTTP version for this object, one of 1.0, 1.1 or 2.0
-     * (AbstractMessage::VERSION_10, AbstractMessage::VERSION_11, AbstractMessage::VERSION_20)
+     * Set the HTTP version for this object, one of 1.0, 1.1 or 2
+     * (AbstractMessage::VERSION_10, AbstractMessage::VERSION_11, AbstractMessage::VERSION_2)
      *
-     * @param  string $version (Must be 1.0, 1.1 or 2.0)
+     * @param  string $version (Must be 1.0, 1.1 or 2)
      * @return AbstractMessage
      * @throws Exception\InvalidArgumentException
      */
     public function setVersion($version)
     {
-        if ($version != self::VERSION_10 && $version != self::VERSION_11 && $version != self::VERSION_20) {
+        if ($version != self::VERSION_10 && $version != self::VERSION_11 && $version != self::VERSION_2) {
             throw new Exception\InvalidArgumentException(
                 'Not valid or not supported HTTP version: ' . $version
             );
