@@ -44,7 +44,7 @@ abstract class AbstractMessage extends Message
      */
     public function setVersion($version)
     {
-        if ($version != self::VERSION_10 && $version != self::VERSION_11 && $version != self::VERSION_2) {
+        if (! in_array($version, [self::VERSION_10, self::VERSION_11, self::VERSION_2])) {
             throw new Exception\InvalidArgumentException(
                 'Not valid or not supported HTTP version: ' . $version
             );
