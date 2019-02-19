@@ -117,7 +117,7 @@ abstract class AbstractAccept implements HeaderInterface
      * Parse the accept params belonging to a media range
      *
      * @param string $fieldValuePart
-     * @return stdClass
+     * @return object
      */
     protected function parseFieldValuePart($fieldValuePart)
     {

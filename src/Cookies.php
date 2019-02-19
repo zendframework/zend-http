@@ -9,6 +9,7 @@ namespace Zend\Http;
 
 use ArrayIterator;
 use Zend\Http\Exception\InvalidArgumentException;
+use Zend\Http\Exception\LogicException;
 use Zend\Http\Header\SetCookie;
 use Zend\Uri;
 
@@ -264,7 +265,11 @@ class Cookies extends Headers
                 if ($retAs == self::COOKIE_STRING_CONCAT) {
                     $ret .= $this->_flattenCookiesArray($item, $retAs);
                 } else {
-                    $ret = array_merge($ret, $this->_flattenCookiesArray($item, $retAs));
+                    $flatten = $this->_flattenCookiesArray($item, $retAs);
+                    if (!\is_array($ret) || ! \is_array($flatten)) {
+                        throw new LogicException('Flatten cookies is not an array');
+                    }
+                    $ret = array_merge($ret, $flatten);
                 }
             }
             return $ret;

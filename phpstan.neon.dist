@@ -10,9 +10,36 @@ parameters:
         - Zend\Http\Header\Accept\FieldValuePart\AbstractFieldValuePart
 
     ignoreErrors:
-        - "#Casting to [a-z]+ something that's already [a-z]+#"
-        - "#Negated boolean is always false#"
-        - "#Result of && is always false#"
-        - "#Strict comparison using === between 8 and 4 will always evaluate to false#"
-        - '#Parameter \#1 $port of method Zend\\Uri\\Uri::setPort() expects int, int|null given#'
-        - '#Access to an undefined property object::\$params#'
+        -
+            message: '#Else branch is unreachable because ternary operator condition is always true#'
+            path: %currentWorkingDirectory%/src/Response.php
+        -
+            message: '#Result of && is always false#'
+            path: %currentWorkingDirectory%/src/PhpEnvironment/Request.php
+        -
+            message: '#Parameter \#1 $port of method Zend\\Uri\\Uri::setPort\(\) expects int, int|null given#'
+            path: %currentWorkingDirectory%/src/PhpEnvironment/Request.php
+        -
+            message: '#Result of && is always false#'
+            path: %currentWorkingDirectory%/src/Headers.php
+        -
+            message: '#Parameter \#1 \$fragment of method Zend\\Uri\\UriInterface::setFragment\(\) expects string, null given#'
+            path: %currentWorkingDirectory%/src/Header/Referer.php
+        -
+            message: '#Strict comparison using === between DateTime|string and 0 will always evaluate to false#'
+            path: %currentWorkingDirectory%/src/Header/Expires.php
+        -
+            message: '#Return type \(int\) of method Zend\\Http\\Header\\Age::getFieldValue\(\) should be compatible with return type \(string\) of method Zend\\Http\\Header\\HeaderInterface::getFieldValue\(\)#'
+            path: %currentWorkingDirectory%/src/Header/Age.php
+        -
+            message: '#Result of && is always false#'
+            path: %currentWorkingDirectory%/src/Header/Age.php
+        -
+            message: '#Access to an undefined property object::\$params#'
+            path: %currentWorkingDirectory%/src/Header/AbstractAccept.php
+        -
+            message: '#Negated boolean expression is always false#'
+            path: %currentWorkingDirectory%/src/Client/Adapter/Curl.php
+        -
+            message: '#Else branch is unreachable because previous condition is always true#'
+            path: %currentWorkingDirectory%/src/Client.php

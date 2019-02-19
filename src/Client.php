@@ -331,6 +331,10 @@ class Client implements Stdlib\DispatchableInterface
             // cleared for peer subdomains due to technical limits
             $nextHost = $this->getRequest()->getUri()->getHost();
 
+            if (! $nextHost) {
+                throw new InvalidArgumentException('Relative URIs are not allowed');
+            }
+
             if (! preg_match('/' . preg_quote($lastHost, '/') . '$/i', $nextHost)) {
                 $this->clearAuth();
             }
@@ -809,7 +813,7 @@ class Client implements Stdlib\DispatchableInterface
      * @param string $user
      * @param string $password
      * @param string $type
-     * @param array $digest
+     * @param string[] $digest
      * @param null|string $entityBody
      * @throws Exception\InvalidArgumentException
      * @return string|bool
@@ -838,7 +842,7 @@ class Client implements Stdlib\DispatchableInterface
                     throw new Exception\InvalidArgumentException('The digest cannot be empty');
                 }
                 foreach ($digest as $key => $value) {
-                    if (! defined('self::DIGEST_' . strtoupper($key))) {
+                    if (! defined('self::DIGEST_' . strtoupper((string) $key))) {
                         throw new Exception\InvalidArgumentException(sprintf(
                             'Invalid or not supported digest authentication parameter: \'%s\'',
                             $key
@@ -917,7 +921,7 @@ class Client implements Stdlib\DispatchableInterface
 
                 if (! empty($queryArray)) {
                     $newUri = $uri->toString();
-                    $queryString = http_build_query($queryArray, null, $this->getArgSeparator());
+                    $queryString = http_build_query($queryArray, '', $this->getArgSeparator());
 
                     if ($this->config['rfc3986strict']) {
                         $queryString = str_replace('+', '%20', $queryString);
@@ -1324,7 +1328,8 @@ class Client implements Stdlib\DispatchableInterface
                 $this->setEncType(self::ENC_FORMDATA);
             }
         } else {
-            $this->setEncType($this->getHeader('Content-Type') ?: null);
+            $contentType = $this->getHeader('Content-Type');
+            $this->setEncType(\is_string($contentType) && ! empty($contentType) ? $contentType: null);
         }
 
         // If we have POST parameters or files, encode and add them to the body
@@ -1353,7 +1358,7 @@ class Client implements Stdlib\DispatchableInterface
                 $body .= '--' . $boundary . '--' . "\r\n";
             } elseif (stripos($this->getEncType(), self::ENC_URLENCODED) === 0) {
                 // Encode body as application/x-www-form-urlencoded
-                $body = http_build_query($this->getRequest()->getPost()->toArray(), null, '&');
+                $body = http_build_query($this->getRequest()->getPost()->toArray(), '', '&');
             } else {
                 throw new Client\Exception\RuntimeException(sprintf(
                     'Cannot handle content type \'%s\' automatically',

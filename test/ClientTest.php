@@ -632,26 +632,17 @@ class ClientTest extends TestCase
         $this->assertContains('foo=bar&baz=foo', $rawRequest);
     }
 
-    public function uriDataProvider()
+    public function testRelativeUriInConstructorIsNotAllowed()
     {
-        return [
-            'valid-relative' => ['/example', true],
-            'invalid-absolute' => ['http://localhost/example', false],
-        ];
+        $this->expectException(HttpException\InvalidArgumentException::class);
+        $client = new Client('/example');
     }
 
-    /**
-     * @dataProvider uriDataProvider
-     */
-    public function testUriCorrectlyDeterminesWhetherOrNotItIsAValidRelativeUri($uri, $isValidRelativeURI)
+    public function testRelativeUriIsNotAllowed()
     {
+        $this->expectException(HttpException\InvalidArgumentException::class);
         $client = new Client('http://www.domain.com');
-        $client->setUri($uri);
-        $this->assertSame($isValidRelativeURI, $client->getUri()->isValidRelative());
-
-        $client->setAdapter(Test::class);
-        $client->send();
-        $this->assertSame($isValidRelativeURI, $client->getUri()->isValidRelative());
+        $client->setUri('/example');
     }
 
     public function portChangeDataProvider()

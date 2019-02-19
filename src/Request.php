@@ -113,6 +113,13 @@ class Request extends AbstractMessage implements RequestInterface
         $request->setUri($matches['uri']);
 
         $parsedUri = parse_url($matches['uri']);
+
+        if (false === $parsedUri) {
+            throw new Exception\InvalidArgumentException(
+                'A valid request line was not found in the provided string'
+            );
+        }
+
         if (array_key_exists('query', $parsedUri)) {
             $parsedQuery = [];
             parse_str($parsedUri['query'], $parsedQuery);
@@ -216,6 +223,13 @@ class Request extends AbstractMessage implements RequestInterface
                 'URI must be an instance of Zend\Uri\Http or a string'
             );
         }
+
+        $path = $uri->getPath();
+
+        if (empty($path)) {
+            $uri->setPath('/');
+        }
+
         $this->uri = $uri;
 
         return $this;

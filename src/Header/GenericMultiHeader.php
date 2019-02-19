@@ -9,6 +9,10 @@ namespace Zend\Http\Header;
 
 class GenericMultiHeader extends GenericHeader implements MultipleHeaderInterface
 {
+    /**
+     * @param string $headerLine
+     * @return GenericMultiHeader|GenericMultiHeader[]
+     */
     public static function fromString($headerLine)
     {
         list($fieldName, $fieldValue) = GenericHeader::splitHeaderLine($headerLine);

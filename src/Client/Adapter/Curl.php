@@ -276,7 +276,7 @@ class Curl implements HttpAdapter, StreamInterface
      *
      * @param  string          $method
      * @param  \Zend\Uri\Uri   $uri
-     * @param  float           $httpVersion
+     * @param  string           $httpVersion
      * @param  array           $headers
      * @param  string|resource $body
      * @return string          $request
@@ -286,8 +286,10 @@ class Curl implements HttpAdapter, StreamInterface
      * @throws AdapterException\InvalidArgumentException if $method is currently not supported
      * @throws AdapterException\TimeoutException if connection timed out
      */
-    public function write($method, $uri, $httpVersion = 1.1, $headers = [], $body = '')
+    public function write($method, $uri, $httpVersion = '1.1', $headers = [], $body = '')
     {
+        $httpVersion = (string) $httpVersion;
+
         // Make sure we're properly connected
         if (! $this->curl) {
             throw new AdapterException\RuntimeException('Trying to write but we are not connected');
@@ -383,7 +385,7 @@ class Curl implements HttpAdapter, StreamInterface
         }
 
         // get http version to use
-        $curlHttp = $httpVersion == 1.1 ? CURL_HTTP_VERSION_1_1 : CURL_HTTP_VERSION_1_0;
+        $curlHttp = $httpVersion === '1.1' ? CURL_HTTP_VERSION_1_1 : CURL_HTTP_VERSION_1_0;
 
         // mark as HTTP request and set HTTP method
         curl_setopt($this->curl, CURLOPT_HTTP_VERSION, $curlHttp);
@@ -489,12 +491,14 @@ class Curl implements HttpAdapter, StreamInterface
 
         // cURL automatically decodes chunked-messages, this means we have to
         // disallow the Zend\Http\Response to do it again.
+        /** @var string $responseHeaders */
         $responseHeaders = preg_replace("/Transfer-Encoding:\s*chunked\\r\\n/i", '', $responseHeaders);
 
         // cURL can automatically handle content encoding; prevent double-decoding from occurring
         if (isset($this->config['curloptions'][CURLOPT_ENCODING])
             && '' == $this->config['curloptions'][CURLOPT_ENCODING]
         ) {
+            /** @var string $responseHeaders */
             $responseHeaders = preg_replace("/Content-Encoding:\s*gzip\\r\\n/i", '', $responseHeaders);
         }
 
@@ -511,9 +515,10 @@ class Curl implements HttpAdapter, StreamInterface
         // Eliminate multiple HTTP responses.
         do {
             $parts = preg_split('|(?:\r?\n){2}|m', $this->response, 2);
+
             $again = false;
 
-            if (isset($parts[1]) && preg_match("|^HTTP/1\.[01](.*?)\r\n|mi", $parts[1])) {
+            if (\is_array($parts) && isset($parts[1]) && preg_match("|^HTTP/1\.[01](.*?)\r\n|mi", $parts[1])) {
                 $this->response = $parts[1];
                 $again          = true;
             }
