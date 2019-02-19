@@ -10,11 +10,12 @@ All notable changes to this project will be documented in this file, in reverse 
 
 ### Changed
 
-- Nothing.
+- Relative URIs are not allowed anymore in `Zend\Http\Client`.
+  Anyway, usage of relative URIs has no sense and no adapter can handle it.
 
 ### Deprecated
 
-- Nothing
+- Nothing.
 
 ### Removed
 
@@ -24,6 +25,7 @@ All notable changes to this project will be documented in this file, in reverse 
 
 - Fixed `Zend\Http\Cookies::getAllCookies(Zend\Http\Cookies::COOKIE_STRING_ARRAY)`.
 - Fixed `Zend\Http\Cookies::getAllCookies(Zend\Http\Cookies::COOKIE_STRING_CONCAT)`.
+- Fixed use of HTTP URIs with empty path in Request
 
 ## 2.11.1 - TBD
 
