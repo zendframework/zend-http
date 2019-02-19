@@ -6,7 +6,7 @@ All notable changes to this project will be documented in this file, in reverse 
 
 ### Added
 
-- Nothing.
+- [#173](https://github.com/zendframework/zend-http/pull/173) adds support for HTTP/2 requests and responses.
 
 ### Changed
 
