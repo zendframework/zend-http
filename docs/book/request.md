@@ -75,7 +75,7 @@ Method signature                                                            | De
 `setUri(string|Uri $uri) : self`                                            | Set the URI/URL for this request; this can be a string or an instance of `Zend\Uri\Http`.
 `getUri() : Uri`                                                            | Return the URI for this request object.
 `getUriString() : string`                                                   | Return the URI for this request object as a string.
-`setVersion(string $version) : self`                                        | Set the HTTP version for this object, one of 1.0 or 1.1 (`Request::VERSION_10`, `Request::VERSION_11`).
+`setVersion(string $version) : self`                                        | Set the HTTP version for this object, one of 1.0, 1.1 or 2 (`Request::VERSION_10`, `Request::VERSION_11`, `Request::VERSION_2`). HTTP/2 support was added in zend-http 2.10.0.
 `getVersion() : string`                                                     | Return the HTTP version for this request.
 `setQuery(Parameters $query) : self`                                        | Provide an alternate Parameter Container implementation for query parameters in this object. (This is NOT the primary API for value setting; for that, see `getQuery()`).
 `getQuery(string|null $name, mixed|null $default) : null|string|Parameters` | Return the parameter container responsible for query parameters or a single query parameter based on `$name`.

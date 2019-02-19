@@ -16,23 +16,79 @@ use Zend\Http\Response;
 
 class ResponseTest extends TestCase
 {
-    public function testResponseFactoryFromStringCreatesValidResponse()
+    public function validHttpVersions()
     {
-        $string = 'HTTP/1.0 200 OK' . "\r\n\r\n" . 'Foo Bar';
-        $response = Response::fromString($string);
-        $this->assertEquals(200, $response->getStatusCode());
-        $this->assertEquals('Foo Bar', $response->getContent());
+        yield 'http/1.0' => ['1.0'];
+        yield 'http/1.1' => ['1.1'];
+        yield 'http/2'   => ['2'];
     }
 
-    public function testResponseCanRenderStatusLine()
+    public function validResponseHttpVersionProvider()
     {
-        $response = new Response();
-        $response->setVersion(1.1);
-        $response->setStatusCode(Response::STATUS_CODE_404);
-        $this->assertEquals('HTTP/1.1 404 Not Found', $response->renderStatusLine());
+        $responseTemplate = "HTTP/%s 200 OK\r\n\r\nFoo Bar";
+        foreach ($this->validHttpVersions() as $testCase => $data) {
+            $version = array_shift($data);
+            yield $testCase => [
+                'response'        => sprintf($responseTemplate, $version),
+                'expectedVersion' => $version,
+                'expectedStatus'  => '200',
+                'expectedContent' => 'Foo Bar',
+            ];
+        }
+    }
 
+    /**
+     * @dataProvider validResponseHttpVersionProvider
+     * @param string $string Response string
+     * @param string $expectedVersion
+     * @param string $expectedStatus
+     * @param string $expectedContent
+     */
+    public function testResponseFactoryFromStringCreatesValidResponse(
+        $string,
+        $expectedVersion,
+        $expectedStatus,
+        $expectedContent
+    ) {
+        $response = Response::fromString($string);
+        $this->assertEquals($expectedVersion, $response->getVersion());
+        $this->assertEquals($expectedStatus, $response->getStatusCode());
+        $this->assertEquals($expectedContent, $response->getContent());
+    }
+
+    /**
+     * @dataProvider validHttpVersions
+     * @param string $version
+     */
+    public function testResponseCanRenderStatusLineUsingDefaultReasonPhrase($version)
+    {
+        $expected = sprintf('HTTP/%s 404 Not Found', $version);
+        $response = new Response();
+        $response->setVersion($version);
+        $response->setStatusCode(Response::STATUS_CODE_404);
+        $this->assertEquals($expected, $response->renderStatusLine());
+    }
+
+    /**
+     * @dataProvider validHttpVersions
+     * @param string $version
+     */
+    public function testResponseCanRenderStatusLineUsingCustomReasonPhrase($version)
+    {
+        $expected = sprintf('HTTP/%s 404 Foo Bar', $version);
+        $response = new Response();
+        $response->setVersion($version);
+        $response->setStatusCode(Response::STATUS_CODE_404);
         $response->setReasonPhrase('Foo Bar');
-        $this->assertEquals('HTTP/1.1 404 Foo Bar', $response->renderStatusLine());
+        $this->assertEquals($expected, $response->renderStatusLine());
+    }
+
+    public function testInvalidHTTP2VersionString()
+    {
+        $this->expectException(InvalidArgumentException::class);
+        $this->expectExceptionMessage('A valid response status line was not found in the provided string');
+        $string = 'HTTP/2.0 200 OK' . "\r\n\r\n" . 'Foo Bar';
+        $response = \Zend\Http\Response::fromString($string);
     }
 
     public function testResponseUsesHeadersContainerByDefault()
