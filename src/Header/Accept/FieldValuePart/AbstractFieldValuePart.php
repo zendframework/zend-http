@@ -97,15 +97,6 @@ abstract class AbstractFieldValuePart
     }
 
     /**
-     * @param string $key
-     * @return mixed
-     */
-    public function getInternalType($key)
-    {
-        return $this->getInternalValues()->$key;
-    }
-
-    /**
      * @param mixed $key
      * @return mixed
      */
