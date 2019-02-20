@@ -367,7 +367,7 @@ class SetCookie implements MultipleHeaderInterface
     }
 
     /**
-     * @param  null|string|null $value
+     * @param  null|string $value
      * @return $this
      */
     public function setValue($value)
@@ -483,7 +483,7 @@ class SetCookie implements MultipleHeaderInterface
     }
 
     /**
-     * @param  null|string|null $domain
+     * @param  null|string $domain
      * @return $this
      */
     public function setDomain($domain)
@@ -502,7 +502,7 @@ class SetCookie implements MultipleHeaderInterface
     }
 
     /**
-     * @param  null|string|null $path
+     * @param  null|string $path
      * @return $this
      */
     public function setPath($path)
@@ -521,7 +521,7 @@ class SetCookie implements MultipleHeaderInterface
     }
 
     /**
-     * @param  null|bool|null $secure
+     * @param  null|bool $secure
      * @return $this
      */
     public function setSecure($secure)
@@ -554,7 +554,7 @@ class SetCookie implements MultipleHeaderInterface
     }
 
     /**
-     * @param  null|bool|null $httponly
+     * @param  null|bool $httponly
      * @return $this
      */
     public function setHttponly($httponly)
