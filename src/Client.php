@@ -1329,7 +1329,7 @@ class Client implements Stdlib\DispatchableInterface
             }
         } else {
             $contentType = $this->getHeader('Content-Type');
-            $this->setEncType(\is_string($contentType) && ! empty($contentType) ? $contentType: null);
+            $this->setEncType(\is_string($contentType) ? $contentType : '');
         }
 
         // If we have POST parameters or files, encode and add them to the body
