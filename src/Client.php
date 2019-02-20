@@ -743,21 +743,23 @@ class Client implements Stdlib\DispatchableInterface
 
         if (! is_string($this->streamName)) {
             // If name is not given, create temp name
-            /** @var string streamName */
             $this->streamName = tempnam(
                 isset($this->config['streamtmpdir']) ? $this->config['streamtmpdir'] : sys_get_temp_dir(),
                 Client::class
             ) ?: null;
         }
 
+        /** @var string streamName */
+        $streamName = $this->streamName;
+
         ErrorHandler::start();
-        $fp    = fopen($this->streamName, 'w+b');
+        $fp    = fopen($streamName, 'w+b');
         $error = ErrorHandler::stop();
         if (false === $fp) {
             if ($this->adapter instanceof Client\Adapter\AdapterInterface) {
                 $this->adapter->close();
             }
-            throw new Exception\RuntimeException(sprintf('Could not open temp file %s', $this->streamName), 0, $error);
+            throw new Exception\RuntimeException(sprintf('Could not open temp file %s', $streamName), 0, $error);
         }
 
         return $fp;
