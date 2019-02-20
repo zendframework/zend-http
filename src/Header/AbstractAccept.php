@@ -7,8 +7,6 @@
 
 namespace Zend\Http\Header;
 
-use stdClass;
-
 /**
  * Abstract Accept Header
  *

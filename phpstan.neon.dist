@@ -43,3 +43,4 @@ parameters:
         -
             message: '#Else branch is unreachable because previous condition is always true#'
             path: %currentWorkingDirectory%/src/Client.php
+        - '#Access to an undefined property object::\$.+#'

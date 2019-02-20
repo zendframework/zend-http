@@ -7,8 +7,6 @@
 
 namespace Zend\Http\Header;
 
-use stdClass;
-
 /**
  * @throws Exception\InvalidArgumentException
  * @see http://www.w3.org/Protocols/rfc2616/rfc2616-sec14.html#sec14.17
@@ -277,7 +275,7 @@ class ContentType implements HeaderInterface
      * - format
      *
      * @param  null|string $string
-     * @return stdClass
+     * @return object
      */
     protected function getMediaTypeObjectFromString($string)
     {
@@ -320,8 +318,8 @@ class ContentType implements HeaderInterface
     /**
      * Validate a subtype
      *
-     * @param  stdClass $right
-     * @param  stdClass $left
+     * @param  object $right
+     * @param  object $left
      * @return bool
      */
     protected function validateSubtype($right, $left)
@@ -360,8 +358,8 @@ class ContentType implements HeaderInterface
      *
      * Validate that the right side format matches what the left side defines.
      *
-     * @param  stdClass $right
-     * @param  stdClass $left
+     * @param  object $right
+     * @param  object $left
      * @return bool
      */
     protected function validateFormat($right, $left)
