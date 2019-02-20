@@ -9,6 +9,7 @@ namespace ZendTest\Http;
 
 use ArrayIterator;
 use PHPUnit\Framework\TestCase;
+use ReflectionClass;
 use ReflectionMethod;
 use Zend\Http\Client;
 use Zend\Http\Client\Adapter\AdapterInterface;
@@ -904,5 +905,19 @@ class ClientTest extends TestCase
         $request->getHeaders()->addHeader($acceptEncodingHeader);
 
         $client->send();
+    }
+
+    public function testDoRequestWithNoHostUri()
+    {
+        $this->expectException(HttpException\InvalidArgumentException::class);
+
+        $client = new Client();
+        $class = new ReflectionClass(Client::class);
+        $method = $class->getMethod('doRequest');
+        $method->setAccessible(true);
+
+        $uri = new Http();
+
+        $method->invokeArgs($client, [$uri, 'GET']);
     }
 }
