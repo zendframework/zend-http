@@ -217,7 +217,7 @@ class Cookies extends Headers
         }
 
         // Get correct cookie path
-        $path = $uri->getPath() ?: '';
+        $path = $uri->getPath() ?: '/';
         $lastSlashPos = strrpos($path, '/') ?: 0;
         $path = substr($path, 0, $lastSlashPos);
         if (! $path) {
@@ -315,7 +315,7 @@ class Cookies extends Headers
     /**
      * Return a subset of a domain-matching cookies that also match a specified path
      *
-     * @param array $domains
+     * @param array<string, array<string, mixed>> $domains
      * @param string $path
      * @return array
      */
@@ -326,11 +326,9 @@ class Cookies extends Headers
         $ret = [];
 
         foreach ($domains as $dom => $pathsArray) {
+            /** @var string[] $keys */
             $keys = array_keys($pathsArray);
             foreach ($keys as $cpath) {
-                if (! is_string($cpath)) {
-                    throw new InvalidArgumentException('Domains is not a valid array');
-                }
                 if (SetCookie::matchCookiePath($cpath, $path)) {
                     if (! isset($ret[$dom])) {
                         $ret[$dom] = [];
