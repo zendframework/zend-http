@@ -743,14 +743,11 @@ class Client implements Stdlib\DispatchableInterface
 
         if (! is_string($this->streamName)) {
             // If name is not given, create temp name
+            /** @var string streamName */
             $this->streamName = tempnam(
                 isset($this->config['streamtmpdir']) ? $this->config['streamtmpdir'] : sys_get_temp_dir(),
                 Client::class
             ) ?: null;
-
-            if (null === $this->streamName) {
-                throw new RuntimeException('Unable to create temporary name for stream');
-            }
         }
 
         ErrorHandler::start();

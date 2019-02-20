@@ -881,32 +881,6 @@ class ClientTest extends TestCase
         $this->assertNotContains("\r\nCookie: foo=far; bar=far\r\n", $lastRawRequest);
     }
 
-    public function testClientThrowsAnErrorWhenUnableToCreateStream()
-    {
-        \putenv('TMPDIR=/__________foooo');
-        \error_reporting(\E_ALL ^ \E_STRICT ^ \E_NOTICE);
-        $this->expectException(HttpException\RuntimeException::class);
-        $this->expectExceptionMessage('Unable to create temporary name for stream');
-
-        $options = [
-            'outputstream' => true,
-        ];
-        $client = new Client('http://foo.com', $options);
-
-        $adapter = $this->prophesize(Client\Adapter\AdapterInterface::class);
-        $adapter->willImplement(Client\Adapter\StreamInterface::class);
-
-        $client->setAdapter($adapter->reveal());
-
-        $request = $client->getRequest();
-
-        $acceptEncodingHeader = new AcceptEncoding();
-        $acceptEncodingHeader->addEncoding('foo', 1);
-        $request->getHeaders()->addHeader($acceptEncodingHeader);
-
-        $client->send();
-    }
-
     public function testDoRequestWithNoHostUri()
     {
         $this->expectException(HttpException\InvalidArgumentException::class);
