@@ -645,6 +645,19 @@ class ClientTest extends TestCase
         $client->setUri('/example');
     }
 
+    public function testRelativeUriIsNotAllowedSendingRequest()
+    {
+        $this->expectException(HttpException\InvalidArgumentException::class);
+
+        $client = new Client();
+        $uri = new Http();
+        $request = new Request();
+        $request->setUri($uri);
+        $request->setMethod(Request::METHOD_GET);
+        $client->setAdapter(Test::class);
+        $client->send($request);
+    }
+
     public function portChangeDataProvider()
     {
         return [
