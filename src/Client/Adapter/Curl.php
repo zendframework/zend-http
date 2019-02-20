@@ -518,7 +518,7 @@ class Curl implements HttpAdapter, StreamInterface
 
             $again = false;
 
-            if (\is_array($parts) && isset($parts[1]) && preg_match("|^HTTP/1\.[01](.*?)\r\n|mi", $parts[1])) {
+            if (is_array($parts) && isset($parts[1]) && preg_match("|^HTTP/1\.[01](.*?)\r\n|mi", $parts[1])) {
                 $this->response = $parts[1];
                 $again          = true;
             }

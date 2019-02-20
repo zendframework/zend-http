@@ -1028,7 +1028,7 @@ class Client implements Stdlib\DispatchableInterface
 
             // Get the cookies from response (if any)
             $setCookies = $response->getCookie();
-            if (! \is_bool($setCookies) && ! empty($setCookies)) {
+            if (! is_bool($setCookies) && ! empty($setCookies)) {
                 $this->addCookie($setCookies);
             }
 
@@ -1329,7 +1329,7 @@ class Client implements Stdlib\DispatchableInterface
             }
         } else {
             $contentType = $this->getHeader('Content-Type');
-            $this->setEncType(\is_string($contentType) ? $contentType : '');
+            $this->setEncType(is_string($contentType) ? $contentType : '');
         }
 
         // If we have POST parameters or files, encode and add them to the body

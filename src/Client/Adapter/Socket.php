@@ -288,7 +288,7 @@ class Socket implements HttpAdapter, StreamInterface
             ) ?: null;
             $error = ErrorHandler::stop();
 
-            if (! \is_resource($this->socket)) {
+            if (! is_resource($this->socket)) {
                 $this->close();
                 throw new AdapterException\RuntimeException(
                     sprintf(

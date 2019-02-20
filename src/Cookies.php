@@ -266,7 +266,7 @@ class Cookies extends Headers
                     $ret .= $this->_flattenCookiesArray($item, $retAs);
                 } else {
                     $flatten = $this->_flattenCookiesArray($item, $retAs);
-                    if (!\is_array($ret) || ! \is_array($flatten)) {
+                    if (!is_array($ret) || ! is_array($flatten)) {
                         throw new LogicException('Flatten cookies is not an array');
                     }
                     $ret = array_merge($ret, $flatten);
@@ -328,7 +328,7 @@ class Cookies extends Headers
         foreach ($domains as $dom => $pathsArray) {
             $keys = array_keys($pathsArray);
             foreach ($keys as $cpath) {
-                if (! \is_string($cpath)) {
+                if (! is_string($cpath)) {
                     throw new InvalidArgumentException('Domains is not a valid array');
                 }
                 if (SetCookie::matchCookiePath($cpath, $path)) {

@@ -20,7 +20,7 @@ class UnexpectedValueException extends \UnexpectedValueException implements Exce
         return new static(sprintf(
             'Expected %s. %s given',
             $expected,
-            \is_object($actual) ? \get_class($actual) : \gettype($actual)
+            is_object($actual) ? get_class($actual) : gettype($actual)
         ));
     }
 }
