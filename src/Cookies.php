@@ -266,7 +266,7 @@ class Cookies extends Headers
                     $ret .= $this->_flattenCookiesArray($item, $retAs);
                 } else {
                     $flatten = $this->_flattenCookiesArray($item, $retAs);
-                    if (!is_array($ret) || ! is_array($flatten)) {
+                    if (! is_array($ret) || ! is_array($flatten)) {
                         throw new LogicException('Flatten cookies is not an array');
                     }
                     $ret = array_merge($ret, $flatten);
