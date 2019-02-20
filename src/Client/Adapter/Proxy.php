@@ -159,9 +159,9 @@ class Proxy extends Socket
             );
         }
 
-        $host = $uri->getHost();
+        $host   = $uri->getHost();
         $scheme = $uri->getScheme();
-        $port = $uri->getPort();
+        $port   = $uri->getPort();
 
         if (null === $host || null === $scheme || null === $port) {
             throw new AdapterException\InvalidArgumentException(
