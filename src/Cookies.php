@@ -128,10 +128,10 @@ class Cookies extends Headers
 
         if ($cookieHeaders instanceof ArrayIterator) {
             foreach ($cookieHeaders as $cookie) {
-                $this->addCookie($cookie);
+                $this->addCookie($cookie, $refUri);
             }
         } elseif (is_string($cookieHeaders)) {
-            $this->addCookie($cookieHeaders);
+            $this->addCookie($cookieHeaders, $refUri);
         }
     }
 
