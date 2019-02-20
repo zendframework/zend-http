@@ -132,6 +132,7 @@ class RemoteAddress
         // trim, so we can compare against trusted proxies properly
         $ips = array_map('trim', $ips);
         // remove trusted proxy IPs
+        /** @var string[] $ips */
         $ips = array_diff($ips, $this->trustedProxies);
 
         // Any left?
@@ -144,7 +145,6 @@ class RemoteAddress
         // not know if it is a proxy server, or a client. As such, we treat it
         // as the originating IP.
         // @see http://en.wikipedia.org/wiki/X-Forwarded-For
-        /** @var string $ip */
         $ip = array_pop($ips);
         return $ip;
     }
