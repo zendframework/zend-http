@@ -60,11 +60,8 @@ class Cookie extends ArrayObject implements HeaderInterface
             throw new Exception\InvalidArgumentException('Invalid header line for Server string: "' . $name . '"');
         }
 
+        /** @var string[] $nvPairs */
         $nvPairs = preg_split('#;\s*#', $value);
-
-        if (false === $nvPairs) {
-            throw new Exception\RuntimeException('Malformed Cookie header found');
-        }
 
         $arrayInfo = [];
         foreach ($nvPairs as $nvPair) {

@@ -7,7 +7,6 @@
 
 namespace Zend\Http\PhpEnvironment;
 
-use Zend\Http\Exception\RuntimeException;
 use Zend\Http\Header\Cookie;
 use Zend\Http\Header\HeaderInterface;
 use Zend\Http\Headers;

@@ -10,6 +10,8 @@ All notable changes to this project will be documented in this file, in reverse 
 
 ### Changed
 
+- `Zend\Http\Request`'s URI now always have a default path ´/´ even when a `Zend\Uri\Http`
+  object is provided with no path.
 - Relative URIs are not allowed anymore in `Zend\Http\Client`.
   Anyway, usage of relative URIs has no sense and no adapter can handle it.
 

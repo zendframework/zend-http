@@ -678,6 +678,14 @@ REQ;
         $this->assertEquals($fixture, $request->getBody());
     }
 
+    public function test100ContinueWithInvalidContent()
+    {
+        $this->expectException(InvalidArgumentException::class);
+        $this->expectExceptionMessage('Invalid response content');
+
+        Response::fromString("HTTP/1.1 100 Continue\r\n");
+    }
+
     /**
      * Helper function: read test response from file
      *

@@ -7,9 +7,7 @@
 
 namespace Zend\Http;
 
-use ArrayIterator;
-use Zend\Http\Exception\RuntimeException;
-use Zend\Http\Exception\UnexpectedValueException;
+use Zend\Http\Exception\InvalidArgumentException;
 use Zend\Http\Header\HeaderInterface;
 use Zend\Stdlib\ErrorHandler;
 use Zend\Stdlib\ResponseInterface;
@@ -213,7 +211,7 @@ class Response extends AbstractMessage implements ResponseInterface
             $next = array_shift($lines); // take next line
             $next = empty($next) ? array_shift($lines) : $next; // take next or skip if empty
             if (null === $next) {
-                throw new RuntimeException('Invalid response content');
+                throw new Exception\InvalidArgumentException('Invalid response content');
             }
             $response->parseStatusLine($next);
         }
