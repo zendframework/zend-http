@@ -124,14 +124,14 @@ class Cookies extends Headers
     {
         /** @var Headers $headers */
         $headers = $response->getHeaders();
-        $cookieHdrs = $headers->get('Set-Cookie');
+        $cookieHeaders = $headers->get('Set-Cookie');
 
-        if ($cookieHdrs instanceof ArrayIterator) {
-            foreach ($cookieHdrs as $cookie) {
+        if ($cookieHeaders instanceof ArrayIterator) {
+            foreach ($cookieHeaders as $cookie) {
                 $this->addCookie($cookie);
             }
-        } elseif (is_string($cookieHdrs)) {
-            $this->addCookie($cookieHdrs);
+        } elseif (is_string($cookieHeaders)) {
+            $this->addCookie($cookieHeaders);
         }
     }
 
