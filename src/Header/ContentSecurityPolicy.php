@@ -8,7 +8,7 @@
 namespace Zend\Http\Header;
 
 /**
- * Content Security Policy 1.0 Header
+ * Content Security Policy Level 3 Header
  *
  * @link http://www.w3.org/TR/CSP/
  */
@@ -32,6 +32,20 @@ class ContentSecurityPolicy implements MultipleHeaderInterface
         'connect-src',
         'sandbox',
         'report-uri',
+        'child-src',
+        'manifest-src',
+        'worker-src',
+        'prefetch-src',
+        'script-src-elem',
+        'script-src-attr',
+        'style-src-elem',
+        'style-src-attr',
+        'base-uri',
+        'plugin-types',
+        'form-action',
+        'frame-ancestors',
+        'navigate-to',
+        'report-to'
     ];
 
     /**

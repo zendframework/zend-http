@@ -187,4 +187,54 @@ class ContentSecurityPolicyTest extends TestCase
             $headers->toString()
         );
     }
+
+    /**
+     * @dataProvider directivesProvider
+     *
+     * @param string $directive
+     * @param string[] $value
+     * @param string $expected
+     */
+    public function testContentSecurityPolicySetDirectiveThrowsExceptionIfMissingDirectiveNameGiven(
+        $directive,
+        array $value,
+        $expected
+    ) {
+        $csp = new ContentSecurityPolicy();
+        $csp->setDirective($directive, $value);
+
+        self::assertSame($expected, $csp->toString());
+    }
+
+    public static function directivesProvider()
+    {
+        return [
+            ['child-src', ["'self'"],"Content-Security-Policy: child-src 'self';"],
+            ['manifest-src', ["'self'"], "Content-Security-Policy: manifest-src 'self';"],
+            ['worker-src', ["'self'"], "Content-Security-Policy: worker-src 'self';"],
+            ['prefetch-src', ["'self'"], "Content-Security-Policy: prefetch-src 'self';"],
+            ['script-src-elem', ["'self'"], "Content-Security-Policy: script-src-elem 'self';"],
+            ['script-src-attr', ["'self'"], "Content-Security-Policy: script-src-attr 'self';"],
+            ['style-src-elem', ["'self'"], "Content-Security-Policy: style-src-elem 'self';"],
+            ['style-src-attr', ["'self'"], "Content-Security-Policy: style-src-attr 'self';"],
+            ['base-uri', ["'self'", "'unsafe-inline'"], "Content-Security-Policy: base-uri 'self' 'unsafe-inline';"],
+            ['plugin-types', ['text/csv'], 'Content-Security-Policy: plugin-types text/csv;'],
+            ['form-action',
+                [
+                    'http://*.example.com',
+                    "'self'"
+                ],
+                "Content-Security-Policy: form-action http://*.example.com 'self';"
+            ],
+            ['frame-ancestors',
+                [
+                    'http://*.example.com',
+                    "'self'"
+                ],
+                "Content-Security-Policy: frame-ancestors http://*.example.com 'self';"
+            ],
+            ['navigate-to', ['example.com'], 'Content-Security-Policy: navigate-to example.com;'],
+            ['sandbox', ['allow-forms'], 'Content-Security-Policy: sandbox allow-forms;'],
+        ];
+    }
 }
