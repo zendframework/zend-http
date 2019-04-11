@@ -29,8 +29,8 @@ class FeaturePolicyTest extends TestCase
         $this->assertInstanceOf(FeaturePolicy::class, $header);
         $directives = [
             'geolocation' => "'none'",
-            'autoplay'  => "'self'",
-            'microphone'     => "'self'",
+            'autoplay' => "'self'",
+            'microphone' => "'self'",
         ];
         $this->assertEquals($directives, $header->getDirectives());
     }
@@ -56,12 +56,12 @@ class FeaturePolicyTest extends TestCase
 
     public function testFeaturePolicySetDirective()
     {
-        $header = new FeaturePolicy();
-        $header->setDirective('geolocation', ['https://*.google.com', 'http://foo.com'])
+        $fp = new FeaturePolicy();
+        $fp->setDirective('geolocation', ['https://*.google.com', 'http://foo.com'])
             ->setDirective('autoplay', ["'self'"])
             ->setDirective('microphone', ['https://*.googleapis.com', 'https://*.bar.com']);
         $header = 'Feature-Policy: geolocation https://*.google.com http://foo.com; '
-                . 'autoplay \'self\'; microphone https://*.googleapis.com https://*.bar.com;';
+            . 'autoplay \'self\'; microphone https://*.googleapis.com https://*.bar.com;';
         $this->assertEquals($header, $header->toString());
     }
 
