@@ -62,7 +62,7 @@ class FeaturePolicyTest extends TestCase
             ->setDirective('microphone', ['https://*.googleapis.com', 'https://*.bar.com']);
         $header = 'Feature-Policy: geolocation https://*.google.com http://foo.com; '
             . 'autoplay \'self\'; microphone https://*.googleapis.com https://*.bar.com;';
-        $this->assertEquals($header, $header->toString());
+        $this->assertEquals($header, $fp->toString());
     }
 
     public function testFeaturePolicySetDirectiveWithEmptySourcesDefaultsToNone()
