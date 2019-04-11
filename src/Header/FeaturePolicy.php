@@ -12,7 +12,7 @@ namespace Zend\Http\Header;
  *
  * @link https://w3c.github.io/webappsec-feature-policy/
  */
-class FeaturePolicy extends AbstractDirectiveBasedHeader
+class FeaturePolicy implements HeaderInterface
 {
     /**
      * Valid directive names
@@ -60,6 +60,23 @@ class FeaturePolicy extends AbstractDirectiveBasedHeader
     ];
 
     /**
+     * The directives defined for this policy
+     *
+     * @var array
+     */
+    protected $directives = [];
+
+    /**
+     * Get the list of defined directives
+     *
+     * @return array
+     */
+    public function getDirectives()
+    {
+        return $this->directives;
+    }
+
+    /**
      * Sets the directive to consist of the source list
      *
      * @param string $name The directive name.
@@ -76,7 +93,6 @@ class FeaturePolicy extends AbstractDirectiveBasedHeader
                 (string) $name
             ));
         }
-
         if (empty($sources)) {
             $this->directives[$name] = "'none'";
             return $this;
@@ -85,8 +101,41 @@ class FeaturePolicy extends AbstractDirectiveBasedHeader
         array_walk($sources, [__NAMESPACE__ . '\HeaderValue', 'assertValid']);
 
         $this->directives[$name] = implode(' ', $sources);
-
         return $this;
+    }
+
+    /**
+     * Create Feature Policy header from a given header line
+     *
+     * @param string $headerLine The header line to parse.
+     * @return self
+     * @throws Exception\InvalidArgumentException If the name field in the given header line does not match.
+     */
+    public static function fromString($headerLine)
+    {
+        $header = new static();
+        $headerName = $header->getFieldName();
+        list($name, $value) = GenericHeader::splitHeaderLine($headerLine);
+        // Ensure the proper header name
+        if (strcasecmp($name, $headerName) !== 0) {
+            throw new Exception\InvalidArgumentException(sprintf(
+                'Invalid header line for %s string: "%s"',
+                $headerName,
+                $name
+            ));
+        }
+        // As per https://w3c.github.io/webappsec-feature-policy/#algo-parse-policy-directive
+        $tokens = explode(';', $value);
+        foreach ($tokens as $token) {
+            $token = trim($token);
+            if ($token) {
+                list($directiveName, $directiveValue) = explode(' ', $token, 2);
+                if (! isset($header->directives[$directiveName])) {
+                    $header->setDirective($directiveName, [$directiveValue]);
+                }
+            }
+        }
+        return $header;
     }
 
     /**
@@ -97,5 +146,29 @@ class FeaturePolicy extends AbstractDirectiveBasedHeader
     public function getFieldName()
     {
         return 'Feature-Policy';
+    }
+
+    /**
+     * Get the header value
+     *
+     * @return string
+     */
+    public function getFieldValue()
+    {
+        $directives = [];
+        foreach ($this->directives as $name => $value) {
+            $directives[] = sprintf('%s %s;', $name, $value);
+        }
+        return implode(' ', $directives);
+    }
+
+    /**
+     * Return the header as a string
+     *
+     * @return string
+     */
+    public function toString()
+    {
+        return sprintf('%s: %s', $this->getFieldName(), $this->getFieldValue());
     }
 }
