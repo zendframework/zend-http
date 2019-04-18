@@ -12,6 +12,7 @@
     <title>Adapters - zend-http</title>
 
     <link rel="stylesheet" href="../../css/styles-18b942728f.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/anchor-js/4.2.0/anchor.min.js"></script>
 </head>
 <body id="page-top">
 
@@ -66,7 +67,7 @@
                     
     <div class="subnavigation hidden-print">
         <h4 class="subnavigation__title">
-            <a href="../..">zend-http</a>
+            <a href="">zend-http</a>
         </h4>
 
         <h5 class="subnavigation__subtitle">Table of Contents</h5>
@@ -75,13 +76,13 @@
             
                 
                     <li class="subnavigation__list-item ">
-                        <a href="../.." class="subnavigation__link">zend-http</a>
+                        <a href="" class="subnavigation__link">zend-http</a>
                     </li>
                 
             
                 
                     <li class="subnavigation__list-item ">
-                        <a href="../../intro/" class="subnavigation__link">Intro</a>
+                        <a href="intro/" class="subnavigation__link">Intro</a>
                     </li>
                 
             
@@ -92,19 +93,19 @@
                             
                                 
     <li class="subnavigation__list-item ">
-        <a href="../../request/" class="subnavigation__link">Request</a>
+        <a href="request/" class="subnavigation__link">Request</a>
     </li>
 
                             
                                 
     <li class="subnavigation__list-item ">
-        <a href="../../response/" class="subnavigation__link">Response</a>
+        <a href="response/" class="subnavigation__link">Response</a>
     </li>
 
                             
                                 
     <li class="subnavigation__list-item ">
-        <a href="../../headers/" class="subnavigation__link">Headers</a>
+        <a href="headers/" class="subnavigation__link">Headers</a>
     </li>
 
                             
@@ -115,31 +116,31 @@
             
                 
     <li class="subnavigation__list-item ">
-        <a href="../intro/" class="subnavigation__link">Intro</a>
+        <a href="client/intro/" class="subnavigation__link">Intro</a>
     </li>
 
             
                 
     <li class="subnavigation__list-item subnavigation__list-item--active">
-        <a href="./" class="subnavigation__link">Adapters</a>
+        <a href="client/adapters/" class="subnavigation__link">Adapters</a>
     </li>
 
             
                 
     <li class="subnavigation__list-item ">
-        <a href="../static/" class="subnavigation__link">Static Client</a>
+        <a href="client/static/" class="subnavigation__link">Static Client</a>
     </li>
 
             
                 
     <li class="subnavigation__list-item ">
-        <a href="../cookies/" class="subnavigation__link">Cookie Persistence</a>
+        <a href="client/cookies/" class="subnavigation__link">Cookie Persistence</a>
     </li>
 
             
                 
     <li class="subnavigation__list-item ">
-        <a href="../advanced/" class="subnavigation__link">Advanced</a>
+        <a href="client/advanced/" class="subnavigation__link">Advanced</a>
     </li>
 
             
@@ -227,15 +228,15 @@
         <li><a href="https://docs.zendframework.com/">Documentation</a></li>
 
         
-            <li><a href="../..">zend-http</a></li>
+            <li><a href="">zend-http</a></li>
 
             
                 
-                    <li>Reference</li>
+                    <li>Client</li>
                 
             
                 
-                    <li>Client</li>
+                    <li>Reference</li>
                 
             
 
@@ -678,14 +679,14 @@ $client  = new Client(
 
 // Set the expected response
 $adapter-&gt;setResponse(
-    &quot;HTTP/1.1 200 OK\r\n&quot;
-    . &quot;Content-type: text/xml\r\n&quot;
-    . &quot;\r\n&quot;
-    . '&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;'
-    . '&lt;rss version=&quot;2.0&quot; '
-    . '     xmlns:content=&quot;http://purl.org/rss/1.0/modules/content/&quot;'
-    . '     xmlns:wfw=&quot;http://wellformedweb.org/CommentAPI/&quot;'
-    . '     xmlns:dc=&quot;http://purl.org/dc/elements/1.1/&quot;&gt;'
+    "HTTP/1.1 200 OK\r\n"
+    . "Content-type: text/xml\r\n"
+    . "\r\n"
+    . '&lt;?xml version="1.0" encoding="UTF-8"?&gt;'
+    . '&lt;rss version="2.0" '
+    . '     xmlns:content="http://purl.org/rss/1.0/modules/content/"'
+    . '     xmlns:wfw="http://wellformedweb.org/CommentAPI/"'
+    . '     xmlns:dc="http://purl.org/dc/elements/1.1/"&gt;'
     . '  &lt;channel&gt;'
     . '    &lt;title&gt;Premature Optimization&lt;/title&gt;'
     // and so on...
@@ -716,10 +717,10 @@ $client = new Client(
 
 // Set the first expected response
 $adapter-&gt;setResponse(
-    &quot;HTTP/1.1 302 Found\r\n&quot;
-    . &quot;Location: /\r\n&quot;
-    . &quot;Content-Type: text/html\r\n&quot;
-    . &quot;\r\n&quot;
+    "HTTP/1.1 302 Found\r\n"
+    . "Location: /\r\n"
+    . "Content-Type: text/html\r\n"
+    . "\r\n"
     . '&lt;html&gt;'
     . '  &lt;head&gt;&lt;title&gt;Moved&lt;/title&gt;&lt;/head&gt;'
     . '  &lt;body&gt;&lt;p&gt;This page has moved.&lt;/p&gt;&lt;/body&gt;'
@@ -728,9 +729,9 @@ $adapter-&gt;setResponse(
 
 // Set the next successive response
 $adapter-&gt;addResponse(
-    &quot;HTTP/1.1 200 OK\r\n&quot;
-    . &quot;Content-Type: text/html\r\n&quot;
-    . &quot;\r\n&quot;
+    "HTTP/1.1 200 OK\r\n"
+    . "Content-Type: text/html\r\n"
+    . "\r\n"
     . '&lt;html&gt;'
     . '  &lt;head&gt;&lt;title&gt;My Pet Store Home Page&lt;/title&gt;&lt;/head&gt;'
     . '  &lt;body&gt;&lt;p&gt;...&lt;/p&gt;&lt;/body&gt;'
@@ -878,7 +879,7 @@ $client = new Client([
         
         <li class="page-nav__item">
             
-                <a rel="prev" class="page-nav__link page-nav__link--prev" href="../intro/">
+                <a rel="prev" class="page-nav__link page-nav__link--prev" href="client/intro/">
                     <i class="fa fa-chevron-left"></i> Previous
                 </a>
             
@@ -887,7 +888,7 @@ $client = new Client([
         
         <li class="page-nav__item">
             
-                <a rel="next" class="page-nav__link page-nav__link--next" href="../static/">
+                <a rel="next" class="page-nav__link page-nav__link--next" href="client/static/">
                     Next <i class="fa fa-chevron-right"></i>
                 </a>
             
@@ -922,7 +923,7 @@ $client = new Client([
                     
     <div class="subnavigation hidden-print">
         <h4 class="subnavigation__title">
-            <a href="../..">zend-http</a>
+            <a href="">zend-http</a>
         </h4>
 
         <h5 class="subnavigation__subtitle">Table of Contents</h5>
@@ -931,13 +932,13 @@ $client = new Client([
             
                 
                     <li class="subnavigation__list-item ">
-                        <a href="../.." class="subnavigation__link">zend-http</a>
+                        <a href="" class="subnavigation__link">zend-http</a>
                     </li>
                 
             
                 
                     <li class="subnavigation__list-item ">
-                        <a href="../../intro/" class="subnavigation__link">Intro</a>
+                        <a href="intro/" class="subnavigation__link">Intro</a>
                     </li>
                 
             
@@ -948,19 +949,19 @@ $client = new Client([
                             
                                 
     <li class="subnavigation__list-item ">
-        <a href="../../request/" class="subnavigation__link">Request</a>
+        <a href="request/" class="subnavigation__link">Request</a>
     </li>
 
                             
                                 
     <li class="subnavigation__list-item ">
-        <a href="../../response/" class="subnavigation__link">Response</a>
+        <a href="response/" class="subnavigation__link">Response</a>
     </li>
 
                             
                                 
     <li class="subnavigation__list-item ">
-        <a href="../../headers/" class="subnavigation__link">Headers</a>
+        <a href="headers/" class="subnavigation__link">Headers</a>
     </li>
 
                             
@@ -971,31 +972,31 @@ $client = new Client([
             
                 
     <li class="subnavigation__list-item ">
-        <a href="../intro/" class="subnavigation__link">Intro</a>
+        <a href="client/intro/" class="subnavigation__link">Intro</a>
     </li>
 
             
                 
     <li class="subnavigation__list-item subnavigation__list-item--active">
-        <a href="./" class="subnavigation__link">Adapters</a>
+        <a href="client/adapters/" class="subnavigation__link">Adapters</a>
     </li>
 
             
                 
     <li class="subnavigation__list-item ">
-        <a href="../static/" class="subnavigation__link">Static Client</a>
+        <a href="client/static/" class="subnavigation__link">Static Client</a>
     </li>
 
             
                 
     <li class="subnavigation__list-item ">
-        <a href="../cookies/" class="subnavigation__link">Cookie Persistence</a>
+        <a href="client/cookies/" class="subnavigation__link">Cookie Persistence</a>
     </li>
 
             
                 
     <li class="subnavigation__list-item ">
-        <a href="../advanced/" class="subnavigation__link">Advanced</a>
+        <a href="client/advanced/" class="subnavigation__link">Advanced</a>
     </li>
 
             
@@ -1081,9 +1082,8 @@ $client = new Client([
         var base_url = '../..',
             siteName = 'zend-http';
     </script>
-    <script src="../../js/scripts-0bcb0a3bb3.js"></script>
-        <script src="../../search/require.js"></script>
-        <script src="../../search/search.js"></script>
+    <script src="../../js/scripts-edc4cfa790.js"></script>
+        <script src="../../search/main.js"></script>
 
     
     <div class="modal" id="mkdocs_search_modal" tabindex="-1" role="dialog" aria-labelledby="Search Modal" aria-hidden="true">
@@ -1112,6 +1112,14 @@ $client = new Client([
             </div>
         </div>
     </div>
+
+<script>
+// Anchors
+anchors.options.placement = 'left';
+anchors.add(
+    '.content h1:not(.content__title), .content h2, .content > h3, .content h4, .content h5'
+);
+</script>
 
 
 
