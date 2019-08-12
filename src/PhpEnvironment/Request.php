@@ -490,7 +490,7 @@ class Request extends HttpRequest
             // matching PHP_SELF.
 
             $argv = $this->getServer()->get('argv', []);
-            if (!empty($argv[0]) && is_string($argv[0]) && strpos($filename, $argv[0]) === 0) {
+            if (! empty($argv[0]) && is_string($argv[0]) && strpos($filename, $argv[0]) === 0) {
                 $filename = substr($filename, strlen($argv[0]));
             }
 
