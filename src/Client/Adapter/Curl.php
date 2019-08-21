@@ -494,7 +494,7 @@ class Curl implements HttpAdapter, StreamInterface
 
         // cURL automatically handles Proxy rewrites, remove the "HTTP/1.0 200 Connection established" string:
         $responseHeaders = preg_replace(
-            "/HTTP\/1.0\s*200\s*Connection\s*established\\r\\n\\r\\n/",
+            "/HTTP\/1.[01]\s*200\s*Connection\s*established\\r\\n\\r\\n/",
             '',
             $responseHeaders
         );
