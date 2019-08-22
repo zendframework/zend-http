@@ -233,7 +233,7 @@ class Request extends HttpRequest
             }
         }
 
-        $headers = $this->getHeaders()->addHeaders($headers);
+        $this->getHeaders()->addHeaders($headers);
 
         // set method
         if (isset($this->serverParams['REQUEST_METHOD'])) {
@@ -266,8 +266,9 @@ class Request extends HttpRequest
         $port = null;
 
         // Set the host
-        if ($headers->get('host')) {
-            $host = $headers->get('host')->getFieldValue();
+        $headerHost = $this->getHeaders()->get('host');
+        if ($headerHost) {
+            $host = $headerHost->getFieldValue();
 
             // works for regname, IPv4 & IPv6
             if (preg_match('|\:(\d+)$|', $host, $matches)) {
