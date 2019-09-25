@@ -31,7 +31,7 @@ class SetCookie implements MultipleHeaderInterface
     const SAME_SITE_LAX = 'Lax';
 
     /**
-     * Vookie will be sent with same-site and cross-site requests.
+     * Cookie will be sent with same-site and cross-site requests.
      */
     const SAME_SITE_NONE = 'None';
 
@@ -231,7 +231,7 @@ class SetCookie implements MultipleHeaderInterface
      * @param   bool                $httponly
      * @param   string              $maxAge
      * @param   int                 $version
-     * @param   string              $sameSite
+     * @param   string|null         $sameSite
      */
     public function __construct(
         $name = null,
@@ -334,7 +334,7 @@ class SetCookie implements MultipleHeaderInterface
         }
 
         $sameSite = $this->getSameSite();
-        if ($sameSite !== null && in_array($sameSite, self::SAME_SITE_ALLOWED_VALUES, true)) {
+        if (in_array($sameSite, self::SAME_SITE_ALLOWED_VALUES, true)) {
             $fieldValue .= '; SameSite=' . $sameSite;
         }
 
@@ -621,11 +621,15 @@ class SetCookie implements MultipleHeaderInterface
     }
 
     /**
-     * @param string $sameSite
+     * @param string|null $sameSite
      * @return SetCookie
+     * @throws Exception\InvalidArgumentException
      */
     public function setSameSite($sameSite)
     {
+        if (!in_array($sameSite, self::SAME_SITE_ALLOWED_VALUES, true)) {
+            throw new Exception\InvalidArgumentException('"' . $sameSite . '" is not an allowed value (Strict, Lax, None) for SameSite directive.');
+        }
         $this->sameSite = $sameSite;
         return $this;
     }
