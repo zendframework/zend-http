@@ -334,7 +334,7 @@ class SetCookie implements MultipleHeaderInterface
         }
 
         $sameSite = $this->getSameSite();
-        if (in_array($sameSite, self::SAME_SITE_ALLOWED_VALUES, true)) {
+        if ($sameSite !== null && in_array($sameSite, self::SAME_SITE_ALLOWED_VALUES, true)) {
             $fieldValue .= '; SameSite=' . $sameSite;
         }
 
@@ -627,7 +627,7 @@ class SetCookie implements MultipleHeaderInterface
      */
     public function setSameSite($sameSite)
     {
-        if (! in_array($sameSite, self::SAME_SITE_ALLOWED_VALUES, true)) {
+        if ($sameSite !== null && ! in_array($sameSite, self::SAME_SITE_ALLOWED_VALUES, true)) {
             throw new Exception\InvalidArgumentException(
                 '"' . $sameSite . '" is not an allowed value (Strict, Lax, None) for SameSite directive.'
             );
