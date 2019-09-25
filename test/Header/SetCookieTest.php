@@ -43,6 +43,32 @@ class SetCookieTest extends TestCase
         $this->assertEquals(9, $setCookieHeader->getVersion());
     }
 
+    public function testSetCookieConstructorWithSameSite()
+    {
+        $setCookieHeader = new SetCookie(
+            'myname',
+            'myvalue',
+            'Wed, 13-Jan-2021 22:23:01 GMT',
+            '/accounts',
+            'docs.foo.com',
+            true,
+            true,
+            99,
+            9,
+            SetCookie::SAME_SITE_STRICT
+        );
+        $this->assertEquals('myname', $setCookieHeader->getName());
+        $this->assertEquals('myvalue', $setCookieHeader->getValue());
+        $this->assertEquals('Wed, 13-Jan-2021 22:23:01 GMT', $setCookieHeader->getExpires());
+        $this->assertEquals('/accounts', $setCookieHeader->getPath());
+        $this->assertEquals('docs.foo.com', $setCookieHeader->getDomain());
+        $this->assertTrue($setCookieHeader->isSecure());
+        $this->assertTrue($setCookieHeader->isHttpOnly());
+        $this->assertEquals(99, $setCookieHeader->getMaxAge());
+        $this->assertEquals(9, $setCookieHeader->getVersion());
+        $this->assertEquals('Strict', $setCookieHeader->getSameSite());
+    }
+
     public function testSetCookieFromStringWithQuotedValue()
     {
         $setCookieHeader = SetCookie::fromString('Set-Cookie: myname="quotedValue"');
@@ -85,6 +111,20 @@ class SetCookieTest extends TestCase
         $this->assertEquals('Wed, 13-Jan-2021 22:23:01 GMT', $setCookieHeader->getExpires());
         $this->assertTrue($setCookieHeader->isSecure());
         $this->assertTrue($setCookieHeader->isHttponly());
+
+        $setCookieHeader = SetCookie::fromString(
+            'set-cookie: myname=myvalue; Domain=docs.foo.com; Path=/accounts;'
+            . 'Expires=Wed, 13-Jan-2021 22:23:01 GMT; Secure; HttpOnly; SameSite=Strict'
+        );
+        $this->assertInstanceOf(MultipleHeaderInterface::class, $setCookieHeader);
+        $this->assertEquals('myname', $setCookieHeader->getName());
+        $this->assertEquals('myvalue', $setCookieHeader->getValue());
+        $this->assertEquals('docs.foo.com', $setCookieHeader->getDomain());
+        $this->assertEquals('/accounts', $setCookieHeader->getPath());
+        $this->assertEquals('Wed, 13-Jan-2021 22:23:01 GMT', $setCookieHeader->getExpires());
+        $this->assertTrue($setCookieHeader->isSecure());
+        $this->assertTrue($setCookieHeader->isHttponly());
+        $this->assertEquals(setCookie::SAME_SITE_STRICT, $setCookieHeader->getSameSite());
     }
 
     public function testSetCookieFromStringCanCreateMultipleHeaders()
