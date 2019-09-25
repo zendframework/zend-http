@@ -69,6 +69,24 @@ class SetCookieTest extends TestCase
         $this->assertEquals('Strict', $setCookieHeader->getSameSite());
     }
 
+    public function testSetCookieWithInvalidSameSiteValueThrowException()
+    {
+        $this->expectException(InvalidArgumentException::class);
+
+        $setCookieHeader = new SetCookie(
+            'myname',
+            'myvalue',
+            'Wed, 13-Jan-2021 22:23:01 GMT',
+            '/accounts',
+            'docs.foo.com',
+            true,
+            true,
+            99,
+            9,
+            'InvalidValue'
+        );
+    }
+
     public function testSetCookieFromStringWithQuotedValue()
     {
         $setCookieHeader = SetCookie::fromString('Set-Cookie: myname="quotedValue"');
