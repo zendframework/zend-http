@@ -197,7 +197,7 @@ class SetCookie implements MultipleHeaderInterface
      * @param   string              $domain
      * @param   bool                $secure
      * @param   bool                $httponly
-     * @param   string              $maxAge
+     * @param   int                 $maxAge
      * @param   int                 $version
      */
     public function __construct(
