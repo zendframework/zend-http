@@ -266,8 +266,9 @@ class Request extends HttpRequest
         $port = null;
 
         // Set the host
-        if ($this->getHeaders()->get('host')) {
-            $host = $this->getHeaders()->get('host')->getFieldValue();
+        $headerHost = $this->getHeaders()->get('host');
+        if ($headerHost) {
+            $host = $headerHost->getFieldValue();
 
             // works for regname, IPv4 & IPv6
             if (preg_match('|\:(\d+)$|', $host, $matches)) {
