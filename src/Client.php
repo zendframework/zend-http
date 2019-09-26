@@ -854,8 +854,7 @@ class Client implements Stdlib\DispatchableInterface
      */
     public function dispatch(Stdlib\RequestInterface $request, Stdlib\ResponseInterface $response = null)
     {
-        $response = $this->send($request);
-        return $response;
+        return $this->send($request);
     }
 
     /**
