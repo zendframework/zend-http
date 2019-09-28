@@ -36,6 +36,7 @@ class HeaderLoader extends PluginClassLoader
         'contentlocation'         => Header\ContentLocation::class,
         'contentmd5'              => Header\ContentMD5::class,
         'contentrange'            => Header\ContentRange::class,
+        'contentsecuritypolicy'   => Header\ContentSecurityPolicy::class,
         'contenttransferencoding' => Header\ContentTransferEncoding::class,
         'contenttype'             => Header\ContentType::class,
         'cookie'                  => Header\Cookie::class,

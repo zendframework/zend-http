@@ -12,7 +12,7 @@ namespace Zend\Http\Header;
  *
  * @link http://www.w3.org/TR/CSP/
  */
-class ContentSecurityPolicy implements HeaderInterface
+class ContentSecurityPolicy implements MultipleHeaderInterface
 {
     /**
      * Valid directive names
@@ -153,5 +153,21 @@ class ContentSecurityPolicy implements HeaderInterface
     public function toString()
     {
         return sprintf('%s: %s', $this->getFieldName(), $this->getFieldValue());
+    }
+
+    public function toStringMultipleHeaders(array $headers)
+    {
+        $strings = [$this->toString()];
+        foreach ($headers as $header) {
+            if (! $header instanceof ContentSecurityPolicy) {
+                throw new Exception\RuntimeException(
+                    'The ContentSecurityPolicy multiple header implementation can only'
+                    . ' accept an array of ContentSecurityPolicy headers'
+                );
+            }
+            $strings[] = $header->toString();
+        }
+
+        return implode("\r\n", $strings) . "\r\n";
     }
 }
