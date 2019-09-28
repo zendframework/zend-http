@@ -588,8 +588,6 @@ class ClientTest extends TestCase
 
     /**
      * @dataProvider cookies
-     *
-     * @param string|array $cookies
      */
     public function testSetCookies(array $cookies)
     {
