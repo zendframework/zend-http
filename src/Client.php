@@ -11,6 +11,7 @@ use ArrayIterator;
 use Traversable;
 use Zend\Http\Client\Adapter\Curl;
 use Zend\Http\Client\Adapter\Socket;
+use Zend\Http\Header\SetCookie;
 use Zend\Stdlib;
 use Zend\Stdlib\ArrayUtils;
 use Zend\Stdlib\ErrorHandler;
@@ -603,7 +604,7 @@ class Client implements Stdlib\DispatchableInterface
     /**
      * Set an array of cookies
      *
-     * @param  array $cookies
+     * @param  array|SetCookie[] $cookies Cookies as name=>value pairs or instances of SetCookie.
      * @throws Exception\InvalidArgumentException
      * @return Client
      */
@@ -612,7 +613,11 @@ class Client implements Stdlib\DispatchableInterface
         if (is_array($cookies)) {
             $this->clearCookies();
             foreach ($cookies as $name => $value) {
-                $this->addCookie($name, $value);
+                if ($value instanceof SetCookie) {
+                    $this->addCookie($value);
+                } else {
+                    $this->addCookie($name, $value);
+                }
             }
         } else {
             throw new Exception\InvalidArgumentException('Invalid cookies passed as parameter, it must be an array');
