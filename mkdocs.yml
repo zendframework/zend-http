@@ -1,8 +1,8 @@
 docs_dir: docs/book
 site_dir: docs/html
-pages:
-    - index.md
-    - Intro: intro.md
+nav:
+    - Home: index.md
+    - Introduction: intro.md
     - Reference:
         - Request: request.md
         - Response: response.md
@@ -14,6 +14,5 @@ pages:
             - "Cookie Persistence": client/cookies.md
             - Advanced: client/advanced.md
 site_name: zend-http
-site_description: zend-http
+site_description: HTTP message and header abstractions, and HTTP client implementation.  (Not a PSR-7 implementation; see <a href="//docs.zendframework.com/zend-diactoros">Diactoros</a> for PSR-7 support.
 repo_url: 'https://github.com/zendframework/zend-http'
-copyright: 'Copyright (c) 2005-2018 <a href="https://www.zend.com/">Zend Technologies USA Inc.</a>'
