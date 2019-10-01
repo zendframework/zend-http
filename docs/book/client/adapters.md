@@ -37,9 +37,11 @@ Parameter            | Description                                              
 `sslcert`            | Path to a PEM encoded SSL certificate                                                | string        | `NULL`
 `sslpassphrase`      | Passphrase for the SSL certificate file                                              | string        | `NULL`
 `sslverifypeer`      | Whether to verify the SSL peer                                                       | string        | `TRUE`
+`sslcafile`          | Path to Certificate Authority file                                                   | string        | `NULL`
 `sslcapath`          | Path to SSL certificate directory                                                    | string        | `NULL`
 `sslallowselfsigned` | Whether to allow self-signed certificates                                            | string        | `FALSE`
 `sslusecontext`      | Enables proxied connections to use SSL even if the proxy connection itself does not. | boolean       | `FALSE`
+`sslverifypeername`  | Whether to verify the peer name                                                      | boolean       | `TRUE`
 
 > ### Persistent TCP connections
 >
