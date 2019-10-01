@@ -62,7 +62,7 @@ $response = $client->send($request);
 > ### URL validation
 >
 > `Zend\Http\Client` uses `Zend\Uri\Http` to validate URLs. See the
-> [zend-uri](http://framework.zend.com/manual/current/en/index.html#zend-uri)
+> [zend-uri](https://docs.zendframework.com/zend-uri/)
 > documentation for more information.
 
 ## Configuration
