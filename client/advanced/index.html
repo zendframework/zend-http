@@ -348,12 +348,11 @@ when redirecting on a 301 or 302 response, all query and body parameters are
 reset, and a <code>GET</code> request is sent to the new location. This behavior can be
 changed by setting the <code>strictredirects</code> configuration parameter to boolean
 <code>TRUE</code>:</p>
-<pre class="codehilite"><code class="language-php">// Strict Redirections
+<p> <pre class=codehilite><code class=language-php>// Strict Redirections
 $client-&gt;setOptions(['strictredirects' =&gt; true]);
 
 // Non-strict Redirections
-$client-&gt;setOptions(['strictredirects' =&gt; false]);</code></pre>
-
+$client-&gt;setOptions(['strictredirects' =&gt; false]);</code></pre></p>
 <p>You can always get the number of redirections done after sending a request
 using the <code>getRedirectionsCount()</code> method.</p>
 <h2 id="adding-cookies-and-using-cookie-persistence">Adding cookies and using cookie persistence</h2>
@@ -362,7 +361,7 @@ that no direct header modification is required. Cookies can be added using
 either the addCookie() or <code>setCookies()</code> method. <code>addCookie()</code> can accept
 either a name and value, a <code>SetCookie</code> header instance, or an array of
 <code>SetCookie</code> header instances.</p>
-<pre class="codehilite"><code class="language-php">use Zend\Http\Header\SetCookie;
+<p> <pre class=codehilite><code class=language-php>use Zend\Http\Header\SetCookie;
 
 // Basic usage: provide a cookie name and cookie value:
 $client-&gt;addCookie('flavor', 'chocolate chips');
@@ -377,26 +376,24 @@ $cookies = [
     SetCookie::fromString('Set-Cookie: flavorOne=chocolate%20chips'),
     SetCookie::fromString('Set-Cookie: flavorTwo=vanilla'),
 ];
-$client-&gt;addCookie($cookies);</code></pre>
-
+$client-&gt;addCookie($cookies);</code></pre></p>
 <p>The <code>setCookies()</code> method works in a similar manner, except that it requires an
 array of cookie name/value pairs as its only argument, and also clears the
 cookie container before adding the new cookies:</p>
-<pre class="codehilite"><code class="language-php">// setCookies accepts an array of cookie values as $name =&gt; $value
+<p> <pre class=codehilite><code class=language-php>// setCookies accepts an array of cookie values as $name =&gt; $value
 $client-&gt;setCookies([
     'flavor' =&gt; 'chocolate chips',
     'amount' =&gt; 10,
-]);</code></pre>
-
+]);</code></pre></p>
 <p>See the <a href="../../headers/#setcookie">Headers documentation</a> for more detail on the
 <code>SetCookie</code> class.</p>
-<h3 id="enabling-cookie-stickiness">Enabling Cookie Stickiness</h3>
+<h3>Enabling Cookie Stickiness</h3>
 <p><code>Zend\Http\Client</code> also provides a means for simplifying cookie "stickiness"
 &mdash; i.e., having the client internally store all sent and received cookies,
 and resending them on subsequent requests. &mdash; via the <code>Zend\Http\Cookies</code>
 class. This is useful when you need to log in to a remote site first and
 receive an authentication or session ID cookie before sending further requests.</p>
-<pre class="codehilite"><code class="language-php">$headers = $client-&gt;getRequest()-&gt;getHeaders();
+<p> <pre class=codehilite><code class=language-php>$headers = $client-&gt;getRequest()-&gt;getHeaders();
 $cookies = new Zend\Http\Cookies($headers);
 
 // First request: log in and start a session
@@ -410,14 +407,13 @@ $cookies-&gt;addCookiesFromResponse($response, $client-&gt;getUri());
 // Now we can send our next request
 $client-&gt;setUri('http://example.com/read_member_news.php');
 $client-&gt;setCookies($cookies-&gt;getMatchingCookies($client-&gt;getUri()));
-$client-&gt;setMethod('GET');</code></pre>
-
+$client-&gt;setMethod('GET');</code></pre></p>
 <p>See the chapter on <a href="../cookies/">cookies</a> for more detail.</p>
 <h2 id="setting-custom-request-headers">Setting custom request headers</h2>
 <p>Setting custom headers is performed by first fetching the header container from
 the client's <code>Zend\Http\Request</code> instance. This <code>Headers</code> container offers a
 number of methods for setting headers:</p>
-<pre class="codehilite"><code class="language-php">use Zend\Http\Header;
+<p> <pre class=codehilite><code class=language-php>use Zend\Http\Header;
 
 // Fetch the container
 $headers = $client-&gt;getRequest()-&gt;getHeaders();
@@ -443,14 +439,13 @@ $headers-&gt;addHeaders([
 
     // Raw header string:
     'Cookie: language=he',
-]);</code></pre>
-
+]);</code></pre></p>
 <p><code>Zend\Http\Client</code> also provides a convenience method for setting request
 headers, <code>setHeaders()</code>.  This method will create a new header container, add
 the specified headers, and then store the new header container in its
 <code>Zend\Http\Request</code> instance. As a consequence, any pre-existing headers will
 be erased:</p>
-<pre class="codehilite"><code class="language-php">use Zend\Http\Header;
+<p> <pre class=codehilite><code class=language-php>use Zend\Http\Header;
 
 // Setting multiple headers via the client; removes all existing headers,
 // replacing the request header container with the following:
@@ -458,8 +453,7 @@ $client-&gt;setHeaders([
     Zend\Http\Header\Host::fromString('Host: www.example.com'),
     ['Accept-Encoding' =&gt; 'gzip,deflate'],
     'X-Powered-By: Zend Framework',
-]);</code></pre>
-
+]);</code></pre></p>
 <h2 id="file-uploads">File uploads</h2>
 <p>You can upload files through HTTP using the <code>setFileUpload()</code> method. This
 method takes a file name as the first parameter, a form name as the second
@@ -474,7 +468,7 @@ optional parameter provides the file's <code>Content-Type</code>. If not specifi
 <code>Zend\Http\Client</code> reads the file from the disk, the <code>mime_content_type()</code>
 function will be used to guess the file's content type, if it is available. In
 any case, the default MIME type will be <code>application/octet-stream</code>.</p>
-<pre class="codehilite"><code class="language-php">// Uploading arbitrary data as a file:
+<p> <pre class=codehilite><code class=language-php>// Uploading arbitrary data as a file:
 $text = 'this is some plain text';
 $client-&gt;setFileUpload('some_text.txt', 'upload', $text, 'text/plain');
 
@@ -483,15 +477,14 @@ $client-&gt;setFileUpload('/tmp/Backup.tar.gz', 'bufile');
 
 // Send the files:
 $client-&gt;setMethod('POST');
-$client-&gt;send();</code></pre>
-
+$client-&gt;send();</code></pre></p>
 <p>In the first example, the <code>$text</code> variable is uploaded and will be available as
 <code>$_FILES['upload']</code> on the server side. In the second example, the existing
 file <code>/tmp/Backup.tar.gz</code> is uploaded to the server and will be available as
 <code>$_FILES['bufile']</code>. The content type will be guessed automatically if
 possible, defaulting to <code>application/octet-stream</code>.</p>
 <blockquote>
-<h3 id="uploading-files">Uploading files</h3>
+<h3>Uploading files</h3>
 <p>When uploading files, the HTTP request <code>Content-Type</code> is automatically set to
 <code>multipart/form-data</code>.  Keep in mind that you must send a POST or PUT request
 in order to upload files; most servers will ignore the request body on other
@@ -502,7 +495,7 @@ request methods.</p>
 method. This method takes one parameter: the data to send in the request body.
 When sending raw POST data, it is advisable to also set the encoding type using
 <code>setEncType()</code>.</p>
-<pre class="codehilite"><code class="language-php">$xml = '&lt;book&gt;'
+<p> <pre class=codehilite><code class=language-php>$xml = '&lt;book&gt;'
     . '  &lt;title&gt;Islands in the Stream&lt;/title&gt;'
     . '  &lt;author&gt;Ernest Hemingway&lt;/author&gt;'
     . '  &lt;year&gt;1970&lt;/year&gt;'
@@ -510,12 +503,11 @@ When sending raw POST data, it is advisable to also set the encoding type using
 $client-&gt;setMethod('POST');
 $client-&gt;setRawBody($xml);
 $client-&gt;setEncType('text/xml');
-$client-&gt;send();</code></pre>
-
+$client-&gt;send();</code></pre></p>
 <p>The data should be available on the server side through PHP's <code>php://input</code>
 stream.</p>
 <blockquote>
-<h3 id="raw-post-data-overrides-other-content">Raw POST data overrides other content</h3>
+<h3>Raw POST data overrides other content</h3>
 <p>Setting raw POST data for a request will override any POST parameters or file
 uploads; you should not try to use both on the same request. Keep in mind
 that most servers will ignore the request body unless you send a POST
@@ -526,7 +518,7 @@ request.</p>
 using the <code>setAuth()</code> method, or by specifying a username and a password in the URI. The <code>setAuth()</code>
 method takes 3 parameters: the user name, the password and an optional authentication type
 parameter.</p>
-<pre class="codehilite"><code class="language-php">use Zend\Http\Client;
+<p> <pre class=codehilite><code class=language-php>use Zend\Http\Client;
 
 // Using basic authentication
 $client-&gt;setAuth('shahar', 'myPassword!', Client::AUTH_BASIC);
@@ -535,8 +527,7 @@ $client-&gt;setAuth('shahar', 'myPassword!', Client::AUTH_BASIC);
 $client-&gt;setAuth('shahar', 'myPassword!');
 
 // You can also specify username and password in the URI
-$client-&gt;setUri('http://christer:secret@example.com');</code></pre>
-
+$client-&gt;setUri('http://christer:secret@example.com');</code></pre></p>
 <h2 id="sending-multiple-requests-with-the-same-client">Sending multiple requests with the same client</h2>
 <p><code>Zend\Http\Client</code> was also designed specifically to handle several consecutive
 requests with the same object. This is useful in cases where a script requires
@@ -552,7 +543,7 @@ all the request-specific parameters are cleared, you should use the
 <code>resetParameters()</code> method. This ensures that GET and POST parameters, request
 body, and request headers are reset and are not reused in the next request.</p>
 <blockquote>
-<h3 id="resetting-parameters">Resetting parameters</h3>
+<h3>Resetting parameters</h3>
 <p>Note that cookies are not reset by default when the <code>resetParameters()</code>
 method is used. To clean all cookies as well, use <code>resetParameters(true)</code>, or
 call <code>clearCookies()</code> after calling <code>resetParameters()</code>.</p>
@@ -567,8 +558,8 @@ consecutive requests might be performed in more than one script in your
 application, it might be a good idea to store the <code>Cookies</code> object in the user's
 session. This way, you will only need to authenticate the user once every
 session.</p>
-<h3 id="performing-consecutive-requests-with-one-client">Performing consecutive requests with one client</h3>
-<pre class="codehilite"><code class="language-php">use Zend\Http\Client;
+<h3>Performing consecutive requests with one client</h3>
+<p> <pre class=codehilite><code class=language-php>use Zend\Http\Client;
 use Zend\Http\Cookies;
 
 // First, instantiate the client
@@ -604,8 +595,7 @@ $client-&gt;setCookies($cookieJar-&gt;getMatchingCookies($client-&gt;getUri()));
 $response = $client-&gt;setMethod('GET')-&gt;send();
 
 // Store cookies in session, for next page
-$_SESSION['cookiejar'] = $cookieJar;</code></pre>
-
+$_SESSION['cookiejar'] = $cookieJar;</code></pre></p>
 <h2 id="data-streaming">Data streaming</h2>
 <p>By default, <code>Zend\Http\Client</code> accepts and returns data as PHP strings.
 However, in many cases there are big files to be received, thus keeping them in
@@ -623,7 +613,7 @@ will return the name of the file where the response is stored, and
 <p>You can either write the response to pre-defined file, or use temporary file
 for storing it and send it out or write it to another file using regular stream
 functions.</p>
-<pre class="codehilite"><code class="language-php">$client-&gt;setStream(); // will use temp file
+<p> <pre class=codehilite><code class=language-php>$client-&gt;setStream(); // will use temp file
 $response = $client-&gt;send();
 
 // copy file:
@@ -634,7 +624,7 @@ $fp = fopen('my/downloads/file2', 'w');
 stream_copy_to_stream($response-&gt;getStream(), $fp);
 
 // write to an existing file:
-$client-&gt;setStream('my/downloads/myfile')-&gt;send();</code></pre>
+$client-&gt;setStream('my/downloads/myfile')-&gt;send();</code></pre></p>
 
 
 

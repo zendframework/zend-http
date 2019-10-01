@@ -350,7 +350,7 @@ PHP's built-in <code>fsockopen()</code> function, and does not require any speci
 extensions or compilation flags.</p>
 <p>The <code>Socket</code> adapter allows several extra configuration options that can be set
 via either the client's constructor or <code>setOptions()</code> method:</p>
-<div class="table-responsive"><div class="table-responsive"><div class="table-responsive"><table>
+<div class="table-responsive"><table>
 <thead>
 <tr>
 <th>Parameter</th>
@@ -391,6 +391,12 @@ via either the client's constructor or <code>setOptions()</code> method:</p>
 <td><code>TRUE</code></td>
 </tr>
 <tr>
+<td><code>sslcafile</code></td>
+<td>Path to Certificate Authority file</td>
+<td>string</td>
+<td><code>NULL</code></td>
+</tr>
+<tr>
 <td><code>sslcapath</code></td>
 <td>Path to SSL certificate directory</td>
 <td>string</td>
@@ -408,10 +414,16 @@ via either the client's constructor or <code>setOptions()</code> method:</p>
 <td>boolean</td>
 <td><code>FALSE</code></td>
 </tr>
+<tr>
+<td><code>sslverifypeername</code></td>
+<td>Whether to verify the peer name</td>
+<td>boolean</td>
+<td><code>TRUE</code></td>
+</tr>
 </tbody>
-</table></div></div></div>
+</table></div>
 <blockquote>
-<h3 id="persistent-tcp-connections">Persistent TCP connections</h3>
+<h3>Persistent TCP connections</h3>
 <p>Using persistent TCP connections can potentially speed up HTTP requests, but
 in most use cases, will have little positive effect and might overload the
 HTTP server you are connecting to. It is recommended to use persistent TCP
@@ -423,15 +435,15 @@ this option.</p>
 <p>Additionally, when using persistent connections, we recommend enabling
 Keep-Alive HTTP requests as described in <a href="../intro/#configuration">the client configuration section</a>;
 otherwise persistent connections might have little or no effect.</p>
-<h3 id="https-ssl-stream-parameters">HTTPS SSL stream parameters</h3>
+<h3>HTTPS SSL stream parameters</h3>
 <p><code>ssltransport</code>, <code>sslcert</code> and <code>sslpassphrase</code> are only relevant when
 connecting using HTTPS.  While the default SSL/TLS settings should work for
 most applications, you might need to change them if the server you are
 connecting to requires special client setup. If so, please read the
 <a href="http://php.net/transports.inet">PHP manual chapter on SSL and TLS transport options</a>.</p>
 </blockquote>
-<h3 id="changing-the-https-transport-layer">Changing the HTTPS transport layer</h3>
-<pre class="codehilite"><code class="language-php">use Zend\Http\Client;
+<h3>Changing the HTTPS transport layer</h3>
+<p> <pre class=codehilite><code class=language-php>use Zend\Http\Client;
 
 // Set the configuration parameters
 $config = [
@@ -443,13 +455,11 @@ $config = [
 $client = new Client('https://www.example.com', $config);
 
 // The following request will be sent over a TLS secure connection.
-$response = $client-&gt;send();</code></pre>
-
+$response = $client-&gt;send();</code></pre></p>
 <p>The result of the example above will be similar to opening a TCP connection
 using the following PHP command:</p>
-<pre class="codehilite"><code class="language-php">fsockopen('tls://www.example.com', 443);</code></pre>
-
-<h3 id="customizing-and-accessing-the-socket-adapter-stream-context">Customizing and accessing the Socket adapter stream context</h3>
+<p> <pre class=codehilite><code class=language-php>fsockopen('tls://www.example.com', 443);</code></pre></p>
+<h3>Customizing and accessing the Socket adapter stream context</h3>
 <p><code>Zend\Http\Client\Adapter\Socket</code> provides direct access to the underlying
 <a href="http://php.net/stream.contexts">stream context</a> used to connect to the remote
 server. This allows the user to pass specific options and parameters to the TCP
@@ -468,8 +478,8 @@ stream, and to the SSL wrapper in case of HTTPS connections.</p>
   return it. You can then set or get the value of different context options
   using regular PHP stream context functions.</li>
 </ul>
-<h4 id="setting-stream-context-options-for-the-socket-adapter">Setting stream context options for the Socket adapter</h4>
-<pre class="codehilite"><code class="language-php">use Zend\Http\Client;
+<h4>Setting stream context options for the Socket adapter</h4>
+<p> <pre class=codehilite><code class=language-php>use Zend\Http\Client;
 
 // Array of options
 $options = [
@@ -509,10 +519,9 @@ $response = $client-&gt;send();
 
 // If everything went well, you can now access the context again:
 $opts = stream_context_get_options($adapter-&gt;getStreamContext());
-echo $opts['ssl']['peer_certificate'];</code></pre>
-
+echo $opts['ssl']['peer_certificate'];</code></pre></p>
 <blockquote>
-<h4 id="set-stream-context-options-prior-to-requests">Set stream context options prior to requests</h4>
+<h4>Set stream context options prior to requests</h4>
 <p>Note that you must set any stream context options before using the adapter to
 perform actual requests. If no context is set before performing HTTP requests
 with the <code>Socket</code> adapter, a default stream context will be created. This
@@ -527,7 +536,7 @@ instead of a direct connection to the target server. This allows usage of
 security or performance reasons.</p>
 <p>Using the <code>Proxy</code> adapter requires several additional client configuration
 parameters to be set, in addition to the default <code>adapter</code> option:</p>
-<div class="table-responsive"><div class="table-responsive"><div class="table-responsive"><table>
+<div class="table-responsive"><table>
 <thead>
 <tr>
 <th>Parameter</th>
@@ -568,7 +577,7 @@ parameters to be set, in addition to the default <code>adapter</code> option:</p
 <td><code>Zend\Http\Client::AUTH_BASIC</code> (default)</td>
 </tr>
 </tbody>
-</table></div></div></div>
+</table></div>
 <p><code>proxy_host</code> should always be set; if it is not set, the client will fall back
 to a direct connection using <code>Zend\Http\Client\Adapter\Socket</code>. <code>proxy_port</code>
 defaults to '8080'; if your proxy listens on a different port, you must set this
@@ -581,8 +590,8 @@ these two options out.</p>
 authentication.  Possible values are similar to the ones accepted by the
 <code>Zend\Http\Client::setAuth()</code> method. Currently, only basic authentication
 (<code>Zend\Http\Client::AUTH_BASIC</code>) is supported.</p>
-<h3 id="using-zend92http92client-behind-a-proxy-server">Using Zend\Http\Client behind a proxy server</h3>
-<pre class="codehilite"><code class="language-php">use Zend\Http\Client;
+<h3>Using Zend\Http\Client behind a proxy server</h3>
+<p> <pre class=codehilite><code class=language-php>use Zend\Http\Client;
 
 // Set the configuration parameters
 $config = [
@@ -596,14 +605,13 @@ $config = [
 // Instantiate a client object
 $client = new Client('http://www.example.com', $config);
 
-// Continue working...</code></pre>
-
+// Continue working...</code></pre></p>
 <p>As mentioned, if <code>proxy_host</code> is not set or is set to a blank string, the
 connection will fall back to a regular direct connection. This allows you to
 write your application in a way that allows a proxy to be used optionally,
 according to a configuration parameter.</p>
 <blockquote>
-<h3 id="access-to-stream-context">Access to stream context</h3>
+<h3>Access to stream context</h3>
 <p>Since the proxy adapter inherits from <code>Zend\Http\Client\Adapter\Socket</code>, you
 can use the stream context access method (see
 <a href="#setting-stream-context-options-for-the-socket-adapter">above</a>) to set stream
@@ -616,15 +624,20 @@ for many special cases which can occur for a HTTP client and make it a perfect
 choice for a HTTP adapter. It supports secure connections, proxies, and multiple
 authentication mechanisms. In particular, it is very performant with regards to
 transfering large files.</p>
-<h3 id="setting-curl-options">Setting cURL options</h3>
-<pre class="codehilite"><code class="language-php">use Zend\Http\Client;
+<blockquote>
+<h4>Known issue with libcurl prior to 7.30.0</h4>
+<p>There is an issue with <a href="https://github.com/bagder/curl/pull/60">incorrect headers length detection in libcurl</a>
+prior to 7.30.0. It leads to problems with removing the Transfer-Encoding
+header from the response. We encourage to update libcurl.</p>
+</blockquote>
+<h3>Setting cURL options</h3>
+<p> <pre class=codehilite><code class=language-php>use Zend\Http\Client;
 
 $config = [
     'adapter'     =&gt; Client\Adapter\Curl::class,
     'curloptions' =&gt; [CURLOPT_FOLLOWLOCATION =&gt; true],
 ];
-$client = new Client($uri, $config);</code></pre>
-
+$client = new Client($uri, $config);</code></pre></p>
 <p>By default, the cURL adapter is configured to behave exactly like the <code>Socket</code>
 adapter, and it also accepts the same configuration parameters as the <code>Socket</code>
 and <code>Proxy</code> adapters. You can also change the cURL options by either specifying
@@ -634,7 +647,7 @@ constants of the cURL extension. You can get access to the underling cURL handle
 by calling <code>$adapter-&gt;getHandle();</code></p>
 <p>The cURL configuration options that can be set via <code>setCurlOption($name, $value)</code>
 method are:</p>
-<div class="table-responsive"><div class="table-responsive"><div class="table-responsive"><table>
+<div class="table-responsive"><table>
 <thead>
 <tr>
 <th>Parameter</th>
@@ -675,10 +688,10 @@ method are:</p>
 <td><code>TRUE</code></td>
 </tr>
 </tbody>
-</table></div></div></div>
-<h3 id="transfering-files-by-handle">Transfering files by handle</h3>
+</table></div>
+<h3>Transfering files by handle</h3>
 <p>You can use cURL to transfer very large files over HTTP by filehandle.</p>
-<pre class="codehilite"><code class="language-php">use Zend\Http\Client;
+<p> <pre class=codehilite><code class=language-php>use Zend\Http\Client;
 
 $putFileSize   = filesize('filepath');
 $putFileHandle = fopen('filepath', 'r');
@@ -693,8 +706,7 @@ $adapter-&gt;setOptions([
         CURLOPT_INFILESIZE =&gt; $putFileSize,
     ],
 ]);
-$client-&gt;send();</code></pre>
-
+$client-&gt;send();</code></pre></p>
 <h2 id="the-test-adapter">The Test adapter</h2>
 <p>Testing code that relies on HTTP connections poses difficulties.  For example,
 testing an application that pulls an RSS feed from a remote server will require
@@ -710,8 +722,8 @@ response as either text or a <code>Zend\Http\Response</code> object. <code>setRe
 an individual response to always return from any request; <code>addResponse()</code> allows
 aggregating a sequence of responses. In both cases, responses are returned
 without performing actual HTTP requests.</p>
-<h3 id="testing-against-a-single-http-response-stub">Testing against a single HTTP response stub</h3>
-<pre class="codehilite"><code class="language-php">use Zend\Http\Client;
+<h3>Testing against a single HTTP response stub</h3>
+<p> <pre class=codehilite><code class=language-php>use Zend\Http\Client;
 
 // Instantiate a new adapter and client
 $adapter = new Client\Adapter\Test();
@@ -722,14 +734,14 @@ $client  = new Client(
 
 // Set the expected response
 $adapter-&gt;setResponse(
-    "HTTP/1.1 200 OK\r\n"
-    . "Content-type: text/xml\r\n"
-    . "\r\n"
-    . '&lt;?xml version="1.0" encoding="UTF-8"?&gt;'
-    . '&lt;rss version="2.0" '
-    . '     xmlns:content="http://purl.org/rss/1.0/modules/content/"'
-    . '     xmlns:wfw="http://wellformedweb.org/CommentAPI/"'
-    . '     xmlns:dc="http://purl.org/dc/elements/1.1/"&gt;'
+    &quot;HTTP/1.1 200 OK\r\n&quot;
+    . &quot;Content-type: text/xml\r\n&quot;
+    . &quot;\r\n&quot;
+    . '&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;'
+    . '&lt;rss version=&quot;2.0&quot; '
+    . '     xmlns:content=&quot;http://purl.org/rss/1.0/modules/content/&quot;'
+    . '     xmlns:wfw=&quot;http://wellformedweb.org/CommentAPI/&quot;'
+    . '     xmlns:dc=&quot;http://purl.org/dc/elements/1.1/&quot;&gt;'
     . '  &lt;channel&gt;'
     . '    &lt;title&gt;Premature Optimization&lt;/title&gt;'
     // and so on...
@@ -737,8 +749,7 @@ $adapter-&gt;setResponse(
 );
 
 $response = $client-&gt;send();
-// .. continue parsing $response..</code></pre>
-
+// .. continue parsing $response..</code></pre></p>
 <p>The above example shows how you can preset your HTTP client to return the
 response you need. Then, you can continue testing your own code, without being
 dependent on a network connection, the server's response, etc. In this case, the
@@ -748,8 +759,8 @@ body.</p>
 performing multiple HTTP transactions. In this case, it's not possible to use
 <code>setResponse()</code> alone because there's no opportunity to set the next response(s)
 your program might need before returning to the caller.</p>
-<h3 id="testing-against-multiple-http-response-stubs">Testing Against Multiple HTTP Response Stubs</h3>
-<pre class="codehilite"><code class="language-php">use Zend\Http\Client;
+<h3>Testing Against Multiple HTTP Response Stubs</h3>
+<p> <pre class=codehilite><code class=language-php>use Zend\Http\Client;
 
 // Instantiate a new adapter and client
 $adapter = new Client\Adapter\Test();
@@ -760,10 +771,10 @@ $client = new Client(
 
 // Set the first expected response
 $adapter-&gt;setResponse(
-    "HTTP/1.1 302 Found\r\n"
-    . "Location: /\r\n"
-    . "Content-Type: text/html\r\n"
-    . "\r\n"
+    &quot;HTTP/1.1 302 Found\r\n&quot;
+    . &quot;Location: /\r\n&quot;
+    . &quot;Content-Type: text/html\r\n&quot;
+    . &quot;\r\n&quot;
     . '&lt;html&gt;'
     . '  &lt;head&gt;&lt;title&gt;Moved&lt;/title&gt;&lt;/head&gt;'
     . '  &lt;body&gt;&lt;p&gt;This page has moved.&lt;/p&gt;&lt;/body&gt;'
@@ -772,9 +783,9 @@ $adapter-&gt;setResponse(
 
 // Set the next successive response
 $adapter-&gt;addResponse(
-    "HTTP/1.1 200 OK\r\n"
-    . "Content-Type: text/html\r\n"
-    . "\r\n"
+    &quot;HTTP/1.1 200 OK\r\n&quot;
+    . &quot;Content-Type: text/html\r\n&quot;
+    . &quot;\r\n&quot;
     . '&lt;html&gt;'
     . '  &lt;head&gt;&lt;title&gt;My Pet Store Home Page&lt;/title&gt;&lt;/head&gt;'
     . '  &lt;body&gt;&lt;p&gt;...&lt;/p&gt;&lt;/body&gt;'
@@ -782,8 +793,7 @@ $adapter-&gt;addResponse(
 );
 
 // inject the http client object ($client) into your object
-// being tested and then test your object's behavior below</code></pre>
-
+// being tested and then test your object's behavior below</code></pre></p>
 <p>The <code>setResponse()</code> method clears any responses in the adapter's buffer and sets
 the first response that will be returned. The <code>addResponse()</code> method will add
 successive responses.</p>
@@ -798,13 +808,13 @@ this. The initial 302 response is set up with the <code>setResponse()</code> met
 200 response to be returned next is added with the <code>addResponse()</code> method. After
 configuring the test adapter, inject the HTTP client containing the adapter into
 your object under test and test its behavior.</p>
-<h3 id="forcing-the-adapter-to-fail">Forcing the adapter to fail</h3>
+<h3>Forcing the adapter to fail</h3>
 <p>If you need the adapter to fail on demand you can use
 <code>setNextRequestWillFail($flag)</code>. The method will cause the next call to
 <code>connect()</code> to throw an <code>Zend\Http\Client\Adapter\Exception\RuntimeException</code>.
 This can be useful when our application caches content from an external site (in
 case the site goes down) and you want to test this feature.</p>
-<pre class="codehilite"><code class="language-php">use Zend\Http\Client;
+<p> <pre class=codehilite><code class=language-php>use Zend\Http\Client;
 
 // Instantiate a new adapter and client
 $adapter = new Client\Adapter\Test();
@@ -824,8 +834,7 @@ try {
 }
 
 // Further requests will work as expected until
-// you call setNextRequestWillFail(true) again</code></pre>
-
+// you call setNextRequestWillFail(true) again</code></pre></p>
 <h2 id="creating-your-own-connection-adapters">Creating your own connection adapters</h2>
 <p><code>Zend\Http\Client</code> has been designed so that you can create and use your own
 connection adapters. You could, for example, create a connection adapter that
@@ -835,7 +844,7 @@ them as needed in your application.</p>
 <code>Zend\Http\Client\Adapter\AdapterInterface</code>. The following example shows the
 skeleton of a user-implemented adapter class. All the public functions defined
 in this example must be defined in your adapter as well.</p>
-<pre class="codehilite"><code class="language-php">namespace MyApp\Http\Client\Adapter;
+<p> <pre class=codehilite><code class=language-php>namespace MyApp\Http\Client\Adapter;
 
 use Zend\Http\Client\Adapter\AdapterInterface;
 
@@ -904,15 +913,14 @@ class BananaProtocol implements AdapterInterface
     {
         // Close the connection to the remote server - called last.
     }
-}</code></pre>
-
+}</code></pre></p>
 <p>Use the adapter as you would any other:</p>
-<pre class="codehilite"><code class="language-php">use MyApp\Http\Client\Adapter\BananaProtocol;
+<p> <pre class=codehilite><code class=language-php>use MyApp\Http\Client\Adapter\BananaProtocol;
 use Zend\Http\Client;
 
 $client = new Client([
     'adapter' =&gt; BananaProtocol::class,
-]);</code></pre>
+]);</code></pre></p>
 
 
 

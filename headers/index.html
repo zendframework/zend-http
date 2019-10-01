@@ -347,17 +347,16 @@ header type.</p>
 <h2 id="quick-start">Quick Start</h2>
 <p>The quickest way to get started interacting with header objects is by retrieving
 an already populated <code>Headers</code> container from a request or response instance.</p>
-<pre class="codehilite"><code class="language-php">// $client is an instance of Zend\Http\Client
+<p> <pre class=codehilite><code class=language-php>// $client is an instance of Zend\Http\Client
 
 // You can retrieve the request headers by first retrieving
 // the Request object and then calling getHeaders on it
 $requestHeaders  = $client-&gt;getRequest()-&gt;getHeaders();
 
 // The same method also works for retrieving Response headers
-$responseHeaders = $client-&gt;getResponse()-&gt;getHeaders();</code></pre>
-
+$responseHeaders = $client-&gt;getResponse()-&gt;getHeaders();</code></pre></p>
 <p><code>Zend\Http\Headers</code> can also extract headers from a string:</p>
-<pre class="codehilite"><code class="language-php">use Zend\Http\Headers;
+<p> <pre class=codehilite><code class=language-php>use Zend\Http\Headers;
 
 $headerString = &lt;&lt;&lt;EOB
 Host: www.example.com
@@ -369,8 +368,7 @@ $headers = Headers::fromString($headerString);
 // $headers is now populated with three objects
 //   (1) Zend\Http\Header\Host
 //   (2) Zend\Http\Header\ContentType
-//   (3) Zend\Http\Header\ContentLength</code></pre>
-
+//   (3) Zend\Http\Header\ContentLength</code></pre></p>
 <p>Now that you have an instance of <code>Zend\Http\Headers</code>, you can manipulate the
 individual headers it contains using the provided public API methods outlined in
 the <a href="#available-methods">Available Methods</a> section.</p>
@@ -384,7 +382,7 @@ brevity, we map the following references to the following classes or namespaces:
 <li><code>Headers</code>: <code>Zend\Http\Headers</code></li>
 <li><code>PluginClassLocator</code>: <code>Zend\Loader\PluginClassLocator</code></li>
 </ul>
-<div class="table-responsive"><div class="table-responsive"><div class="table-responsive"><table>
+<div class="table-responsive"><table>
 <thead>
 <tr>
 <th>Method signature</th>
@@ -469,10 +467,10 @@ brevity, we map the following references to the following classes or namespaces:
 <td>By calling this, it will force parsing and loading of all headers, ensuring <code>count()</code> is accurate.</td>
 </tr>
 </tbody>
-</table></div></div></div>
+</table></div>
 <h2 id="headerinterface-methods">HeaderInterface Methods</h2>
 <p>The following are methods available to all <code>HeaderInterface</code> implementations.</p>
-<div class="table-responsive"><div class="table-responsive"><div class="table-responsive"><table>
+<div class="table-responsive"><table>
 <thead>
 <tr>
 <th>Method signature</th>
@@ -497,7 +495,7 @@ brevity, we map the following references to the following classes or namespaces:
 <td>Cast the header to a well-formed HTTP header line (<code>Name: Value</code>).</td>
 </tr>
 </tbody>
-</table></div></div></div>
+</table></div>
 <h2 id="abstractaccept-methods">AbstractAccept Methods</h2>
 <p><code>Zend\Http\Header\AbstractAccept</code> defines the following methods in addition to
 those it inherits from the <a href="#headerinterface-methods">HeaderInterface</a>. The
@@ -509,7 +507,7 @@ namespaces:</p>
 <li><code>AcceptFieldValuePart</code>: <code>Zend\Http\Header\Accept\FieldValuePart\AcceptFieldValuePart</code></li>
 <li><code>InvalidArgumentException</code>: <code>Zend\Http\Header\Exception\InvalidArgumentException</code></li>
 </ul>
-<div class="table-responsive"><div class="table-responsive"><div class="table-responsive"><table>
+<div class="table-responsive"><table>
 <thead>
 <tr>
 <th>Method signature</th>
@@ -538,7 +536,7 @@ namespaces:</p>
 <td>Returns all the keys, values and parameters this header represents.</td>
 </tr>
 </tbody>
-</table></div></div></div>
+</table></div>
 <h2 id="abstractdate-methods">AbstractDate Methods</h2>
 <p><code>Zend\Http\Header\AbstractDate</code> defines the following methods in addition to
 those it inherits from the <a href="#headerinterface-methods">HeaderInterface</a>. The
@@ -549,7 +547,7 @@ namespaces:</p>
 <ul>
 <li><code>InvalidArgumentException</code>: <code>Zend\Http\Header\Exception\InvalidArgumentException</code></li>
 </ul>
-<div class="table-responsive"><div class="table-responsive"><div class="table-responsive"><table>
+<div class="table-responsive"><table>
 <thead>
 <tr>
 <th>Method signature</th>
@@ -590,7 +588,7 @@ namespaces:</p>
 <td>Return date for this header as an instance of <code>DateTime</code>.</td>
 </tr>
 </tbody>
-</table></div></div></div>
+</table></div>
 <h2 id="abstractlocation-methods">AbstractLocation Methods</h2>
 <p><code>Zend\Http\Header\AbstractLocation</code> defines the following methods in addition to
 those it inherits from the <a href="#headerinterface-methods">HeaderInterface</a>. The
@@ -601,7 +599,7 @@ namespaces:</p>
 <li><code>Uri</code>: <code>Zend\Uri\UriInterface</code></li>
 <li><code>InvalidArgumentException</code>: <code>Zend\Http\Header\Exception\InvalidArgumentException</code></li>
 </ul>
-<div class="table-responsive"><div class="table-responsive"><div class="table-responsive"><table>
+<div class="table-responsive"><table>
 <thead>
 <tr>
 <th>Method signature</th>
@@ -622,15 +620,15 @@ namespaces:</p>
 <td>Return the <code>Uri</code> instance for this header.</td>
 </tr>
 </tbody>
-</table></div></div></div>
+</table></div>
 <h2 id="list-of-http-header-types">List of HTTP Header Types</h2>
 <p>Some header classes expose methods for manipulating their value. The following
 list contains all of the classes available in the <code>Zend\Http\Header\*</code>
 namespace, as well as any specific methods they contain. Each class implements
 <code>Zend\Http\Header\HeaderInterface</code>.</p>
-<h3 id="accept">Accept</h3>
+<h3>Accept</h3>
 <p>Extends <a href="#abstractaccept-methods">AbstractAccept</a>.</p>
-<div class="table-responsive"><div class="table-responsive"><div class="table-responsive"><table>
+<div class="table-responsive"><table>
 <thead>
 <tr>
 <th>Method signature</th>
@@ -647,10 +645,10 @@ namespace, as well as any specific methods they contain. Each class implements
 <td>Does the header have the requested media type?</td>
 </tr>
 </tbody>
-</table></div></div></div>
-<h3 id="acceptcharset">AcceptCharset</h3>
+</table></div>
+<h3>AcceptCharset</h3>
 <p>Extends <a href="#abstractaccept-methods">AbstractAccept</a>.</p>
-<div class="table-responsive"><div class="table-responsive"><div class="table-responsive"><table>
+<div class="table-responsive"><table>
 <thead>
 <tr>
 <th>Method signature</th>
@@ -667,10 +665,10 @@ namespace, as well as any specific methods they contain. Each class implements
 <td>Does the header have the requested charset?</td>
 </tr>
 </tbody>
-</table></div></div></div>
-<h3 id="acceptencoding">AcceptEncoding</h3>
+</table></div>
+<h3>AcceptEncoding</h3>
 <p>Extends <a href="#abstractaccept-methods">AbstractAccept</a>.</p>
-<div class="table-responsive"><div class="table-responsive"><div class="table-responsive"><table>
+<div class="table-responsive"><table>
 <thead>
 <tr>
 <th>Method signature</th>
@@ -687,10 +685,10 @@ namespace, as well as any specific methods they contain. Each class implements
 <td>Does the header have the requested encoding?</td>
 </tr>
 </tbody>
-</table></div></div></div>
-<h3 id="acceptlanguage">AcceptLanguage</h3>
+</table></div>
+<h3>AcceptLanguage</h3>
 <p>Extends <a href="#abstractaccept-methods">AbstractAccept</a>.</p>
-<div class="table-responsive"><div class="table-responsive"><div class="table-responsive"><table>
+<div class="table-responsive"><table>
 <thead>
 <tr>
 <th>Method signature</th>
@@ -707,9 +705,9 @@ namespace, as well as any specific methods they contain. Each class implements
 <td>Does the header have the requested language?</td>
 </tr>
 </tbody>
-</table></div></div></div>
-<h3 id="acceptranges">AcceptRanges</h3>
-<div class="table-responsive"><div class="table-responsive"><div class="table-responsive"><table>
+</table></div>
+<h3>AcceptRanges</h3>
+<div class="table-responsive"><table>
 <thead>
 <tr>
 <th>Method signature</th>
@@ -726,9 +724,9 @@ namespace, as well as any specific methods they contain. Each class implements
 <td>(unkown)</td>
 </tr>
 </tbody>
-</table></div></div></div>
-<h3 id="age">Age</h3>
-<div class="table-responsive"><div class="table-responsive"><div class="table-responsive"><table>
+</table></div>
+<h3>Age</h3>
+<div class="table-responsive"><table>
 <thead>
 <tr>
 <th>Method signature</th>
@@ -745,9 +743,9 @@ namespace, as well as any specific methods they contain. Each class implements
 <td>Set number of seconds</td>
 </tr>
 </tbody>
-</table></div></div></div>
-<h3 id="allow">Allow</h3>
-<div class="table-responsive"><div class="table-responsive"><div class="table-responsive"><table>
+</table></div>
+<h3>Allow</h3>
+<div class="table-responsive"><table>
 <thead>
 <tr>
 <th>Method signature</th>
@@ -780,13 +778,13 @@ namespace, as well as any specific methods they contain. Each class implements
 <td>Check whether method is allowed.</td>
 </tr>
 </tbody>
-</table></div></div></div>
-<h3 id="authenticationinfo">AuthenticationInfo</h3>
+</table></div>
+<h3>AuthenticationInfo</h3>
 <p>No additional methods.</p>
-<h3 id="authorization">Authorization</h3>
+<h3>Authorization</h3>
 <p>No additional methods.</p>
-<h3 id="cachecontrol">CacheControl</h3>
-<div class="table-responsive"><div class="table-responsive"><div class="table-responsive"><table>
+<h3>CacheControl</h3>
+<div class="table-responsive"><table>
 <thead>
 <tr>
 <th>Method signature</th>
@@ -815,9 +813,9 @@ namespace, as well as any specific methods they contain. Each class implements
 <td>Remove a directive.</td>
 </tr>
 </tbody>
-</table></div></div></div>
-<h3 id="connection">Connection</h3>
-<div class="table-responsive"><div class="table-responsive"><div class="table-responsive"><table>
+</table></div>
+<h3>Connection</h3>
+<div class="table-responsive"><table>
 <thead>
 <tr>
 <th>Method signature</th>
@@ -838,23 +836,23 @@ namespace, as well as any specific methods they contain. Each class implements
 <td>Set Connection header to define persistent connection.</td>
 </tr>
 </tbody>
-</table></div></div></div>
-<h3 id="contentdisposition">ContentDisposition</h3>
+</table></div>
+<h3>ContentDisposition</h3>
 <p>No additional methods.</p>
-<h3 id="contentencoding">ContentEncoding</h3>
+<h3>ContentEncoding</h3>
 <p>No additional methods.</p>
-<h3 id="contentlanguage">ContentLanguage</h3>
+<h3>ContentLanguage</h3>
 <p>No additional methods.</p>
-<h3 id="contentlength">ContentLength</h3>
+<h3>ContentLength</h3>
 <p>No additional methods.</p>
-<h3 id="contentlocation">ContentLocation</h3>
+<h3>ContentLocation</h3>
 <p>See <a href="#abstractlocation-methods">AbstractLocation</a>.</p>
-<h3 id="contentmd5">ContentMD5</h3>
+<h3>ContentMD5</h3>
 <p>No additional methods.</p>
-<h3 id="contentrange">ContentRange</h3>
+<h3>ContentRange</h3>
 <p>No additional methods.</p>
-<h3 id="contentsecuritypolicy">ContentSecurityPolicy</h3>
-<div class="table-responsive"><div class="table-responsive"><div class="table-responsive"><table>
+<h3>ContentSecurityPolicy</h3>
+<div class="table-responsive"><table>
 <thead>
 <tr>
 <th>Method signature</th>
@@ -871,22 +869,21 @@ namespace, as well as any specific methods they contain. Each class implements
 <td>Set the directive with the given name to include the sources. See below for an example.</td>
 </tr>
 </tbody>
-</table></div></div></div>
+</table></div>
 <p>As an example: an auction site wishes to load images from any URI, plugin
 content from a list of trusted media providers (including a content distribution
 network), and scripts only from a server under its control hosting sanitized
 Javacript:</p>
-<pre class="codehilite"><code class="language-php">// http://www.w3.org/TR/2012/CR-CSP-20121115/#sample-policy-definitions
+<p> <pre class=codehilite><code class=language-php>// http://www.w3.org/TR/2012/CR-CSP-20121115/#sample-policy-definitions
 $csp = new ContentSecurityPolicy();
 $csp-&gt;setDirective('default-src', []); // No sources
 $csp-&gt;setDirective('img-src', ['*']);
 $csp-&gt;setDirective('object-src', ['media1.example.com', 'media2.example.com', '*.cdn.example.com']);
-$csp-&gt;setDirective('script-src', ['trustedscripts.example.com']);</code></pre>
-
-<h3 id="contenttransferencoding">ContentTransferEncoding</h3>
+$csp-&gt;setDirective('script-src', ['trustedscripts.example.com']);</code></pre></p>
+<h3>ContentTransferEncoding</h3>
 <p>No additional methods.</p>
-<h3 id="contenttype">ContentType</h3>
-<div class="table-responsive"><div class="table-responsive"><div class="table-responsive"><table>
+<h3>ContentType</h3>
+<div class="table-responsive"><table>
 <thead>
 <tr>
 <th>Method signature</th>
@@ -923,10 +920,10 @@ $csp-&gt;setDirective('script-src', ['trustedscripts.example.com']);</code></pre
 <td>Set the content-type character set encoding.</td>
 </tr>
 </tbody>
-</table></div></div></div>
-<h3 id="cookie">Cookie</h3>
+</table></div>
+<h3>Cookie</h3>
 <p>Extends <code>ArrayObject</code>.</p>
-<div class="table-responsive"><div class="table-responsive"><div class="table-responsive"><table>
+<div class="table-responsive"><table>
 <thead>
 <tr>
 <th>Method signature</th>
@@ -947,43 +944,43 @@ $csp-&gt;setDirective('script-src', ['trustedscripts.example.com']);</code></pre
 <td>Get flag indicating whether or not to <code>urlencode()</code> the cookie values.</td>
 </tr>
 </tbody>
-</table></div></div></div>
-<h3 id="date">Date</h3>
+</table></div>
+<h3>Date</h3>
 <p>See <a href="#abstractdate-methods">AbstractDate</a>.</p>
-<h3 id="etag">Etag</h3>
+<h3>Etag</h3>
 <p>No additional methods.</p>
-<h3 id="expect">Expect</h3>
+<h3>Expect</h3>
 <p>No additional methods.</p>
-<h3 id="expires">Expires</h3>
+<h3>Expires</h3>
 <p>See <a href="#abstractdate-methods">AbstractDate</a>.</p>
-<h3 id="from">From</h3>
+<h3>From</h3>
 <p>No additional methods.</p>
-<h3 id="host">Host</h3>
+<h3>Host</h3>
 <p>No additional methods.</p>
-<h3 id="ifmatch">IfMatch</h3>
+<h3>IfMatch</h3>
 <p>No additional methods.</p>
-<h3 id="ifmodifiedsince">IfModifiedSince</h3>
+<h3>IfModifiedSince</h3>
 <p>See <a href="#abstractdate-methods">AbstractDate</a>.</p>
-<h3 id="ifnonematch">IfNoneMatch</h3>
+<h3>IfNoneMatch</h3>
 <p>No additional methods.</p>
-<h3 id="ifrange">IfRange</h3>
+<h3>IfRange</h3>
 <p>No additional methods.</p>
-<h3 id="ifunmodifiedsince">IfUnmodifiedSince</h3>
+<h3>IfUnmodifiedSince</h3>
 <p>See <a href="#abstractdate-methods">AbstractDate</a>.</p>
-<h3 id="keepalive">KeepAlive</h3>
+<h3>KeepAlive</h3>
 <p>No additional methods.</p>
-<h3 id="lastmodified">LastModified</h3>
+<h3>LastModified</h3>
 <p>See <a href="#abstractdate-methods">AbstractDate</a>.</p>
-<h3 id="location">Location</h3>
+<h3>Location</h3>
 <p>See <a href="#abstractlocation-methods">AbstractLocation</a>.</p>
-<h3 id="maxforwards">MaxForwards</h3>
+<h3>MaxForwards</h3>
 <p>No additional methods.</p>
-<h3 id="origin">Origin</h3>
+<h3>Origin</h3>
 <p>No additional methods.</p>
-<h3 id="pragma">Pragma</h3>
+<h3>Pragma</h3>
 <p>No additional methods.</p>
-<h3 id="proxyauthenticate">ProxyAuthenticate</h3>
-<div class="table-responsive"><div class="table-responsive"><div class="table-responsive"><table>
+<h3>ProxyAuthenticate</h3>
+<div class="table-responsive"><table>
 <thead>
 <tr>
 <th>Method signature</th>
@@ -996,18 +993,18 @@ $csp-&gt;setDirective('script-src', ['trustedscripts.example.com']);</code></pre
 <td>Creates a string representation when multiple values are present.</td>
 </tr>
 </tbody>
-</table></div></div></div>
-<h3 id="proxyauthorization">ProxyAuthorization</h3>
+</table></div>
+<h3>ProxyAuthorization</h3>
 <p>No additional methods.</p>
-<h3 id="range">Range</h3>
+<h3>Range</h3>
 <p>No additional methods.</p>
-<h3 id="referer">Referer</h3>
+<h3>Referer</h3>
 <p>See <a href="#abstractlocation-methods">AbstractLocation</a>.</p>
-<h3 id="refresh">Refresh</h3>
+<h3>Refresh</h3>
 <p>No additional methods.</p>
-<h3 id="retryafter">RetryAfter</h3>
+<h3>RetryAfter</h3>
 <p>See <a href="#abstractdate-methods">AbstractDate</a>.</p>
-<div class="table-responsive"><div class="table-responsive"><div class="table-responsive"><table>
+<div class="table-responsive"><table>
 <thead>
 <tr>
 <th>Method signature</th>
@@ -1024,11 +1021,11 @@ $csp-&gt;setDirective('script-src', ['trustedscripts.example.com']);</code></pre
 <td>Get number of seconds.</td>
 </tr>
 </tbody>
-</table></div></div></div>
-<h3 id="server">Server</h3>
+</table></div>
+<h3>Server</h3>
 <p>No additional methods.</p>
-<h3 id="setcookie">SetCookie</h3>
-<div class="table-responsive"><div class="table-responsive"><div class="table-responsive"><table>
+<h3>SetCookie</h3>
+<div class="table-responsive"><table>
 <thead>
 <tr>
 <th>Method signature</th>
@@ -1145,29 +1142,29 @@ $csp-&gt;setDirective('script-src', ['trustedscripts.example.com']);</code></pre
 <td>Returns string representation when multiple values are present.</td>
 </tr>
 </tbody>
-</table></div></div></div>
-<h3 id="te">TE</h3>
+</table></div>
+<h3>TE</h3>
 <p>No additional methods.</p>
-<h3 id="trailer">Trailer</h3>
+<h3>Trailer</h3>
 <p>No additional methods.</p>
-<h3 id="transferencoding">TransferEncoding</h3>
+<h3>TransferEncoding</h3>
 <p>No additional methods.</p>
-<h3 id="upgrade">Upgrade</h3>
+<h3>Upgrade</h3>
 <p>No additional methods.</p>
-<h3 id="useragent">UserAgent</h3>
+<h3>UserAgent</h3>
 <p>No additional methods.</p>
-<h3 id="vary">Vary</h3>
+<h3>Vary</h3>
 <p>No additional methods.</p>
-<h3 id="via">Via</h3>
+<h3>Via</h3>
 <p>No additional methods.</p>
-<h3 id="warning">Warning</h3>
+<h3>Warning</h3>
 <p>No additional methods.</p>
-<h3 id="wwwauthenticate">WWWAuthenticate</h3>
+<h3>WWWAuthenticate</h3>
 <p>Defines a <code>toStringMultipleHeaders(array $headers)</code> method for serializing to
 string when multiple values are present.</p>
 <h2 id="examples">Examples</h2>
-<h3 id="retrieving-headers-from-a-headers-object">Retrieving headers from a Headers object</h3>
-<pre class="codehilite"><code class="language-php">// $client is an instance of Zend\Http\Client
+<h3>Retrieving headers from a Headers object</h3>
+<p> <pre class=codehilite><code class=language-php>// $client is an instance of Zend\Http\Client
 $response = $client-&gt;send();
 $headers = $response-&gt;getHeaders();
 
@@ -1178,8 +1175,7 @@ $headers-&gt;has('Content-Type');
 
 // We can retrieve all instances of a specific header by using
 // the ``get`` method:
-$contentTypeHeaders = $headers-&gt;get('Content-Type');</code></pre>
-
+$contentTypeHeaders = $headers-&gt;get('Content-Type');</code></pre></p>
 <p>There are three possibilities for the return value of the above call to the <code>get</code> method:</p>
 <ul>
 <li>If no <code>Content-Type</code> header was set in the <code>Request</code>, <code>get</code> will return <code>false</code>.</li>
@@ -1189,8 +1185,8 @@ $contentTypeHeaders = $headers-&gt;get('Content-Type');</code></pre>
   return an <code>ArrayIterator</code> containing one <code>Zend\Http\Header\ContentType</code>
   instance per header.</li>
 </ul>
-<h3 id="adding-headers-to-a-headers-object">Adding headers to a Headers object</h3>
-<pre class="codehilite"><code class="language-php">use Zend\Http\Header;
+<h3>Adding headers to a Headers object</h3>
+<p> <pre class=codehilite><code class=language-php>use Zend\Http\Header;
 use Zend\Http\Headers;
 
 $headers = new Headers();
@@ -1219,12 +1215,11 @@ $headers-&gt;addHeaders([
     // We can also pass the header name as the array key and the
     // header content as that array key's value
     'Content-Type' =&gt; 'text/html',
-]);</code></pre>
-
-<h3 id="removing-headers-from-a-headers-object">Removing headers from a Headers object</h3>
+]);</code></pre></p>
+<h3>Removing headers from a Headers object</h3>
 <p>We can remove all headers of a specific type using the <code>removeHeader</code> method,
 which accepts a single object implementing <code>Zend\Http\Header\HeaderInterface</code></p>
-<pre class="codehilite"><code class="language-php">use ArrayIterator;
+<p> <pre class=codehilite><code class=language-php>use ArrayIterator;
 use Zend\Http\Header\HeaderInterface;
 
 // $headers is a pre-configured instance of Zend\Http\Headers
@@ -1245,7 +1240,7 @@ if ($matches instanceof ArrayIterator) {
 
 // In addition to this, we can clear all the headers currently stored in
 // the container by calling the clearHeaders() method
-$matches-&gt;clearHeaders();</code></pre>
+$matches-&gt;clearHeaders();</code></pre></p>
 
 
 
