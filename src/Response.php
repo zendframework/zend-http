@@ -88,6 +88,9 @@ class Response extends AbstractMessage implements ResponseInterface
     const STATUS_CODE_599 = 599;
     /**#@-*/
 
+    const MIN_STATUS_CODE_VALUE = 100;
+    const MAX_STATUS_CODE_VALUE = 599;
+
     /**
      * @var array Recommended Reason Phrases
      */
@@ -279,12 +282,16 @@ class Response extends AbstractMessage implements ResponseInterface
      */
     public function setStatusCode($code)
     {
-        $const = get_class($this) . '::STATUS_CODE_' . $code;
-        if (! is_numeric($code) || ! defined($const)) {
-            $code = is_scalar($code) ? $code : gettype($code);
+        if (! is_numeric($code)
+            || is_float($code)
+            || $code < static::MIN_STATUS_CODE_VALUE
+            || $code > static::MAX_STATUS_CODE_VALUE
+        ) {
             throw new Exception\InvalidArgumentException(sprintf(
-                'Invalid status code provided: "%s"',
-                $code
+                'Invalid status code "%s"; must be an integer between %d and %d, inclusive',
+                is_scalar($code) ? $code : gettype($code),
+                static::MIN_STATUS_CODE_VALUE,
+                static::MAX_STATUS_CODE_VALUE
             ));
         }
 

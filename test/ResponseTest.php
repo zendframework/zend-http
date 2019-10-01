@@ -115,6 +115,14 @@ class ResponseTest extends TestCase
         $this->assertEquals(303, $response->getStatusCode());
     }
 
+    public function testResponseCanSetStatusCodeNonStandard()
+    {
+        $response = new Response();
+        $this->assertEquals(200, $response->getStatusCode());
+        $response->setStatusCode('520');
+        $this->assertEquals(520, $response->getStatusCode());
+    }
+
     public function testResponseSetStatusCodeThrowsExceptionOnInvalidCode()
     {
         $response = new Response();
@@ -142,7 +150,7 @@ class ResponseTest extends TestCase
     {
         $response = new Response();
         $this->expectException(InvalidArgumentException::class);
-        $this->expectExceptionMessage('Invalid status code provided: "foo"');
+        $this->expectExceptionMessage('Invalid status code "foo"; must be an integer between 100 and 599, inclusive');
 
         $response->setStatusCode('foo');
     }
@@ -540,8 +548,6 @@ REQ;
     public function testUnknownCode()
     {
         $responseStr = $this->readResponse('response_unknown');
-        $this->expectException(InvalidArgumentException::class);
-        $this->expectExceptionMessage('Invalid status code provided: "550"');
         $response = Response::fromString($responseStr);
         $this->assertEquals(550, $response->getStatusCode());
     }
