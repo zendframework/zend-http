@@ -9,6 +9,7 @@ env:
     - COMPOSER_ARGS="--no-interaction"
     - COVERAGE_DEPS="php-coveralls/php-coveralls"
     - TESTS_ZEND_HTTP_CLIENT_ONLINE=true
+    - TESTS_ZEND_HTTP_CLIENT_BASEURI=http://127.0.0.1:8080
 
 matrix:
   include:
@@ -72,6 +73,9 @@ install:
   - if [[ $DEPS == 'lowest' ]]; then travis_retry composer update --prefer-lowest --prefer-stable $COMPOSER_ARGS ; fi
   - if [[ $TEST_COVERAGE == 'true' ]]; then travis_retry composer require --dev $COMPOSER_ARGS $COVERAGE_DEPS ; fi
   - stty cols 120 && composer show
+
+before_script:
+  - php -S 127.0.0.1:8080 -t test/Client/_files/ > /dev/null 2>&1 &
 
 script:
   - if [[ $TEST_COVERAGE == 'true' ]]; then composer test-coverage ; else composer test ; fi

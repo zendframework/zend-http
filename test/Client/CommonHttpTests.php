@@ -75,10 +75,11 @@ abstract class CommonHttpTests extends TestCase
      */
     protected function setUp()
     {
-        if (getenv('TESTS_ZEND_HTTP_CLIENT_BASEURI')
-            && (filter_var(getenv('TESTS_ZEND_HTTP_CLIENT_BASEURI'), FILTER_VALIDATE_BOOLEAN) != false)) {
-            $this->baseuri = getenv('TESTS_ZEND_HTTP_CLIENT_BASEURI');
-            if (substr($this->baseuri, -1) != '/') {
+        $baseUri = getenv('TESTS_ZEND_HTTP_CLIENT_BASEURI');
+
+        if ($baseUri && filter_var($baseUri, FILTER_VALIDATE_URL) !== false) {
+            $this->baseuri = $baseUri;
+            if (substr($this->baseuri, -1) !== '/') {
                 $this->baseuri .= '/';
             }
 
