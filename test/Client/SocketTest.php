@@ -187,7 +187,7 @@ class SocketTest extends CommonHttpTests
         $adapter = new Adapter\Socket();
         $adapter->setOptions(['timeout' => $timeout]);
 
-        $adapter->connect('http://framework.zend.com');
+        $adapter->connect('framework.zend.com');
     }
 
     public function testThrowInvalidArgumentExceptionOnNonIntegerAndNonNumericStringTimeout()
@@ -198,7 +198,7 @@ class SocketTest extends CommonHttpTests
         $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessage('integer or numeric string expected, got string');
 
-        $adapter->connect('http://framework.zend.com');
+        $adapter->connect('framework.zend.com');
     }
 
     /**

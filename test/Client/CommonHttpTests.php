@@ -1084,7 +1084,7 @@ abstract class CommonHttpTests extends TestCase
     {
         $this->client->setArgSeparator(';');
         $request = new Request();
-        $request->setUri('http://framework.zend.com');
+        $request->setUri('https://framework.zend.com');
         $request->setQuery(new Parameters(['foo' => 'bar', 'baz' => 'bat']));
         $this->client->send($request);
         $rawRequest = $this->client->getLastRawRequest();

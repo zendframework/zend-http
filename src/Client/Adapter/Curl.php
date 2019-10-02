@@ -143,7 +143,7 @@ class Curl implements HttpAdapter, StreamInterface
                     break;
                 default:
                     if (is_array($v) && isset($this->config[$option]) && is_array($this->config[$option])) {
-                        $v = ArrayUtils::merge($this->config[$option], $v);
+                        $v = ArrayUtils::merge($this->config[$option], $v, true);
                     }
                     $this->config[$option] = $v;
                     break;
@@ -425,9 +425,7 @@ class Curl implements HttpAdapter, StreamInterface
          * Make sure POSTFIELDS is set after $curlMethod is set:
          * @link http://de2.php.net/manual/en/function.curl-setopt.php#81161
          */
-        if (in_array($method, ['POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'], true)) {
-            curl_setopt($this->curl, CURLOPT_POSTFIELDS, $body);
-        } elseif ($curlMethod == CURLOPT_UPLOAD) {
+        if ($curlMethod == CURLOPT_UPLOAD) {
             // this covers a PUT by file-handle:
             // Make the setting of this options explicit (rather than setting it through the loop following a bit lower)
             // to group common functionality together.
@@ -435,6 +433,8 @@ class Curl implements HttpAdapter, StreamInterface
             curl_setopt($this->curl, CURLOPT_INFILESIZE, $this->config['curloptions'][CURLOPT_INFILESIZE]);
             unset($this->config['curloptions'][CURLOPT_INFILE]);
             unset($this->config['curloptions'][CURLOPT_INFILESIZE]);
+        } elseif (in_array($method, ['POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'], true)) {
+            curl_setopt($this->curl, CURLOPT_POSTFIELDS, $body);
         }
 
         // set additional curl options

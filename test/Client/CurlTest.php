@@ -14,6 +14,7 @@ use Zend\Http\Client\Adapter\Curl;
 use Zend\Http\Client\Adapter\Exception\InvalidArgumentException;
 use Zend\Http\Client\Adapter\Exception\RuntimeException;
 use Zend\Http\Client\Adapter\Exception\TimeoutException;
+use Zend\Stdlib\ErrorHandler;
 
 /**
  * This Testsuite includes all Zend_Http_Client that require a working web
@@ -112,7 +113,7 @@ class CurlTest extends CommonHttpTests
         $adapter = new Adapter\Curl();
         $adapter->setOptions(['timeout' => $timeout]);
 
-        $adapter->connect('http://framework.zend.com');
+        $adapter->connect('framework.zend.com');
     }
 
     public function testThrowInvalidArgumentExceptionOnNonIntegerAndNonNumericStringTimeout()
@@ -123,7 +124,7 @@ class CurlTest extends CommonHttpTests
         $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessage('integer or numeric string expected, got string');
 
-        $adapter->connect('http://framework.zend.com');
+        $adapter->connect('framework.zend.com');
     }
 
     /**
@@ -141,27 +142,24 @@ class CurlTest extends CommonHttpTests
         $this->_adapter->setOptions($config);
     }
 
-    /**
-     * CURLOPT_CLOSEPOLICY never worked and returns false on setopt always:
-     * @link http://de2.php.net/manual/en/function.curl-setopt.php#84277
-     *
-     * This should throw an exception.
-     */
     public function testSettingInvalidCurlOption()
     {
-        if (version_compare(PHP_VERSION, 7, 'gte')) {
-            $this->markTestSkipped('Test is invalid for PHP version 7');
-        }
-
         $config = [
             'adapter'     => Curl::class,
-            'curloptions' => [CURLOPT_CLOSEPOLICY => true],
+            'curloptions' => [-PHP_INT_MAX => true],
         ];
         $this->client = new Client($this->client->getUri(true), $config);
 
+        // Ignore curl warning: Invalid curl configuration option
+        ErrorHandler::start();
+
         $this->expectException(RuntimeException::class);
         $this->expectExceptionMessage('Unknown or erroreous cURL option');
-        $this->client->send();
+        try {
+            $this->client->send();
+        } finally {
+            ErrorHandler::stop();
+        }
     }
 
     public function testRedirectWithGetOnly()
@@ -207,9 +205,7 @@ class CurlTest extends CommonHttpTests
         $this->client->setParameterPost(['Camelot' => 'A silly place']);
         $this->client->setMethod('POST');
         $this->expectException(RuntimeException::class);
-        $this->expectExceptionMessage(
-            'Error in cURL request: Operation timed out after 1000 milliseconds with 0 bytes received'
-        );
+        $this->expectExceptionMessage('Read timed out');
         $this->client->send();
     }
 
@@ -358,7 +354,7 @@ class CurlTest extends CommonHttpTests
     {
         $adapter = new Adapter\Curl();
         $adapter->setOptions(['timeout' => 2, 'maxredirects' => 1]);
-        $adapter->connect('http://framework.zend.com');
+        $adapter->connect('framework.zend.com');
 
         $this->assertInternalType('resource', $adapter->getHandle());
     }
