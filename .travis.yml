@@ -10,6 +10,7 @@ env:
     - COVERAGE_DEPS="php-coveralls/php-coveralls"
     - TESTS_ZEND_HTTP_CLIENT_ONLINE=true
     - TESTS_ZEND_HTTP_CLIENT_BASEURI=http://127.0.0.1
+    - TESTS_ZEND_HTTP_CLIENT_HTTP_PROXY=127.0.0.1:8081
 
 matrix:
   include:
@@ -91,6 +92,12 @@ before_script:
   - sudo cp -f .ci/site.conf /etc/apache2/sites-available/000-default.conf
   - sudo sed -e "s?%TRAVIS_BUILD_DIR%?$(pwd)?g" --in-place /etc/apache2/sites-available/000-default.conf
   - sudo sed -e "s?%PHP_VERSION%?$(phpenv version-name)?g" --in-place /etc/apache2/sites-available/000-default.conf
+  # configure proxy
+  - sudo a2enmod proxy
+  - sudo a2enmod proxy_http
+  - sudo cp -f .ci/proxy.conf /etc/apache2/sites-available/proxy.conf
+  - sudo a2ensite proxy
+  - sudo sed -i "s/Listen 80/Listen 80\nListen 8081/" /etc/apache2/ports.conf
   - sudo service apache2 restart
 
 script:
