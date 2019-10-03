@@ -64,6 +64,9 @@ class ProxyAdapterTest extends SocketTest
                 'proxy_port' => $port,
                 'proxy_user' => $user,
                 'proxy_pass' => $pass,
+                'sslverifypeername' => false,
+                'sslallowselfsigned' => true,
+                'sslverifypeer' => false,
             ];
 
             parent::setUp();

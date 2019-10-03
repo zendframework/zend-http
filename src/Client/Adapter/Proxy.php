@@ -7,9 +7,11 @@
 
 namespace Zend\Http\Client\Adapter;
 
+use Traversable;
 use Zend\Http\Client;
 use Zend\Http\Client\Adapter\Exception as AdapterException;
 use Zend\Http\Response;
+use Zend\Stdlib\ArrayUtils;
 use Zend\Stdlib\ErrorHandler;
 
 /**
@@ -60,6 +62,15 @@ class Proxy extends Socket
      */
     public function setOptions($options = [])
     {
+        if ($options instanceof Traversable) {
+            $options = ArrayUtils::iteratorToArray($options);
+        }
+        if (! is_array($options)) {
+            throw new AdapterException\InvalidArgumentException(
+                'Array or Zend\Config object expected, got ' . gettype($options)
+            );
+        }
+
         //enforcing that the proxy keys are set in the form proxy_*
         foreach ($options as $k => $v) {
             if (preg_match('/^proxy[a-z]+/', $k)) {
@@ -129,7 +140,12 @@ class Proxy extends Socket
         $host = $this->config['proxy_host'];
         $port = $this->config['proxy_port'];
 
-        if ($this->connectedTo[0] != sprintf('tcp://%s', $host) || $this->connectedTo[1] != $port) {
+        $isSecure = $uri->getScheme() === 'https';
+
+        if ($this->connectedTo[1] !== $port
+            || ($this->connectedTo[0] !== sprintf('tcp://%s', $host)
+                && $this->connectedTo[0] !== sprintf('ssl://%s', $host))
+        ) {
             throw new AdapterException\RuntimeException(
                 'Trying to write but we are connected to the wrong proxy server'
             );
@@ -145,7 +161,7 @@ class Proxy extends Socket
         }
 
         // if we are proxying HTTPS, preform CONNECT handshake with the proxy
-        if ($uri->getScheme() == 'https' && ! $this->negotiated) {
+        if ($isSecure && ! $this->negotiated) {
             $this->connectHandshake($uri->getHost(), $uri->getPort(), $httpVer, $headers);
             $this->negotiated = true;
         }
