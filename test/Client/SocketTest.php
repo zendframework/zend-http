@@ -331,6 +331,8 @@ class SocketTest extends CommonHttpTests
     /**
      * Verifies that writing on a socket is considered valid even if 0 bytes
      * were written.
+     *
+     * @runInSeparateProcess
      */
     public function testAllowsZeroWrittenBytes()
     {

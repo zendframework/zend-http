@@ -197,7 +197,7 @@ class Proxy extends Socket
         ErrorHandler::start();
         $test  = fwrite($this->socket, $request);
         $error = ErrorHandler::stop();
-        if (! $test) {
+        if ($test === false) {
             throw new AdapterException\RuntimeException('Error writing request to proxy server', 0, $error);
         }
 

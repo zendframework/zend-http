@@ -64,9 +64,6 @@ class ProxyAdapterTest extends SocketTest
                 'proxy_port' => $port,
                 'proxy_user' => $user,
                 'proxy_pass' => $pass,
-                'sslverifypeername' => false,
-                'sslallowselfsigned' => true,
-                'sslverifypeer' => false,
             ];
 
             parent::setUp();
@@ -112,6 +109,19 @@ class ProxyAdapterTest extends SocketTest
         $config = $this->_adapter->getConfig();
         $this->assertEquals(true, $config['sslverifypeer']);
         $this->assertEquals(false, $config['sslallowselfsigned']);
+    }
+
+    /**
+     * Somehow verification failed through for the request through the proxy.
+     * This could be an issue with Proxy/Socket adapter implementation,
+     * as issue is not present from command line using curl:
+     * curl -IL https://framework.zend.com -x 127.0.0.1:8081
+     */
+    public function testUsesProvidedArgSeparator()
+    {
+        $this->client->setOptions(['sslverifypeername' => false]);
+
+        parent::testUsesProvidedArgSeparator();
     }
 
     /**
