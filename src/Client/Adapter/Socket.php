@@ -87,6 +87,11 @@ class Socket implements HttpAdapter, StreamInterface
     protected $context;
 
     /**
+     * @var bool
+     */
+    protected $setSslCryptoMethod = true;
+
+    /**
      * Adapter constructor, currently empty. Config is set using setOptions()
      *
      */
@@ -301,6 +306,7 @@ class Socket implements HttpAdapter, StreamInterface
             }
 
             if ($secure || $this->config['sslusecontext']) {
+                if ($this->setSslCryptoMethod) {
                 if ($this->config['ssltransport'] && isset(static::$sslCryptoTypes[$this->config['ssltransport']])) {
                     $sslCryptoMethod = static::$sslCryptoTypes[$this->config['ssltransport']];
                 } else {
@@ -342,6 +348,7 @@ class Socket implements HttpAdapter, StreamInterface
                         $host,
                         $errorString
                     ), 0, $error);
+                }
                 }
 
                 $host = $this->config['ssltransport'] . '://' . $host;

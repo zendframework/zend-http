@@ -104,6 +104,7 @@ class Proxy extends Socket
         /* Url might require stream context even if proxy connection doesn't */
         if ($secure) {
             $this->config['sslusecontext'] = true;
+            $this->setSslCryptoMethod = false;
         }
 
         // Connect (a non-secure connection) to the proxy server
@@ -140,12 +141,10 @@ class Proxy extends Socket
         $host = $this->config['proxy_host'];
         $port = $this->config['proxy_port'];
 
-        $isSecure = $uri->getScheme() === 'https';
+        $isSecure = strtolower($uri->getScheme()) === 'https';
+        $connectedHost = ($isSecure ? $this->config['ssltransport'] : 'tcp') . '://' . $host;
 
-        if ($this->connectedTo[1] !== $port
-            || ($this->connectedTo[0] !== sprintf('tcp://%s', $host)
-                && $this->connectedTo[0] !== sprintf('ssl://%s', $host))
-        ) {
+        if ($this->connectedTo[1] !== $port || $this->connectedTo[0] !== $connectedHost) {
             throw new AdapterException\RuntimeException(
                 'Trying to write but we are connected to the wrong proxy server'
             );
