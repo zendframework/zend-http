@@ -175,6 +175,11 @@ class Proxy extends Socket
             $path .= $query ? '?' . $query : '';
             $request = sprintf('%s %s HTTP/%s%s', $method, $path, $httpVer, "\r\n");
         } else {
+            if ($uri->getUserInfo()) {
+                $headers['Authorization'] = 'Basic ' . base64_encode($uri->getUserInfo());
+                $uri = clone $uri;
+                $uri->setUserInfo(null);
+            }
             $request = sprintf('%s %s HTTP/%s%s', $method, $uri, $httpVer, "\r\n");
         }
 
