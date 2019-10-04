@@ -194,7 +194,7 @@ class Headers implements Countable, Iterator
             $headerName = $headerFieldNameOrLine;
             $headerKey  = static::createKey($headerFieldNameOrLine);
             if (is_array($fieldValue)) {
-                $fieldValue = implode(', ', $fieldValue);
+                $fieldValue = implode('; ', $fieldValue);
             }
             $line = $headerFieldNameOrLine . ': ' . $fieldValue;
         }

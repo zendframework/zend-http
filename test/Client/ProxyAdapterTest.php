@@ -112,7 +112,7 @@ class ProxyAdapterTest extends SocketTest
     }
 
     /**
-     * Somehow verification failed through for the request through the proxy.
+     * Somehow verification failed for the request through the proxy.
      * This could be an issue with Proxy/Socket adapter implementation,
      * as issue is not present from command line using curl:
      * curl -IL https://framework.zend.com -x 127.0.0.1:8081
@@ -122,6 +122,50 @@ class ProxyAdapterTest extends SocketTest
         $this->client->setOptions(['sslverifypeername' => false]);
 
         parent::testUsesProvidedArgSeparator();
+    }
+
+    /**
+     * HTTP request through the proxy must be with absoluteURI
+     * https://www.w3.org/Protocols/rfc2616/rfc2616-sec5.html#sec5.1.2
+     * Response contains path, not the absolute URI,
+     * also Connection: close header is in the different place.
+     */
+    public function testGetLastRawRequest()
+    {
+        $this->client->setUri($this->baseuri . 'testHeaders.php');
+        $this->client->setParameterGet(['someinput' => 'somevalue']);
+        $this->client->setHeaders([
+            'X-Powered-By' => 'My Glorious Golden Ass',
+        ]);
+
+        $this->client->setMethod('TRACE');
+        $res = $this->client->send();
+        if ($res->getStatusCode() == 405 || $res->getStatusCode() == 501) {
+            $this->markTestSkipped('Server does not allow the TRACE method');
+        }
+
+        list($schema, $host) = explode('://', $this->baseuri);
+        $host = trim($host, '/');
+
+        $this->assertSame(
+            'TRACE ' . $this->baseuri . 'testHeaders.php?someinput=somevalue HTTP/1.1' . "\r\n"
+            . 'Host: ' . $host . "\r\n"
+            . 'Connection: close' . "\r\n"
+            . 'Accept-Encoding: gzip, deflate' . "\r\n"
+            . 'User-Agent: Zend\Http\Client' . "\r\n"
+            . 'X-Powered-By: My Glorious Golden Ass' . "\r\n\r\n",
+            $this->client->getLastRawRequest()
+        );
+
+        $this->assertSame(
+            'TRACE /testHeaders.php?someinput=somevalue HTTP/1.1' . "\r\n"
+            . 'Host: ' . $host . "\r\n"
+            . 'Accept-Encoding: gzip, deflate' . "\r\n"
+            . 'User-Agent: Zend\Http\Client' . "\r\n"
+            . 'X-Powered-By: My Glorious Golden Ass' . "\r\n"
+            . 'Connection: close' . "\r\n\r\n",
+            $res->getBody()
+        );
     }
 
     /**

@@ -168,20 +168,20 @@ class Proxy extends Socket
         // Save request method for later
         $this->method = $method;
 
-        // Build request headers
-        if ($this->negotiated) {
-            $path = $uri->getPath();
-            $query = $uri->getQuery();
-            $path .= $query ? '?' . $query : '';
-            $request = sprintf('%s %s HTTP/%s%s', $method, $path, $httpVer, "\r\n");
-        } else {
-            if ($uri->getUserInfo()) {
-                $headers['Authorization'] = 'Basic ' . base64_encode($uri->getUserInfo());
-                $uri = clone $uri;
-                $uri->setUserInfo(null);
-            }
-            $request = sprintf('%s %s HTTP/%s%s', $method, $uri, $httpVer, "\r\n");
+        if ($uri->getUserInfo()) {
+            $headers['Authorization'] = 'Basic ' . base64_encode($uri->getUserInfo());
         }
+
+        $path = $uri->getPath();
+        $query = $uri->getQuery();
+        $path .= $query ? '?' . $query : '';
+
+        if (! $this->negotiated) {
+            $path = $uri->getScheme() . '://' . $uri->getHost() . $path;
+        }
+
+        // Build request headers
+        $request = sprintf('%s %s HTTP/%s%s', $method, $path, $httpVer, "\r\n");
 
         // Add all headers to the request string
         foreach ($headers as $k => $v) {

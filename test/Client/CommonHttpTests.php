@@ -384,10 +384,10 @@ abstract class CommonHttpTests extends TestCase
         $this->client->setUri($this->baseuri . 'testHeaders.php');
 
         $headers = [
-            'Accept-encoding' => 'gzip,deflate',
+            'Accept-encoding' => 'gzip, deflate',
             'X-baz' => 'Foo',
             'X-powered-by' => 'A large wooden badger',
-            'Accept' => 'text/xml,text/html,*/*',
+            'Accept' => 'text/xml, text/html, */*',
         ];
 
         $this->client->setHeaders($headers);
@@ -413,10 +413,10 @@ abstract class CommonHttpTests extends TestCase
         $this->client->setUri($this->baseuri . 'testHeaders.php');
 
         $headers = [
-            'Accept-encoding' => 'gzip,deflate',
+            'Accept-encoding' => 'gzip, deflate',
             'X-baz' => 'Foo',
             'X-powered-by' => 'A large wooden badger',
-            'Accept: text/xml,text/html,*/*',
+            'Accept: text/xml, text/html, */*',
         ];
 
         $this->client->setHeaders($headers);
@@ -445,7 +445,7 @@ abstract class CommonHttpTests extends TestCase
     {
         $this->client->setUri($this->baseuri . 'testHeaders.php');
         $headers = [
-            'Accept-encoding' => 'gzip,deflate',
+            'Accept-encoding' => 'gzip, deflate',
             'X-baz' => 'Foo',
             'X-powered-by' => [
                 'A large wooden badger',
@@ -469,7 +469,7 @@ abstract class CommonHttpTests extends TestCase
 
         foreach ($headers as $key => $val) {
             if (is_array($val)) {
-                $val = implode(', ', $val);
+                $val = implode('; ', $val);
             }
 
             $this->assertContains(strtolower($key . ': ' . $val), $body);
