@@ -307,48 +307,51 @@ class Socket implements HttpAdapter, StreamInterface
 
             if ($secure || $this->config['sslusecontext']) {
                 if ($this->setSslCryptoMethod) {
-                if ($this->config['ssltransport'] && isset(static::$sslCryptoTypes[$this->config['ssltransport']])) {
-                    $sslCryptoMethod = static::$sslCryptoTypes[$this->config['ssltransport']];
-                } else {
-                    $sslCryptoMethod = STREAM_CRYPTO_METHOD_SSLv3_CLIENT;
-                }
+                    if ($this->config['ssltransport']
+                        && isset(static::$sslCryptoTypes[$this->config['ssltransport']])
+                    ) {
+                        $sslCryptoMethod = static::$sslCryptoTypes[$this->config['ssltransport']];
+                    } else {
+                        $sslCryptoMethod = STREAM_CRYPTO_METHOD_SSLv3_CLIENT;
+                    }
 
-                ErrorHandler::start();
-                $test  = stream_socket_enable_crypto($this->socket, true, $sslCryptoMethod);
-                $error = ErrorHandler::stop();
-                if (! $test || $error) {
-                    // Error handling is kind of difficult when it comes to SSL
-                    $errorString = '';
-                    if (extension_loaded('openssl')) {
-                        while (($sslError = openssl_error_string()) != false) {
-                            $errorString .= sprintf('; SSL error: %s', $sslError);
+                    ErrorHandler::start();
+                    $test  = stream_socket_enable_crypto($this->socket, true, $sslCryptoMethod);
+                    $error = ErrorHandler::stop();
+                    if (! $test || $error) {
+                        // Error handling is kind of difficult when it comes to SSL
+                        $errorString = '';
+                        if (extension_loaded('openssl')) {
+                            while (($sslError = openssl_error_string()) != false) {
+                                $errorString .= sprintf('; SSL error: %s', $sslError);
+                            }
                         }
-                    }
-                    $this->close();
+                        $this->close();
 
-                    if ((! $errorString) && $this->config['sslverifypeer']) {
-                        // There's good chance our error is due to sslcapath not being properly set
-                        if (! ($this->config['sslcafile'] || $this->config['sslcapath'])) {
-                            $errorString = 'make sure the "sslcafile" or "sslcapath" option are properly set for the '
-                                . 'environment.';
-                        } elseif ($this->config['sslcafile'] && ! is_file($this->config['sslcafile'])) {
-                            $errorString = 'make sure the "sslcafile" option points to a valid SSL certificate file';
-                        } elseif ($this->config['sslcapath'] && ! is_dir($this->config['sslcapath'])) {
-                            $errorString = 'make sure the "sslcapath" option points to a valid SSL certificate '
-                                . 'directory';
+                        if ((! $errorString) && $this->config['sslverifypeer']) {
+                            // There's good chance our error is due to sslcapath not being properly set
+                            if (! ($this->config['sslcafile'] || $this->config['sslcapath'])) {
+                                $errorString = 'make sure the "sslcafile" or "sslcapath" option are properly set for '
+                                    . 'the environment.';
+                            } elseif ($this->config['sslcafile'] && ! is_file($this->config['sslcafile'])) {
+                                $errorString = 'make sure the "sslcafile" option points to a valid SSL certificate '
+                                    . 'file';
+                            } elseif ($this->config['sslcapath'] && ! is_dir($this->config['sslcapath'])) {
+                                $errorString = 'make sure the "sslcapath" option points to a valid SSL certificate '
+                                    . 'directory';
+                            }
                         }
-                    }
 
-                    if ($errorString) {
-                        $errorString = sprintf(': %s', $errorString);
-                    }
+                        if ($errorString) {
+                            $errorString = sprintf(': %s', $errorString);
+                        }
 
-                    throw new AdapterException\RuntimeException(sprintf(
-                        'Unable to enable crypto on TCP connection %s%s',
-                        $host,
-                        $errorString
-                    ), 0, $error);
-                }
+                        throw new AdapterException\RuntimeException(sprintf(
+                            'Unable to enable crypto on TCP connection %s%s',
+                            $host,
+                            $errorString
+                        ), 0, $error);
+                    }
                 }
 
                 $host = $this->config['ssltransport'] . '://' . $host;
