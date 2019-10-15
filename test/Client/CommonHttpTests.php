@@ -844,9 +844,7 @@ abstract class CommonHttpTests extends TestCase
             );
         }
 
-        $file = dirname(realpath(__FILE__))
-            . DIRECTORY_SEPARATOR . '_files'
-            . DIRECTORY_SEPARATOR . 'staticFile.jpg';
+        $file = __DIR__ . '/_files/staticFile.jpg';
 
         $this->client->setUri($this->baseuri . 'testUploads.php');
         $this->client->setFileUpload($file, 'uploadfile');
@@ -884,7 +882,7 @@ abstract class CommonHttpTests extends TestCase
         $this->client->setUri($this->baseuri . 'staticFile.jpg');
 
         $got = $this->client->send()->getBody();
-        $expected = $this->_getTestFileContents('staticFile.jpg');
+        $expected = $this->getTestFileContents('staticFile.jpg');
 
         $this->assertEquals($expected, $got, 'Downloaded file does not seem to match!');
     }
@@ -934,7 +932,7 @@ abstract class CommonHttpTests extends TestCase
         $this->client->setUri($this->baseuri . 'ZF4238-zerolineresponse.txt');
 
         $got = $this->client->send()->getBody();
-        $expected = $this->_getTestFileContents('ZF4238-zerolineresponse.txt');
+        $expected = $this->getTestFileContents('ZF4238-zerolineresponse.txt');
         $this->assertEquals($expected, $got);
     }
 
@@ -957,7 +955,7 @@ abstract class CommonHttpTests extends TestCase
         $streamRead = stream_get_contents($response->getStream());
         $fileRead = file_get_contents($streamName);
 
-        $expected = $this->_getTestFileContents('staticFile.jpg');
+        $expected = $this->getTestFileContents('staticFile.jpg');
 
         $this->assertEquals($expected, $streamRead, 'Downloaded stream does not seem to match!');
         $this->assertEquals($expected, $fileRead, 'Downloaded file does not seem to match!');
@@ -981,7 +979,7 @@ abstract class CommonHttpTests extends TestCase
 
         $body = $response->getBody();
 
-        $expected = $this->_getTestFileContents('staticFile.jpg');
+        $expected = $this->getTestFileContents('staticFile.jpg');
         $this->assertEquals($expected, $body, 'Downloaded stream does not seem to match!');
     }
 
@@ -1005,7 +1003,7 @@ abstract class CommonHttpTests extends TestCase
         $streamRead = stream_get_contents($response->getStream());
         $fileRead = file_get_contents($outfile);
 
-        $expected = $this->_getTestFileContents('staticFile.jpg');
+        $expected = $this->getTestFileContents('staticFile.jpg');
 
         $this->assertEquals($expected, $streamRead, 'Downloaded stream does not seem to match!');
         $this->assertEquals($expected, $fileRead, 'Downloaded file does not seem to match!');
@@ -1017,17 +1015,12 @@ abstract class CommonHttpTests extends TestCase
             $this->markTestSkipped('Current adapter does not support streaming');
             return;
         }
-        $data = fopen(
-            dirname(realpath(__FILE__))
-            . DIRECTORY_SEPARATOR . '_files'
-            . DIRECTORY_SEPARATOR . 'staticFile.jpg',
-            'r'
-        );
+        $data = fopen(__DIR__ . '/_files/staticFile.jpg', 'r');
         $this->client->setRawBody($data);
         $this->client->setEncType('image/jpeg');
         $this->client->setMethod('PUT');
         $res = $this->client->send();
-        $expected = $this->_getTestFileContents('staticFile.jpg');
+        $expected = $this->getTestFileContents('staticFile.jpg');
         $this->assertEquals($expected, $res->getBody(), 'Response body does not contain the expected data');
     }
 
@@ -1039,11 +1032,7 @@ abstract class CommonHttpTests extends TestCase
     public function testZF9404DoubleContentLengthHeader()
     {
         $this->client->setUri($this->baseuri . 'ZF9404-doubleContentLength.php');
-        $expect = filesize(
-            dirname(realpath(__FILE__))
-            . DIRECTORY_SEPARATOR . '_files'
-            . DIRECTORY_SEPARATOR . 'ZF9404-doubleContentLength.php'
-        );
+        $expect = filesize(__DIR__ . '/_files/ZF9404-doubleContentLength.php');
 
         $response = $this->client->send();
         if (! $response->isSuccess()) {
@@ -1107,15 +1096,9 @@ abstract class CommonHttpTests extends TestCase
      * @param  string $file
      * @return string
      */
-    // @codingStandardsIgnoreStart
-    protected function _getTestFileContents($file)
+    private function getTestFileContents($file)
     {
-        // @codingStandardsIgnoreEnd
-        return file_get_contents(
-            dirname(realpath(__FILE__))
-            . DIRECTORY_SEPARATOR . '_files'
-            . DIRECTORY_SEPARATOR . $file
-        );
+        return file_get_contents(__DIR__ . '/_files/' . $file);
     }
 
     /**
