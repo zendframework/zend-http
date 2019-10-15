@@ -24,14 +24,12 @@ use Zend\Http\Client\Adapter\Socket;
  */
 class ProxyAdapterTest extends SocketTest
 {
+    /** @var string */
     protected $host;
+
+    /** @var int */
     protected $port;
 
-    /**
-     * Configuration array
-     *
-     * @var array
-     */
     protected function setUp()
     {
         if (getenv('TESTS_ZEND_HTTP_CLIENT_HTTP_PROXY')
@@ -46,32 +44,19 @@ class ProxyAdapterTest extends SocketTest
             $this->host = $host;
 
             $port = (int) $port;
-            if ($port == 0) {
+            if ($port === 0) {
                 $port = 8080;
-            } else {
-                if (($port < 1 || $port > 65535)) {
-                    $this->markTestSkipped(sprintf(
-                        '%s is not a valid proxy port number. Should be between 1 and 65535.',
-                        $port
-                    ));
-                }
+            } elseif ($port < 1 || $port > 65535) {
+                $this->markTestSkipped(sprintf(
+                    '%s is not a valid proxy port number. Should be between 1 and 65535.',
+                    $port
+                ));
             }
 
             $this->port = $port;
 
-            $user = '';
-            $pass = '';
-            if (getenv('TESTS_ZEND_HTTP_CLIENT_HTTP_PROXY_USER')
-                && getenv('TESTS_ZEND_HTTP_CLIENT_HTTP_PROXY_USER')
-            ) {
-                $user = getenv('TESTS_ZEND_HTTP_CLIENT_HTTP_PROXY_USER');
-            }
-
-            if (getenv('TESTS_ZEND_HTTP_CLIENT_HTTP_PROXY_PASS')
-                && getenv('TESTS_ZEND_HTTP_CLIENT_HTTP_PROXY_PASS')
-            ) {
-                $pass = getenv('TESTS_ZEND_HTTP_CLIENT_HTTP_PROXY_PASS');
-            }
+            $user = getenv('TESTS_ZEND_HTTP_CLIENT_HTTP_PROXY_USER') ?: '';
+            $pass = getenv('TESTS_ZEND_HTTP_CLIENT_HTTP_PROXY_PASS') ?: '';
 
             $this->config = [
                 'adapter'    => Proxy::class,
