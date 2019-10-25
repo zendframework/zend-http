@@ -1,0 +1,718 @@
+<!DOCTYPE html>
+<html lang="en">
+
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="HTTP message and header abstractions, and HTTP client implementation. (Not a PSR-7 implementation; see Diactoros for PSR-7 support.">  
+    <link rel="canonical" href="https://docs.zendframework.com/zend-http/client/cookies/">
+    <link rel="shortcut icon" href="../../img/favicon.ico">
+
+    <title>Cookie Persistence - zend-http - Zend Framework Docs</title>
+
+    <link rel="stylesheet" href="../../css/styles-5cfabd53ee.css">
+</head>
+<body id="page-top">
+
+    
+    <div class="navbar navbar-default" role="navigation">
+    <div class="container">
+        <div class="navbar-header">
+
+            
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+
+            
+            <span class="navbar-brand">
+                <a class="logo-link" href="https://framework.zend.com/" data-tooltip data-placement="bottom" title="Go to the ZF homepage">
+                    <img src="../../img/zend-framework-logo.svg" height="28" alt="Zend Framework">
+                </a>
+            </span>
+        </div>
+
+        <div class="navbar-collapse collapse">
+
+            
+            <ul class="nav navbar-nav navbar-right">
+                <li>
+                    <a href="https://framework.zend.com/about">About</a>
+                </li>
+                <li>
+                    <a href="https://framework.zend.com/downloads">Install</a>
+                </li>
+                <li class="active">
+                    <a href="https://docs.zendframework.com">Documentation</a>
+                </li>
+                <li>
+                    <a href="https://www.zend.com/en/services/training">Training</a>
+                </li>
+                <li>
+                    <a href="https://framework.zend.com/blog">Blog</a>
+                </li>
+                <li>
+                    <a href="https://framework.zend.com/participate">Participate</a>
+                </li>
+            </ul>
+
+            
+            
+                <div class="nav navbar-nav navbar-collapse visible-xs-block ">
+                    
+    <div class="subnavigation hidden-print">
+        <h4 class="subnavigation__title">
+            <a href="../..">zend-http</a>
+        </h4>
+
+        <h5 class="subnavigation__subtitle">Table of Contents</h5>
+
+        <ul class="subnavigation__list">
+            
+
+                
+                
+
+                    
+                    
+                        
+                            <li class="subnavigation__list-item ">
+                                <a href="../../intro/" class="subnavigation__link">Introduction</a>
+                            </li>
+                        
+                    
+                
+            
+
+                
+                
+
+                    
+                    
+                        
+                            <li class="subnavigation__list-item">
+                                <span class="subnavigation__headline">Reference</span>
+                                <ul class="subnavigation__list">
+                                    
+                                        
+    <li class="subnavigation__list-item ">
+        <a href="../../request/" class="subnavigation__link">Request</a>
+    </li>
+
+                                    
+                                        
+    <li class="subnavigation__list-item ">
+        <a href="../../response/" class="subnavigation__link">Response</a>
+    </li>
+
+                                    
+                                        
+    <li class="subnavigation__list-item ">
+        <a href="../../headers/" class="subnavigation__link">Headers</a>
+    </li>
+
+                                    
+                                        
+    <li class="subnavigation__list-item">
+        <span class="subnavigation__headline">Client</span>
+        <ul class="subnavigation__list">
+            
+                
+    <li class="subnavigation__list-item ">
+        <a href="../intro/" class="subnavigation__link">Intro</a>
+    </li>
+
+            
+                
+    <li class="subnavigation__list-item ">
+        <a href="../adapters/" class="subnavigation__link">Adapters</a>
+    </li>
+
+            
+                
+    <li class="subnavigation__list-item ">
+        <a href="../static/" class="subnavigation__link">Static Client</a>
+    </li>
+
+            
+                
+    <li class="subnavigation__list-item subnavigation__list-item--active">
+        <a href="./" class="subnavigation__link">Cookie Persistence</a>
+    </li>
+
+            
+                
+    <li class="subnavigation__list-item ">
+        <a href="../advanced/" class="subnavigation__link">Advanced</a>
+    </li>
+
+            
+        </ul>
+    </li>
+
+                                    
+                                </ul>
+                            </li>
+                        
+                    
+                
+            
+        </ul>
+    </div>
+
+                </div>
+            
+
+            
+            <div class="nav navbar-nav navbar-collapse visible-xs-block">
+                <div class="component-selector">
+    <h4 class="component-selector__title">Components</h4>
+    <h5 class="component-selector__subtitle">Find documentation…</h5>
+    <select class="form-control component-selector__control">
+        <option value="/">Overview</option>
+        <optgroup label="Components"></optgroup>
+    </select>
+</div>
+            </div>
+        </div>
+    </div>
+</div>
+
+    
+    <header class="header">
+    <div class="container">
+        <div class="row">
+
+            
+            <div class="col-xs-8">
+                <h1 class="header__title">
+                    Documentation
+
+                    
+                        <small class="header__subtitle">zend-http</small>
+                    
+                </h1>
+            </div>
+
+            
+            <div class="col-xs-4 text-right">
+                
+                    
+
+                    <a href="#" class="header__link header__link--search" data-toggle="modal" data-target="#mkdocs_search_modal" title="Open search">
+                        <i class="fa fa-search"></i> Search
+                    </a>
+                    <a href="https://github.com/zendframework/zend-http/" class="header__link header__link--github" title="Go to repository of zend-http">
+                        <i class="fa fa-github"></i> GitHub
+                    </a>
+                
+            </div>
+        </div>
+    </div>
+</header>
+
+    
+    <div class="laminas-announcement">
+    <div class="container">
+        <div class="row">
+            <div class="col-xs-12">
+                Zend Framework transitions to the Linux Foundation. <a href="https://getlaminas.org">Learn More.</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+    
+    <div class="container">
+        <div class="row">
+            <div class="col-md-9 col-xs-12 content" role="main">
+            <!-- content:begin -->
+                
+                    <ol class="breadcrumb" role="navigation" aria-label="breadcrumbs navigation">
+    <li><a href="https://framework.zend.com/">Home</a></li>
+
+    
+        <li><a href="https://docs.zendframework.com/">Documentation</a></li>
+
+        
+            <li><a href="../..">zend-http</a></li>
+
+            
+                
+                    
+                    
+                        <li>Reference</li>
+                    
+                
+            
+                
+                    
+                    
+                        <li>Client</li>
+                    
+                
+            
+
+            <li class="active">Cookie Persistence</li>
+        
+    
+</ol>
+
+
+
+
+
+
+    
+    
+        <h2 class="chapter__headline">Client</h2>
+    
+
+    <div>
+        
+    
+
+    
+    
+        <div class="toc">
+            <h6 class="toc__headline">In This Article</h6>
+            <ul class="toc__list">
+                
+                    <li class="toc__entry">
+                        <a href="#usage" class="toc__link">Usage</a>
+                    </li>
+                
+                    <li class="toc__entry">
+                        <a href="#serializing-and-caching-cookies" class="toc__link">Serializing and caching cookies</a>
+                    </li>
+                
+                    <li class="toc__entry">
+                        <a href="#public-methods" class="toc__link">Public methods</a>
+                    </li>
+                
+            </ul>
+        </div>
+    
+
+    </div>
+
+    <h1 id="client-cookies">Client Cookies</h1>
+<p><code>Zend\Http\Cookies</code> can be used with <code>Zend\Http\Client</code> to manage sending
+cookies in the request and setting cookies from the response; it is populated
+from the <code>Set-Cookie</code> headers obtained from a client response, and then used to
+populate the <code>Cookie</code> headers for a client request. This is highly useful in
+cases where you need to maintain a user session over consecutive HTTP requests,
+automatically sending the session ID cookies when required. Additionally, the
+<code>Zend\Http\Cookies</code> object can be serialized and stored in <code>$_SESSION</code> when
+needed.</p>
+<p><code>Zend\Http\Client</code> already provides methods for managing cookies for requests;
+<code>Zend\Http\Cookies</code> manages the parsing of <code>Set-Cookie</code> headers returned in the
+response, and allows persisting them. Additionally, <code>Cookies</code> can return a
+subset of cookies that match the current request, ensuring you are only sending
+relevant cookies.</p>
+<h2 id="usage">Usage</h2>
+<p><code>Cookies</code> is an extension of <code>Zend\Http\Headers</code>, and inherits its methods. It
+can be instantiated without any arguments.</p>
+<p> <pre class=codehilite><code class=language-php>use Zend\Http\Cookies;
+
+$cookies = new Cookies();</code></pre></p>
+<p>On your first client request, you likely won't have any cookies, so the
+instance does nothing.</p>
+<p>Once you've made your first request, you can start using it. Populate it from
+the response:</p>
+<p> <pre class=codehilite><code class=language-php>$response = $client-&gt;send();
+
+$cookies-&gt;addCookiesFromResponse($response, $client-&gt;getUri());</code></pre></p>
+<p>Alternately, you can create your initial <code>Cookies</code> instance using the static <code>fromResponse()</code> method:</p>
+<p> <pre class=codehilite><code class=language-php>$cookies = Cookies::fromResponse($response, $client-&gt;getUri());</code></pre></p>
+<p>On subsequent requests, we'll notify the client of our cookies. To do this, we
+should use the same URI we'll use for the request.</p>
+<p> <pre class=codehilite><code class=language-php>$client-&gt;setUri($uri);
+$client-&gt;setCookies($cookies-&gt;getMatchingCookies($uri));</code></pre></p>
+<p>After the request, don't forget to add any cookies returned!</p>
+<p>Essentially, <code>Cookies</code> aggregates all cookies for our client interactions, and
+allows us to send only those relevant to a given request.</p>
+<h2 id="serializing-and-caching-cookies">Serializing and caching cookies</h2>
+<p>To cache cookies &mdash; e.g., to store in <code>$_SESSION</code>, or between job
+invocations &mdash; you will need to serialize them. <code>Zend\Http\Cookies</code>
+provides this functionality via the <code>getAllCookies()</code> method.</p>
+<p>If your cache storage allows array structures, use the <code>COOKIE_STRING_ARRAY</code> constant:</p>
+<p> <pre class=codehilite><code class=language-php>$cookiesToCache = $cookies-&gt;getAllCookies($cookies::COOKIE_STRING_ARRAY);</code></pre></p>
+<p>If your cache storage only allows string values, use <code>COOKIE_STRING_CONCAT</code>:</p>
+<p> <pre class=codehilite><code class=language-php>$cookiesToCache = $cookies-&gt;getAllCookies($cookies::COOKIE_STRING_CONCAT);</code></pre></p>
+<p>When you retrieve the value later, you can test its type to determine how to
+deserialize the values:</p>
+<p> <pre class=codehilite><code class=language-php>use Zend\Http\Cookies;
+use Zend\Http\Headers;
+
+$cookies = new Cookies();
+
+if (is_array($cachedCookies)) {
+    foreach ($cachedCookies as $cookie) {
+        $cookies-&gt;addCookie($cookie);
+    }
+} elseif (is_string($cachedCookies)) {
+    foreach (Headers::fromString($cachedCookies) as $cookie) {
+        $cookies-&gt;addCookie($cookie);
+    }
+}</code></pre></p>
+<h2 id="public-methods">Public methods</h2>
+<p>Besides the methods demonstrated in the examples, <code>Zend\Http\Cookies</code> defines the following:</p>
+<div class="table-responsive"><table>
+<thead>
+<tr>
+<th>Method signature</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>static fromResponse(Response $response, string $refUri) : Cookies</code></td>
+<td>Create a <code>Cookies</code> instance from a response and the request URI. Parses all <code>Set-Cookie</code> headers, maps them to the URI, and aggregates them.</td>
+</tr>
+<tr>
+<td><code>addCookie(string|SetCookie $cookie, string $refUri = null) : void</code></td>
+<td>Add a cookie, mapping it to the given URI. If no URI is provided, it will be inferred from the cookie value's domain and path.</td>
+</tr>
+<tr>
+<td><code>addCookiesFromResponse(Response $response, string $refUri) : void</code></td>
+<td>Add all <code>Set-Cookie</code> values from the provided response, mapping to the given URI.</td>
+</tr>
+<tr>
+<td><code>getAllCookies(int $retAs = self::COOKIE_OBJECT) : array|string</code></td>
+<td>Retrieve all cookies. Returned array will have either <code>SetCookie</code> instances (the default), strings for each <code>Set-Cookie</code> declaration, or a single string containing all declarations, based on the <code>COOKIE_*</code> constant used.</td>
+</tr>
+<tr>
+<td><code>getCookie(/* ... */) : string|SetCookie</code></td>
+<td>Retrieve a single cookie by name for the given URI. See below for argument details.</td>
+</tr>
+<tr>
+<td><code>getMatchingCookies(/* ... */) : array</code></td>
+<td>See below for details.</td>
+</tr>
+<tr>
+<td><code>isEmpty() : bool</code></td>
+<td>Whether or not the instance aggregates any cookies currently.</td>
+</tr>
+<tr>
+<td><code>reset() : void</code></td>
+<td>Clear all aggregated cookies from the instance.</td>
+</tr>
+</tbody>
+</table></div>
+<p><code>getCookie()</code> accepts the following arguments, in the following order:</p>
+<div class="table-responsive"><table>
+<thead>
+<tr>
+<th>Argument</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>string $uri</code></td>
+<td>URI to match when retrieving the cookie. Will use its protocol, domain, and path.</td>
+</tr>
+<tr>
+<td><code>string $cookieName</code></td>
+<td>The specific cookie name to retrieve.</td>
+</tr>
+<tr>
+<td><code>int $retAs = self::COOKIE_OBJECT</code></td>
+<td>How to return matched cookies; defaults to <code>SetCookie</code> objects. Can be any of the <code>Cookies::COOKIE_*</code> constant values.</td>
+</tr>
+</tbody>
+</table></div>
+<p><code>getMatchingCookies()</code> accepts the following arguments, in the following order:</p>
+<div class="table-responsive"><table>
+<thead>
+<tr>
+<th>Argument</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>string $uri</code></td>
+<td>URI to match when retrieving cookies. Will use its protocol, domain, and path.</td>
+</tr>
+<tr>
+<td><code>bool $matchSessionCookies = true</code></td>
+<td>Whether or not to also return related session cookies.</td>
+</tr>
+<tr>
+<td><code>int $retAs = self::COOKIE_OBJECT</code></td>
+<td>How to return matched cookies; defaults to <code>SetCookie</code> objects. Can be any of the <code>Cookies::COOKIE_*</code> constant values.</td>
+</tr>
+<tr>
+<td><code>int $now = null</code></td>
+<td>Timestamp against which to match; defaults to <code>time()</code>. Any expired cookies will be ignored.</td>
+</tr>
+</tbody>
+</table></div>
+
+
+
+
+    <nav>
+    <ul class="page-nav hidden-print">
+
+        
+        <li class="page-nav__item">
+            
+                <a rel="prev" class="page-nav__link page-nav__link--prev" href="../static/">
+                    <i class="fa fa-chevron-left"></i> Previous
+                </a>
+            
+        </li>
+
+        
+        <li class="page-nav__item">
+            
+                <a rel="next" class="page-nav__link page-nav__link--next" href="../advanced/">
+                    Next <i class="fa fa-chevron-right"></i>
+                </a>
+            
+        </li>
+    </ul>
+</nav>
+
+
+
+
+    <div class="help-wanted">
+        <p>
+            Found a mistake or want to contribute to the documentation?
+            <a href="https://github.com/zendframework/zend-http/edit/master/docs/book/client/cookies.md" target="_blank" class="help-wanted__link">
+                Edit this page on GitHub!
+            </a>
+        </p>
+    </div>
+
+                
+            <!-- content:end -->
+            </div>
+            <div class="col-md-3 col-xs-12 sidebar">
+                
+                    <div class="component-selector">
+    <h4 class="component-selector__title">Components</h4>
+    <h5 class="component-selector__subtitle">Find documentation…</h5>
+    <select class="form-control component-selector__control">
+        <option value="/">Overview</option>
+        <optgroup label="Components"></optgroup>
+    </select>
+</div>
+                    
+    <div class="subnavigation hidden-print">
+        <h4 class="subnavigation__title">
+            <a href="../..">zend-http</a>
+        </h4>
+
+        <h5 class="subnavigation__subtitle">Table of Contents</h5>
+
+        <ul class="subnavigation__list">
+            
+
+                
+                
+
+                    
+                    
+                        
+                            <li class="subnavigation__list-item ">
+                                <a href="../../intro/" class="subnavigation__link">Introduction</a>
+                            </li>
+                        
+                    
+                
+            
+
+                
+                
+
+                    
+                    
+                        
+                            <li class="subnavigation__list-item">
+                                <span class="subnavigation__headline">Reference</span>
+                                <ul class="subnavigation__list">
+                                    
+                                        
+    <li class="subnavigation__list-item ">
+        <a href="../../request/" class="subnavigation__link">Request</a>
+    </li>
+
+                                    
+                                        
+    <li class="subnavigation__list-item ">
+        <a href="../../response/" class="subnavigation__link">Response</a>
+    </li>
+
+                                    
+                                        
+    <li class="subnavigation__list-item ">
+        <a href="../../headers/" class="subnavigation__link">Headers</a>
+    </li>
+
+                                    
+                                        
+    <li class="subnavigation__list-item">
+        <span class="subnavigation__headline">Client</span>
+        <ul class="subnavigation__list">
+            
+                
+    <li class="subnavigation__list-item ">
+        <a href="../intro/" class="subnavigation__link">Intro</a>
+    </li>
+
+            
+                
+    <li class="subnavigation__list-item ">
+        <a href="../adapters/" class="subnavigation__link">Adapters</a>
+    </li>
+
+            
+                
+    <li class="subnavigation__list-item ">
+        <a href="../static/" class="subnavigation__link">Static Client</a>
+    </li>
+
+            
+                
+    <li class="subnavigation__list-item subnavigation__list-item--active">
+        <a href="./" class="subnavigation__link">Cookie Persistence</a>
+    </li>
+
+            
+                
+    <li class="subnavigation__list-item ">
+        <a href="../advanced/" class="subnavigation__link">Advanced</a>
+    </li>
+
+            
+        </ul>
+    </li>
+
+                                    
+                                </ul>
+                            </li>
+                        
+                    
+                
+            
+        </ul>
+    </div>
+
+                
+            </div>
+        </div>
+    </div>
+
+    
+    <footer class="footer">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-9">
+                <h5>Zend Framework</h5>
+                <ul>
+                    <li><a href="https://framework.zend.com/">framework.zend.com</a></li>
+                    <li><a href="https://docs.zendframework.com">docs.zendframework.com</a></li>
+                    <li><a href="https://packages.zendframework.com">packages.zendframework.com</a></li>
+                    <li><a href="https://apigility.org">apigility.org</a></li>
+                    <li><a href="https://getexpressive.org/">getexpressive.org</a></li>
+                </ul>
+            </div>
+        </div>
+
+        
+        <div class="row">
+            <div class="col-md-12 text-center">
+                <a class="footer__button" href="#page-top"><i class="fa fa-chevron-up" aria-hidden="true"></i></a>
+            </div>
+        </div>
+
+        <div class="row">
+
+            
+            <div class="col-md-9">
+                <h4 class="footer__headline">Copyright</h4>
+                <p>&copy; 2006-2019 by <a href="https://www.zend.com/">Zend</a>, a <a href="https://www.roguewave.com/">Rogue Wave Company</a>.</p>
+            </div>
+
+            
+            <div class="col-md-3">
+                <h4 class="footer__headline">Support</h4>
+                <ul class="support__list">
+                    <li class="support__list-item">
+                        <a href="https://discourse.zendframework.com" class="support__link" title="Forum"><i class="fa fa-comments"></i></a>
+                    </li>
+                    <li class="support__list-item">
+                        <a href="https://zendframework-slack.herokuapp.com" class="support__link" title="Chat"><i class="fa fa-slack"></i></a>
+                    </li>
+                    <li class="support__list-item">
+                        <a href="https://github.com/zendframework" class="support__link" title="Github"><i class="fa fa-github"></i></a>
+                    </li>
+                    <li class="support__list-item">
+                        <a href="https://twitter.com/zfdevteam" class="support__link" title="Twitter"><i class="fa fa-twitter"></i></a>
+                    </li>
+                    <li class="support__list-item">
+                        <a href="https://tinyletter.com/mwopzend" class="support__link" title="Newsletter"><i class="fa fa-envelope"></i></a>
+                    </li>
+                    <li class="support__list-item">
+                        <a href="https://framework.zend.com/blog/feed-rss.xml" class="support__link" title="Blog feed"><i class="fa fa-rss"></i></a>
+                    </li>
+                    <li class="support__list-item">
+                        <a href="https://framework.zend.com/security/feed" class="support__link" title="Security feed"><i class="fa fa-rss-square"></i></a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</footer>
+
+    <script>
+        var base_url = '../..',
+            siteName = 'zend-http';
+    </script>
+    <script src="../../js/scripts-8d7ae56abf.js"></script>
+        <script src="../../search/main.js"></script>
+
+    
+    <div class="modal" id="mkdocs_search_modal" tabindex="-1" role="dialog" aria-labelledby="Search Modal" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">
+                        <span aria-hidden="true">&times;</span>
+                        <span class="sr-only">Close</span>
+                    </button>
+                    <h4 class="modal-title" id="exampleModalLabel">Search</h4>
+                </div>
+                <div class="modal-body">
+                    <p>
+                        From here you can search these documents. Enter your search terms below.
+                    </p>
+                    <form role="form">
+                        <div class="form-group">
+                            <input type="text" class="form-control" placeholder="Search..." id="mkdocs-search-query">
+                        </div>
+                    </form>
+                    <div id="mkdocs-search-results"></div>
+                </div>
+                <div class="modal-footer">
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+</body>
+
+
+</html>
