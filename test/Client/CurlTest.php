@@ -514,4 +514,24 @@ class CurlTest extends CommonHttpTests
         }
         $this->assertNotNull($error, 'Failed to detect timeout in cURL adapter');
     }
+
+    /**
+     * @see https://github.com/zendframework/zend-http/pull/184
+     *
+     */
+    public function testMustRemoveProxyConnectionEstablishedLine()
+    {
+        $this->client->setUri($this->baseuri . 'testProxyResponse.php');
+
+        $adapter = new Adapter\Curl();
+
+        $this->client->setAdapter($adapter);
+        $this->client->setMethod('GET');
+        $this->client->send();
+
+        $response = $this->client->getResponse();
+
+        $this->assertEquals(200, $response->getStatusCode());
+        $this->assertEquals('work', $response->getBody());
+    }
 }
