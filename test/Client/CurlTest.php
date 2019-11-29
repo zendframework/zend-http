@@ -513,21 +513,28 @@ class CurlTest extends CommonHttpTests
 
     /**
      * @see https://github.com/zendframework/zend-http/pull/184
-     *
      */
     public function testMustRemoveProxyConnectionEstablishedLine()
     {
-        $this->client->setUri($this->baseuri . 'testProxyResponse.php');
+        $proxy = getenv('TESTS_ZEND_HTTP_CLIENT_HTTP_PROXY');
+        if (! $proxy) {
+            $this->markTestSkipped('Proxy is not configured');
+        }
 
-        $adapter = new Adapter\Curl();
+        list($proxyHost, $proxyPort) = explode(':', $proxy);
 
-        $this->client->setAdapter($adapter);
+        $this->client->setAdapter(new Adapter\Curl());
+        $this->client->setOptions([
+            'proxyhost' => $proxyHost,
+            'proxyport' => $proxyPort,
+        ]);
+        $this->client->setUri('https://framework.zend.com');
         $this->client->setMethod('GET');
         $this->client->send();
 
         $response = $this->client->getResponse();
 
-        $this->assertEquals(200, $response->getStatusCode());
-        $this->assertEquals('work', $response->getBody());
+        $this->assertSame(200, $response->getStatusCode());
+        $this->assertSame('HTTP/1.1 200 OK', trim(strstr($response, "\n", true)));
     }
 }
