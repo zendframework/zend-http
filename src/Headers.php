@@ -472,6 +472,10 @@ class Headers implements Countable, Iterator
         try {
             $headers = $class::fromString($current['line']);
         } catch (Exception\InvalidArgumentException $exception) {
+            if ($isGeneric) {
+                throw $exception;
+            }
+
             return $this->lazyLoadHeader($index, true);
         }
         if (is_array($headers)) {

@@ -315,4 +315,14 @@ class HeadersTest extends TestCase
         $this->expectException(RuntimeException::class);
         Headers::fromString("Fake: foo-bar\r\n\r\nevilContent");
     }
+
+    public function testThrowExceptionOnInvalidHeader()
+    {
+        $headers = new Headers();
+        $headers->addHeaderLine('Location', "/mail\r\ntest");
+
+        $this->expectException(InvalidArgumentException::class);
+        $this->expectExceptionMessage('Invalid header value detected');
+        $headers->get('Location');
+    }
 }
