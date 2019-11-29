@@ -455,7 +455,7 @@ class Headers implements Countable, Iterator
 
     /**
      * @param $index
-     * @param bool $isGeneric
+     * @param bool $isGeneric If true, there is no need to parse $index and call the ClassLoader.
      * @return mixed|void
      */
     protected function lazyLoadHeader($index, $isGeneric = false)
@@ -472,10 +472,12 @@ class Headers implements Countable, Iterator
         try {
             $headers = $class::fromString($current['line']);
         } catch (Exception\InvalidArgumentException $exception) {
+            // Generic Header should throw an exception if it fails
             if ($isGeneric) {
                 throw $exception;
             }
 
+            // Retry one more time with GenericHeader
             return $this->lazyLoadHeader($index, true);
         }
         if (is_array($headers)) {
