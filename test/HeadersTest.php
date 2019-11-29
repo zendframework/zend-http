@@ -7,6 +7,7 @@
 
 namespace ZendTest\Http;
 
+use ArrayIterator;
 use Countable;
 use Iterator;
 use PHPUnit\Framework\TestCase;
@@ -314,6 +315,121 @@ class HeadersTest extends TestCase
     {
         $this->expectException(RuntimeException::class);
         Headers::fromString("Fake: foo-bar\r\n\r\nevilContent");
+    }
+
+    public function testAddHeaderLineMultipleHeadersGet()
+    {
+        $headers = new Headers();
+        $headers->addHeaderLine('Set-Cookie: cookie1=value1');
+        $headers->addHeaderLine('Set-Cookie', 'cookie2=value2');
+
+        $result = $headers->get('Set-Cookie');
+        self::assertInstanceOf(ArrayIterator::class, $result);
+        self::assertCount(2, $result);
+        self::assertContainsOnlyInstancesOf(Header\SetCookie::class, $result);
+    }
+
+    public function testAddHeaderLineMultipleHeadersToString()
+    {
+        $headers = new Headers();
+        $headers->addHeaderLine('Set-Cookie: cookie1=value1');
+        $headers->addHeaderLine('Set-Cookie', 'cookie2=value2');
+
+        self::assertSame(
+            'Set-Cookie: cookie1=value1' . "\r\n"
+            . 'Set-Cookie: cookie2=value2' . "\r\n",
+            $headers->toString()
+        );
+    }
+
+    public function testAddHeaderMultipleHeadersGet()
+    {
+        $headers = new Headers();
+        $headers->addHeader(new Header\SetCookie('cookie1', 'value1'));
+        $headers->addHeader(new Header\SetCookie('cookie2', 'value2'));
+
+        $result = $headers->get('Set-Cookie');
+        self::assertInstanceOf(ArrayIterator::class, $result);
+        self::assertCount(2, $result);
+        self::assertContainsOnlyInstancesOf(Header\SetCookie::class, $result);
+    }
+
+    public function testAddHeaderMultipleHeadersToString()
+    {
+        $headers = new Headers();
+        $headers->addHeader(new Header\SetCookie('cookie1', 'value1'));
+        $headers->addHeader(new Header\SetCookie('cookie2', 'value2'));
+
+        self::assertSame(
+            'Set-Cookie: cookie1=value1' . "\r\n"
+            . 'Set-Cookie: cookie2=value2' . "\r\n",
+            $headers->toString()
+        );
+    }
+
+    public function testAddHeadersMultipleHeadersGet()
+    {
+        $headers = new Headers();
+        $headers->addHeaders([
+            new Header\SetCookie('cookie1', 'value1'),
+            ['Set-Cookie', 'cookie2=value2'],
+            ['Set-Cookie' => 'cookie3=value3'],
+            'Set-Cookie: cookie4=value4',
+            'Set-Cookie' => 'cookie5=value5',
+        ]);
+
+        $result = $headers->get('Set-Cookie');
+        self::assertInstanceOf(ArrayIterator::class, $result);
+        self::assertCount(5, $result);
+        self::assertContainsOnlyInstancesOf(Header\SetCookie::class, $result);
+    }
+
+    public function testAddHeadersMultipleHeadersToString()
+    {
+        $headers = new Headers();
+        $headers->addHeaders([
+            new Header\SetCookie('cookie1', 'value1'),
+            ['Set-Cookie', 'cookie2=value2'],
+            ['Set-Cookie' => 'cookie3=value3'],
+            'Set-Cookie: cookie4=value4',
+            'Set-Cookie' => 'cookie5=value5',
+        ]);
+
+        self::assertSame(
+            'Set-Cookie: cookie1=value1' . "\r\n"
+            . 'Set-Cookie: cookie2=value2' . "\r\n"
+            . 'Set-Cookie: cookie3=value3' . "\r\n"
+            . 'Set-Cookie: cookie4=value4' . "\r\n"
+            . 'Set-Cookie: cookie5=value5' . "\r\n",
+            $headers->toString()
+        );
+    }
+
+    public function testFromStringMultipleHeadersGet()
+    {
+        $headers = Headers::fromString(
+            'Set-Cookie: cookie1=value1' . "\r\n"
+            . 'Set-Cookie: cookie2=value2'
+        );
+
+        $result = $headers->get('Set-Cookie');
+        self::assertInstanceOf(ArrayIterator::class, $result);
+        self::assertCount(2, $result);
+        self::assertContainsOnlyInstancesOf(Header\SetCookie::class, $result);
+    }
+
+    public function testFromStringHeadersToString()
+    {
+        $headers = Headers::fromString(
+            'Set-Cookie: cookie1=value1' . "\r\n"
+            . 'Set-Cookie: cookie2=value2'
+        );
+
+        self::assertSame(
+            'Set-Cookie: cookie1=value1' . "\r\n"
+            . 'Set-Cookie: cookie2=value2' . "\r\n",
+            $headers->toString()
+        );
     }
 
     public function testThrowExceptionOnInvalidHeader()
