@@ -52,6 +52,12 @@ All notable changes to this project will be documented in this file, in reverse 
 
 - [#189](https://github.com/zendframework/zend-http/pull/189) fixes `Headers::toArray` method to properly handle headers of the same type. Behaviour was different depends how header has been attached (`addHeader` or `addHeaderLine` broken before). 
 
+- [#198](https://github.com/zendframework/zend-http/pull/198) fixes merging options in Curl adapter. It was not possible to override integer-key options (constants) set via constructor with method `setOptions`. 
+
+- [#198](https://github.com/zendframework/zend-http/pull/198) fixes allowed options type in `Proxy::setOptions`. `Traversable`, `array` or `Zend\Config` object is expected.
+
+- [#198](https://github.com/zendframework/zend-http/pull/198) fixes various issues with `Proxy` adapter.
+
 ## 2.10.0 - 2019-02-19
 
 ### Added
