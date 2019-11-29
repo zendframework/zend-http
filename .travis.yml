@@ -9,6 +9,9 @@ env:
     - COMPOSER_ARGS="--no-interaction"
     - COVERAGE_DEPS="php-coveralls/php-coveralls"
     - TESTS_ZEND_HTTP_CLIENT_ONLINE=true
+    - TESTS_ZEND_HTTP_CLIENT_BASEURI=http://127.0.0.1
+    - TESTS_ZEND_HTTP_CLIENT_HTTP_PROXY=127.0.0.1:8081
+    - TESTS_ZEND_HTTP_CLIENT_NOTRESPONDINGURI=http://127.1.1.0:1234
 
 matrix:
   include:
@@ -73,12 +76,40 @@ install:
   - if [[ $TEST_COVERAGE == 'true' ]]; then travis_retry composer require --dev $COMPOSER_ARGS $COVERAGE_DEPS ; fi
   - stty cols 120 && composer show
 
+before_script:
+  # custom php.ini for PHP 5.6
+  - if [[ ${TRAVIS_PHP_VERSION:0:3} == "5.6" ]]; then phpenv config-add .ci/php5.6.ini; fi
+  # install apache
+  - sudo apt-get update -qq
+  - sudo apt-get install apache2 libapache2-mod-fastcgi
+  # enable php-fpm
+  - sudo cp ~/.phpenv/versions/$(phpenv version-name)/etc/php-fpm.conf.default ~/.phpenv/versions/$(phpenv version-name)/etc/php-fpm.conf
+  - sudo a2enmod rewrite actions fastcgi alias
+  - echo "cgi.fix_pathinfo = 1" >> ~/.phpenv/versions/$(phpenv version-name)/etc/php.ini
+  - sudo sed -i -e "s,www-data,travis,g" /etc/apache2/envvars
+  - sudo chown -R travis:travis /var/lib/apache2/fastcgi
+  - ~/.phpenv/versions/$(phpenv version-name)/sbin/php-fpm
+  # configure apache virtual hosts
+  - sudo cp -f .ci/site.conf /etc/apache2/sites-available/000-default.conf
+  - sudo sed -e "s?%TRAVIS_BUILD_DIR%?$(pwd)?g" --in-place /etc/apache2/sites-available/000-default.conf
+  - sudo sed -e "s?%PHP_VERSION%?$(phpenv version-name)?g" --in-place /etc/apache2/sites-available/000-default.conf
+  # enable TRACE
+  - sudo sed -e "s?TraceEnable Off?TraceEnable On?g" --in-place /etc/apache2/conf-available/security.conf
+  # configure proxy
+  - sudo a2enmod proxy proxy_http proxy_connect
+  - sudo cp -f .ci/proxy.conf /etc/apache2/sites-available/proxy.conf
+  - sudo a2ensite proxy
+  - sudo sed -i "s/Listen 80/Listen 80\nListen 8081/" /etc/apache2/ports.conf
+  - sudo service apache2 restart
+
 script:
   - if [[ $TEST_COVERAGE == 'true' ]]; then composer test-coverage ; else composer test ; fi
   - if [[ $CS_CHECK == 'true' ]]; then composer cs-check ; fi
 
 after_script:
   - if [[ $TEST_COVERAGE == 'true' ]]; then travis_retry php vendor/bin/php-coveralls -v ; fi
+  - sudo cat /var/log/apache2/error.log
+  - sudo cat /var/log/apache2/access.log
 
 notifications:
   email: false
