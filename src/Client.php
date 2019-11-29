@@ -1184,7 +1184,7 @@ class Client implements Stdlib\DispatchableInterface
         // Set the Accept-encoding header if not set - depending on whether
         // zlib is available or not.
         if (! $this->getRequest()->getHeaders()->has('Accept-Encoding')) {
-            if (function_exists('gzinflate')) {
+            if (empty($this->config['outputstream']) && function_exists('gzinflate')) {
                 $headers['Accept-Encoding'] = 'gzip, deflate';
             } else {
                 $headers['Accept-Encoding'] = 'identity';
