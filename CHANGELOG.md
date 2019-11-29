@@ -50,6 +50,8 @@ All notable changes to this project will be documented in this file, in reverse 
 
 - [#188](https://github.com/zendframework/zend-http/pull/188) fixes `Client::setCookies` method to properly handle array of `SetCookie` objects. Per [documentation](https://docs.zendframework.com/zend-http/client/cookies/#usage) it should be allowed. 
 
+- [#189](https://github.com/zendframework/zend-http/pull/189) fixes `Headers::toArray` method to properly handle headers of the same type. Behaviour was different depends how header has been attached (`addHeader` or `addHeaderLine` broken before). 
+
 ## 2.10.0 - 2019-02-19
 
 ### Added

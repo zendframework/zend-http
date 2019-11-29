@@ -420,21 +420,19 @@ class Headers implements Countable, Iterator
     {
         $headers = [];
         /* @var $header Header\HeaderInterface */
-        foreach ($this->headers as $header) {
+        foreach ($this->headers as $index => $header) {
+            if (is_array($header)) {
+                $header = $this->lazyLoadHeader($index);
+            }
+
             if ($header instanceof Header\MultipleHeaderInterface) {
                 $name = $header->getFieldName();
                 if (! isset($headers[$name])) {
                     $headers[$name] = [];
                 }
                 $headers[$name][] = $header->getFieldValue();
-            } elseif ($header instanceof Header\HeaderInterface) {
-                $headers[$header->getFieldName()] = $header->getFieldValue();
             } else {
-                $matches = null;
-                preg_match('/^(?P<name>[^()><@,;:\"\\/\[\]?=}{ \t]+):\s*(?P<value>.*)$/', $header['line'], $matches);
-                if ($matches) {
-                    $headers[$matches['name']] = $matches['value'];
-                }
+                $headers[$header->getFieldName()] = $header->getFieldValue();
             }
         }
         return $headers;
