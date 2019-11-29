@@ -48,6 +48,8 @@ All notable changes to this project will be documented in this file, in reverse 
 
 - [#187](https://github.com/zendframework/zend-http/pull/187) fixes infinite recursion on invalid header. Now `InvalidArgumentException` exception is thrown. 
 
+- [#188](https://github.com/zendframework/zend-http/pull/188) fixes `Client::setCookies` method to properly handle array of `SetCookie` objects. Per [documentation](https://docs.zendframework.com/zend-http/client/cookies/#usage) it should be allowed. 
+
 ## 2.10.0 - 2019-02-19
 
 ### Added

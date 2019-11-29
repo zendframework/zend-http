@@ -579,4 +579,32 @@ class ClientTest extends TestCase
         $client->send();
         $this->assertNull($client->getUri()->getPort());
     }
+
+    public function cookies()
+    {
+        yield 'name-value' => [['cookie-name' => 'cookie-value']];
+        yield 'SetCookie' => [[new SetCookie('cookie-name', 'cookie-value')]];
+    }
+
+    /**
+     * @dataProvider cookies
+     */
+    public function testSetCookies(array $cookies)
+    {
+        $client = new Client();
+
+        $client->setCookies($cookies);
+
+        self::assertCount(1, $client->getCookies());
+        self::assertContainsOnlyInstancesOf(SetCookie::class, $client->getCookies());
+    }
+
+    public function testSetCookieAcceptOnlyArray()
+    {
+        $client = new Client();
+
+        $this->expectException(HttpException\InvalidArgumentException::class);
+        $this->expectExceptionMessage('Invalid cookies passed as parameter, it must be an array');
+        $client->setCookies(new SetCookie('name', 'value'));
+    }
 }
