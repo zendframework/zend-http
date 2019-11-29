@@ -564,8 +564,10 @@ class Response extends AbstractMessage implements ResponseInterface
             );
         }
 
-        if ($this->getHeaders()->has('content-length')
-            && 0 === (int) $this->getHeaders()->get('content-length')->getFieldValue()) {
+        if ($body === ''
+            || ($this->getHeaders()->has('content-length')
+                && (int) $this->getHeaders()->get('content-length')->getFieldValue() === 0)
+        ) {
             return '';
         }
 

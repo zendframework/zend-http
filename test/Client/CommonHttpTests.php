@@ -75,10 +75,11 @@ abstract class CommonHttpTests extends TestCase
      */
     protected function setUp()
     {
-        if (getenv('TESTS_ZEND_HTTP_CLIENT_BASEURI')
-            && (filter_var(getenv('TESTS_ZEND_HTTP_CLIENT_BASEURI'), FILTER_VALIDATE_BOOLEAN) != false)) {
-            $this->baseuri = getenv('TESTS_ZEND_HTTP_CLIENT_BASEURI');
-            if (substr($this->baseuri, -1) != '/') {
+        $baseUri = getenv('TESTS_ZEND_HTTP_CLIENT_BASEURI');
+
+        if ($baseUri && filter_var($baseUri, FILTER_VALIDATE_URL) !== false) {
+            $this->baseuri = $baseUri;
+            if (substr($this->baseuri, -1) !== '/') {
                 $this->baseuri .= '/';
             }
 
@@ -383,10 +384,10 @@ abstract class CommonHttpTests extends TestCase
         $this->client->setUri($this->baseuri . 'testHeaders.php');
 
         $headers = [
-            'Accept-encoding' => 'gzip,deflate',
+            'Accept-encoding' => 'gzip, deflate',
             'X-baz' => 'Foo',
             'X-powered-by' => 'A large wooden badger',
-            'Accept' => 'text/xml,text/html,*/*',
+            'Accept' => 'text/xml, text/html, */*',
         ];
 
         $this->client->setHeaders($headers);
@@ -412,10 +413,10 @@ abstract class CommonHttpTests extends TestCase
         $this->client->setUri($this->baseuri . 'testHeaders.php');
 
         $headers = [
-            'Accept-encoding' => 'gzip,deflate',
+            'Accept-encoding' => 'gzip, deflate',
             'X-baz' => 'Foo',
             'X-powered-by' => 'A large wooden badger',
-            'Accept: text/xml,text/html,*/*',
+            'Accept: text/xml, text/html, */*',
         ];
 
         $this->client->setHeaders($headers);
@@ -444,7 +445,7 @@ abstract class CommonHttpTests extends TestCase
     {
         $this->client->setUri($this->baseuri . 'testHeaders.php');
         $headers = [
-            'Accept-encoding' => 'gzip,deflate',
+            'Accept-encoding' => 'gzip, deflate',
             'X-baz' => 'Foo',
             'X-powered-by' => [
                 'A large wooden badger',
@@ -468,7 +469,7 @@ abstract class CommonHttpTests extends TestCase
 
         foreach ($headers as $key => $val) {
             if (is_array($val)) {
-                $val = implode(', ', $val);
+                $val = implode('; ', $val);
             }
 
             $this->assertContains(strtolower($key . ': ' . $val), $body);
@@ -1083,7 +1084,7 @@ abstract class CommonHttpTests extends TestCase
     {
         $this->client->setArgSeparator(';');
         $request = new Request();
-        $request->setUri('http://framework.zend.com');
+        $request->setUri('https://framework.zend.com');
         $request->setQuery(new Parameters(['foo' => 'bar', 'baz' => 'bat']));
         $this->client->send($request);
         $rawRequest = $this->client->getLastRawRequest();
