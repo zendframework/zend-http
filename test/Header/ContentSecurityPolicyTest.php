@@ -8,9 +8,13 @@
 namespace ZendTest\Http\Header;
 
 use PHPUnit\Framework\TestCase;
+use Zend\Http\Exception\RuntimeException;
 use Zend\Http\Header\ContentSecurityPolicy;
 use Zend\Http\Header\Exception\InvalidArgumentException;
+use Zend\Http\Header\GenericHeader;
 use Zend\Http\Header\HeaderInterface;
+use Zend\Http\Header\MultipleHeaderInterface;
+use Zend\Http\Headers;
 
 class ContentSecurityPolicyTest extends TestCase
 {
@@ -25,6 +29,7 @@ class ContentSecurityPolicyTest extends TestCase
         $csp = ContentSecurityPolicy::fromString(
             "Content-Security-Policy: default-src 'none'; script-src 'self'; img-src 'self'; style-src 'self';"
         );
+        $this->assertInstanceOf(MultipleHeaderInterface::class, $csp);
         $this->assertInstanceOf(HeaderInterface::class, $csp);
         $this->assertInstanceOf(ContentSecurityPolicy::class, $csp);
         $directives = [
@@ -137,6 +142,49 @@ class ContentSecurityPolicyTest extends TestCase
         $this->assertEquals(
             'Content-Security-Policy: ',
             $csp->toString()
+        );
+    }
+
+    public function testToStringMultipleHeaders()
+    {
+        $csp = new ContentSecurityPolicy();
+        $csp->setDirective('default-src', ["'self'"]);
+
+        $additional = new ContentSecurityPolicy();
+        $additional->setDirective('img-src', ['https://*.github.com']);
+
+        self::assertSame(
+            "Content-Security-Policy: default-src 'self';\r\n"
+            . "Content-Security-Policy: img-src https://*.github.com;\r\n",
+            $csp->toStringMultipleHeaders([$additional])
+        );
+    }
+
+    public function testToStringMultipleHeadersExceptionIfDifferent()
+    {
+        $csp = new ContentSecurityPolicy();
+        $csp->setDirective('default-src', ["'self'"]);
+
+        $additional = new GenericHeader();
+
+        $this->expectException(RuntimeException::class);
+        $this->expectExceptionMessage(
+            'The ContentSecurityPolicy multiple header implementation'
+            . ' can only accept an array of ContentSecurityPolicy headers'
+        );
+        $csp->toStringMultipleHeaders([$additional]);
+    }
+
+    public function testMultiple()
+    {
+        $headers = new Headers();
+        $headers->addHeader((new ContentSecurityPolicy())->setDirective('default-src', ["'self'"]));
+        $headers->addHeader((new ContentSecurityPolicy())->setDirective('img-src', ['https://*.github.com']));
+
+        self::assertSame(
+            "Content-Security-Policy: default-src 'self';\r\n"
+            . "Content-Security-Policy: img-src https://*.github.com;\r\n",
+            $headers->toString()
         );
     }
 }
