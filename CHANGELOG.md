@@ -10,7 +10,7 @@ All notable changes to this project will be documented in this file, in reverse 
 
 ### Changed
 
-- Nothing.
+- [#190](https://github.com/zendframework/zend-http/pull/190) changes `ContentSecurityPolicy` to allow multiple values. Before it was not possible to provide multiple headers of that type.
 
 ### Deprecated
 
