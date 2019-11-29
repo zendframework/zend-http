@@ -24,6 +24,8 @@ All notable changes to this project will be documented in this file, in reverse 
 
 - [#184](https://github.com/zendframework/zend-http/pull/184) fixes responses for request through the proxy with `HTTP/1.1 200 Connection established` header. 
 
+- [#187](https://github.com/zendframework/zend-http/pull/187) fixes infinite recursion on invalid header. Now `InvalidArgumentException` exception is thrown. 
+
 ## 2.10.0 - 2019-02-19
 
 ### Added
