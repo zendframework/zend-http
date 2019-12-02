@@ -189,7 +189,7 @@ class ContentSecurityPolicyTest extends TestCase
     }
 
     /**
-     * @dataProvider directivesProvider
+     * @dataProvider validDirectives
      *
      * @param string $directive
      * @param string[] $values
@@ -206,7 +206,7 @@ class ContentSecurityPolicyTest extends TestCase
         self::assertSame($expected, $csp->toString());
     }
 
-    public static function directivesProvider()
+    public static function validDirectives()
     {
         return [
             ['child-src', ["'self'"],"Content-Security-Policy: child-src 'self';"],
