@@ -233,4 +233,19 @@ class ContentSecurityPolicyTest extends TestCase
             ['sandbox', ['allow-forms'], 'Content-Security-Policy: sandbox allow-forms;'],
         ];
     }
+
+    /**
+     * @dataProvider validDirectives
+     *
+     * @param string $directive
+     * @param string[] $values
+     * @param string $header
+     */
+    public function testFromString($directive, array $values, $header)
+    {
+        $contentSecurityPolicy = ContentSecurityPolicy::fromString($header);
+
+        self::assertArrayHasKey($directive, $contentSecurityPolicy->getDirectives());
+        self::assertSame(implode(' ', $values), $contentSecurityPolicy->getDirectives()[$directive]);
+    }
 }
