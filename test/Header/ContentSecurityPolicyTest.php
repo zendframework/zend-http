@@ -219,18 +219,14 @@ class ContentSecurityPolicyTest extends TestCase
             ['style-src-attr', ["'self'"], "Content-Security-Policy: style-src-attr 'self';"],
             ['base-uri', ["'self'", "'unsafe-inline'"], "Content-Security-Policy: base-uri 'self' 'unsafe-inline';"],
             ['plugin-types', ['text/csv'], 'Content-Security-Policy: plugin-types text/csv;'],
-            ['form-action',
-                [
-                    'http://*.example.com',
-                    "'self'"
-                ],
+            [
+                'form-action',
+                ['http://*.example.com', "'self'"],
                 "Content-Security-Policy: form-action http://*.example.com 'self';"
             ],
-            ['frame-ancestors',
-                [
-                    'http://*.example.com',
-                    "'self'"
-                ],
+            [
+                'frame-ancestors',
+                ['http://*.example.com', "'self'"],
                 "Content-Security-Policy: frame-ancestors http://*.example.com 'self';"
             ],
             ['navigate-to', ['example.com'], 'Content-Security-Policy: navigate-to example.com;'],
