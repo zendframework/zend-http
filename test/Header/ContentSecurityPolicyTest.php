@@ -192,16 +192,16 @@ class ContentSecurityPolicyTest extends TestCase
      * @dataProvider directivesProvider
      *
      * @param string $directive
-     * @param string[] $value
+     * @param string[] $values
      * @param string $expected
      */
     public function testContentSecurityPolicySetDirectiveThrowsExceptionIfMissingDirectiveNameGiven(
         $directive,
-        array $value,
+        array $values,
         $expected
     ) {
         $csp = new ContentSecurityPolicy();
-        $csp->setDirective($directive, $value);
+        $csp->setDirective($directive, $values);
 
         self::assertSame($expected, $csp->toString());
     }
