@@ -36,6 +36,8 @@ All notable changes to this project will be documented in this file, in reverse 
 
 - [#198](https://github.com/zendframework/zend-http/pull/198) fixes various issues with `Proxy` adapter.
 
+- [#199](https://github.com/zendframework/zend-http/pull/199) fixes saving resource to the file when streaming while client supports compression. Before, incorrectly, compressed resource was saved into the file.
+
 ## 2.10.0 - 2019-02-19
 
 ### Added
