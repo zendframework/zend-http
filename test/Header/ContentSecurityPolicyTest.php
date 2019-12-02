@@ -188,24 +188,6 @@ class ContentSecurityPolicyTest extends TestCase
         );
     }
 
-    /**
-     * @dataProvider validDirectives
-     *
-     * @param string $directive
-     * @param string[] $values
-     * @param string $expected
-     */
-    public function testContentSecurityPolicySetDirectiveThrowsExceptionIfMissingDirectiveNameGiven(
-        $directive,
-        array $values,
-        $expected
-    ) {
-        $csp = new ContentSecurityPolicy();
-        $csp->setDirective($directive, $values);
-
-        self::assertSame($expected, $csp->toString());
-    }
-
     public static function validDirectives()
     {
         return [
@@ -232,6 +214,24 @@ class ContentSecurityPolicyTest extends TestCase
             ['navigate-to', ['example.com'], 'Content-Security-Policy: navigate-to example.com;'],
             ['sandbox', ['allow-forms'], 'Content-Security-Policy: sandbox allow-forms;'],
         ];
+    }
+
+    /**
+     * @dataProvider validDirectives
+     *
+     * @param string $directive
+     * @param string[] $values
+     * @param string $expected
+     */
+    public function testContentSecurityPolicySetDirectiveThrowsExceptionIfMissingDirectiveNameGiven(
+        $directive,
+        array $values,
+        $expected
+    ) {
+        $csp = new ContentSecurityPolicy();
+        $csp->setDirective($directive, $values);
+
+        self::assertSame($expected, $csp->toString());
     }
 
     /**
