@@ -2,52 +2,52 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
     <url>
      <loc>https://docs.zendframework.com/zend-http/</loc>
-     <lastmod>2019-11-29</lastmod>
+     <lastmod>2019-12-02</lastmod>
      <changefreq>daily</changefreq>
     </url>
     <url>
      <loc>https://docs.zendframework.com/zend-http/intro/</loc>
-     <lastmod>2019-11-29</lastmod>
+     <lastmod>2019-12-02</lastmod>
      <changefreq>daily</changefreq>
     </url>
     <url>
      <loc>https://docs.zendframework.com/zend-http/request/</loc>
-     <lastmod>2019-11-29</lastmod>
+     <lastmod>2019-12-02</lastmod>
      <changefreq>daily</changefreq>
     </url>
     <url>
      <loc>https://docs.zendframework.com/zend-http/response/</loc>
-     <lastmod>2019-11-29</lastmod>
+     <lastmod>2019-12-02</lastmod>
      <changefreq>daily</changefreq>
     </url>
     <url>
      <loc>https://docs.zendframework.com/zend-http/headers/</loc>
-     <lastmod>2019-11-29</lastmod>
+     <lastmod>2019-12-02</lastmod>
      <changefreq>daily</changefreq>
     </url>
     <url>
      <loc>https://docs.zendframework.com/zend-http/client/intro/</loc>
-     <lastmod>2019-11-29</lastmod>
+     <lastmod>2019-12-02</lastmod>
      <changefreq>daily</changefreq>
     </url>
     <url>
      <loc>https://docs.zendframework.com/zend-http/client/adapters/</loc>
-     <lastmod>2019-11-29</lastmod>
+     <lastmod>2019-12-02</lastmod>
      <changefreq>daily</changefreq>
     </url>
     <url>
      <loc>https://docs.zendframework.com/zend-http/client/static/</loc>
-     <lastmod>2019-11-29</lastmod>
+     <lastmod>2019-12-02</lastmod>
      <changefreq>daily</changefreq>
     </url>
     <url>
      <loc>https://docs.zendframework.com/zend-http/client/cookies/</loc>
-     <lastmod>2019-11-29</lastmod>
+     <lastmod>2019-12-02</lastmod>
      <changefreq>daily</changefreq>
     </url>
     <url>
      <loc>https://docs.zendframework.com/zend-http/client/advanced/</loc>
-     <lastmod>2019-11-29</lastmod>
+     <lastmod>2019-12-02</lastmod>
      <changefreq>daily</changefreq>
     </url>
 </urlset>
