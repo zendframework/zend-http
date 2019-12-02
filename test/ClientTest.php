@@ -12,6 +12,9 @@ use PHPUnit\Framework\TestCase;
 use ReflectionMethod;
 use Zend\Http\Client;
 use Zend\Http\Client\Adapter\AdapterInterface;
+use Zend\Http\Client\Adapter\Curl;
+use Zend\Http\Client\Adapter\Proxy;
+use Zend\Http\Client\Adapter\Socket;
 use Zend\Http\Client\Adapter\Test;
 use Zend\Http\Client\Exception as ClientException;
 use Zend\Http\Cookies;
@@ -606,5 +609,32 @@ class ClientTest extends TestCase
         $this->expectException(HttpException\InvalidArgumentException::class);
         $this->expectExceptionMessage('Invalid cookies passed as parameter, it must be an array');
         $client->setCookies(new SetCookie('name', 'value'));
+    }
+
+    /**
+     * @return AdapterInterface[]
+     */
+    public function adapterWithStreamSupport()
+    {
+        yield 'curl' => [new Curl()];
+        yield 'proxy' => [new Proxy()];
+        yield 'socket' => [new Socket()];
+    }
+
+    /**
+     * @dataProvider adapterWithStreamSupport
+     */
+    public function testStreamCompression(AdapterInterface $adapter)
+    {
+        $tmpFile = tempnam(sys_get_temp_dir(), 'stream');
+
+        $client = new Client('https://www.gnu.org/licenses/gpl-3.0.txt');
+        $client->setAdapter($adapter);
+        $client->setStream($tmpFile);
+        $client->send();
+
+        $response = $client->getResponse();
+
+        self::assertSame($response->getBody(), file_get_contents($tmpFile));
     }
 }
