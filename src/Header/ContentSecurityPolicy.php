@@ -133,7 +133,7 @@ class ContentSecurityPolicy implements MultipleHeaderInterface
         foreach ($tokens as $token) {
             $token = trim($token);
             if ($token) {
-                list($directiveName, $directiveValue) = explode(' ', $token, 2);
+                list($directiveName, $directiveValue) = array_pad(explode(' ', $token, 2), 2, null);
                 if (! isset($header->directives[$directiveName])) {
                     $header->setDirective($directiveName, [$directiveValue]);
                 }
