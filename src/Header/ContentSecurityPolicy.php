@@ -8,7 +8,7 @@
 namespace Zend\Http\Header;
 
 /**
- * Content Security Policy 1.0 Header
+ * Content Security Policy Level 3 Header
  *
  * @link http://www.w3.org/TR/CSP/
  */
@@ -21,17 +21,38 @@ class ContentSecurityPolicy implements MultipleHeaderInterface
      */
     protected $validDirectiveNames = [
         // As per http://www.w3.org/TR/CSP/#directives
-        'default-src',
-        'script-src',
-        'object-src',
-        'style-src',
-        'img-src',
-        'media-src',
-        'frame-src',
-        'font-src',
+        // Fetch directives
+        'child-src',
         'connect-src',
+        'default-src',
+        'font-src',
+        'frame-src',
+        'img-src',
+        'manifest-src',
+        'media-src',
+        'object-src',
+        'prefetch-src',
+        'script-src',
+        'script-src-elem',
+        'script-src-attr',
+        'style-src',
+        'style-src-elem',
+        'style-src-attr',
+        'worker-src',
+
+        // Document directives
+        'base-uri',
+        'plugin-types',
         'sandbox',
+
+        // Navigation directives
+        'form-action',
+        'frame-ancestors',
+        'navigate-to',
+
+        // Reporting directives
         'report-uri',
+        'report-to',
     ];
 
     /**

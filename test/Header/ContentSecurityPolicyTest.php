@@ -187,4 +187,65 @@ class ContentSecurityPolicyTest extends TestCase
             $headers->toString()
         );
     }
+
+    public static function validDirectives()
+    {
+        return [
+            ['child-src', ["'self'"],"Content-Security-Policy: child-src 'self';"],
+            ['manifest-src', ["'self'"], "Content-Security-Policy: manifest-src 'self';"],
+            ['worker-src', ["'self'"], "Content-Security-Policy: worker-src 'self';"],
+            ['prefetch-src', ["'self'"], "Content-Security-Policy: prefetch-src 'self';"],
+            ['script-src-elem', ["'self'"], "Content-Security-Policy: script-src-elem 'self';"],
+            ['script-src-attr', ["'self'"], "Content-Security-Policy: script-src-attr 'self';"],
+            ['style-src-elem', ["'self'"], "Content-Security-Policy: style-src-elem 'self';"],
+            ['style-src-attr', ["'self'"], "Content-Security-Policy: style-src-attr 'self';"],
+            ['base-uri', ["'self'", "'unsafe-inline'"], "Content-Security-Policy: base-uri 'self' 'unsafe-inline';"],
+            ['plugin-types', ['text/csv'], 'Content-Security-Policy: plugin-types text/csv;'],
+            [
+                'form-action',
+                ['http://*.example.com', "'self'"],
+                "Content-Security-Policy: form-action http://*.example.com 'self';"
+            ],
+            [
+                'frame-ancestors',
+                ['http://*.example.com', "'self'"],
+                "Content-Security-Policy: frame-ancestors http://*.example.com 'self';"
+            ],
+            ['navigate-to', ['example.com'], 'Content-Security-Policy: navigate-to example.com;'],
+            ['sandbox', ['allow-forms'], 'Content-Security-Policy: sandbox allow-forms;'],
+        ];
+    }
+
+    /**
+     * @dataProvider validDirectives
+     *
+     * @param string $directive
+     * @param string[] $values
+     * @param string $expected
+     */
+    public function testContentSecurityPolicySetDirectiveThrowsExceptionIfMissingDirectiveNameGiven(
+        $directive,
+        array $values,
+        $expected
+    ) {
+        $csp = new ContentSecurityPolicy();
+        $csp->setDirective($directive, $values);
+
+        self::assertSame($expected, $csp->toString());
+    }
+
+    /**
+     * @dataProvider validDirectives
+     *
+     * @param string $directive
+     * @param string[] $values
+     * @param string $header
+     */
+    public function testFromString($directive, array $values, $header)
+    {
+        $contentSecurityPolicy = ContentSecurityPolicy::fromString($header);
+
+        self::assertArrayHasKey($directive, $contentSecurityPolicy->getDirectives());
+        self::assertSame(implode(' ', $values), $contentSecurityPolicy->getDirectives()[$directive]);
+    }
 }
