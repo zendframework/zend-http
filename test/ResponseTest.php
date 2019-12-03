@@ -107,20 +107,24 @@ class ResponseTest extends TestCase
         $this->assertSame($headers, $response->getHeaders());
     }
 
-    public function testResponseCanSetStatusCode()
+    public function validStatusCode()
     {
-        $response = new Response();
-        $this->assertEquals(200, $response->getStatusCode());
-        $response->setStatusCode('303');
-        $this->assertEquals(303, $response->getStatusCode());
+        for ($i = 100; $i <= 599; ++$i) {
+            yield $i => [$i];
+        }
     }
 
-    public function testResponseCanSetStatusCodeNonStandard()
+    /**
+     * @dataProvider validStatusCode
+     *
+     * @param int $statusCode
+     */
+    public function testResponseCanSetStatusCode($statusCode)
     {
         $response = new Response();
-        $this->assertEquals(200, $response->getStatusCode());
-        $response->setStatusCode('520');
-        $this->assertEquals(520, $response->getStatusCode());
+        $this->assertSame(200, $response->getStatusCode());
+        $response->setStatusCode($statusCode);
+        $this->assertSame($statusCode, $response->getStatusCode());
     }
 
     public function testResponseSetStatusCodeThrowsExceptionOnInvalidCode()
