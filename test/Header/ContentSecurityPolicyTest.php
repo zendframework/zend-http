@@ -213,6 +213,12 @@ class ContentSecurityPolicyTest extends TestCase
             ],
             ['navigate-to', ['example.com'], 'Content-Security-Policy: navigate-to example.com;'],
             ['sandbox', ['allow-forms'], 'Content-Security-Policy: sandbox allow-forms;'],
+
+            // Other directives
+            ['block-all-mixed-content', [], 'Content-Security-Policy: block-all-mixed-content;'],
+            ['require-sri-for', ['script', 'style'], 'Content-Security-Policy: require-sri-for script style;'],
+            ['trusted-types', ['*'], 'Content-Security-Policy: trusted-types *;'],
+            ['upgrade-insecure-requests', [], 'Content-Security-Policy: upgrade-insecure-requests;'],
         ];
     }
 
@@ -247,5 +253,28 @@ class ContentSecurityPolicyTest extends TestCase
 
         self::assertArrayHasKey($directive, $contentSecurityPolicy->getDirectives());
         self::assertSame(implode(' ', $values), $contentSecurityPolicy->getDirectives()[$directive]);
+    }
+
+    /**
+     * @return string
+     */
+    public function directivesWithoutValue()
+    {
+        yield ['block-all-mixed-content'];
+        yield ['upgrade-insecure-requests'];
+    }
+
+    /**
+     * @dataProvider directivesWithoutValue
+     *
+     * @param string $directive
+     */
+    public function testExceptionWhenProvideValueWithDirectiveWithoutValue($directive)
+    {
+        $csp = new ContentSecurityPolicy();
+
+        $this->expectException(InvalidArgumentException::class);
+        $this->expectExceptionMessage($directive);
+        $csp->setDirective($directive, ['something']);
     }
 }
