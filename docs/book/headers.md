@@ -455,6 +455,8 @@ Method signature                                                      | Descript
 `setSecure(bool $secure) : self`                                      | Set whether the cookies contain the Secure flag.
 `isHttponly() : bool`                                                 | Whether the cookies can be accessed via the HTTP protocol only.
 `setHttponly(bool $httponly) : self`                                  | Set whether the cookies can be accessed only via HTTP protocol.
+`getSameSite() : ?string`                                             | Retrieve the SameSite directive value (`null` when it is not set).
+`setSameSite(?string $sameSite) : self`                               | Set SameSite directive value - allowed values are: `Strict`, `Lax` and `None`.
 `isExpired() : bool`                                                  | Whether the cookie is expired.
 `isSessionCookie() : bool`                                            | Whether the cookie is a session cookie.
 `setQuoteFieldValue(bool $quotedValue) : self`                        | Set whether the value for this cookie should be quoted.
