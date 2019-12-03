@@ -2,7 +2,7 @@
 
 All notable changes to this project will be documented in this file, in reverse chronological order by release.
 
-## 2.11.0 - TBD
+## 2.11.0 - 2019-12-03
 
 ### Added
 
@@ -33,28 +33,6 @@ All notable changes to this project will be documented in this file, in reverse 
 ### Fixed
 
 - [#200](https://github.com/zendframework/zend-http/pull/200) fixes support for directives without value in Content Security Policy header.
-
-## 2.10.2 - TBD
-
-### Added
-
-- Nothing.
-
-### Changed
-
-- Nothing.
-
-### Deprecated
-
-- Nothing.
-
-### Removed
-
-- Nothing.
-
-### Fixed
-
-- Nothing.
 
 ## 2.10.1 - 2019-12-02
 
