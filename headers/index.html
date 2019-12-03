@@ -1100,6 +1100,14 @@ $csp-&gt;setDirective('script-src', ['trustedscripts.example.com']);</code></pre
 <td>Set whether the cookies can be accessed only via HTTP protocol.</td>
 </tr>
 <tr>
+<td><code>getSameSite() : ?string</code></td>
+<td>Retrieve the SameSite directive value (<code>null</code> when it is not set).</td>
+</tr>
+<tr>
+<td><code>setSameSite(?string $sameSite) : self</code></td>
+<td>Set SameSite directive value - allowed values are: <code>Strict</code>, <code>Lax</code> and <code>None</code>.</td>
+</tr>
+<tr>
 <td><code>isExpired() : bool</code></td>
 <td>Whether the cookie is expired.</td>
 </tr>
