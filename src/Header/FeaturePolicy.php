@@ -8,7 +8,7 @@
 namespace Zend\Http\Header;
 
 /**
- * Feature Policy (based on Editor’s Draft, 1 April 2019)
+ * Feature Policy (based on Editor’s Draft, 28 November 2019)
  *
  * @link https://w3c.github.io/webappsec-feature-policy/
  */
@@ -17,7 +17,7 @@ class FeaturePolicy implements HeaderInterface
     /**
      * Valid directive names
      *
-     * @var array
+     * @var string[]
      *
      * @see https://github.com/w3c/webappsec-feature-policy/blob/master/features.md
      */
@@ -26,13 +26,19 @@ class FeaturePolicy implements HeaderInterface
         'accelerometer',
         'ambient-light-sensor',
         'autoplay',
+        'battery',
         'camera',
+        'display-capture',
         'document-domain',
         'fullscreen',
+        'execution-while-not-rendered',
+        'execution-while-out-of-viewport',
         'gyroscope',
         'magnetometer',
         'microphone',
         'midi',
+        'payment',
+        'picture-in-picture',
         'picture-in-picture',
         'sync-xhr',
         'usb',
@@ -42,18 +48,19 @@ class FeaturePolicy implements HeaderInterface
         // Proposed Features
         'encrypted-media',
         'geolocation',
-        'payment',
         'speaker',
 
         // Experimental Features
         'document-write',
         'font-display-late-swap',
         'layout-animations',
-        'lazyload',
+        'loading-frame-default-eager',
+        'loading-image-default-eager',
         'legacy-image-formats',
         'oversized-images',
         'sync-script',
-        'unoptimized-images',
+        'unoptimized-lossy-images',
+        'unoptimized-lossless-images',
         'unsized-media',
         'vertical-scroll',
         'serial',
@@ -80,8 +87,8 @@ class FeaturePolicy implements HeaderInterface
      * Sets the directive to consist of the source list
      *
      * @param string $name The directive name.
-     * @param array $sources The source list.
-     * @return self
+     * @param string[] $sources The source list.
+     * @return $this
      * @throws Exception\InvalidArgumentException If the name is not a valid directive name.
      */
     public function setDirective($name, array $sources)
@@ -108,7 +115,7 @@ class FeaturePolicy implements HeaderInterface
      * Create Feature Policy header from a given header line
      *
      * @param string $headerLine The header line to parse.
-     * @return self
+     * @return static
      * @throws Exception\InvalidArgumentException If the name field in the given header line does not match.
      */
     public static function fromString($headerLine)
@@ -129,12 +136,16 @@ class FeaturePolicy implements HeaderInterface
         foreach ($tokens as $token) {
             $token = trim($token);
             if ($token) {
-                list($directiveName, $directiveValue) = explode(' ', $token, 2);
+                list($directiveName, $directiveValue) = array_pad(explode(' ', $token, 2), 2, null);
                 if (! isset($header->directives[$directiveName])) {
-                    $header->setDirective($directiveName, [$directiveValue]);
+                    $header->setDirective(
+                        $directiveName,
+                        $directiveValue === null ? [] : [$directiveValue]
+                    );
                 }
             }
         }
+
         return $header;
     }
 
