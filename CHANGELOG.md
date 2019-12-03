@@ -16,6 +16,8 @@ All notable changes to this project will be documented in this file, in reverse 
 
 - [#177](https://github.com/zendframework/zend-http/pull/177) adds support for Feature Policy header.
 
+- [#186](https://github.com/zendframework/zend-http/pull/186) adds support for SameSite directive in Set-Cookie header.
+
 ### Changed
 
 - [#194](https://github.com/zendframework/zend-http/pull/194) changes range of valid HTTP status codes to 100-599 (inclusive).

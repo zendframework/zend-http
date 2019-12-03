@@ -18,6 +18,33 @@ use Zend\Uri\UriFactory;
 class SetCookie implements MultipleHeaderInterface
 {
     /**
+     * Cookie will not be sent for any cross-domain requests whatsoever.
+     * Even if the user simply navigates to the target site with a regular link, the cookie will not be sent.
+     */
+    const SAME_SITE_STRICT = 'Strict';
+
+    /**
+     * Cookie will not be passed for any cross-domain requests unless it's a regular link that navigates user
+     * to the target site.
+     * Other requests methods (such as POST and PUT) and XHR requests will not contain this cookie.
+     */
+    const SAME_SITE_LAX = 'Lax';
+
+    /**
+     * Cookie will be sent with same-site and cross-site requests.
+     */
+    const SAME_SITE_NONE = 'None';
+
+    /**
+     * @internal
+     */
+    const SAME_SITE_ALLOWED_VALUES = [
+        self::SAME_SITE_STRICT,
+        self::SAME_SITE_LAX,
+        self::SAME_SITE_NONE,
+    ];
+
+    /**
      * Cookie name
      *
      * @var string|null
@@ -86,6 +113,11 @@ class SetCookie implements MultipleHeaderInterface
     protected $httponly;
 
     /**
+     * @var string|null
+     */
+    protected $sameSite;
+
+    /**
      * @var bool
      */
     protected $encodeValue = true;
@@ -152,6 +184,9 @@ class SetCookie implements MultipleHeaderInterface
                         case 'maxage':
                             $header->setMaxAge($headerValue);
                             break;
+                        case 'samesite':
+                            $header->setSameSite($headerValue);
+                            break;
                         default:
                             // Intentionally omitted
                     }
@@ -199,6 +234,7 @@ class SetCookie implements MultipleHeaderInterface
      * @param bool                     $httponly
      * @param int|null                 $maxAge
      * @param int|null                 $version
+     * @param string|null              $sameSite
      */
     public function __construct(
         $name = null,
@@ -209,7 +245,8 @@ class SetCookie implements MultipleHeaderInterface
         $secure = false,
         $httponly = false,
         $maxAge = null,
-        $version = null
+        $version = null,
+        $sameSite = null
     ) {
         $this->type = 'Cookie';
 
@@ -221,7 +258,8 @@ class SetCookie implements MultipleHeaderInterface
              ->setExpires($expires)
              ->setPath($path)
              ->setSecure($secure)
-             ->setHttpOnly($httponly);
+             ->setHttpOnly($httponly)
+             ->setSameSite($sameSite);
     }
 
     /**
@@ -296,6 +334,11 @@ class SetCookie implements MultipleHeaderInterface
 
         if ($this->isHttponly()) {
             $fieldValue .= '; HttpOnly';
+        }
+
+        $sameSite = $this->getSameSite();
+        if ($sameSite !== null && in_array($sameSite, self::SAME_SITE_ALLOWED_VALUES, true)) {
+            $fieldValue .= '; SameSite=' . $sameSite;
         }
 
         return $fieldValue;
@@ -558,6 +601,31 @@ class SetCookie implements MultipleHeaderInterface
     public function isSessionCookie()
     {
         return ($this->expires === null);
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getSameSite()
+    {
+        return $this->sameSite;
+    }
+
+    /**
+     * @param  string|null $sameSite
+     * @return $this
+     * @throws Exception\InvalidArgumentException
+     */
+    public function setSameSite($sameSite)
+    {
+        if ($sameSite !== null && ! in_array($sameSite, self::SAME_SITE_ALLOWED_VALUES, true)) {
+            throw new Exception\InvalidArgumentException(sprintf(
+                'Invalid value provided for SameSite directive: "%s"; expected one of: Strict, Lax or None',
+                is_scalar($sameSite) ? $sameSite : gettype($sameSite)
+            ));
+        }
+        $this->sameSite = $sameSite;
+        return $this;
     }
 
     /**
