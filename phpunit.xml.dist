@@ -36,15 +36,15 @@
              symbolically link or copy the files in test/Client/_files to a
              directory under your web server(s) document root and set this
              constant to point to the URL of this directory. -->
-        <env name="TESTS_ZEND_HTTP_CLIENT_BASEURI" value="http://127.0.0.1" />
-        <env name="TESTS_ZEND_HTTP_CLIENT_ONLINE" value="true" />
+        <env name="TESTS_ZEND_HTTP_CLIENT_BASEURI" value="false" />
+        <env name="TESTS_ZEND_HTTP_CLIENT_ONLINE" value="false" />
 
         <!-- Zend\Http\Client\Proxy tests
 
              HTTP proxy to be used for testing the Proxy adapter. Set to a
              string of the form 'host:port'. Set to null to skip HTTP proxy
              tests. -->
-        <env name="TESTS_ZEND_HTTP_CLIENT_HTTP_PROXY" value="127.0.0.1:8081" />
+        <env name="TESTS_ZEND_HTTP_CLIENT_HTTP_PROXY" value="false" />
         <env name="TESTS_ZEND_HTTP_CLIENT_HTTP_PROXY_USER" value="" />
         <env name="TESTS_ZEND_HTTP_CLIENT_HTTP_PROXY_PASS" value="" />
 
