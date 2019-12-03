@@ -53,6 +53,12 @@ class ContentSecurityPolicy implements MultipleHeaderInterface
         // Reporting directives
         'report-uri',
         'report-to',
+
+        // Other directives
+        'block-all-mixed-content',
+        'require-sri-for',
+        'trusted-types',
+        'upgrade-insecure-requests',
     ];
 
     /**
@@ -91,6 +97,21 @@ class ContentSecurityPolicy implements MultipleHeaderInterface
                 (string) $name
             ));
         }
+
+        if ($name === 'block-all-mixed-content'
+            || $name === 'upgrade-insecure-requests'
+        ) {
+            if ($sources) {
+                throw new Exception\InvalidArgumentException(sprintf(
+                    'Received value for %s directive; none expected',
+                    $name
+                ));
+            }
+
+            $this->directives[$name] = '';
+            return $this;
+        }
+
         if (empty($sources)) {
             if ('report-uri' === $name) {
                 if (isset($this->directives[$name])) {
@@ -98,6 +119,7 @@ class ContentSecurityPolicy implements MultipleHeaderInterface
                 }
                 return $this;
             }
+
             $this->directives[$name] = "'none'";
             return $this;
         }
@@ -133,9 +155,12 @@ class ContentSecurityPolicy implements MultipleHeaderInterface
         foreach ($tokens as $token) {
             $token = trim($token);
             if ($token) {
-                list($directiveName, $directiveValue) = explode(' ', $token, 2);
+                list($directiveName, $directiveValue) = array_pad(explode(' ', $token, 2), 2, null);
                 if (! isset($header->directives[$directiveName])) {
-                    $header->setDirective($directiveName, [$directiveValue]);
+                    $header->setDirective(
+                        $directiveName,
+                        $directiveValue === null ? [] : [$directiveValue]
+                    );
                 }
             }
         }
@@ -163,7 +188,7 @@ class ContentSecurityPolicy implements MultipleHeaderInterface
         foreach ($this->directives as $name => $value) {
             $directives[] = sprintf('%s %s;', $name, $value);
         }
-        return implode(' ', $directives);
+        return str_replace(' ;', ';', implode(' ', $directives));
     }
 
     /**
