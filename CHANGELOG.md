@@ -8,6 +8,12 @@ All notable changes to this project will be documented in this file, in reverse 
 
 - [#175](https://github.com/zendframework/zend-http/pull/175) adds support for Content Security Policy Level 3 Header directives.
 
+- [#200](https://github.com/zendframework/zend-http/pull/200) adds support for additional directives in Content Security Policy header:
+  - `block-all-mixed-content`,
+  - `require-sri-for`,
+  - `trusted-types`,
+  - `upgrade-insecure-requests`.
+
 ### Changed
 
 - Nothing.
@@ -22,7 +28,7 @@ All notable changes to this project will be documented in this file, in reverse 
 
 ### Fixed
 
-- Nothing.
+- [#200](https://github.com/zendframework/zend-http/pull/200) fixes support for directives without value in Content Security Policy header.
 
 ## 2.10.2 - TBD
 
