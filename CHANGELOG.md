@@ -14,6 +14,8 @@ All notable changes to this project will be documented in this file, in reverse 
   - `trusted-types`,
   - `upgrade-insecure-requests`.
 
+- [#177](https://github.com/zendframework/zend-http/pull/177) adds support for Feature Policy header.
+
 ### Changed
 
 - Nothing.
