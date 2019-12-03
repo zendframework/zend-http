@@ -2,6 +2,38 @@
 
 All notable changes to this project will be documented in this file, in reverse chronological order by release.
 
+## 2.11.0 - TBD
+
+### Added
+
+- [#175](https://github.com/zendframework/zend-http/pull/175) adds support for Content Security Policy Level 3 Header directives.
+
+- [#200](https://github.com/zendframework/zend-http/pull/200) adds support for additional directives in Content Security Policy header:
+  - `block-all-mixed-content`,
+  - `require-sri-for`,
+  - `trusted-types`,
+  - `upgrade-insecure-requests`.
+
+- [#177](https://github.com/zendframework/zend-http/pull/177) adds support for Feature Policy header.
+
+- [#186](https://github.com/zendframework/zend-http/pull/186) adds support for SameSite directive in Set-Cookie header.
+
+### Changed
+
+- [#194](https://github.com/zendframework/zend-http/pull/194) changes range of valid HTTP status codes to 100-599 (inclusive).
+
+### Deprecated
+
+- Nothing.
+
+### Removed
+
+- Nothing.
+
+### Fixed
+
+- [#200](https://github.com/zendframework/zend-http/pull/200) fixes support for directives without value in Content Security Policy header.
+
 ## 2.10.2 - TBD
 
 ### Added

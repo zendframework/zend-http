@@ -107,12 +107,24 @@ class ResponseTest extends TestCase
         $this->assertSame($headers, $response->getHeaders());
     }
 
-    public function testResponseCanSetStatusCode()
+    public function validStatusCode()
+    {
+        for ($i = 100; $i <= 599; ++$i) {
+            yield $i => [$i];
+        }
+    }
+
+    /**
+     * @dataProvider validStatusCode
+     *
+     * @param int $statusCode
+     */
+    public function testResponseCanSetStatusCode($statusCode)
     {
         $response = new Response();
-        $this->assertEquals(200, $response->getStatusCode());
-        $response->setStatusCode('303');
-        $this->assertEquals(303, $response->getStatusCode());
+        $this->assertSame(200, $response->getStatusCode());
+        $response->setStatusCode($statusCode);
+        $this->assertSame($statusCode, $response->getStatusCode());
     }
 
     public function testResponseSetStatusCodeThrowsExceptionOnInvalidCode()
@@ -142,7 +154,7 @@ class ResponseTest extends TestCase
     {
         $response = new Response();
         $this->expectException(InvalidArgumentException::class);
-        $this->expectExceptionMessage('Invalid status code provided: "foo"');
+        $this->expectExceptionMessage('Invalid status code "foo"; must be an integer between 100 and 599, inclusive');
 
         $response->setStatusCode('foo');
     }
@@ -540,8 +552,6 @@ REQ;
     public function testUnknownCode()
     {
         $responseStr = $this->readResponse('response_unknown');
-        $this->expectException(InvalidArgumentException::class);
-        $this->expectExceptionMessage('Invalid status code provided: "550"');
         $response = Response::fromString($responseStr);
         $this->assertEquals(550, $response->getStatusCode());
     }
