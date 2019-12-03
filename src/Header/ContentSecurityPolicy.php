@@ -135,7 +135,10 @@ class ContentSecurityPolicy implements MultipleHeaderInterface
             if ($token) {
                 list($directiveName, $directiveValue) = array_pad(explode(' ', $token, 2), 2, null);
                 if (! isset($header->directives[$directiveName])) {
-                    $header->setDirective($directiveName, [$directiveValue]);
+                    $header->setDirective(
+                        $directiveName,
+                        $directiveValue === null ? [] : [$directiveValue]
+                    );
                 }
             }
         }
