@@ -88,7 +88,14 @@ class Response extends AbstractMessage implements ResponseInterface
     const STATUS_CODE_599 = 599;
     /**#@-*/
 
+    /**
+     * @internal
+     */
     const MIN_STATUS_CODE_VALUE = 100;
+
+    /**
+     * @internal
+     */
     const MAX_STATUS_CODE_VALUE = 599;
 
     /**
