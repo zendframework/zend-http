@@ -44,6 +44,7 @@ class HeaderLoader extends PluginClassLoader
         'etag'                    => Header\Etag::class,
         'expect'                  => Header\Expect::class,
         'expires'                 => Header\Expires::class,
+        'featurepolicy'           => Header\FeaturePolicy::class,
         'from'                    => Header\From::class,
         'host'                    => Header\Host::class,
         'ifmatch'                 => Header\IfMatch::class,

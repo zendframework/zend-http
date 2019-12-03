@@ -1,64 +1,69 @@
 <?php
 /**
  * @see       https://github.com/zendframework/zend-http for the canonical source repository
- * @copyright Copyright (c) 2005-2017 Zend Technologies USA Inc. (http://www.zend.com)
+ * @copyright Copyright (c) 2019 Zend Technologies USA Inc. (https://www.zend.com)
  * @license   https://github.com/zendframework/zend-http/blob/master/LICENSE.md New BSD License
  */
 
 namespace Zend\Http\Header;
 
 /**
- * Content Security Policy Level 3 Header
+ * Feature Policy (based on Editor’s Draft, 28 November 2019)
  *
- * @link http://www.w3.org/TR/CSP/
+ * @link https://w3c.github.io/webappsec-feature-policy/
  */
-class ContentSecurityPolicy implements MultipleHeaderInterface
+class FeaturePolicy implements HeaderInterface
 {
     /**
      * Valid directive names
      *
-     * @var array
+     * @var string[]
+     *
+     * @see https://github.com/w3c/webappsec-feature-policy/blob/master/features.md
      */
     protected $validDirectiveNames = [
-        // As per http://www.w3.org/TR/CSP/#directives
-        // Fetch directives
-        'child-src',
-        'connect-src',
-        'default-src',
-        'font-src',
-        'frame-src',
-        'img-src',
-        'manifest-src',
-        'media-src',
-        'object-src',
-        'prefetch-src',
-        'script-src',
-        'script-src-elem',
-        'script-src-attr',
-        'style-src',
-        'style-src-elem',
-        'style-src-attr',
-        'worker-src',
+        // Standardized Features
+        'accelerometer',
+        'ambient-light-sensor',
+        'autoplay',
+        'battery',
+        'camera',
+        'display-capture',
+        'document-domain',
+        'fullscreen',
+        'execution-while-not-rendered',
+        'execution-while-out-of-viewport',
+        'gyroscope',
+        'magnetometer',
+        'microphone',
+        'midi',
+        'payment',
+        'picture-in-picture',
+        'picture-in-picture',
+        'sync-xhr',
+        'usb',
+        'wake-lock',
+        'xr',
 
-        // Document directives
-        'base-uri',
-        'plugin-types',
-        'sandbox',
+        // Proposed Features
+        'encrypted-media',
+        'geolocation',
+        'speaker',
 
-        // Navigation directives
-        'form-action',
-        'frame-ancestors',
-        'navigate-to',
-
-        // Reporting directives
-        'report-uri',
-        'report-to',
-
-        // Other directives
-        'block-all-mixed-content',
-        'require-sri-for',
-        'trusted-types',
-        'upgrade-insecure-requests',
+        // Experimental Features
+        'document-write',
+        'font-display-late-swap',
+        'layout-animations',
+        'loading-frame-default-eager',
+        'loading-image-default-eager',
+        'legacy-image-formats',
+        'oversized-images',
+        'sync-script',
+        'unoptimized-lossy-images',
+        'unoptimized-lossless-images',
+        'unsized-media',
+        'vertical-scroll',
+        'serial',
     ];
 
     /**
@@ -81,11 +86,9 @@ class ContentSecurityPolicy implements MultipleHeaderInterface
     /**
      * Sets the directive to consist of the source list
      *
-     * Reverses http://www.w3.org/TR/CSP/#parsing-1
-     *
      * @param string $name The directive name.
-     * @param array $sources The source list.
-     * @return self
+     * @param string[] $sources The source list.
+     * @return $this
      * @throws Exception\InvalidArgumentException If the name is not a valid directive name.
      */
     public function setDirective($name, array $sources)
@@ -97,44 +100,22 @@ class ContentSecurityPolicy implements MultipleHeaderInterface
                 (string) $name
             ));
         }
-
-        if ($name === 'block-all-mixed-content'
-            || $name === 'upgrade-insecure-requests'
-        ) {
-            if ($sources) {
-                throw new Exception\InvalidArgumentException(sprintf(
-                    'Received value for %s directive; none expected',
-                    $name
-                ));
-            }
-
-            $this->directives[$name] = '';
-            return $this;
-        }
-
         if (empty($sources)) {
-            if ('report-uri' === $name) {
-                if (isset($this->directives[$name])) {
-                    unset($this->directives[$name]);
-                }
-                return $this;
-            }
-
             $this->directives[$name] = "'none'";
             return $this;
         }
 
         array_walk($sources, [__NAMESPACE__ . '\HeaderValue', 'assertValid']);
-        $this->directives[$name] = implode(' ', $sources);
 
+        $this->directives[$name] = implode(' ', $sources);
         return $this;
     }
 
     /**
-     * Create Content Security Policy header from a given header line
+     * Create Feature Policy header from a given header line
      *
      * @param string $headerLine The header line to parse.
-     * @return self
+     * @return static
      * @throws Exception\InvalidArgumentException If the name field in the given header line does not match.
      */
     public static function fromString($headerLine)
@@ -143,14 +124,14 @@ class ContentSecurityPolicy implements MultipleHeaderInterface
         $headerName = $header->getFieldName();
         list($name, $value) = GenericHeader::splitHeaderLine($headerLine);
         // Ensure the proper header name
-        if (strcasecmp($name, $headerName) != 0) {
+        if (strcasecmp($name, $headerName) !== 0) {
             throw new Exception\InvalidArgumentException(sprintf(
                 'Invalid header line for %s string: "%s"',
                 $headerName,
                 $name
             ));
         }
-        // As per http://www.w3.org/TR/CSP/#parsing
+        // As per https://w3c.github.io/webappsec-feature-policy/#algo-parse-policy-directive
         $tokens = explode(';', $value);
         foreach ($tokens as $token) {
             $token = trim($token);
@@ -164,6 +145,7 @@ class ContentSecurityPolicy implements MultipleHeaderInterface
                 }
             }
         }
+
         return $header;
     }
 
@@ -174,7 +156,7 @@ class ContentSecurityPolicy implements MultipleHeaderInterface
      */
     public function getFieldName()
     {
-        return 'Content-Security-Policy';
+        return 'Feature-Policy';
     }
 
     /**
@@ -188,7 +170,7 @@ class ContentSecurityPolicy implements MultipleHeaderInterface
         foreach ($this->directives as $name => $value) {
             $directives[] = sprintf('%s %s;', $name, $value);
         }
-        return str_replace(' ;', ';', implode(' ', $directives));
+        return implode(' ', $directives);
     }
 
     /**
@@ -199,21 +181,5 @@ class ContentSecurityPolicy implements MultipleHeaderInterface
     public function toString()
     {
         return sprintf('%s: %s', $this->getFieldName(), $this->getFieldValue());
-    }
-
-    public function toStringMultipleHeaders(array $headers)
-    {
-        $strings = [$this->toString()];
-        foreach ($headers as $header) {
-            if (! $header instanceof ContentSecurityPolicy) {
-                throw new Exception\RuntimeException(
-                    'The ContentSecurityPolicy multiple header implementation can only'
-                    . ' accept an array of ContentSecurityPolicy headers'
-                );
-            }
-            $strings[] = $header->toString();
-        }
-
-        return implode("\r\n", $strings) . "\r\n";
     }
 }
