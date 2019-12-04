@@ -85,7 +85,7 @@ class ContentSecurityPolicy implements MultipleHeaderInterface
      *
      * @param string $name The directive name.
      * @param array $sources The source list.
-     * @return self
+     * @return $this
      * @throws Exception\InvalidArgumentException If the name is not a valid directive name.
      */
     public function setDirective($name, array $sources)
@@ -134,7 +134,7 @@ class ContentSecurityPolicy implements MultipleHeaderInterface
      * Create Content Security Policy header from a given header line
      *
      * @param string $headerLine The header line to parse.
-     * @return self
+     * @return static
      * @throws Exception\InvalidArgumentException If the name field in the given header line does not match.
      */
     public static function fromString($headerLine)
