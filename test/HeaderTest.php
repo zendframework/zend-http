@@ -134,6 +134,20 @@ class HeaderTest extends TestCase
      * @param string $class
      * @param string $name
      */
+    public function testSetZeroStringValueViaConstructor($class, $name)
+    {
+        $header = new $class('0');
+
+        self::assertSame('0', $header->getFieldValue());
+        self::assertSame($name . ': 0', $header->toString());
+    }
+
+    /**
+     * @dataProvider header
+     *
+     * @param string $class
+     * @param string $name
+     */
     public function testFromStringWithNumber($class, $name)
     {
         $header = $class::fromString($name . ': 100');
