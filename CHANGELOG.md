@@ -24,6 +24,8 @@ All notable changes to this project will be documented in this file, in reverse 
 
 - [#204](https://github.com/zendframework/zend-http/pull/204) fixes numerous header classes to cast field value to string (since `HeaderInterface::getFieldValue()` specifies a return value of a string).
 
+- [#182](https://github.com/zendframework/zend-http/pull/182) fixes detecting base uri in Request. Now `argv` is used only for CLI request as a fallback to detect script filename.
+
 ## 2.11.0 - 2019-12-03
 
 ### Added
