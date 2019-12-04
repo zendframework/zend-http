@@ -101,7 +101,7 @@ class Curl implements HttpAdapter, StreamInterface
      * Set the configuration array for the adapter
      *
      * @param  array|Traversable $options
-     * @return Curl
+     * @return $this
      * @throws AdapterException\InvalidArgumentException
      */
     public function setOptions($options = [])
@@ -168,7 +168,7 @@ class Curl implements HttpAdapter, StreamInterface
      *
      * @param  string|int $option
      * @param  mixed $value
-     * @return Curl
+     * @return $this
      */
     public function setCurlOption($option, $value)
     {
@@ -553,7 +553,7 @@ class Curl implements HttpAdapter, StreamInterface
      * Set output stream for the response
      *
      * @param resource $stream
-     * @return Curl
+     * @return $this
      */
     public function setOutputStream($stream)
     {

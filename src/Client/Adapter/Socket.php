@@ -143,7 +143,7 @@ class Socket implements HttpAdapter, StreamInterface
      *
      * @param  mixed $context Stream context or array of context options
      * @throws Exception\InvalidArgumentException
-     * @return Socket
+     * @return $this
      */
     public function setStreamContext($context)
     {
