@@ -490,9 +490,13 @@ class Request extends HttpRequest
             // Backtrack up the SCRIPT_FILENAME to find the portion
             // matching PHP_SELF.
 
-            $argv = $this->getServer()->get('argv', []);
-            if (isset($argv[0]) && strpos($filename, $argv[0]) === 0) {
-                $filename = substr($filename, strlen($argv[0]));
+            // Only for CLI requests argv[0] contains script filename
+            // @see https://www.php.net/manual/en/reserved.variables.server.php
+            if (PHP_SAPI === 'cli') {
+                $argv = $this->getServer()->get('argv', []);
+                if (isset($argv[0]) && is_string($argv[0]) && $argv[0] !== '' && strpos($filename, $argv[0]) === 0) {
+                    $filename = substr($filename, strlen($argv[0]));
+                }
             }
 
             $baseUrl  = '/';
