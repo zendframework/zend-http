@@ -16,6 +16,7 @@ class HeaderTest extends TestCase
     public function header()
     {
         // @codingStandardsIgnoreStart
+        yield Header\AcceptRanges::class            => [Header\AcceptRanges::class, 'Accept-Ranges'];
         yield Header\AuthenticationInfo::class      => [Header\AuthenticationInfo::class, 'Authentication-Info'];
         yield Header\Authorization::class           => [Header\Authorization::class, 'Authorization'];
         yield Header\ContentDisposition::class      => [Header\ContentDisposition::class, 'Content-Disposition'];
