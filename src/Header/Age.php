@@ -37,14 +37,12 @@ class Age implements HeaderInterface
             throw new Exception\InvalidArgumentException('Invalid header line for Age string: "' . $name . '"');
         }
 
-        $header = new static($value);
-
-        return $header;
+        return new static($value);
     }
 
     public function __construct($deltaSeconds = null)
     {
-        if ($deltaSeconds) {
+        if ($deltaSeconds !== null) {
             $this->setDeltaSeconds($deltaSeconds);
         }
     }
@@ -62,11 +60,11 @@ class Age implements HeaderInterface
     /**
      * Get header value (number of seconds)
      *
-     * @return int
+     * @return string
      */
     public function getFieldValue()
     {
-        return $this->getDeltaSeconds();
+        return (string) $this->getDeltaSeconds();
     }
 
     /**
