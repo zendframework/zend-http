@@ -86,7 +86,7 @@ class Cookie extends ArrayObject implements HeaderInterface
     /**
      * @param bool $encodeValue
      *
-     * @return self
+     * @return $this
      */
     public function setEncodeValue($encodeValue)
     {

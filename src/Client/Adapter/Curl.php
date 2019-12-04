@@ -42,7 +42,7 @@ class Curl implements HttpAdapter, StreamInterface
     /**
      * The curl session handle
      *
-     * @var null|resource
+     * @var resource|null
      */
     protected $curl;
 

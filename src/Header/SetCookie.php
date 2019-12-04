@@ -258,7 +258,7 @@ class SetCookie implements MultipleHeaderInterface
              ->setExpires($expires)
              ->setPath($path)
              ->setSecure($secure)
-             ->setHttponly($httponly)
+             ->setHttpOnly($httponly)
              ->setSameSite($sameSite);
     }
 
@@ -334,7 +334,7 @@ class SetCookie implements MultipleHeaderInterface
             $fieldValue .= '; Secure';
         }
 
-        if ($this->isHttpOnly()) {
+        if ($this->isHttponly()) {
             $fieldValue .= '; HttpOnly';
         }
 
@@ -347,7 +347,7 @@ class SetCookie implements MultipleHeaderInterface
     }
 
     /**
-     * @param  null|string|null $name
+     * @param  string|null $name
      * @return $this
      * @throws Exception\InvalidArgumentException
      */
@@ -359,7 +359,7 @@ class SetCookie implements MultipleHeaderInterface
     }
 
     /**
-     * @return null|string|null
+     * @return string|null
      */
     public function getName()
     {
@@ -367,7 +367,7 @@ class SetCookie implements MultipleHeaderInterface
     }
 
     /**
-     * @param  null|string $value
+     * @param  string|null $value
      * @return $this
      */
     public function setValue($value)
@@ -377,7 +377,7 @@ class SetCookie implements MultipleHeaderInterface
     }
 
     /**
-     * @return null|string|null
+     * @return string|null
      */
     public function getValue()
     {
@@ -385,7 +385,7 @@ class SetCookie implements MultipleHeaderInterface
     }
 
     /**
-     * @param  null|int|null $version
+     * @param  int|null $version
      * @return $this
      * @throws Exception\InvalidArgumentException
      */
@@ -399,7 +399,7 @@ class SetCookie implements MultipleHeaderInterface
     }
 
     /**
-     * @return null|int|null
+     * @return int|null
      */
     public function getVersion()
     {
@@ -407,7 +407,7 @@ class SetCookie implements MultipleHeaderInterface
     }
 
     /**
-     * @param  null|int $maxAge
+     * @param  int|null $maxAge
      * @return $this
      */
     public function setMaxAge($maxAge)
@@ -421,7 +421,7 @@ class SetCookie implements MultipleHeaderInterface
     }
 
     /**
-     * @return null|int|null
+     * @return int|null
      */
     public function getMaxAge()
     {
@@ -429,7 +429,7 @@ class SetCookie implements MultipleHeaderInterface
     }
 
     /**
-     * @param  null|int|string|DateTime|null $expires
+     * @param  int|string|DateTime|null $expires
      * @return $this
      * @throws Exception\InvalidArgumentException
      */
@@ -469,7 +469,7 @@ class SetCookie implements MultipleHeaderInterface
 
     /**
      * @param  bool $inSeconds
-     * @return null|int|string|null
+     * @return int|string|null
      */
     public function getExpires($inSeconds = false)
     {
@@ -483,7 +483,7 @@ class SetCookie implements MultipleHeaderInterface
     }
 
     /**
-     * @param  null|string $domain
+     * @param  string|null $domain
      * @return $this
      */
     public function setDomain($domain)
@@ -494,7 +494,7 @@ class SetCookie implements MultipleHeaderInterface
     }
 
     /**
-     * @return null|string|null
+     * @return string|null
      */
     public function getDomain()
     {
@@ -502,7 +502,7 @@ class SetCookie implements MultipleHeaderInterface
     }
 
     /**
-     * @param  null|string $path
+     * @param  string|null $path
      * @return $this
      */
     public function setPath($path)
@@ -513,7 +513,7 @@ class SetCookie implements MultipleHeaderInterface
     }
 
     /**
-     * @return null|string|null
+     * @return string|null
      */
     public function getPath()
     {
@@ -521,7 +521,7 @@ class SetCookie implements MultipleHeaderInterface
     }
 
     /**
-     * @param  null|bool $secure
+     * @param  bool|null $secure
      * @return $this
      */
     public function setSecure($secure)
@@ -546,7 +546,7 @@ class SetCookie implements MultipleHeaderInterface
     }
 
     /**
-     * @return null|bool|null
+     * @return bool|null
      */
     public function isSecure()
     {
@@ -554,7 +554,7 @@ class SetCookie implements MultipleHeaderInterface
     }
 
     /**
-     * @param  null|bool $httponly
+     * @param  bool|null $httponly
      * @return $this
      */
     public function setHttponly($httponly)
@@ -567,7 +567,7 @@ class SetCookie implements MultipleHeaderInterface
     }
 
     /**
-     * @return null|bool|null
+     * @return bool|null
      */
     public function isHttpOnly()
     {
@@ -579,7 +579,7 @@ class SetCookie implements MultipleHeaderInterface
      *
      * Always returns false if the cookie is a session cookie (has no expiry time)
      *
-     * @param null|int|null $now Timestamp to consider as "now"
+     * @param int|null $now Timestamp to consider as "now"
      * @return bool
      */
     public function isExpired($now = null)
