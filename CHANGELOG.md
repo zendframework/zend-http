@@ -44,7 +44,7 @@ All notable changes to this project will be documented in this file, in reverse 
 
 ### Fixed
 
-- Nothing.
+- [#204](https://github.com/zendframework/zend-http/pull/204) fixes numerous header classes to cast field value to string (since `HeaderInterface::getFieldValue()` specifies a return value of a string).
 
 ## 2.11.0 - 2019-12-03
 
