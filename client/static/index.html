@@ -302,7 +302,7 @@
 static HTTP client which exposes a simplified API for quickly performing one-off <code>GET</code>
 and <code>POST</code> operations.</p>
 <h2 id="quick-start">Quick Start</h2>
-<p> <pre class=codehilite><code class=language-php>use Zend\Http\ClientStatic;
+<pre class=codehilite><code class=language-php>use Zend\Http\ClientStatic;
 
 // Simple GET request
 $response = ClientStatic::get('http://example.org');
@@ -323,27 +323,27 @@ $response = ClientStatic::post(
         'username' =&gt; 'foo',
         'password' =&gt; 'bar',
     ]
-);</code></pre></p>
+);</code></pre>
 <h2 id="available-methods">Available Methods</h2>
 <h3>get()</h3>
-<p> <pre class=codehilite><code class=language-php>get(
+<pre class=codehilite><code class=language-php>get(
     string $url,
     array $query = [],
     array $headers = [],
     mixed $body = null,
     $clientOptions = null
-) : Response</code></pre></p>
+) : Response</code></pre>
 <p>Perform an HTTP <code>GET</code> request using the provided URL, query string variables,
 headers, and request body. The fifth parameter can be used to pass configuration
 options to the HTTP client instance.</p>
 <h3>post()</h3>
-<p> <pre class=codehilite><code class=language-php>post(
+<pre class=codehilite><code class=language-php>post(
     string $url,
     array $params,
     array $headers = [],
     mixed $body = null,
     $clientOptions = null
-) : Response</code></pre></p>
+) : Response</code></pre>
 <p>Perform an HTTP <code>POST</code> request using the provided URL, parameters, headers, and
 request body. The fifth parameter can be used to pass configuration options to
 the HTTP client instance.</p>

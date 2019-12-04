@@ -318,22 +318,22 @@ relevant cookies.</p>
 <h2 id="usage">Usage</h2>
 <p><code>Cookies</code> is an extension of <code>Zend\Http\Headers</code>, and inherits its methods. It
 can be instantiated without any arguments.</p>
-<p> <pre class=codehilite><code class=language-php>use Zend\Http\Cookies;
+<pre class=codehilite><code class=language-php>use Zend\Http\Cookies;
 
-$cookies = new Cookies();</code></pre></p>
+$cookies = new Cookies();</code></pre>
 <p>On your first client request, you likely won't have any cookies, so the
 instance does nothing.</p>
 <p>Once you've made your first request, you can start using it. Populate it from
 the response:</p>
-<p> <pre class=codehilite><code class=language-php>$response = $client-&gt;send();
+<pre class=codehilite><code class=language-php>$response = $client-&gt;send();
 
-$cookies-&gt;addCookiesFromResponse($response, $client-&gt;getUri());</code></pre></p>
+$cookies-&gt;addCookiesFromResponse($response, $client-&gt;getUri());</code></pre>
 <p>Alternately, you can create your initial <code>Cookies</code> instance using the static <code>fromResponse()</code> method:</p>
-<p> <pre class=codehilite><code class=language-php>$cookies = Cookies::fromResponse($response, $client-&gt;getUri());</code></pre></p>
+<pre class=codehilite><code class=language-php>$cookies = Cookies::fromResponse($response, $client-&gt;getUri());</code></pre>
 <p>On subsequent requests, we'll notify the client of our cookies. To do this, we
 should use the same URI we'll use for the request.</p>
-<p> <pre class=codehilite><code class=language-php>$client-&gt;setUri($uri);
-$client-&gt;setCookies($cookies-&gt;getMatchingCookies($uri));</code></pre></p>
+<pre class=codehilite><code class=language-php>$client-&gt;setUri($uri);
+$client-&gt;setCookies($cookies-&gt;getMatchingCookies($uri));</code></pre>
 <p>After the request, don't forget to add any cookies returned!</p>
 <p>Essentially, <code>Cookies</code> aggregates all cookies for our client interactions, and
 allows us to send only those relevant to a given request.</p>
@@ -342,12 +342,12 @@ allows us to send only those relevant to a given request.</p>
 invocations &mdash; you will need to serialize them. <code>Zend\Http\Cookies</code>
 provides this functionality via the <code>getAllCookies()</code> method.</p>
 <p>If your cache storage allows array structures, use the <code>COOKIE_STRING_ARRAY</code> constant:</p>
-<p> <pre class=codehilite><code class=language-php>$cookiesToCache = $cookies-&gt;getAllCookies($cookies::COOKIE_STRING_ARRAY);</code></pre></p>
+<pre class=codehilite><code class=language-php>$cookiesToCache = $cookies-&gt;getAllCookies($cookies::COOKIE_STRING_ARRAY);</code></pre>
 <p>If your cache storage only allows string values, use <code>COOKIE_STRING_CONCAT</code>:</p>
-<p> <pre class=codehilite><code class=language-php>$cookiesToCache = $cookies-&gt;getAllCookies($cookies::COOKIE_STRING_CONCAT);</code></pre></p>
+<pre class=codehilite><code class=language-php>$cookiesToCache = $cookies-&gt;getAllCookies($cookies::COOKIE_STRING_CONCAT);</code></pre>
 <p>When you retrieve the value later, you can test its type to determine how to
 deserialize the values:</p>
-<p> <pre class=codehilite><code class=language-php>use Zend\Http\Cookies;
+<pre class=codehilite><code class=language-php>use Zend\Http\Cookies;
 use Zend\Http\Headers;
 
 $cookies = new Cookies();
@@ -360,7 +360,7 @@ if (is_array($cachedCookies)) {
     foreach (Headers::fromString($cachedCookies) as $cookie) {
         $cookies-&gt;addCookie($cookie);
     }
-}</code></pre></p>
+}</code></pre>
 <h2 id="public-methods">Public methods</h2>
 <p>Besides the methods demonstrated in the examples, <code>Zend\Http\Cookies</code> defines the following:</p>
 <div class="table-responsive"><table>
