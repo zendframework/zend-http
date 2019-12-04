@@ -39,7 +39,6 @@ class FeaturePolicy implements HeaderInterface
         'midi',
         'payment',
         'picture-in-picture',
-        'picture-in-picture',
         'sync-xhr',
         'usb',
         'wake-lock',
