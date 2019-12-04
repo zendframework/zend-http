@@ -69,7 +69,7 @@ class ContentType implements HeaderInterface
 
     public function __construct($value = null, $mediaType = null)
     {
-        if ($value) {
+        if ($value !== null) {
             HeaderValue::assertValid($value);
             $this->value = $value;
         }
@@ -146,7 +146,7 @@ class ContentType implements HeaderInterface
     public function getFieldValue()
     {
         if (null !== $this->value) {
-            return $this->value;
+            return (string) $this->value;
         }
         return $this->assembleValue();
     }
@@ -172,7 +172,7 @@ class ContentType implements HeaderInterface
      */
     public function getMediaType()
     {
-        return $this->mediaType;
+        return (string) $this->mediaType;
     }
 
     /**
