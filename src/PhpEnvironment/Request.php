@@ -493,7 +493,7 @@ class Request extends HttpRequest
             // @see https://www.php.net/manual/en/reserved.variables.server.php
             if (PHP_SAPI === 'cli') {
                 $argv = $this->getServer()->get('argv', []);
-                if (strpos($filename, $argv[0]) === 0) {
+                if (isset($argv[0]) && is_string($argv[0]) && $argv[0] !== '' && strpos($filename, $argv[0]) === 0) {
                     $filename = substr($filename, strlen($argv[0]));
                 }
             }
