@@ -39,7 +39,7 @@ abstract class AbstractMessage extends Message
      * (AbstractMessage::VERSION_10, AbstractMessage::VERSION_11, AbstractMessage::VERSION_2)
      *
      * @param  string $version (Must be 1.0, 1.1 or 2)
-     * @return AbstractMessage
+     * @return $this
      * @throws Exception\InvalidArgumentException
      */
     public function setVersion($version)
@@ -69,7 +69,7 @@ abstract class AbstractMessage extends Message
      *
      * @see    getHeaders()
      * @param  Headers $headers
-     * @return AbstractMessage
+     * @return $this
      */
     public function setHeaders(Headers $headers)
     {

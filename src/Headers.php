@@ -46,7 +46,7 @@ class Headers implements Countable, Iterator
      * will be lazy loaded)
      *
      * @param  string $string
-     * @return Headers
+     * @return static
      * @throws Exception\RuntimeException
      */
     public static function fromString($string)
@@ -109,8 +109,8 @@ class Headers implements Countable, Iterator
     /**
      * Set an alternate implementation for the PluginClassLoader
      *
-     * @param \Zend\Loader\PluginClassLocator $pluginClassLoader
-     * @return Headers
+     * @param PluginClassLocator $pluginClassLoader
+     * @return $this
      */
     public function setPluginClassLoader(PluginClassLocator $pluginClassLoader)
     {
@@ -137,7 +137,7 @@ class Headers implements Countable, Iterator
      * Expects an array (or Traversable object) of type/value pairs.
      *
      * @param  array|Traversable $headers
-     * @return Headers
+     * @return $this
      * @throws Exception\InvalidArgumentException
      */
     public function addHeaders($headers)
@@ -177,7 +177,7 @@ class Headers implements Countable, Iterator
      * @throws Exception\InvalidArgumentException
      * @param string $headerFieldNameOrLine
      * @param string $fieldValue optional
-     * @return Headers
+     * @return $this
      */
     public function addHeaderLine($headerFieldNameOrLine, $fieldValue = null)
     {
@@ -209,7 +209,7 @@ class Headers implements Countable, Iterator
      * Add a Header to this container, for raw values @see addHeaderLine() and addHeaders()
      *
      * @param  Header\HeaderInterface $header
-     * @return Headers
+     * @return $this
      */
     public function addHeader(Header\HeaderInterface $header)
     {
@@ -261,7 +261,7 @@ class Headers implements Countable, Iterator
      *
      * Removes all headers from queue
      *
-     * @return Headers
+     * @return $this
      */
     public function clearHeaders()
     {
