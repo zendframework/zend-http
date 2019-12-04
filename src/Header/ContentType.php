@@ -34,7 +34,7 @@ class ContentType implements HeaderInterface
      * Factory method: create an object from a string representation
      *
      * @param  string $headerLine
-     * @return self
+     * @return static
      */
     public static function fromString($headerLine)
     {
@@ -155,7 +155,7 @@ class ContentType implements HeaderInterface
      * Set the media type
      *
      * @param  string $mediaType
-     * @return self
+     * @return $this
      */
     public function setMediaType($mediaType)
     {
@@ -179,7 +179,7 @@ class ContentType implements HeaderInterface
      * Set additional content-type parameters
      *
      * @param  array $parameters
-     * @return self
+     * @return $this
      */
     public function setParameters(array $parameters)
     {
@@ -206,7 +206,7 @@ class ContentType implements HeaderInterface
      * Set the content-type character set encoding
      *
      * @param  string $charset
-     * @return self
+     * @return $this
      */
     public function setCharset($charset)
     {

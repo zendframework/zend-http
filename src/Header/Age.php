@@ -25,7 +25,7 @@ class Age implements HeaderInterface
      * Create Age header from string
      *
      * @param string $headerLine
-     * @return Age
+     * @return static
      * @throws Exception\InvalidArgumentException
      */
     public static function fromString($headerLine)
@@ -73,7 +73,7 @@ class Age implements HeaderInterface
      * Set number of seconds
      *
      * @param int $delta
-     * @return RetryAfter
+     * @return $this
      */
     public function setDeltaSeconds($delta)
     {
