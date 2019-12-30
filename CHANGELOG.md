@@ -44,7 +44,7 @@ All notable changes to this project will be documented in this file, in reverse 
 
 ### Fixed
 
-- Nothing.
+- fixes case sensitivity for SameSite directive.
 
 ## 2.11.1 - 2019-12-04
 

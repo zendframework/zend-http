@@ -251,15 +251,15 @@ class SetCookie implements MultipleHeaderInterface
         $this->type = 'Cookie';
 
         $this->setName($name)
-             ->setValue($value)
-             ->setVersion($version)
-             ->setMaxAge($maxAge)
-             ->setDomain($domain)
-             ->setExpires($expires)
-             ->setPath($path)
-             ->setSecure($secure)
-             ->setHttpOnly($httponly)
-             ->setSameSite($sameSite);
+            ->setValue($value)
+            ->setVersion($version)
+            ->setMaxAge($maxAge)
+            ->setDomain($domain)
+            ->setExpires($expires)
+            ->setPath($path)
+            ->setSecure($secure)
+            ->setHttpOnly($httponly)
+            ->setSameSite($sameSite);
     }
 
     /**
@@ -337,7 +337,8 @@ class SetCookie implements MultipleHeaderInterface
         }
 
         $sameSite = $this->getSameSite();
-        if ($sameSite !== null && in_array($sameSite, self::SAME_SITE_ALLOWED_VALUES, true)) {
+        if ($sameSite !== null
+            && in_array(strtolower($sameSite), array_map('strtolower', self::SAME_SITE_ALLOWED_VALUES), true)) {
             $fieldValue .= '; SameSite=' . $sameSite;
         }
 
@@ -618,7 +619,8 @@ class SetCookie implements MultipleHeaderInterface
      */
     public function setSameSite($sameSite)
     {
-        if ($sameSite !== null && ! in_array($sameSite, self::SAME_SITE_ALLOWED_VALUES, true)) {
+        if ($sameSite !== null
+            && ! in_array(strtolower($sameSite), array_map('strtolower', self::SAME_SITE_ALLOWED_VALUES), true)) {
             throw new Exception\InvalidArgumentException(sprintf(
                 'Invalid value provided for SameSite directive: "%s"; expected one of: Strict, Lax or None',
                 is_scalar($sameSite) ? $sameSite : gettype($sameSite)
