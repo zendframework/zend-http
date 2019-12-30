@@ -14,6 +14,9 @@ use Zend\Http\Header\HeaderInterface;
 use Zend\Http\Header\MultipleHeaderInterface;
 use Zend\Http\Header\SetCookie;
 
+use function strtolower;
+use function strtoupper;
+
 class SetCookieTest extends TestCase
 {
     /**
@@ -147,33 +150,11 @@ class SetCookieTest extends TestCase
         );
         $this->assertEquals(SetCookie::SAME_SITE_STRICT, $setCookieHeader->getSameSite());
 
-        $setCookieHeader = new SetCookie(
-            'myname',
-            'myvalue',
-            'Wed, 13-Jan-2021 22:23:01 GMT',
-            '/accounts',
-            'docs.foo.com',
-            true,
-            true,
-            99,
-            9,
-            strtolower(SetCookie::SAME_SITE_STRICT)
-        );
-        $this->assertEquals(SetCookie::SAME_SITE_STRICT, $setCookieHeader->getSameSite());
+        $setCookieHeader->setSameSite(strtolower(SetCookie::SAME_SITE_LAX));
+        $this->assertEquals(SetCookie::SAME_SITE_LAX, $setCookieHeader->getSameSite());
 
-        $setCookieHeader = new SetCookie(
-            'myname',
-            'myvalue',
-            'Wed, 13-Jan-2021 22:23:01 GMT',
-            '/accounts',
-            'docs.foo.com',
-            true,
-            true,
-            99,
-            9,
-            strtoupper(SetCookie::SAME_SITE_STRICT)
-        );
-        $this->assertEquals(SetCookie::SAME_SITE_STRICT, $setCookieHeader->getSameSite());
+        $setCookieHeader->setSameSite(strtoupper(SetCookie::SAME_SITE_NONE));
+        $this->assertEquals(SetCookie::SAME_SITE_NONE, $setCookieHeader->getSameSite());
     }
 
     public function testSetCookieFromStringWithQuotedValue()
