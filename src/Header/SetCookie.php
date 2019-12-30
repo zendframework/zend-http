@@ -46,7 +46,7 @@ class SetCookie implements MultipleHeaderInterface
     const SAME_SITE_ALLOWED_VALUES = [
         'strict' => self::SAME_SITE_STRICT,
         'lax' => self::SAME_SITE_LAX,
-        'none' => self::SAME_SITE_NONE
+        'none' => self::SAME_SITE_NONE,
     ];
 
     /**
