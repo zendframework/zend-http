@@ -131,6 +131,51 @@ class SetCookieTest extends TestCase
         $setCookieHeader->setSameSite('InvalidValue');
     }
 
+    public function testSameSiteGetterReturnsCanonicalValue()
+    {
+        $setCookieHeader = new SetCookie(
+            'myname',
+            'myvalue',
+            'Wed, 13-Jan-2021 22:23:01 GMT',
+            '/accounts',
+            'docs.foo.com',
+            true,
+            true,
+            99,
+            9,
+            SetCookie::SAME_SITE_STRICT
+        );
+        $this->assertEquals(SetCookie::SAME_SITE_STRICT, $setCookieHeader->getSameSite());
+
+        $setCookieHeader = new SetCookie(
+            'myname',
+            'myvalue',
+            'Wed, 13-Jan-2021 22:23:01 GMT',
+            '/accounts',
+            'docs.foo.com',
+            true,
+            true,
+            99,
+            9,
+            strtolower(SetCookie::SAME_SITE_STRICT)
+        );
+        $this->assertEquals(SetCookie::SAME_SITE_STRICT, $setCookieHeader->getSameSite());
+
+        $setCookieHeader = new SetCookie(
+            'myname',
+            'myvalue',
+            'Wed, 13-Jan-2021 22:23:01 GMT',
+            '/accounts',
+            'docs.foo.com',
+            true,
+            true,
+            99,
+            9,
+            strtoupper(SetCookie::SAME_SITE_STRICT)
+        );
+        $this->assertEquals(SetCookie::SAME_SITE_STRICT, $setCookieHeader->getSameSite());
+    }
+
     public function testSetCookieFromStringWithQuotedValue()
     {
         $setCookieHeader = SetCookie::fromString('Set-Cookie: myname="quotedValue"');
