@@ -14,6 +14,9 @@ use Zend\Http\Header\HeaderInterface;
 use Zend\Http\Header\MultipleHeaderInterface;
 use Zend\Http\Header\SetCookie;
 
+use function strtolower;
+use function strtoupper;
+
 class SetCookieTest extends TestCase
 {
     /**
@@ -69,6 +72,32 @@ class SetCookieTest extends TestCase
         $this->assertEquals('Strict', $setCookieHeader->getSameSite());
     }
 
+    public function testSetCookieConstructorWithSameSiteCaseInsensitive()
+    {
+        $setCookieHeader = new SetCookie(
+            'myname',
+            'myvalue',
+            'Wed, 13-Jan-2021 22:23:01 GMT',
+            '/accounts',
+            'docs.foo.com',
+            true,
+            true,
+            99,
+            9,
+            strtolower(SetCookie::SAME_SITE_STRICT)
+        );
+        $this->assertEquals('myname', $setCookieHeader->getName());
+        $this->assertEquals('myvalue', $setCookieHeader->getValue());
+        $this->assertEquals('Wed, 13-Jan-2021 22:23:01 GMT', $setCookieHeader->getExpires());
+        $this->assertEquals('/accounts', $setCookieHeader->getPath());
+        $this->assertEquals('docs.foo.com', $setCookieHeader->getDomain());
+        $this->assertTrue($setCookieHeader->isSecure());
+        $this->assertTrue($setCookieHeader->isHttpOnly());
+        $this->assertEquals(99, $setCookieHeader->getMaxAge());
+        $this->assertEquals(9, $setCookieHeader->getVersion());
+        $this->assertEquals(SetCookie::SAME_SITE_STRICT, $setCookieHeader->getSameSite());
+    }
+
     public function testSetCookieWithInvalidSameSiteValueThrowException()
     {
         $this->expectException(InvalidArgumentException::class);
@@ -103,6 +132,29 @@ class SetCookieTest extends TestCase
 
         $this->expectException(InvalidArgumentException::class);
         $setCookieHeader->setSameSite('InvalidValue');
+    }
+
+    public function testSameSiteGetterReturnsCanonicalValue()
+    {
+        $setCookieHeader = new SetCookie(
+            'myname',
+            'myvalue',
+            'Wed, 13-Jan-2021 22:23:01 GMT',
+            '/accounts',
+            'docs.foo.com',
+            true,
+            true,
+            99,
+            9,
+            SetCookie::SAME_SITE_STRICT
+        );
+        $this->assertEquals(SetCookie::SAME_SITE_STRICT, $setCookieHeader->getSameSite());
+
+        $setCookieHeader->setSameSite(strtolower(SetCookie::SAME_SITE_LAX));
+        $this->assertEquals(SetCookie::SAME_SITE_LAX, $setCookieHeader->getSameSite());
+
+        $setCookieHeader->setSameSite(strtoupper(SetCookie::SAME_SITE_NONE));
+        $this->assertEquals(SetCookie::SAME_SITE_NONE, $setCookieHeader->getSameSite());
     }
 
     public function testSetCookieFromStringWithQuotedValue()
@@ -161,6 +213,39 @@ class SetCookieTest extends TestCase
         $this->assertTrue($setCookieHeader->isSecure());
         $this->assertTrue($setCookieHeader->isHttponly());
         $this->assertEquals(setCookie::SAME_SITE_STRICT, $setCookieHeader->getSameSite());
+
+        $setCookieHeader = SetCookie::fromString(
+            'set-cookie: myname=myvalue; Domain=docs.foo.com; Path=/accounts;'
+            . 'Expires=Wed, 13-Jan-2021 22:23:01 GMT; Secure; HttpOnly; SameSite=strict'
+        );
+        $this->assertInstanceOf(MultipleHeaderInterface::class, $setCookieHeader);
+        $this->assertEquals('myname', $setCookieHeader->getName());
+        $this->assertEquals('myvalue', $setCookieHeader->getValue());
+        $this->assertEquals('docs.foo.com', $setCookieHeader->getDomain());
+        $this->assertEquals('/accounts', $setCookieHeader->getPath());
+        $this->assertEquals('Wed, 13-Jan-2021 22:23:01 GMT', $setCookieHeader->getExpires());
+        $this->assertTrue($setCookieHeader->isSecure());
+        $this->assertTrue($setCookieHeader->isHttponly());
+        $this->assertEquals(setCookie::SAME_SITE_STRICT, $setCookieHeader->getSameSite());
+    }
+
+    public function testFieldValueWithSameSiteCaseInsensitive()
+    {
+        $setCookieHeader = SetCookie::fromString(
+            'set-cookie: myname=myvalue; SameSite=Strict'
+        );
+        $this->assertEquals(
+            'myname=myvalue; SameSite=Strict',
+            $setCookieHeader->getFieldValue()
+        );
+
+        $setCookieHeader = SetCookie::fromString(
+            'set-cookie: myname=myvalue; SameSite=strict'
+        );
+        $this->assertEquals(
+            'myname=myvalue; SameSite=Strict',
+            $setCookieHeader->getFieldValue()
+        );
     }
 
     public function testSetCookieFromStringCanCreateMultipleHeaders()

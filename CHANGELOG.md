@@ -24,7 +24,7 @@ All notable changes to this project will be documented in this file, in reverse 
 
 - Nothing.
 
-## 2.11.2 - TBD
+## 2.11.2 - 2019-12-30
 
 ### Added
 
@@ -44,7 +44,7 @@ All notable changes to this project will be documented in this file, in reverse 
 
 ### Fixed
 
-- Nothing.
+- [#207](https://github.com/zendframework/zend-http/pull/207) fixes case sensitivity for SameSite directive.
 
 ## 2.11.1 - 2019-12-04
 

@@ -10,6 +10,11 @@ namespace Zend\Http\Header;
 use DateTime;
 use Zend\Uri\UriFactory;
 
+use function array_key_exists;
+use function gettype;
+use function is_scalar;
+use function strtolower;
+
 /**
  * @throws Exception\InvalidArgumentException
  * @see http://www.ietf.org/rfc/rfc2109.txt
@@ -39,9 +44,9 @@ class SetCookie implements MultipleHeaderInterface
      * @internal
      */
     const SAME_SITE_ALLOWED_VALUES = [
-        self::SAME_SITE_STRICT,
-        self::SAME_SITE_LAX,
-        self::SAME_SITE_NONE,
+        'strict' => self::SAME_SITE_STRICT,
+        'lax' => self::SAME_SITE_LAX,
+        'none' => self::SAME_SITE_NONE,
     ];
 
     /**
@@ -337,7 +342,7 @@ class SetCookie implements MultipleHeaderInterface
         }
 
         $sameSite = $this->getSameSite();
-        if ($sameSite !== null && in_array($sameSite, self::SAME_SITE_ALLOWED_VALUES, true)) {
+        if ($sameSite !== null && array_key_exists(strtolower($sameSite), self::SAME_SITE_ALLOWED_VALUES)) {
             $fieldValue .= '; SameSite=' . $sameSite;
         }
 
@@ -618,13 +623,17 @@ class SetCookie implements MultipleHeaderInterface
      */
     public function setSameSite($sameSite)
     {
-        if ($sameSite !== null && ! in_array($sameSite, self::SAME_SITE_ALLOWED_VALUES, true)) {
+        if ($sameSite === null) {
+            $this->sameSite = null;
+            return $this;
+        }
+        if (! array_key_exists(strtolower($sameSite), self::SAME_SITE_ALLOWED_VALUES)) {
             throw new Exception\InvalidArgumentException(sprintf(
                 'Invalid value provided for SameSite directive: "%s"; expected one of: Strict, Lax or None',
                 is_scalar($sameSite) ? $sameSite : gettype($sameSite)
             ));
         }
-        $this->sameSite = $sameSite;
+        $this->sameSite = self::SAME_SITE_ALLOWED_VALUES[strtolower($sameSite)];
         return $this;
     }
 
