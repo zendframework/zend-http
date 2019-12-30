@@ -22,7 +22,7 @@ All notable changes to this project will be documented in this file, in reverse 
 
 ### Fixed
 
-- fixes case sensitivity for SameSite directive.
+- [#207](https://github.com/zendframework/zend-http/pull/207) fixes case sensitivity for SameSite directive.
 
 ## 2.11.1 - 2019-12-04
 
