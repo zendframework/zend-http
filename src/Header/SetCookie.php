@@ -39,9 +39,9 @@ class SetCookie implements MultipleHeaderInterface
      * @internal
      */
     const SAME_SITE_ALLOWED_VALUES = [
-        'strict',
-        'lax',
-        'none',
+        'strict' => self::SAME_SITE_STRICT,
+        'lax' => self::SAME_SITE_LAX,
+        'none' => self::SAME_SITE_NONE
     ];
 
     /**
@@ -337,7 +337,7 @@ class SetCookie implements MultipleHeaderInterface
         }
 
         $sameSite = $this->getSameSite();
-        if ($sameSite !== null && in_array(strtolower($sameSite), self::SAME_SITE_ALLOWED_VALUES, true)) {
+        if ($sameSite !== null && array_key_exists(strtolower($sameSite), self::SAME_SITE_ALLOWED_VALUES)) {
             $fieldValue .= '; SameSite=' . $sameSite;
         }
 
@@ -618,13 +618,18 @@ class SetCookie implements MultipleHeaderInterface
      */
     public function setSameSite($sameSite)
     {
-        if ($sameSite !== null && ! in_array(strtolower($sameSite), self::SAME_SITE_ALLOWED_VALUES, true)) {
-            throw new Exception\InvalidArgumentException(sprintf(
-                'Invalid value provided for SameSite directive: "%s"; expected one of: Strict, Lax or None',
-                is_scalar($sameSite) ? $sameSite : gettype($sameSite)
-            ));
+        if ($sameSite !== null) {
+            if (array_key_exists(strtolower($sameSite), self::SAME_SITE_ALLOWED_VALUES)) {
+                $this->sameSite = self::SAME_SITE_ALLOWED_VALUES[strtolower($sameSite)];
+            } else {
+                throw new Exception\InvalidArgumentException(sprintf(
+                    'Invalid value provided for SameSite directive: "%s"; expected one of: Strict, Lax or None',
+                    is_scalar($sameSite) ? $sameSite : gettype($sameSite)
+                ));
+            }
+        } else {
+            $this->sameSite = $sameSite;
         }
-        $this->sameSite = $sameSite;
         return $this;
     }
 
