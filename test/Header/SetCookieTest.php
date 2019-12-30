@@ -92,7 +92,7 @@ class SetCookieTest extends TestCase
         $this->assertTrue($setCookieHeader->isHttpOnly());
         $this->assertEquals(99, $setCookieHeader->getMaxAge());
         $this->assertEquals(9, $setCookieHeader->getVersion());
-        $this->assertEquals(strtolower(SetCookie::SAME_SITE_STRICT), $setCookieHeader->getSameSite());
+        $this->assertEquals(SetCookie::SAME_SITE_STRICT, $setCookieHeader->getSameSite());
     }
 
     public function testSetCookieWithInvalidSameSiteValueThrowException()
@@ -200,7 +200,7 @@ class SetCookieTest extends TestCase
         $this->assertEquals('Wed, 13-Jan-2021 22:23:01 GMT', $setCookieHeader->getExpires());
         $this->assertTrue($setCookieHeader->isSecure());
         $this->assertTrue($setCookieHeader->isHttponly());
-        $this->assertEquals(strtolower(setCookie::SAME_SITE_STRICT), $setCookieHeader->getSameSite());
+        $this->assertEquals(setCookie::SAME_SITE_STRICT, $setCookieHeader->getSameSite());
     }
 
     public function testFieldValueWithSameSiteCaseInsensitive()
@@ -217,7 +217,7 @@ class SetCookieTest extends TestCase
             'set-cookie: myname=myvalue; SameSite=strict'
         );
         $this->assertEquals(
-            'myname=myvalue; SameSite=strict',
+            'myname=myvalue; SameSite=Strict',
             $setCookieHeader->getFieldValue()
         );
     }
