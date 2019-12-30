@@ -187,11 +187,6 @@ class SetCookieTest extends TestCase
         $this->assertTrue($setCookieHeader->isSecure());
         $this->assertTrue($setCookieHeader->isHttponly());
         $this->assertEquals(setCookie::SAME_SITE_STRICT, $setCookieHeader->getSameSite());
-        $this->assertEquals(
-            'myname=myvalue; Expires=Wed, 13-Jan-2021 22:23:01 GMT; Domain=docs.foo.com; '
-            . 'Path=/accounts; Secure; HttpOnly; SameSite=Strict',
-            $setCookieHeader->getFieldValue()
-        );
 
         $setCookieHeader = SetCookie::fromString(
             'set-cookie: myname=myvalue; Domain=docs.foo.com; Path=/accounts;'
@@ -206,9 +201,22 @@ class SetCookieTest extends TestCase
         $this->assertTrue($setCookieHeader->isSecure());
         $this->assertTrue($setCookieHeader->isHttponly());
         $this->assertEquals(strtolower(setCookie::SAME_SITE_STRICT), $setCookieHeader->getSameSite());
+    }
+
+    public function testFieldValueWithSameSiteCaseInsensitive() {
+        $setCookieHeader = SetCookie::fromString(
+            'set-cookie: myname=myvalue; SameSite=Strict'
+        );
         $this->assertEquals(
-            'myname=myvalue; Expires=Wed, 13-Jan-2021 22:23:01 GMT; Domain=docs.foo.com; '
-            . 'Path=/accounts; Secure; HttpOnly; SameSite=strict',
+            'myname=myvalue; SameSite=Strict',
+            $setCookieHeader->getFieldValue()
+        );
+
+        $setCookieHeader = SetCookie::fromString(
+            'set-cookie: myname=myvalue; SameSite=strict'
+        );
+        $this->assertEquals(
+            'myname=myvalue; SameSite=strict',
             $setCookieHeader->getFieldValue()
         );
     }
