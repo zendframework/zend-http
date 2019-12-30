@@ -10,6 +10,11 @@ namespace Zend\Http\Header;
 use DateTime;
 use Zend\Uri\UriFactory;
 
+use function array_key_exists;
+use function gettype;
+use function is_scalar;
+use function strtolower;
+
 /**
  * @throws Exception\InvalidArgumentException
  * @see http://www.ietf.org/rfc/rfc2109.txt
