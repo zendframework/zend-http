@@ -203,7 +203,8 @@ class SetCookieTest extends TestCase
         $this->assertEquals(strtolower(setCookie::SAME_SITE_STRICT), $setCookieHeader->getSameSite());
     }
 
-    public function testFieldValueWithSameSiteCaseInsensitive() {
+    public function testFieldValueWithSameSiteCaseInsensitive()
+    {
         $setCookieHeader = SetCookie::fromString(
             'set-cookie: myname=myvalue; SameSite=Strict'
         );
