@@ -618,18 +618,17 @@ class SetCookie implements MultipleHeaderInterface
      */
     public function setSameSite($sameSite)
     {
-        if ($sameSite !== null) {
-            if (array_key_exists(strtolower($sameSite), self::SAME_SITE_ALLOWED_VALUES)) {
-                $this->sameSite = self::SAME_SITE_ALLOWED_VALUES[strtolower($sameSite)];
-            } else {
-                throw new Exception\InvalidArgumentException(sprintf(
-                    'Invalid value provided for SameSite directive: "%s"; expected one of: Strict, Lax or None',
-                    is_scalar($sameSite) ? $sameSite : gettype($sameSite)
-                ));
-            }
-        } else {
-            $this->sameSite = $sameSite;
+        if ($sameSite === null) {
+            $this->sameSite = null;
+            return $this;
         }
+        if (! array_key_exists(strtolower($sameSite), self::SAME_SITE_ALLOWED_VALUES)) {
+            throw new Exception\InvalidArgumentException(sprintf(
+                'Invalid value provided for SameSite directive: "%s"; expected one of: Strict, Lax or None',
+                is_scalar($sameSite) ? $sameSite : gettype($sameSite)
+            ));
+        }
+        $this->sameSite = self::SAME_SITE_ALLOWED_VALUES[strtolower($sameSite)];
         return $this;
     }
 
