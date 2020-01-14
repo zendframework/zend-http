@@ -61,7 +61,7 @@ class Test implements AdapterInterface
      * Set the nextRequestWillFail flag
      *
      * @param  bool $flag
-     * @return \Zend\Http\Client\Adapter\Test
+     * @return self
      */
     public function setNextRequestWillFail($flag)
     {

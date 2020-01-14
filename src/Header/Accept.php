@@ -51,7 +51,9 @@ class Accept extends AbstractAccept
      */
     public function addMediaType($type, $priority = 1, array $params = [])
     {
-        return $this->addType($type, $priority, $params);
+        $this->addType($type, $priority, $params);
+
+        return $this;
     }
 
     /**

@@ -186,14 +186,13 @@ class CacheControl implements HeaderInterface
         switch (static::match(['[a-zA-Z][a-zA-Z_-]*'], $value, $lastMatch)) {
             case 0:
                 $directive = $lastMatch;
-                goto state_value;
+                break;
                 // intentional fall-through
 
             default:
                 throw new Exception\InvalidArgumentException('expected DIRECTIVE');
         }
 
-        state_value:
         switch (static::match(['="[^"]*"', '=[^",\s;]*'], $value, $lastMatch)) {
             case 0:
                 $directives[$directive] = substr($lastMatch, 2, -1);

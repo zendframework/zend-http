@@ -94,6 +94,7 @@ class RemoteAddress
      */
     public function getIpAddress()
     {
+        /** @var string|false $ip */
         $ip = $this->getIpAddressFromProxy();
         if ($ip) {
             return $ip;
@@ -111,7 +112,7 @@ class RemoteAddress
      * Attempt to get the IP address for a proxied client
      *
      * @see http://tools.ietf.org/html/draft-ietf-appsawg-http-forwarded-10#section-5.2
-     * @return false|string
+     * @return bool|string
      */
     protected function getIpAddressFromProxy()
     {
@@ -131,6 +132,7 @@ class RemoteAddress
         // trim, so we can compare against trusted proxies properly
         $ips = array_map('trim', $ips);
         // remove trusted proxy IPs
+        /** @var string[] $ips */
         $ips = array_diff($ips, $this->trustedProxies);
 
         // Any left?

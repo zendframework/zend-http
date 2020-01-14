@@ -7,6 +7,8 @@
 
 namespace Zend\Http;
 
+use Traversable;
+
 /**
  * Http static client
  */
@@ -20,7 +22,7 @@ class ClientStatic
     /**
      * Get the static HTTP client
      *
-     * @param array|Traversable $options
+     * @param array|Traversable|null $options
      * @return Client
      */
     protected static function getStaticClient($options = null)
@@ -56,7 +58,9 @@ class ClientStatic
         }
 
         if (! empty($headers) && is_array($headers)) {
-            $request->getHeaders()->addHeaders($headers);
+            /** @var Headers $requestHeaders */
+            $requestHeaders = $request->getHeaders();
+            $requestHeaders->addHeaders($headers);
         }
 
         if (! empty($body)) {
@@ -98,7 +102,9 @@ class ClientStatic
         }
 
         if (! empty($headers) && is_array($headers)) {
-            $request->getHeaders()->addHeaders($headers);
+            /** @var Headers $requestHeaders */
+            $requestHeaders = $request->getHeaders();
+            $requestHeaders->addHeaders($headers);
         }
 
         if (! empty($body)) {

@@ -11,6 +11,11 @@ use ArrayIterator;
 use Traversable;
 use Zend\Http\Client\Adapter\Curl;
 use Zend\Http\Client\Adapter\Socket;
+use Zend\Http\Client\Adapter\StreamInterface;
+use Zend\Http\Exception\InvalidArgumentException;
+use Zend\Http\Exception\RuntimeException;
+use Zend\Http\Exception\UnexpectedValueException;
+use Zend\Http\Header\HeaderInterface;
 use Zend\Http\Header\SetCookie;
 use Zend\Stdlib;
 use Zend\Stdlib\ArrayUtils;
@@ -45,17 +50,17 @@ class Client implements Stdlib\DispatchableInterface
     const DIGEST_CNONCE = 'cnonce';
 
     /**
-     * @var Response
+     * @var null|Response
      */
     protected $response;
 
     /**
-     * @var Request
+     * @var null|Request
      */
     protected $request;
 
     /**
-     * @var Client\Adapter\AdapterInterface
+     * @var null|Client\Adapter\AdapterInterface
      */
     protected $adapter;
 
@@ -65,14 +70,14 @@ class Client implements Stdlib\DispatchableInterface
     protected $auth = [];
 
     /**
-     * @var string
+     * @var null|string|resource
      */
     protected $streamName;
 
     /**
      * @var resource|null
      */
-    protected $streamHandle = null;
+    protected $streamHandle;
 
     /**
      * @var array of Header\SetCookie
@@ -85,12 +90,12 @@ class Client implements Stdlib\DispatchableInterface
     protected $encType = '';
 
     /**
-     * @var Request
+     * @var null|string
      */
     protected $lastRawRequest;
 
     /**
-     * @var Response
+     * @var null|string
      */
     protected $lastRawResponse;
 
@@ -128,15 +133,15 @@ class Client implements Stdlib\DispatchableInterface
      * This variable is populated the first time _detectFileMimeType is called
      * and is then reused on every call to this method
      *
-     * @var resource
+     * @var null|resource
      */
     protected static $fileInfoDb;
 
     /**
      * Constructor
      *
-     * @param string $uri
-     * @param array|Traversable $options
+     * @param null|string $uri
+     * @param null|array|Traversable $options
      */
     public function __construct($uri = null, $options = null)
     {
@@ -170,9 +175,7 @@ class Client implements Stdlib\DispatchableInterface
         }
 
         // Pass configuration options to the adapter if it exists
-        if ($this->adapter instanceof Client\Adapter\AdapterInterface) {
-            $this->adapter->setOptions($options);
-        }
+        $this->getAdapter()->setOptions($options);
 
         return $this;
     }
@@ -203,9 +206,12 @@ class Client implements Stdlib\DispatchableInterface
         }
 
         $this->adapter = $adapter;
+
         $config = $this->config;
         unset($config['adapter']);
-        $this->adapter->setOptions($config);
+
+        $adapter->setOptions($config);
+
         return $this;
     }
 
@@ -220,7 +226,10 @@ class Client implements Stdlib\DispatchableInterface
             $this->setAdapter($this->config['adapter']);
         }
 
-        return $this->adapter;
+        /** @var Client\Adapter\AdapterInterface $adapter */
+        $adapter = $this->adapter;
+
+        return $adapter;
     }
 
     /**
@@ -277,7 +286,7 @@ class Client implements Stdlib\DispatchableInterface
     /**
      * Get the last request (as a string)
      *
-     * @return string
+     * @return null|string
      */
     public function getLastRawRequest()
     {
@@ -287,7 +296,7 @@ class Client implements Stdlib\DispatchableInterface
     /**
      * Get the last response (as a string)
      *
-     * @return string
+     * @return null|string
      */
     public function getLastRawResponse()
     {
@@ -314,13 +323,18 @@ class Client implements Stdlib\DispatchableInterface
     {
         if (! empty($uri)) {
             // remember host of last request
-            $lastHost = $this->getRequest()->getUri()->getHost();
+            $lastHost = $this->getRequest()->getUri()->getHost() ?: '';
             $this->getRequest()->setUri($uri);
 
             // if host changed, the HTTP authentication should be cleared for security
             // reasons, see #4215 for a discussion - currently authentication is also
             // cleared for peer subdomains due to technical limits
             $nextHost = $this->getRequest()->getUri()->getHost();
+
+            if (! $nextHost) {
+                throw new InvalidArgumentException('Relative URIs are not allowed');
+            }
+
             if (! preg_match('/' . preg_quote($lastHost, '/') . '$/i', $nextHost)) {
                 $this->clearAuth();
             }
@@ -412,7 +426,7 @@ class Client implements Stdlib\DispatchableInterface
     {
         $argSeparator = $this->config['argseparator'];
         if (empty($argSeparator)) {
-            $argSeparator = ini_get('arg_separator.output');
+            $argSeparator = ini_get('arg_separator.output') ?: '&';
             $this->setArgSeparator($argSeparator);
         }
         return $argSeparator;
@@ -421,14 +435,14 @@ class Client implements Stdlib\DispatchableInterface
     /**
      * Set the encoding type and the boundary (if any)
      *
-     * @param string $encType
-     * @param string $boundary
+     * @param null|string $encType
+     * @param null|string $boundary
      * @return $this
      */
     public function setEncType($encType, $boundary = null)
     {
         if (null === $encType || empty($encType)) {
-            $this->encType = null;
+            $this->encType = '';
             return $this;
         }
 
@@ -490,10 +504,9 @@ class Client implements Stdlib\DispatchableInterface
      * Reset all the HTTP parameters (request, response, etc)
      *
      * @param  bool   $clearCookies  Also clear all valid cookies? (defaults to false)
-     * @param  bool   $clearAuth     Also clear http authentication? (defaults to true)
      * @return $this
      */
-    public function resetParameters($clearCookies = false /*, $clearAuth = true */)
+    public function resetParameters($clearCookies = false)
     {
         $clearAuth = true;
         if (func_num_args() > 1) {
@@ -503,7 +516,7 @@ class Client implements Stdlib\DispatchableInterface
         $uri = $this->getUri();
 
         $this->streamName      = null;
-        $this->encType         = null;
+        $this->encType         = '';
         $this->request         = null;
         $this->response        = null;
         $this->lastRawRequest  = null;
@@ -535,12 +548,12 @@ class Client implements Stdlib\DispatchableInterface
     /**
      * Get the cookie Id (name+domain+path)
      *
-     * @param  Header\SetCookie|Header\Cookie $cookie
+     * @param  Header\SetCookie $cookie
      * @return string|bool
      */
     protected function getCookieId($cookie)
     {
-        if (($cookie instanceof Header\SetCookie) || ($cookie instanceof Header\Cookie)) {
+        if ($cookie instanceof Header\SetCookie) {
             return $cookie->getName() . $cookie->getDomain() . $cookie->getPath();
         }
         return false;
@@ -550,14 +563,14 @@ class Client implements Stdlib\DispatchableInterface
      * Add a cookie
      *
      * @param array|ArrayIterator|Header\SetCookie|string $cookie
-     * @param string  $value
-     * @param string  $expire
-     * @param string  $path
-     * @param string  $domain
-     * @param  bool $secure
-     * @param  bool $httponly
-     * @param string  $maxAge
-     * @param string  $version
+     * @param null|string  $value
+     * @param null|string  $expire
+     * @param null|string  $path
+     * @param null|string  $domain
+     * @param bool $secure
+     * @param bool $httponly
+     * @param null|int  $maxAge
+     * @param null|int  $version
      * @throws Exception\InvalidArgumentException
      * @return $this
      */
@@ -681,12 +694,16 @@ class Client implements Stdlib\DispatchableInterface
     {
         $headers = $this->getRequest()->getHeaders();
 
-        if ($headers instanceof Headers) {
-            if ($headers->get($name)) {
-                return $headers->get($name)->getFieldValue();
-            }
+        if (! $headers instanceof Headers) {
+            return false;
         }
-        return false;
+
+        $header = $headers->get($name);
+        if (! $header instanceof HeaderInterface) {
+            return false;
+        }
+
+        return $header->getFieldValue();
     }
 
     /**
@@ -703,7 +720,7 @@ class Client implements Stdlib\DispatchableInterface
 
     /**
      * Get status of streaming for received data
-     * @return bool|string
+     * @return bool|resource|string
      */
     public function getStream()
     {
@@ -729,17 +746,20 @@ class Client implements Stdlib\DispatchableInterface
             $this->streamName = tempnam(
                 isset($this->config['streamtmpdir']) ? $this->config['streamtmpdir'] : sys_get_temp_dir(),
                 Client::class
-            );
+            ) ?: null;
         }
 
+        /** @var string streamName */
+        $streamName = $this->streamName;
+
         ErrorHandler::start();
-        $fp    = fopen($this->streamName, 'w+b');
+        $fp    = fopen($streamName, 'w+b');
         $error = ErrorHandler::stop();
         if (false === $fp) {
             if ($this->adapter instanceof Client\Adapter\AdapterInterface) {
                 $this->adapter->close();
             }
-            throw new Exception\RuntimeException(sprintf('Could not open temp file %s', $this->streamName), 0, $error);
+            throw new Exception\RuntimeException(sprintf('Could not open temp file %s', $streamName), 0, $error);
         }
 
         return $fp;
@@ -792,7 +812,7 @@ class Client implements Stdlib\DispatchableInterface
      * @param string $user
      * @param string $password
      * @param string $type
-     * @param array $digest
+     * @param string[] $digest
      * @param null|string $entityBody
      * @throws Exception\InvalidArgumentException
      * @return string|bool
@@ -821,7 +841,7 @@ class Client implements Stdlib\DispatchableInterface
                     throw new Exception\InvalidArgumentException('The digest cannot be empty');
                 }
                 foreach ($digest as $key => $value) {
-                    if (! defined('self::DIGEST_' . strtoupper($key))) {
+                    if (! defined('self::DIGEST_' . strtoupper((string) $key))) {
                         throw new Exception\InvalidArgumentException(sprintf(
                             'Invalid or not supported digest authentication parameter: \'%s\'',
                             $key
@@ -838,6 +858,8 @@ class Client implements Stdlib\DispatchableInterface
                         );
                     }
                     $ha2 = md5($this->getMethod() . ':' . $this->getUri()->getPath() . ':' . md5($entityBody));
+                } else {
+                    throw new InvalidArgumentException('Invalid DIGEST auth data');
                 }
                 if (empty($digest['qop'])) {
                     $response = md5($ha1 . ':' . $digest['nonce'] . ':' . $ha2);
@@ -855,10 +877,15 @@ class Client implements Stdlib\DispatchableInterface
      *
      * @param Stdlib\RequestInterface $request
      * @param Stdlib\ResponseInterface $response
+     * @throws UnexpectedValueException on $request not an instance of Zend\http\Request
      * @return Stdlib\ResponseInterface
      */
     public function dispatch(Stdlib\RequestInterface $request, Stdlib\ResponseInterface $response = null)
     {
+        if (! $request instanceof Request) {
+            throw UnexpectedValueException::unexpectedType(Request::class, $request);
+        }
+
         return $this->send($request);
     }
 
@@ -893,7 +920,7 @@ class Client implements Stdlib\DispatchableInterface
 
                 if (! empty($queryArray)) {
                     $newUri = $uri->toString();
-                    $queryString = http_build_query($queryArray, null, $this->getArgSeparator());
+                    $queryString = http_build_query($queryArray, '', $this->getArgSeparator());
 
                     if ($this->config['rfc3986strict']) {
                         $queryString = str_replace('+', '%20', $queryString);
@@ -925,7 +952,11 @@ class Client implements Stdlib\DispatchableInterface
             // headers
             $headers = $this->prepareHeaders($body, $uri);
 
-            $secure = $uri->getScheme() == 'https';
+            $secure = $uri->getScheme() === 'https';
+
+            if (null === $uri->getHost()) {
+                throw new InvalidArgumentException('Invalid URI in request');
+            }
 
             // cookies
             $cookie = $this->prepareCookies($uri->getHost(), $uri->getPath(), $secure);
@@ -933,15 +964,11 @@ class Client implements Stdlib\DispatchableInterface
                 $headers['Cookie'] = $cookie->getFieldValue();
             }
 
-            // check that adapter supports streaming before using it
-            if (is_resource($body) && ! ($adapter instanceof Client\Adapter\StreamInterface)) {
-                throw new Client\Exception\RuntimeException('Adapter does not support streaming');
-            }
-
             $this->streamHandle = null;
             // calling protected method to allow extending classes
             // to wrap the interaction with the adapter
             $response = $this->doRequest($uri, $method, $secure, $headers, $body);
+            /** @var null|resource $stream */
             $stream = $this->streamHandle;
             $this->streamHandle = null;
 
@@ -959,19 +986,36 @@ class Client implements Stdlib\DispatchableInterface
             }
 
             if ($this->config['outputstream']) {
+                if (! $adapter instanceof StreamInterface) {
+                    throw new Client\Exception\RuntimeException('Adapter does not support streaming');
+                }
+
                 if ($stream === null) {
+                    // @todo: check if it's really used
                     $stream = $this->getStream();
                     if (! is_resource($stream) && is_string($stream)) {
-                        $stream = fopen($stream, 'r');
+                        $stream = fopen($stream, 'rb');
                     }
                 }
+
+                if (! is_resource($stream)) {
+                    throw new UnexpectedValueException('Stream is not a resource');
+                }
+
                 $streamMetaData = stream_get_meta_data($stream);
                 if ($streamMetaData['seekable']) {
                     rewind($stream);
                 }
+
                 // cleanup the adapter
                 $adapter->setOutputStream(null);
                 $response = Response\Stream::fromStream($response, $stream);
+
+                // streamName can just be a string at this point
+                if (! is_string($this->streamName)) {
+                    throw new UnexpectedValueException('Unexpected value for streamName');
+                }
+
                 $response->setStreamName($this->streamName);
                 if (! is_string($this->config['outputstream'])) {
                     // we used temp name, will need to clean up
@@ -983,15 +1027,20 @@ class Client implements Stdlib\DispatchableInterface
 
             // Get the cookies from response (if any)
             $setCookies = $response->getCookie();
-            if (! empty($setCookies)) {
+            if (! is_bool($setCookies) && ! empty($setCookies)) {
                 $this->addCookie($setCookies);
             }
 
+            /** @var Headers $responseHeaders */
+            $responseHeaders = $response->getHeaders();
+
             // If we got redirected, look for the Location header
-            if ($response->isRedirect() && ($response->getHeaders()->has('Location'))) {
+            if ($response->isRedirect() && ($responseHeaders->has('Location'))) {
                 // Avoid problems with buggy servers that add whitespace at the
                 // end of some headers
-                $location = trim($response->getHeaders()->get('Location')->getFieldValue());
+                /** @var HeaderInterface $locationHeader */
+                $locationHeader = $responseHeaders->get('Location');
+                $location = trim($locationHeader->getFieldValue());
 
                 // Check whether we send the exact same request again, or drop the parameters
                 // and send a GET request
@@ -1024,8 +1073,9 @@ class Client implements Stdlib\DispatchableInterface
                         // Else, assume we have a relative path
                     } else {
                         // Get the current path directory, removing any trailing slashes
-                        $path = $this->getUri()->getPath();
-                        $path = rtrim(substr($path, 0, strrpos($path, '/')), '/');
+                        $path = $this->getUri()->getPath() ?: '/';
+                        $slashPosition = strrpos($path, '/') ?: 0;
+                        $path = rtrim(substr($path, 0, $slashPosition) ?: '', '/');
                         $this->getUri()->setPath($path . '/' . $location);
                     }
                 }
@@ -1120,10 +1170,10 @@ class Client implements Stdlib\DispatchableInterface
     /**
      * Prepare Cookies
      *
-     * @param   string $domain
-     * @param   string $path
+     * @param   null|string $domain
+     * @param   null|string $path
      * @param   bool $secure
-     * @return  Header\Cookie|bool
+     * @return  Header\Cookie
      */
     protected function prepareCookies($domain, $path, $secure)
     {
@@ -1161,6 +1211,11 @@ class Client implements Stdlib\DispatchableInterface
     {
         $headers = [];
 
+        $adapter = $this->getAdapter();
+
+        /** @var Headers|HeaderInterface[] $requestHeaders */
+        $requestHeaders = $this->getRequest()->getHeaders();
+
         // Set the host header
         if ($this->config['httpversion'] == Request::VERSION_11) {
             $host = $uri->getHost();
@@ -1175,7 +1230,7 @@ class Client implements Stdlib\DispatchableInterface
         }
 
         // Set the connection header
-        if (! $this->getRequest()->getHeaders()->has('Connection')) {
+        if (! $requestHeaders->has('Connection')) {
             if (! $this->config['keepalive']) {
                 $headers['Connection'] = 'close';
             }
@@ -1183,7 +1238,7 @@ class Client implements Stdlib\DispatchableInterface
 
         // Set the Accept-encoding header if not set - depending on whether
         // zlib is available or not.
-        if (! $this->getRequest()->getHeaders()->has('Accept-Encoding')) {
+        if (! $requestHeaders->has('Accept-Encoding')) {
             if (empty($this->config['outputstream']) && function_exists('gzinflate')) {
                 $headers['Accept-Encoding'] = 'gzip, deflate';
             } else {
@@ -1192,7 +1247,7 @@ class Client implements Stdlib\DispatchableInterface
         }
 
         // Set the user agent header
-        if (! $this->getRequest()->getHeaders()->has('User-Agent') && isset($this->config['useragent'])) {
+        if (! $requestHeaders->has('User-Agent') && isset($this->config['useragent'])) {
             $headers['User-Agent'] = $this->config['useragent'];
         }
 
@@ -1206,15 +1261,15 @@ class Client implements Stdlib\DispatchableInterface
                     }
                     break;
                 case self::AUTH_DIGEST:
-                    if (! $this->adapter instanceof Client\Adapter\Curl) {
+                    if (! $adapter instanceof Client\Adapter\Curl) {
                         throw new Exception\RuntimeException(sprintf(
                             'The digest authentication is only available for curl adapters (%s)',
                             Curl::class
                         ));
                     }
 
-                    $this->adapter->setCurlOption(CURLOPT_HTTPAUTH, CURLAUTH_DIGEST);
-                    $this->adapter->setCurlOption(CURLOPT_USERPWD, $this->auth['user'] . ':' . $this->auth['password']);
+                    $adapter->setCurlOption(CURLOPT_HTTPAUTH, CURLAUTH_DIGEST);
+                    $adapter->setCurlOption(CURLOPT_USERPWD, $this->auth['user'] . ':' . $this->auth['password']);
             }
         }
 
@@ -1235,7 +1290,6 @@ class Client implements Stdlib\DispatchableInterface
 
         // Merge the headers of the request (if any)
         // here we need right 'http field' and not lowercase letters
-        $requestHeaders = $this->getRequest()->getHeaders();
         foreach ($requestHeaders as $requestHeaderElement) {
             $headers[$requestHeaderElement->getFieldName()] = $requestHeaderElement->getFieldValue();
         }
@@ -1263,14 +1317,18 @@ class Client implements Stdlib\DispatchableInterface
         $body = '';
         $hasFiles = false;
 
-        if (! $this->getRequest()->getHeaders()->has('Content-Type')) {
+        /** @var Headers $headers */
+        $headers = $this->getRequest()->getHeaders();
+
+        if (! $headers->has('Content-Type')) {
             $hasFiles = ! empty($this->getRequest()->getFiles()->toArray());
             // If we have files to upload, force encType to multipart/form-data
             if ($hasFiles) {
                 $this->setEncType(self::ENC_FORMDATA);
             }
         } else {
-            $this->setEncType($this->getHeader('Content-Type'));
+            $contentType = $this->getHeader('Content-Type');
+            $this->setEncType(is_string($contentType) ? $contentType : '');
         }
 
         // If we have POST parameters or files, encode and add them to the body
@@ -1299,7 +1357,7 @@ class Client implements Stdlib\DispatchableInterface
                 $body .= '--' . $boundary . '--' . "\r\n";
             } elseif (stripos($this->getEncType(), self::ENC_URLENCODED) === 0) {
                 // Encode body as application/x-www-form-urlencoded
-                $body = http_build_query($this->getRequest()->getPost()->toArray(), null, '&');
+                $body = http_build_query($this->getRequest()->getPost()->toArray(), '', '&');
             } else {
                 throw new Client\Exception\RuntimeException(sprintf(
                     'Cannot handle content type \'%s\' automatically',
@@ -1332,14 +1390,16 @@ class Client implements Stdlib\DispatchableInterface
 
         // First try with fileinfo functions
         if (function_exists('finfo_open')) {
+            $fileInfoDb = static::$fileInfoDb;
             if (static::$fileInfoDb === null) {
                 ErrorHandler::start();
-                static::$fileInfoDb = finfo_open(FILEINFO_MIME);
+                $fileInfoDb = finfo_open(FILEINFO_MIME);
                 ErrorHandler::stop();
             }
 
-            if (static::$fileInfoDb) {
-                $type = finfo_file(static::$fileInfoDb, $file);
+            if ($fileInfoDb) {
+                static::$fileInfoDb = $fileInfoDb;
+                $type = finfo_file($fileInfoDb, $file);
             }
         } elseif (function_exists('mime_content_type')) {
             $type = mime_content_type($file);
@@ -1413,7 +1473,7 @@ class Client implements Stdlib\DispatchableInterface
                     $key = $prefix . sprintf('[%s]', $name);
                 }
             } else {
-                $key = $name;
+                $key = (string) $name;
             }
 
             if (is_array($value)) {
@@ -1440,19 +1500,25 @@ class Client implements Stdlib\DispatchableInterface
      */
     protected function doRequest(Http $uri, $method, $secure = false, $headers = [], $body = '')
     {
+        if (null === $uri->getHost()) {
+            throw new InvalidArgumentException('URI does not have an host');
+        }
+
+        $adapter = $this->getAdapter();
+
         // Open the connection, send the request and read the response
-        $this->adapter->connect($uri->getHost(), $uri->getPort(), $secure);
+        $adapter->connect($uri->getHost(), $uri->getPort(), $secure);
 
         if ($this->config['outputstream']) {
-            if ($this->adapter instanceof Client\Adapter\StreamInterface) {
+            if ($adapter instanceof Client\Adapter\StreamInterface) {
                 $this->streamHandle = $this->openTempStream();
-                $this->adapter->setOutputStream($this->streamHandle);
+                $adapter->setOutputStream($this->streamHandle);
             } else {
                 throw new Exception\RuntimeException('Adapter does not support streaming');
             }
         }
         // HTTP connection
-        $this->lastRawRequest = $this->adapter->write(
+        $this->lastRawRequest = $adapter->write(
             $method,
             $uri,
             $this->config['httpversion'],
@@ -1460,7 +1526,7 @@ class Client implements Stdlib\DispatchableInterface
             $body
         );
 
-        return $this->adapter->read();
+        return $adapter->read();
     }
 
     /**

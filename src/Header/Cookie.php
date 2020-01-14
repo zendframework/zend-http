@@ -29,6 +29,13 @@ class Cookie extends ArrayObject implements HeaderInterface
                 ));
             }
 
+            if (null === $setCookie->getName()) {
+                throw new Exception\InvalidArgumentException(sprintf(
+                    '%s requires cookies with name',
+                    __METHOD__
+                ));
+            }
+
             if (array_key_exists($setCookie->getName(), $nvPairs)) {
                 throw new Exception\InvalidArgumentException(sprintf(
                     'Two cookies with the same name were provided to %s',
@@ -53,12 +60,13 @@ class Cookie extends ArrayObject implements HeaderInterface
             throw new Exception\InvalidArgumentException('Invalid header line for Server string: "' . $name . '"');
         }
 
+        /** @var string[] $nvPairs */
         $nvPairs = preg_split('#;\s*#', $value);
 
         $arrayInfo = [];
         foreach ($nvPairs as $nvPair) {
             $parts = explode('=', $nvPair, 2);
-            if (count($parts) != 2) {
+            if (count($parts) !== 2) {
                 throw new Exception\RuntimeException('Malformed Cookie header found');
             }
             list($name, $value) = $parts;
@@ -104,7 +112,7 @@ class Cookie extends ArrayObject implements HeaderInterface
         $nvPairs = [];
 
         foreach ($this->flattenCookies($this) as $name => $value) {
-            $nvPairs[] = $name . '=' . (($this->encodeValue) ? urlencode($value) : $value);
+            $nvPairs[] = $name . '=' . ($this->encodeValue ? urlencode($value) : $value);
         }
 
         return implode('; ', $nvPairs);

@@ -9,6 +9,7 @@ namespace ZendTest\Http;
 
 use ArrayIterator;
 use PHPUnit\Framework\TestCase;
+use ReflectionClass;
 use ReflectionMethod;
 use Zend\Http\Client;
 use Zend\Http\Client\Adapter\AdapterInterface;
@@ -24,10 +25,30 @@ use Zend\Http\Header\SetCookie;
 use Zend\Http\Request;
 use Zend\Http\Response;
 use Zend\Uri\Http;
+use Zend\Stdlib;
 use ZendTest\Http\TestAsset\ExtendedClient;
 
 class ClientTest extends TestCase
 {
+    private $originalErrorReporting;
+    private $tmpDir;
+
+    protected function setUp()
+    {
+        $this->originalErrorReporting = \error_reporting();
+        $this->tmpDir = \getenv('TMPDIR');
+
+        parent::setUp();
+    }
+
+    protected function tearDown()
+    {
+        \error_reporting($this->originalErrorReporting);
+        \putenv('TMPDIR=' . $this->tmpDir);
+
+        parent::tearDown();
+    }
+
     public function testIfCookiesAreSticky()
     {
         $initialCookies = [
@@ -119,6 +140,8 @@ class ClientTest extends TestCase
         $client->addCookie('test', 0);
         $client->addCookie('test2', '0');
         $client->addCookie('test3', false);
+
+        $this->assertCount(3, $client->getCookies());
     }
 
     public function testIfNullValueCookiesThrowsException()
@@ -183,6 +206,17 @@ class ClientTest extends TestCase
      * @group 2774
      * @group 2745
      */
+    public function testArgSeparatorDefaultsWithNoIniSetting()
+    {
+        \ini_set('arg_separator.output', false);
+        $client = new Client();
+        $this->assertEquals('&', $client->getArgSeparator());
+    }
+
+    /**
+     * @group 2774
+     * @group 2745
+     */
     public function testCanOverrideArgSeparator()
     {
         $client = new Client();
@@ -192,7 +226,7 @@ class ClientTest extends TestCase
 
     public function testClientUsesAcceptEncodingHeaderFromRequestObject()
     {
-        $client = new Client();
+        $client = new Client('http://foo.com');
 
         $client->setAdapter(Test::class);
 
@@ -264,6 +298,75 @@ class ClientTest extends TestCase
         // response should be the second response, since third response should not
         // be requested, due to the maxredirects = 1 limit
         $this->assertEquals($response->getContent(), 'Page #2');
+    }
+
+    public function testSendWithNotUriPath()
+    {
+        $testAdapter = new Test();
+        $testAdapter->setResponse(
+            'HTTP/1.1 200 OK' . "\r\n\r\n"
+            . 'Page #1'
+        );
+
+        $uri = new Http();
+        $uri->setHost('www.example.org');
+
+        $this->assertNull($uri->getPath());
+
+        $client = new Client($uri, [
+            'adapter' => $testAdapter,
+            'storeresponse' => true,
+        ]);
+
+        // do the request
+        $response = $client->setMethod('GET')->send();
+
+        $this->assertEquals($response->getContent(), 'Page #1');
+    }
+
+    public function testHappyPathWithDispatch()
+    {
+        $testAdapter = new Test();
+        $testAdapter->setResponse(
+            'HTTP/1.1 200 OK' . "\r\n\r\n"
+            . 'Page #1'
+        );
+
+        $client = new Client('http://www.example.org/part1', [
+            'adapter' => $testAdapter,
+            'storeresponse' => true,
+        ]);
+
+        $request = new Request();
+        $request->setUri('http://www.example.org/part1');
+        $response = new Response();
+
+        // do the request
+        $response = $client->setMethod('GET')->dispatch($request, $response);
+
+        $this->assertEquals($response->getContent(), 'Page #1');
+    }
+
+    public function testDispatchWithBaseInterface()
+    {
+        $this->expectException(HttpException\UnexpectedValueException::class);
+
+        $testAdapter = new Test();
+        $testAdapter->setResponse(
+            'HTTP/1.1 200 OK' . "\r\n\r\n"
+            . 'Page #1'
+        );
+
+        $client = new Client('http://www.example.org/part1', [
+            'adapter' => $testAdapter,
+            'storeresponse' => true,
+        ]);
+
+        $request = $this->prophesize(Stdlib\RequestInterface::class);
+        $response = new Response();
+
+        // do the request
+        $client->setMethod('GET')->dispatch($request->reveal(), $response);
     }
 
     public function testIfClientDoesNotLooseAuthenticationOnRedirect()
@@ -486,6 +589,7 @@ class ClientTest extends TestCase
     public function testClientRequestMethod()
     {
         $request = new Request();
+        $request->setUri('http://foo.com');
         $request->setMethod(Request::METHOD_POST);
         $request->getPost()->set('data', 'random');
 
@@ -507,7 +611,7 @@ class ClientTest extends TestCase
         $this->assertEquals('application/x-www-form-urlencoded', $client->getEncType());
 
         $client->setEncType(null);
-        $this->assertNull($client->getEncType());
+        $this->assertSame('', $client->getEncType());
     }
 
     /**
@@ -518,6 +622,7 @@ class ClientTest extends TestCase
         $client = new Client();
         $client->setEncType('application/x-www-form-urlencoded');
         $request = new Request();
+        $request->setUri('http://foo.com');
         $request->setMethod(Request::METHOD_POST);
         $request->getPost()->set('foo', 'bar');
         $request->getPost()->set('baz', 'foo');
@@ -528,25 +633,30 @@ class ClientTest extends TestCase
         $this->assertContains('foo=bar&baz=foo', $rawRequest);
     }
 
-    public function uriDataProvider()
+    public function testRelativeUriInConstructorIsNotAllowed()
     {
-        return [
-            'valid-relative' => ['/example', true],
-            'invalid-absolute' => ['http://localhost/example', false],
-        ];
+        $this->expectException(HttpException\InvalidArgumentException::class);
+        $client = new Client('/example');
     }
 
-    /**
-     * @dataProvider uriDataProvider
-     */
-    public function testUriCorrectlyDeterminesWhetherOrNotItIsAValidRelativeUri($uri, $isValidRelativeURI)
+    public function testRelativeUriIsNotAllowed()
     {
-        $client = new Client($uri);
-        $this->assertSame($isValidRelativeURI, $client->getUri()->isValidRelative());
+        $this->expectException(HttpException\InvalidArgumentException::class);
+        $client = new Client('http://www.domain.com');
+        $client->setUri('/example');
+    }
 
+    public function testRelativeUriIsNotAllowedSendingRequest()
+    {
+        $this->expectException(HttpException\InvalidArgumentException::class);
+
+        $client = new Client();
+        $uri = new Http();
+        $request = new Request();
+        $request->setUri($uri);
+        $request->setMethod(Request::METHOD_GET);
         $client->setAdapter(Test::class);
-        $client->send();
-        $this->assertSame($isValidRelativeURI, $client->getUri()->isValidRelative());
+        $client->send($request);
     }
 
     public function portChangeDataProvider()
@@ -636,5 +746,152 @@ class ClientTest extends TestCase
         $response = $client->getResponse();
 
         self::assertSame($response->getBody(), file_get_contents($tmpFile));
+    }
+
+    public function testClientRequestWillNotThrowExceptionOnResponseWithNoCookies()
+    {
+        $request = new Request();
+        $request->setUri('http://www.domain.com');
+        $request->setMethod(Request::METHOD_POST);
+        $request->getPost()->set('data', 'random');
+
+        $response = new Response();
+
+        $adapter = new Test();
+
+        $adapter->setResponse([
+            0 => $response,
+        ]);
+
+        $client = new Client();
+        $client->setAdapter($adapter);
+        $client->send($request);
+
+        $this->assertCount(0, $client->getCookies());
+    }
+
+    public function testClientRequestWillSaveCookiesAndReuseThem()
+    {
+        $cookies = new Cookies();
+        $cookies->addCookie(new SetCookie('foo', 'far', null, '/', 'www.domain.com'));
+        $cookies->addCookie(new SetCookie('bar', 'far', null, '/', 'www.domain.com'));
+
+        $request = new Request();
+        $request->setUri('http://www.domain.com');
+        $request->setMethod(Request::METHOD_POST);
+        $request->getPost()->set('data', 'random');
+
+        $response = new Response();
+        $response->getHeaders()->addHeaders($cookies->getAllCookies());
+
+        $adapter = new Test();
+
+        $adapter->setResponse([
+            0 => $response,
+        ]);
+
+        $client = new Client();
+        $client->setAdapter($adapter);
+        $client->send($request);
+
+        $this->assertCount(2, $client->getCookies());
+
+        $request2 = new Request();
+        $request2->setUri('http://www.domain.com');
+
+        $client->send($request2);
+
+        $lastRawRequest = $client->getLastRawRequest();
+        $this->assertContains("\r\nCookie: foo=far; bar=far\r\n", $lastRawRequest);
+    }
+
+    public function testClientRequestWillSaveCookiesAndReuseThemWithNullPathUri()
+    {
+        $cookies = new Cookies();
+        $cookies->addCookie(new SetCookie('foo', 'far', null, '/', 'www.domain.com'));
+        //$cookies->addCookie(new SetCookie('foo2', 'far', null, '/foo', 'www.domain.com'));
+        $cookies->addCookie(new SetCookie('bar', 'far', null, '/', 'www.domain.com'));
+
+        $uri = new Http();
+        $uri->setHost('www.domain.com');
+
+        $this->assertNull($uri->getPath());
+
+        $request = new Request();
+        $request->setUri('http://www.domain.com');
+        $request->setMethod(Request::METHOD_POST);
+        $request->getPost()->set('data', 'random');
+
+        $response = new Response();
+        $response->getHeaders()->addHeaders($cookies->getAllCookies());
+
+        $adapter = new Test();
+
+        $adapter->setResponse([
+            0 => $response,
+        ]);
+
+        $client = new Client();
+        $client->setAdapter($adapter);
+        $client->send($request);
+
+        $this->assertCount(2, $client->getCookies());
+
+        $request2 = new Request();
+        $request2->setUri($uri);
+
+        $client->send($request2);
+
+        $lastRawRequest = $client->getLastRawRequest();
+        $this->assertContains("\r\nCookie: foo=far; bar=far\r\n", $lastRawRequest);
+    }
+
+    public function testClientRequestWillNotReuseCookiesFromDifferentDomain()
+    {
+        $cookies = new Cookies();
+        $cookies->addCookie(new SetCookie('foo', 'far', null, '/', 'www.domain.com'));
+        $cookies->addCookie(new SetCookie('bar', 'far', null, '/', 'www.domain.com'));
+
+        $request = new Request();
+        $request->setUri('http://www.domain.com');
+        $request->setMethod(Request::METHOD_POST);
+        $request->getPost()->set('data', 'random');
+
+        $response = new Response();
+        $response->getHeaders()->addHeaders($cookies->getAllCookies());
+
+        $adapter = new Test();
+
+        $adapter->setResponse([
+            0 => $response,
+        ]);
+
+        $client = new Client();
+        $client->setAdapter($adapter);
+        $client->send($request);
+
+        $this->assertCount(2, $client->getCookies());
+
+        $request2 = new Request();
+        $request2->setUri('http://foo.com');
+
+        $client->send($request2);
+
+        $lastRawRequest = $client->getLastRawRequest();
+        $this->assertNotContains("\r\nCookie: foo=far; bar=far\r\n", $lastRawRequest);
+    }
+
+    public function testDoRequestWithNoHostUri()
+    {
+        $this->expectException(HttpException\InvalidArgumentException::class);
+
+        $client = new Client();
+        $class = new ReflectionClass(Client::class);
+        $method = $class->getMethod('doRequest');
+        $method->setAccessible(true);
+
+        $uri = new Http();
+
+        $method->invokeArgs($client, [$uri, 'GET']);
     }
 }

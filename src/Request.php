@@ -7,6 +7,7 @@
 
 namespace Zend\Http;
 
+use Zend\Http\Header\HeaderInterface;
 use Zend\Stdlib\Parameters;
 use Zend\Stdlib\ParametersInterface;
 use Zend\Stdlib\RequestInterface;
@@ -100,6 +101,7 @@ class Request extends AbstractMessage implements RequestInterface
             );
 
         $regex     = '#^(?P<method>' . $methods . ')\s(?P<uri>[^ ]*)(?:\sHTTP\/(?P<version>\d+\.\d+)){0,1}#';
+        /** @var string $firstLine */
         $firstLine = array_shift($lines);
         if (! preg_match($regex, $firstLine, $matches)) {
             throw new Exception\InvalidArgumentException(
@@ -111,6 +113,13 @@ class Request extends AbstractMessage implements RequestInterface
         $request->setUri($matches['uri']);
 
         $parsedUri = parse_url($matches['uri']);
+
+        if (false === $parsedUri) {
+            throw new Exception\InvalidArgumentException(
+                'A valid request line was not found in the provided string'
+            );
+        }
+
         if (array_key_exists('query', $parsedUri)) {
             $parsedQuery = [];
             parse_str($parsedUri['query'], $parsedQuery);
@@ -128,6 +137,7 @@ class Request extends AbstractMessage implements RequestInterface
         $isHeader = true;
         $headers = $rawBody = [];
         while ($lines) {
+            /** @var string $nextLine */
             $nextLine = array_shift($lines);
             if ($nextLine == '') {
                 $isHeader = false;
@@ -213,6 +223,13 @@ class Request extends AbstractMessage implements RequestInterface
                 'URI must be an instance of Zend\Uri\Http or a string'
             );
         }
+
+        $path = $uri->getPath();
+
+        if (empty($path)) {
+            $uri->setPath('/');
+        }
+
         $this->uri = $uri;
 
         return $this;
@@ -318,7 +335,12 @@ class Request extends AbstractMessage implements RequestInterface
      */
     public function getCookie()
     {
-        return $this->getHeaders()->get('Cookie');
+        /** @var Headers $headers */
+        $headers = $this->getHeaders();
+        /** @var false|Header\Cookie $header */
+        $header = $headers->get('Cookie');
+
+        return $header;
     }
 
     /**
@@ -366,7 +388,7 @@ class Request extends AbstractMessage implements RequestInterface
     {
         if ($this->headers === null || is_string($this->headers)) {
             // this is only here for fromString lazy loading
-            $this->headers = (is_string($this->headers)) ? Headers::fromString($this->headers) : new Headers();
+            $this->headers = is_string($this->headers) ? Headers::fromString($this->headers) : new Headers();
         }
 
         if ($name === null) {
@@ -390,7 +412,10 @@ class Request extends AbstractMessage implements RequestInterface
      */
     public function getHeader($name, $default = false)
     {
-        return $this->getHeaders($name, $default);
+        /** @var false|HeaderInterface $header */
+        $header = $this->getHeaders($name, $default);
+
+        return $header;
     }
 
     /**
@@ -502,8 +527,11 @@ class Request extends AbstractMessage implements RequestInterface
      */
     public function isXmlHttpRequest()
     {
-        $header = $this->getHeaders()->get('X_REQUESTED_WITH');
-        return false !== $header && $header->getFieldValue() == 'XMLHttpRequest';
+        /** @var Headers $headers */
+        $headers = $this->getHeaders();
+        /** @var false|HeaderInterface $header */
+        $header = $headers->get('X_REQUESTED_WITH');
+        return false !== $header && $header->getFieldValue() === 'XMLHttpRequest';
     }
 
     /**
@@ -513,7 +541,10 @@ class Request extends AbstractMessage implements RequestInterface
      */
     public function isFlashRequest()
     {
-        $header = $this->getHeaders()->get('USER_AGENT');
+        /** @var Headers $headers */
+        $headers = $this->getHeaders();
+        /** @var false|HeaderInterface $header */
+        $header = $headers->get('USER_AGENT');
         return false !== $header && stristr($header->getFieldValue(), ' flash');
     }
 
@@ -532,8 +563,10 @@ class Request extends AbstractMessage implements RequestInterface
      */
     public function toString()
     {
+        /** @var Headers $headers */
+        $headers = $this->getHeaders();
         $str = $this->renderRequestLine() . "\r\n";
-        $str .= $this->getHeaders()->toString();
+        $str .= $headers->toString();
         $str .= "\r\n";
         $str .= $this->getContent();
         return $str;

@@ -124,7 +124,7 @@ class ContentSecurityPolicy implements MultipleHeaderInterface
             return $this;
         }
 
-        array_walk($sources, [__NAMESPACE__ . '\HeaderValue', 'assertValid']);
+        array_walk($sources, [HeaderValue::class, 'assertValid']);
         $this->directives[$name] = implode(' ', $sources);
 
         return $this;

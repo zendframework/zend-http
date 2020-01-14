@@ -16,16 +16,16 @@ class LanguageFieldValuePart extends AbstractFieldValuePart
 {
     public function getLanguage()
     {
-        return $this->getInternalValues()->typeString;
+        return $this->typeString;
     }
 
     public function getPrimaryTag()
     {
-        return $this->getInternalValues()->type;
+        return $this->type;
     }
 
     public function getSubTag()
     {
-        return $this->getInternalValues()->subtype;
+        return $this->subtype;
     }
 }

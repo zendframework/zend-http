@@ -19,6 +19,6 @@ class CharsetFieldValuePart extends AbstractFieldValuePart
      */
     public function getCharset()
     {
-        return $this->getInternalValues()->type;
+        return $this->type;
     }
 }

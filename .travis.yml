@@ -8,6 +8,7 @@ env:
   global:
     - COMPOSER_ARGS="--no-interaction"
     - COVERAGE_DEPS="php-coveralls/php-coveralls"
+    - PHPSTAN_DEPS="phpstan/phpstan:^0.12"
     - TESTS_ZEND_HTTP_CLIENT_ONLINE=true
     - TESTS_ZEND_HTTP_CLIENT_BASEURI=http://127.0.0.1
     - TESTS_ZEND_HTTP_CLIENT_HTTP_PROXY=127.0.0.1:8081
@@ -43,6 +44,7 @@ matrix:
         - DEPS=locked
         - CS_CHECK=true
         - TEST_COVERAGE=true
+        - PHPSTAN_TEST=true
     - php: 7.1
       env:
         - DEPS=latest
@@ -74,6 +76,7 @@ install:
   - if [[ $DEPS == 'latest' ]]; then travis_retry composer update $COMPOSER_ARGS ; fi
   - if [[ $DEPS == 'lowest' ]]; then travis_retry composer update --prefer-lowest --prefer-stable $COMPOSER_ARGS ; fi
   - if [[ $TEST_COVERAGE == 'true' ]]; then travis_retry composer require --dev $COMPOSER_ARGS $COVERAGE_DEPS ; fi
+  - if [[ $PHPSTAN_TEST == 'true' ]]; then travis_retry composer require --dev $COMPOSER_ARGS $PHPSTAN_DEPS ; fi
   - stty cols 120 && composer show
 
 before_script:
@@ -105,6 +108,7 @@ before_script:
 script:
   - if [[ $TEST_COVERAGE == 'true' ]]; then composer test-coverage ; else composer test ; fi
   - if [[ $CS_CHECK == 'true' ]]; then composer cs-check ; fi
+  - if [[ $PHPSTAN_TEST == 'true' ]]; then ./vendor/bin/phpstan analyse --no-progress . ; fi
 
 after_script:
   - if [[ $TEST_COVERAGE == 'true' ]]; then travis_retry php vendor/bin/php-coveralls -v ; fi

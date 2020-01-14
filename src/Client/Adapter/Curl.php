@@ -56,14 +56,14 @@ class Curl implements HttpAdapter, StreamInterface
     /**
      * Response gotten from server
      *
-     * @var string
+     * @var null|string
      */
     protected $response;
 
     /**
      * Stream for storing output
      *
-     * @var resource
+     * @var null|resource
      */
     protected $outputStream;
 
@@ -133,7 +133,7 @@ class Curl implements HttpAdapter, StreamInterface
         }
 
         foreach ($options as $k => $v) {
-            $option = strtolower($k);
+            $option = strtolower((string) $k);
             switch ($option) {
                 case 'proxyhost':
                     $this->setCurlOption(CURLOPT_PROXY, $v);
@@ -196,9 +196,10 @@ class Curl implements HttpAdapter, StreamInterface
         }
 
         // Do the actual connection
-        $this->curl = curl_init();
+        $curl = curl_init();
+
         if ($port != 80) {
-            curl_setopt($this->curl, CURLOPT_PORT, intval($port));
+            curl_setopt($curl, CURLOPT_PORT, (int) $port);
         }
 
         if (isset($this->config['connecttimeout'])) {
@@ -222,33 +223,33 @@ class Curl implements HttpAdapter, StreamInterface
 
         if ($connectTimeout !== null) {
             if (defined('CURLOPT_CONNECTTIMEOUT_MS')) {
-                curl_setopt($this->curl, CURLOPT_CONNECTTIMEOUT_MS, $connectTimeout * 1000);
+                curl_setopt($curl, CURLOPT_CONNECTTIMEOUT_MS, $connectTimeout * 1000);
             } else {
-                curl_setopt($this->curl, CURLOPT_CONNECTTIMEOUT, $connectTimeout);
+                curl_setopt($curl, CURLOPT_CONNECTTIMEOUT, $connectTimeout);
             }
         }
 
         if (isset($this->config['timeout'])) {
             if (defined('CURLOPT_TIMEOUT_MS')) {
-                curl_setopt($this->curl, CURLOPT_TIMEOUT_MS, $this->config['timeout'] * 1000);
+                curl_setopt($curl, CURLOPT_TIMEOUT_MS, $this->config['timeout'] * 1000);
             } else {
-                curl_setopt($this->curl, CURLOPT_TIMEOUT, $this->config['timeout']);
+                curl_setopt($curl, CURLOPT_TIMEOUT, $this->config['timeout']);
             }
         }
 
         if (isset($this->config['sslcafile']) && $this->config['sslcafile']) {
-            curl_setopt($this->curl, CURLOPT_CAINFO, $this->config['sslcafile']);
+            curl_setopt($curl, CURLOPT_CAINFO, $this->config['sslcafile']);
         }
         if (isset($this->config['sslcapath']) && $this->config['sslcapath']) {
-            curl_setopt($this->curl, CURLOPT_CAPATH, $this->config['sslcapath']);
+            curl_setopt($curl, CURLOPT_CAPATH, $this->config['sslcapath']);
         }
 
         if (isset($this->config['maxredirects'])) {
             // Set Max redirects
-            curl_setopt($this->curl, CURLOPT_MAXREDIRS, $this->config['maxredirects']);
+            curl_setopt($curl, CURLOPT_MAXREDIRS, $this->config['maxredirects']);
         }
 
-        if (! $this->curl) {
+        if (! $curl) {
             $this->close();
 
             throw new AdapterException\RuntimeException('Unable to Connect to ' . $host . ':' . $port);
@@ -257,12 +258,14 @@ class Curl implements HttpAdapter, StreamInterface
         if ($secure !== false) {
             // Behave the same like Zend\Http\Adapter\Socket on SSL options.
             if (isset($this->config['sslcert'])) {
-                curl_setopt($this->curl, CURLOPT_SSLCERT, $this->config['sslcert']);
+                curl_setopt($curl, CURLOPT_SSLCERT, $this->config['sslcert']);
             }
             if (isset($this->config['sslpassphrase'])) {
-                curl_setopt($this->curl, CURLOPT_SSLCERTPASSWD, $this->config['sslpassphrase']);
+                curl_setopt($curl, CURLOPT_SSLCERTPASSWD, $this->config['sslpassphrase']);
             }
         }
+
+        $this->curl = $curl;
 
         // Update connected_to
         $this->connectedTo = [$host, $port];
@@ -271,20 +274,22 @@ class Curl implements HttpAdapter, StreamInterface
     /**
      * Send request to the remote server
      *
-     * @param  string        $method
-     * @param  \Zend\Uri\Uri $uri
-     * @param  float         $httpVersion
-     * @param  array         $headers
-     * @param  string        $body
-     * @return string        $request
+     * @param  string          $method
+     * @param  \Zend\Uri\Uri   $uri
+     * @param  string           $httpVersion
+     * @param  array           $headers
+     * @param  string|resource $body
+     * @return string          $request
      * @throws AdapterException\RuntimeException If connection fails, connected
      *     to wrong host, no PUT file defined, unsupported method, or unsupported
      *     cURL option.
      * @throws AdapterException\InvalidArgumentException if $method is currently not supported
      * @throws AdapterException\TimeoutException if connection timed out
      */
-    public function write($method, $uri, $httpVersion = 1.1, $headers = [], $body = '')
+    public function write($method, $uri, $httpVersion = '1.1', $headers = [], $body = '')
     {
+        $httpVersion = (string) $httpVersion;
+
         // Make sure we're properly connected
         if (! $this->curl) {
             throw new AdapterException\RuntimeException('Trying to write but we are not connected');
@@ -380,7 +385,7 @@ class Curl implements HttpAdapter, StreamInterface
         }
 
         // get http version to use
-        $curlHttp = $httpVersion == 1.1 ? CURL_HTTP_VERSION_1_1 : CURL_HTTP_VERSION_1_0;
+        $curlHttp = $httpVersion === '1.1' ? CURL_HTTP_VERSION_1_1 : CURL_HTTP_VERSION_1_0;
 
         // mark as HTTP request and set HTTP method
         curl_setopt($this->curl, CURLOPT_HTTP_VERSION, $curlHttp);
@@ -455,16 +460,11 @@ class Curl implements HttpAdapter, StreamInterface
 
         // send the request
 
+        /** @var false|string $response */
         $response = curl_exec($this->curl);
-        // if we used streaming, headers are already there
-        if (! is_resource($this->outputStream)) {
-            $this->response = $response;
-        }
-
-        $request  = curl_getinfo($this->curl, CURLINFO_HEADER_OUT);
-        $request .= $body;
 
         if ($response === false || empty($this->response)) {
+            $this->response = null;
             if (curl_errno($this->curl) === static::ERROR_OPERATION_TIMEDOUT) {
                 throw new AdapterException\TimeoutException(
                     'Read timed out',
@@ -477,18 +477,28 @@ class Curl implements HttpAdapter, StreamInterface
             ));
         }
 
+        // if we used streaming, headers are already there
+        if (! is_resource($this->outputStream)) {
+            $this->response = $response;
+        }
+
+        $request  = curl_getinfo($this->curl, CURLINFO_HEADER_OUT);
+        $request .= $body;
+
         // separating header from body because it is dangerous to accidentially replace strings in the body
         $responseHeaderSize = curl_getinfo($this->curl, CURLINFO_HEADER_SIZE);
         $responseHeaders = substr($this->response, 0, $responseHeaderSize);
 
         // cURL automatically decodes chunked-messages, this means we have to
         // disallow the Zend\Http\Response to do it again.
+        /** @var string $responseHeaders */
         $responseHeaders = preg_replace("/Transfer-Encoding:\s*chunked\\r\\n/i", '', $responseHeaders);
 
         // cURL can automatically handle content encoding; prevent double-decoding from occurring
         if (isset($this->config['curloptions'][CURLOPT_ENCODING])
             && '' == $this->config['curloptions'][CURLOPT_ENCODING]
         ) {
+            /** @var string $responseHeaders */
             $responseHeaders = preg_replace("/Content-Encoding:\s*gzip\\r\\n/i", '', $responseHeaders);
         }
 
@@ -505,9 +515,10 @@ class Curl implements HttpAdapter, StreamInterface
         // Eliminate multiple HTTP responses.
         do {
             $parts = preg_split('|(?:\r?\n){2}|m', $this->response, 2);
+
             $again = false;
 
-            if (isset($parts[1]) && preg_match("|^HTTP/1\.[01](.*?)\r\n|mi", $parts[1])) {
+            if (is_array($parts) && isset($parts[1]) && preg_match("|^HTTP/1\.[01](.*?)\r\n|mi", $parts[1])) {
                 $this->response = $parts[1];
                 $again          = true;
             }
@@ -519,7 +530,7 @@ class Curl implements HttpAdapter, StreamInterface
     /**
      * Return read response from server
      *
-     * @return string
+     * @return null|string
      */
     public function read()
     {
@@ -542,7 +553,7 @@ class Curl implements HttpAdapter, StreamInterface
     /**
      * Get cUrl Handle
      *
-     * @return resource
+     * @return null|resource
      */
     public function getHandle()
     {
@@ -552,7 +563,7 @@ class Curl implements HttpAdapter, StreamInterface
     /**
      * Set output stream for the response
      *
-     * @param resource $stream
+     * @param null|resource $stream
      * @return $this
      */
     public function setOutputStream($stream)

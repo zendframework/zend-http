@@ -198,7 +198,7 @@ class SetCookieTest extends TestCase
         $this->assertEquals('/accounts', $setCookieHeader->getPath());
         $this->assertEquals('Wed, 13-Jan-2021 22:23:01 GMT', $setCookieHeader->getExpires());
         $this->assertTrue($setCookieHeader->isSecure());
-        $this->assertTrue($setCookieHeader->isHttponly());
+        $this->assertTrue($setCookieHeader->isHttpOnly());
 
         $setCookieHeader = SetCookie::fromString(
             'set-cookie: myname=myvalue; Domain=docs.foo.com; Path=/accounts;'
@@ -395,7 +395,7 @@ class SetCookieTest extends TestCase
         $this->assertNull($setCookieHeader->getDomain());
         $this->assertNull($setCookieHeader->getPath());
         $this->assertNull($setCookieHeader->isSecure());
-        $this->assertNull($setCookieHeader->isHttponly());
+        $this->assertNull($setCookieHeader->isHttpOnly());
     }
 
     public function testSetCookieFieldValueIsEmptyStringWhenNameIsUnset()

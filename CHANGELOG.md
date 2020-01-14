@@ -10,7 +10,10 @@ All notable changes to this project will be documented in this file, in reverse 
 
 ### Changed
 
-- Nothing.
+- `Zend\Http\Request`'s URI now always have a default path ´/´ even when a `Zend\Uri\Http`
+  object is provided with no path.
+- Relative URIs are not allowed anymore in `Zend\Http\Client`.
+  Anyway, usage of relative URIs has no sense and no adapter can handle it.
 
 ### Deprecated
 
@@ -22,7 +25,9 @@ All notable changes to this project will be documented in this file, in reverse 
 
 ### Fixed
 
-- Nothing.
+- Fixed `Zend\Http\Cookies::getAllCookies(Zend\Http\Cookies::COOKIE_STRING_ARRAY)`.
+- Fixed `Zend\Http\Cookies::getAllCookies(Zend\Http\Cookies::COOKIE_STRING_CONCAT)`.
+- Fixed use of HTTP URIs with empty path in Request
 
 ## 2.11.3 - TBD
 

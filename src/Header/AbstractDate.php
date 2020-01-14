@@ -95,7 +95,13 @@ abstract class AbstractDate implements HeaderInterface
      */
     public static function fromTimeString($time)
     {
-        return static::fromTimestamp(strtotime($time));
+        $timestamp = strtotime((string) $time);
+
+        if (false === $timestamp) {
+            throw new Exception\InvalidArgumentException(sprintf('Invalid time %s', $time));
+        }
+
+        return static::fromTimestamp($timestamp);
     }
 
     /**
@@ -159,14 +165,16 @@ abstract class AbstractDate implements HeaderInterface
     {
         if (is_string($date)) {
             try {
-                $date = new DateTime($date, new DateTimeZone('GMT'));
+                $dateObj = new DateTime($date, new DateTimeZone('GMT'));
             } catch (\Exception $e) {
                 throw new Exception\InvalidArgumentException(
-                    sprintf('Invalid date passed as string (%s)', (string) $date),
+                    sprintf('Invalid date passed as string (%s)', $date),
                     $e->getCode(),
                     $e
                 );
             }
+
+            $date = $dateObj;
         } elseif (! ($date instanceof DateTime)) {
             throw new Exception\InvalidArgumentException('Date must be an instance of \DateTime or a string');
         }
@@ -195,7 +203,7 @@ abstract class AbstractDate implements HeaderInterface
     public function date()
     {
         if ($this->date === null) {
-            $this->date = new DateTime(null, new DateTimeZone('GMT'));
+            $this->date = new DateTime('now', new DateTimeZone('GMT'));
         }
         return $this->date;
     }
@@ -213,14 +221,16 @@ abstract class AbstractDate implements HeaderInterface
     {
         if (is_string($date)) {
             try {
-                $date = new DateTime($date, new DateTimeZone('GMT'));
+                $dateObj = new DateTime($date, new DateTimeZone('GMT'));
             } catch (\Exception $e) {
                 throw new Exception\InvalidArgumentException(
-                    sprintf('Invalid Date passed as string (%s)', (string) $date),
+                    sprintf('Invalid Date passed as string (%s)', $date),
                     $e->getCode(),
                     $e
                 );
             }
+
+            $date = $dateObj;
         } elseif (! ($date instanceof DateTime)) {
             throw new Exception\InvalidArgumentException('Date must be an instance of \DateTime or a string');
         }

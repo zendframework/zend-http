@@ -43,7 +43,7 @@ class RetryAfter extends AbstractDate
         }
 
         if (is_numeric($date)) {
-            $dateHeader->setDeltaSeconds($date);
+            $dateHeader->setDeltaSeconds((int) $date);
         } else {
             $dateHeader->setDate($date);
         }

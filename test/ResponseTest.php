@@ -16,6 +16,23 @@ use Zend\Http\Response;
 
 class ResponseTest extends TestCase
 {
+
+    private $originalErrorReporting;
+
+    protected function setUp()
+    {
+        $this->originalErrorReporting = \error_reporting();
+
+        parent::setUp();
+    }
+
+    protected function tearDown()
+    {
+        \error_reporting($this->originalErrorReporting);
+
+        parent::tearDown();
+    }
+
     public function validHttpVersions()
     {
         yield 'http/1.0' => ['1.0'];
@@ -224,6 +241,35 @@ REQ;
         $this->assertEquals('deflate', $res->getHeaders()->get('Content-encoding')->getFieldValue());
         $this->assertEquals('0b13cb193de9450aa70a6403e2c9902f', md5($res->getBody()));
         $this->assertEquals('ad62c21c3aa77b6a6f39600f6dd553b8', md5($res->getContent()));
+    }
+
+    public function testDeflateResponseWithDeflateError()
+    {
+        \error_reporting(E_ALL ^ \E_STRICT ^ \E_WARNING);
+
+        $this->expectException(RuntimeException::class);
+        $this->expectExceptionMessage('An error occurred during inflation');
+
+        $responseTest = <<<'REQ'
+HTTP/1.1 200 OK
+Date: Sun, 25 Jun 2006 19:38:02 GMT
+Server: Apache
+X-powered-by: PHP/5.1.4-pl3-gentoo
+Content-encoding: deflate
+Vary: Accept-Encoding
+Content-length: 300
+Connection: close
+Content-type: text/html
+
+REQ;
+
+        // uncompressed data is more than 32768 times the length of the compressed input data
+        $data = \str_repeat('1', 10000000);
+
+        $responseTest .= "\n" . \gzdeflate($data);
+
+        $res = Response::fromString($responseTest);
+        $res->getBody();
     }
 
     public function testDeflateResponseWithEmptyBody()
@@ -630,6 +676,14 @@ REQ;
         $request = Response::fromString($this->readResponse('response_100_continue'));
         $this->assertEquals(Response::STATUS_CODE_200, $request->getStatusCode());
         $this->assertEquals($fixture, $request->getBody());
+    }
+
+    public function test100ContinueWithInvalidContent()
+    {
+        $this->expectException(InvalidArgumentException::class);
+        $this->expectExceptionMessage('Invalid response content');
+
+        Response::fromString("HTTP/1.1 100 Continue\r\n");
     }
 
     /**
