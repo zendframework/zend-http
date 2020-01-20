@@ -2,7 +2,7 @@
 
 > ## Repository abandoned 2019-12-31
 >
-> This repository has moved to laminas/laminas-http.
+> This repository has moved to [laminas/laminas-http](https://github.com/laminas/laminas-http).
 
 [![Build Status](https://secure.travis-ci.org/zendframework/zend-http.svg?branch=master)](https://secure.travis-ci.org/zendframework/zend-http)
 [![Coverage Status](https://coveralls.io/repos/github/zendframework/zend-http/badge.svg?branch=master)](https://coveralls.io/github/zendframework/zend-http?branch=master)
