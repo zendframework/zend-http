@@ -7,12 +7,12 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="HTTP message and header abstractions, and HTTP client implementation. (Not a PSR-7 implementation; see Diactoros for PSR-7 support.">  
-    <link rel="canonical" href="https://docs.zendframework.com/zend-http/response/">
+    <link rel="canonical" href="https://docs.zendframework.com/response/">
     <link rel="shortcut icon" href="../img/favicon.ico">
 
     <title>Response - zend-http - Zend Framework Docs</title>
 
-    <link rel="stylesheet" href="../css/styles-5cfabd53ee.css">
+    <link rel="stylesheet" href="/css/styles.css">
 </head>
 <body id="page-top">
 
@@ -220,9 +220,9 @@
     <div class="laminas-announcement">
     <div class="container">
         <div class="row">
-            <div class="col-xs-12">
-                Zend Framework transitions to the Linux Foundation. <a href="https://getlaminas.org">Learn More.</a>
-            </div>
+            <div class="col-xs-12"><strong>
+                This package has moved. Visit its replacement, <a href="https://docs.laminas.dev/laminas-http/">laminas/laminas-http.</a>
+            </strong></div>
         </div>
     </div>
 </div>
@@ -302,9 +302,11 @@
 <p><code>Zend\Http\Response</code> is responsible for providing a fluent API that allows a
 developer to interact with all the various parts of an HTTP response.</p>
 <p>A typical HTTP Response looks like this:</p>
-<pre class=codehilite><code class=language-text>| VERSION | CODE | REASON |
+<pre><code class="language-text">| VERSION | CODE | REASON |
 |        HEADERS          |
-|         BODY            |</code></pre>
+|         BODY            |
+</code></pre>
+
 <p>The first line of the response consists of the HTTP version, status code, and
 the reason string for the provided status code; this is called the Response
 Line. Next is a set of zero or more headers.  The remainder of the response is
@@ -317,7 +319,7 @@ specification of an HTTP response can be found in
 <p>Response objects can either be created from the provided <code>fromString()</code> factory,
 or, if you wish to have a completely empty object to start with, by
 instantiating the <code>Zend\Http\Response</code> class with no arguments.</p>
-<pre class=codehilite><code class=language-php>use Zend\Http\Response;
+<pre><code class="language-php">use Zend\Http\Response;
 $response = Response::fromString(&lt;&lt;&lt;EOS
 HTTP/1.0 200 OK
 HeaderField1: header-field-value
@@ -345,7 +347,9 @@ $response-&gt;setContent(&lt;&lt;&lt;EOS
 &lt;/body&gt;
 &lt;/html&gt;
 EOS
-);</code></pre>
+);
+</code></pre>
+
 <h2 id="configuration-options">Configuration Options</h2>
 <p>No configuration options are available.</p>
 <h2 id="available-methods">Available Methods</h2>
@@ -476,7 +480,7 @@ fully qualified class names and/or namespaces:</p>
 </table></div>
 <h2 id="examples">Examples</h2>
 <h3>Generating a Response object from a string</h3>
-<pre class=codehilite><code class=language-php>use Zend\Http\Response;
+<pre><code class="language-php">use Zend\Http\Response;
 $request = Response::fromString(&lt;&lt;&lt;EOS
 HTTP/1.0 200 OK
 HeaderField1: header-field-value
@@ -487,9 +491,11 @@ HeaderField2: header-field-value2
     Hello World
 &lt;/body&gt;
 &lt;/html&gt;
-EOS);</code></pre>
+EOS);
+</code></pre>
+
 <h3>Generating a formatted HTTP Response from a Response object</h3>
-<pre class=codehilite><code class=language-php>use Zend\Http\Response;
+<pre><code class="language-php">use Zend\Http\Response;
 $response = new Response();
 $response-&gt;setStatusCode(Response::STATUS_CODE_200);
 $response-&gt;getHeaders()-&gt;addHeaders([
@@ -502,7 +508,8 @@ $response-&gt;setContent(&lt;&lt;&lt;EOS
     Hello World
 &lt;/body&gt;
 &lt;/html&gt;
-EOS);</code></pre>
+EOS);
+</code></pre>
 
 
 
@@ -689,7 +696,7 @@ EOS);</code></pre>
             
             <div class="col-md-9">
                 <h4 class="footer__headline">Copyright</h4>
-                <p>&copy; 2006-2019 by <a href="https://www.zend.com/">Zend</a>, a <a href="https://www.roguewave.com/">Rogue Wave Company</a>.</p>
+                <p>&copy; 2006-2020 by <a href="https://www.zend.com/">Zend</a> by <a href="https://www.perforce.com/">Perforce</a>.</p>
             </div>
 
             
@@ -697,10 +704,10 @@ EOS);</code></pre>
                 <h4 class="footer__headline">Support</h4>
                 <ul class="support__list">
                     <li class="support__list-item">
-                        <a href="https://discourse.zendframework.com" class="support__link" title="Forum"><i class="fa fa-comments"></i></a>
+                        <a href="https://discourse.laminas.dev" class="support__link" title="Forum"><i class="fa fa-comments"></i></a>
                     </li>
                     <li class="support__list-item">
-                        <a href="https://zendframework-slack.herokuapp.com" class="support__link" title="Chat"><i class="fa fa-slack"></i></a>
+                        <a href="https://laminas.dev/chat/" class="support__link" title="Chat"><i class="fa fa-slack"></i></a>
                     </li>
                     <li class="support__list-item">
                         <a href="https://github.com/zendframework" class="support__link" title="Github"><i class="fa fa-github"></i></a>
@@ -708,27 +715,28 @@ EOS);</code></pre>
                     <li class="support__list-item">
                         <a href="https://twitter.com/zfdevteam" class="support__link" title="Twitter"><i class="fa fa-twitter"></i></a>
                     </li>
-                    <li class="support__list-item">
-                        <a href="https://tinyletter.com/mwopzend" class="support__link" title="Newsletter"><i class="fa fa-envelope"></i></a>
-                    </li>
-                    <li class="support__list-item">
-                        <a href="https://framework.zend.com/blog/feed-rss.xml" class="support__link" title="Blog feed"><i class="fa fa-rss"></i></a>
-                    </li>
-                    <li class="support__list-item">
-                        <a href="https://framework.zend.com/security/feed" class="support__link" title="Security feed"><i class="fa fa-rss-square"></i></a>
-                    </li>
                 </ul>
             </div>
         </div>
     </div>
 </footer>
 
+<nav class="cookie-bar navbar navbar-fixed-bottom navbar-default hidden">
+    <div class="container">
+        <p class="navbar-text">
+            We use cookies to allow you to dismiss dialogs such as the Laminas
+            Project notification.
+        </p>
+        <button type="button" class="cookie-button btn btn-default navbar-btn">Allow Cookies</button>
+    </div>
+</nav>
+
     <script>
         var base_url = '..',
             siteName = 'zend-http';
     </script>
-    <script src="../js/scripts-8d7ae56abf.js"></script>
-        <script src="../search/main.js"></script>
+    <script src="/js/scripts.js"></script>
+    <script src="../search/main.js"></script>
 
     
     <div class="modal" id="mkdocs_search_modal" tabindex="-1" role="dialog" aria-labelledby="Search Modal" aria-hidden="true">

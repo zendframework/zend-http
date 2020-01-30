@@ -7,12 +7,12 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="HTTP message and header abstractions, and HTTP client implementation. (Not a PSR-7 implementation; see Diactoros for PSR-7 support.">  
-    <link rel="canonical" href="https://docs.zendframework.com/zend-http/request/">
+    <link rel="canonical" href="https://docs.zendframework.com/request/">
     <link rel="shortcut icon" href="../img/favicon.ico">
 
     <title>Request - zend-http - Zend Framework Docs</title>
 
-    <link rel="stylesheet" href="../css/styles-5cfabd53ee.css">
+    <link rel="stylesheet" href="/css/styles.css">
 </head>
 <body id="page-top">
 
@@ -220,9 +220,9 @@
     <div class="laminas-announcement">
     <div class="container">
         <div class="row">
-            <div class="col-xs-12">
-                Zend Framework transitions to the Linux Foundation. <a href="https://getlaminas.org">Learn More.</a>
-            </div>
+            <div class="col-xs-12"><strong>
+                This package has moved. Visit its replacement, <a href="https://docs.laminas.dev/laminas-http/">laminas/laminas-http.</a>
+            </strong></div>
         </div>
     </div>
 </div>
@@ -302,9 +302,11 @@
 <p><code>Zend\Http\Request</code> is responsible for providing a fluent API that allows a
 developer to interact with all the various parts of an HTTP request.</p>
 <p>A typical HTTP request looks like this:</p>
-<pre class=codehilite><code class=language-text>| METHOD | URI | VERSION |
+<pre><code class="language-text">| METHOD | URI | VERSION |
 |        HEADERS         |
-|         BODY           |</code></pre>
+|         BODY           |
+</code></pre>
+
 <p>In simplified terms, the request consists of a method, URI, and HTTP version
 number; together, they make up the "Request Line." This line is followed by zero
 or more HTTP headers, which is followed by an empty line and then the request
@@ -317,7 +319,7 @@ specification of a HTTP request can be found in
 <p>Request objects can either be created from the provided <code>fromString()</code> factory,
 or, if you wish to have a completely empty object to start with, by
 manually instantiating the <code>Zend\Http\Request</code> class with no parameters.</p>
-<pre class=codehilite><code class=language-php>use Zend\Http\Request;
+<pre><code class="language-php">use Zend\Http\Request;
 
 $request = Request::fromString(&lt;&lt;&lt;EOS
 POST /foo HTTP/1.1
@@ -337,7 +339,9 @@ $request-&gt;getHeaders()-&gt;addHeaders([
     'HeaderField1' =&gt; 'header-field-value1',
     'HeaderField2' =&gt; 'header-field-value2',
 ]);
-$request-&gt;getPost()-&gt;set('foo', 'bar');</code></pre>
+$request-&gt;getPost()-&gt;set('foo', 'bar');
+</code></pre>
+
 <h2 id="configuration-options">Configuration Options</h2>
 <p>No configuration options are available.</p>
 <h2 id="available-methods">Available Methods</h2>
@@ -504,7 +508,7 @@ fully qualified class names and/or namespaces:</p>
 </table></div>
 <h2 id="examples">Examples</h2>
 <h3>Generating a Request object from a string</h3>
-<pre class=codehilite><code class=language-php>use Zend\Http\Request;
+<pre><code class="language-php">use Zend\Http\Request;
 
 $string = &quot;GET /foo HTTP/1.1\r\n\r\nSome Content&quot;;
 $request = Request::fromString($string);
@@ -513,9 +517,11 @@ $request-&gt;getMethod();    // returns Request::METHOD_GET
 $request-&gt;getUri();       // returns Zend\Uri\Http object
 $request-&gt;getUriString(); // returns '/foo'
 $request-&gt;getVersion();   // returns Request::VERSION_11 or '1.1'
-$request-&gt;getContent();   // returns 'Some Content'</code></pre>
+$request-&gt;getContent();   // returns 'Some Content'
+</code></pre>
+
 <h3>Retrieving and setting headers</h3>
-<pre class=codehilite><code class=language-php>use Zend\Http\Request;
+<pre><code class="language-php">use Zend\Http\Request;
 use Zend\Http\Header\Cookie;
 
 $request = new Request();
@@ -523,9 +529,11 @@ $request-&gt;getHeaders()-&gt;get('Content-Type'); // return content type
 $request-&gt;getHeaders()-&gt;addHeader(new Cookie(['foo' =&gt; 'bar']));
 foreach ($request-&gt;getHeaders() as $header) {
     printf(&quot;%s with value %s\n&quot;, $header-&gt;getFieldName(), $header-&gt;getFieldValue());
-}</code></pre>
+}
+</code></pre>
+
 <h3>Retrieving and setting GET and POST values</h3>
-<pre class=codehilite><code class=language-php>use Zend\Http\Request;
+<pre><code class="language-php">use Zend\Http\Request;
 
 $request = new Request();
 
@@ -534,9 +542,11 @@ $request = new Request();
 $request-&gt;getPost()-&gt;foo = 'Foo value';
 $request-&gt;getQuery()-&gt;bar = 'Bar value';
 $request-&gt;getPost('foo'); // returns 'Foo value'
-$request-&gt;getQuery()-&gt;offsetGet('bar'); // returns 'Bar value'</code></pre>
+$request-&gt;getQuery()-&gt;offsetGet('bar'); // returns 'Bar value'
+</code></pre>
+
 <h3>Generating a formatted HTTP Request from a Request object</h3>
-<pre class=codehilite><code class=language-php>use Zend\Http\Request;
+<pre><code class="language-php">use Zend\Http\Request;
 
 $request = new Request();
 $request-&gt;setMethod(Request::METHOD_POST);
@@ -555,7 +565,8 @@ HeaderField1: header-field-value1
 HeaderField2: header-field-value2
 
 foo=bar
-*/</code></pre>
+*/
+</code></pre>
 
 
 
@@ -742,7 +753,7 @@ foo=bar
             
             <div class="col-md-9">
                 <h4 class="footer__headline">Copyright</h4>
-                <p>&copy; 2006-2019 by <a href="https://www.zend.com/">Zend</a>, a <a href="https://www.roguewave.com/">Rogue Wave Company</a>.</p>
+                <p>&copy; 2006-2020 by <a href="https://www.zend.com/">Zend</a> by <a href="https://www.perforce.com/">Perforce</a>.</p>
             </div>
 
             
@@ -750,10 +761,10 @@ foo=bar
                 <h4 class="footer__headline">Support</h4>
                 <ul class="support__list">
                     <li class="support__list-item">
-                        <a href="https://discourse.zendframework.com" class="support__link" title="Forum"><i class="fa fa-comments"></i></a>
+                        <a href="https://discourse.laminas.dev" class="support__link" title="Forum"><i class="fa fa-comments"></i></a>
                     </li>
                     <li class="support__list-item">
-                        <a href="https://zendframework-slack.herokuapp.com" class="support__link" title="Chat"><i class="fa fa-slack"></i></a>
+                        <a href="https://laminas.dev/chat/" class="support__link" title="Chat"><i class="fa fa-slack"></i></a>
                     </li>
                     <li class="support__list-item">
                         <a href="https://github.com/zendframework" class="support__link" title="Github"><i class="fa fa-github"></i></a>
@@ -761,27 +772,28 @@ foo=bar
                     <li class="support__list-item">
                         <a href="https://twitter.com/zfdevteam" class="support__link" title="Twitter"><i class="fa fa-twitter"></i></a>
                     </li>
-                    <li class="support__list-item">
-                        <a href="https://tinyletter.com/mwopzend" class="support__link" title="Newsletter"><i class="fa fa-envelope"></i></a>
-                    </li>
-                    <li class="support__list-item">
-                        <a href="https://framework.zend.com/blog/feed-rss.xml" class="support__link" title="Blog feed"><i class="fa fa-rss"></i></a>
-                    </li>
-                    <li class="support__list-item">
-                        <a href="https://framework.zend.com/security/feed" class="support__link" title="Security feed"><i class="fa fa-rss-square"></i></a>
-                    </li>
                 </ul>
             </div>
         </div>
     </div>
 </footer>
 
+<nav class="cookie-bar navbar navbar-fixed-bottom navbar-default hidden">
+    <div class="container">
+        <p class="navbar-text">
+            We use cookies to allow you to dismiss dialogs such as the Laminas
+            Project notification.
+        </p>
+        <button type="button" class="cookie-button btn btn-default navbar-btn">Allow Cookies</button>
+    </div>
+</nav>
+
     <script>
         var base_url = '..',
             siteName = 'zend-http';
     </script>
-    <script src="../js/scripts-8d7ae56abf.js"></script>
-        <script src="../search/main.js"></script>
+    <script src="/js/scripts.js"></script>
+    <script src="../search/main.js"></script>
 
     
     <div class="modal" id="mkdocs_search_modal" tabindex="-1" role="dialog" aria-labelledby="Search Modal" aria-hidden="true">

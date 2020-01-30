@@ -7,12 +7,12 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="HTTP message and header abstractions, and HTTP client implementation. (Not a PSR-7 implementation; see Diactoros for PSR-7 support.">  
-    <link rel="canonical" href="https://docs.zendframework.com/zend-http/client/adapters/">
+    <link rel="canonical" href="https://docs.zendframework.com/client/adapters/">
     <link rel="shortcut icon" href="../../img/favicon.ico">
 
     <title>Adapters - zend-http - Zend Framework Docs</title>
 
-    <link rel="stylesheet" href="../../css/styles-5cfabd53ee.css">
+    <link rel="stylesheet" href="/css/styles.css">
 </head>
 <body id="page-top">
 
@@ -220,9 +220,9 @@
     <div class="laminas-announcement">
     <div class="container">
         <div class="row">
-            <div class="col-xs-12">
-                Zend Framework transitions to the Linux Foundation. <a href="https://getlaminas.org">Learn More.</a>
-            </div>
+            <div class="col-xs-12"><strong>
+                This package has moved. Visit its replacement, <a href="https://docs.laminas.dev/laminas-http/">laminas/laminas-http.</a>
+            </strong></div>
         </div>
     </div>
 </div>
@@ -429,7 +429,7 @@ connecting to requires special client setup. If so, please read the
 <a href="http://php.net/transports.inet">PHP manual chapter on SSL and TLS transport options</a>.</p>
 </blockquote>
 <h3>Changing the HTTPS transport layer</h3>
-<pre class=codehilite><code class=language-php>use Zend\Http\Client;
+<pre><code class="language-php">use Zend\Http\Client;
 
 // Set the configuration parameters
 $config = [
@@ -441,10 +441,14 @@ $config = [
 $client = new Client('https://www.example.com', $config);
 
 // The following request will be sent over a TLS secure connection.
-$response = $client-&gt;send();</code></pre>
+$response = $client-&gt;send();
+</code></pre>
+
 <p>The result of the example above will be similar to opening a TCP connection
 using the following PHP command:</p>
-<pre class=codehilite><code class=language-php>fsockopen('tls://www.example.com', 443);</code></pre>
+<pre><code class="language-php">fsockopen('tls://www.example.com', 443);
+</code></pre>
+
 <h3>Customizing and accessing the Socket adapter stream context</h3>
 <p><code>Zend\Http\Client\Adapter\Socket</code> provides direct access to the underlying
 <a href="http://php.net/stream.contexts">stream context</a> used to connect to the remote
@@ -465,7 +469,7 @@ stream, and to the SSL wrapper in case of HTTPS connections.</p>
   using regular PHP stream context functions.</li>
 </ul>
 <h4>Setting stream context options for the Socket adapter</h4>
-<pre class=codehilite><code class=language-php>use Zend\Http\Client;
+<pre><code class="language-php">use Zend\Http\Client;
 
 // Array of options
 $options = [
@@ -505,7 +509,9 @@ $response = $client-&gt;send();
 
 // If everything went well, you can now access the context again:
 $opts = stream_context_get_options($adapter-&gt;getStreamContext());
-echo $opts['ssl']['peer_certificate'];</code></pre>
+echo $opts['ssl']['peer_certificate'];
+</code></pre>
+
 <blockquote>
 <h4>Set stream context options prior to requests</h4>
 <p>Note that you must set any stream context options before using the adapter to
@@ -577,7 +583,7 @@ authentication.  Possible values are similar to the ones accepted by the
 <code>Zend\Http\Client::setAuth()</code> method. Currently, only basic authentication
 (<code>Zend\Http\Client::AUTH_BASIC</code>) is supported.</p>
 <h3>Using Zend\Http\Client behind a proxy server</h3>
-<pre class=codehilite><code class=language-php>use Zend\Http\Client;
+<pre><code class="language-php">use Zend\Http\Client;
 
 // Set the configuration parameters
 $config = [
@@ -591,7 +597,9 @@ $config = [
 // Instantiate a client object
 $client = new Client('http://www.example.com', $config);
 
-// Continue working...</code></pre>
+// Continue working...
+</code></pre>
+
 <p>As mentioned, if <code>proxy_host</code> is not set or is set to a blank string, the
 connection will fall back to a regular direct connection. This allows you to
 write your application in a way that allows a proxy to be used optionally,
@@ -617,13 +625,15 @@ prior to 7.30.0. It leads to problems with removing the Transfer-Encoding
 header from the response. We encourage to update libcurl.</p>
 </blockquote>
 <h3>Setting cURL options</h3>
-<pre class=codehilite><code class=language-php>use Zend\Http\Client;
+<pre><code class="language-php">use Zend\Http\Client;
 
 $config = [
     'adapter'     =&gt; Client\Adapter\Curl::class,
     'curloptions' =&gt; [CURLOPT_FOLLOWLOCATION =&gt; true],
 ];
-$client = new Client($uri, $config);</code></pre>
+$client = new Client($uri, $config);
+</code></pre>
+
 <p>By default, the cURL adapter is configured to behave exactly like the <code>Socket</code>
 adapter, and it also accepts the same configuration parameters as the <code>Socket</code>
 and <code>Proxy</code> adapters. You can also change the cURL options by either specifying
@@ -677,7 +687,7 @@ method are:</p>
 </table></div>
 <h3>Transfering files by handle</h3>
 <p>You can use cURL to transfer very large files over HTTP by filehandle.</p>
-<pre class=codehilite><code class=language-php>use Zend\Http\Client;
+<pre><code class="language-php">use Zend\Http\Client;
 
 $putFileSize   = filesize('filepath');
 $putFileHandle = fopen('filepath', 'r');
@@ -692,7 +702,9 @@ $adapter-&gt;setOptions([
         CURLOPT_INFILESIZE =&gt; $putFileSize,
     ],
 ]);
-$client-&gt;send();</code></pre>
+$client-&gt;send();
+</code></pre>
+
 <h2 id="the-test-adapter">The Test adapter</h2>
 <p>Testing code that relies on HTTP connections poses difficulties.  For example,
 testing an application that pulls an RSS feed from a remote server will require
@@ -709,7 +721,7 @@ an individual response to always return from any request; <code>addResponse()</c
 aggregating a sequence of responses. In both cases, responses are returned
 without performing actual HTTP requests.</p>
 <h3>Testing against a single HTTP response stub</h3>
-<pre class=codehilite><code class=language-php>use Zend\Http\Client;
+<pre><code class="language-php">use Zend\Http\Client;
 
 // Instantiate a new adapter and client
 $adapter = new Client\Adapter\Test();
@@ -735,7 +747,9 @@ $adapter-&gt;setResponse(
 );
 
 $response = $client-&gt;send();
-// .. continue parsing $response..</code></pre>
+// .. continue parsing $response..
+</code></pre>
+
 <p>The above example shows how you can preset your HTTP client to return the
 response you need. Then, you can continue testing your own code, without being
 dependent on a network connection, the server's response, etc. In this case, the
@@ -746,7 +760,7 @@ performing multiple HTTP transactions. In this case, it's not possible to use
 <code>setResponse()</code> alone because there's no opportunity to set the next response(s)
 your program might need before returning to the caller.</p>
 <h3>Testing Against Multiple HTTP Response Stubs</h3>
-<pre class=codehilite><code class=language-php>use Zend\Http\Client;
+<pre><code class="language-php">use Zend\Http\Client;
 
 // Instantiate a new adapter and client
 $adapter = new Client\Adapter\Test();
@@ -779,7 +793,9 @@ $adapter-&gt;addResponse(
 );
 
 // inject the http client object ($client) into your object
-// being tested and then test your object's behavior below</code></pre>
+// being tested and then test your object's behavior below
+</code></pre>
+
 <p>The <code>setResponse()</code> method clears any responses in the adapter's buffer and sets
 the first response that will be returned. The <code>addResponse()</code> method will add
 successive responses.</p>
@@ -800,7 +816,7 @@ your object under test and test its behavior.</p>
 <code>connect()</code> to throw an <code>Zend\Http\Client\Adapter\Exception\RuntimeException</code>.
 This can be useful when our application caches content from an external site (in
 case the site goes down) and you want to test this feature.</p>
-<pre class=codehilite><code class=language-php>use Zend\Http\Client;
+<pre><code class="language-php">use Zend\Http\Client;
 
 // Instantiate a new adapter and client
 $adapter = new Client\Adapter\Test();
@@ -820,7 +836,9 @@ try {
 }
 
 // Further requests will work as expected until
-// you call setNextRequestWillFail(true) again</code></pre>
+// you call setNextRequestWillFail(true) again
+</code></pre>
+
 <h2 id="creating-your-own-connection-adapters">Creating your own connection adapters</h2>
 <p><code>Zend\Http\Client</code> has been designed so that you can create and use your own
 connection adapters. You could, for example, create a connection adapter that
@@ -830,7 +848,7 @@ them as needed in your application.</p>
 <code>Zend\Http\Client\Adapter\AdapterInterface</code>. The following example shows the
 skeleton of a user-implemented adapter class. All the public functions defined
 in this example must be defined in your adapter as well.</p>
-<pre class=codehilite><code class=language-php>namespace MyApp\Http\Client\Adapter;
+<pre><code class="language-php">namespace MyApp\Http\Client\Adapter;
 
 use Zend\Http\Client\Adapter\AdapterInterface;
 
@@ -899,14 +917,17 @@ class BananaProtocol implements AdapterInterface
     {
         // Close the connection to the remote server - called last.
     }
-}</code></pre>
+}
+</code></pre>
+
 <p>Use the adapter as you would any other:</p>
-<pre class=codehilite><code class=language-php>use MyApp\Http\Client\Adapter\BananaProtocol;
+<pre><code class="language-php">use MyApp\Http\Client\Adapter\BananaProtocol;
 use Zend\Http\Client;
 
 $client = new Client([
     'adapter' =&gt; BananaProtocol::class,
-]);</code></pre>
+]);
+</code></pre>
 
 
 
@@ -1093,7 +1114,7 @@ $client = new Client([
             
             <div class="col-md-9">
                 <h4 class="footer__headline">Copyright</h4>
-                <p>&copy; 2006-2019 by <a href="https://www.zend.com/">Zend</a>, a <a href="https://www.roguewave.com/">Rogue Wave Company</a>.</p>
+                <p>&copy; 2006-2020 by <a href="https://www.zend.com/">Zend</a> by <a href="https://www.perforce.com/">Perforce</a>.</p>
             </div>
 
             
@@ -1101,10 +1122,10 @@ $client = new Client([
                 <h4 class="footer__headline">Support</h4>
                 <ul class="support__list">
                     <li class="support__list-item">
-                        <a href="https://discourse.zendframework.com" class="support__link" title="Forum"><i class="fa fa-comments"></i></a>
+                        <a href="https://discourse.laminas.dev" class="support__link" title="Forum"><i class="fa fa-comments"></i></a>
                     </li>
                     <li class="support__list-item">
-                        <a href="https://zendframework-slack.herokuapp.com" class="support__link" title="Chat"><i class="fa fa-slack"></i></a>
+                        <a href="https://laminas.dev/chat/" class="support__link" title="Chat"><i class="fa fa-slack"></i></a>
                     </li>
                     <li class="support__list-item">
                         <a href="https://github.com/zendframework" class="support__link" title="Github"><i class="fa fa-github"></i></a>
@@ -1112,27 +1133,28 @@ $client = new Client([
                     <li class="support__list-item">
                         <a href="https://twitter.com/zfdevteam" class="support__link" title="Twitter"><i class="fa fa-twitter"></i></a>
                     </li>
-                    <li class="support__list-item">
-                        <a href="https://tinyletter.com/mwopzend" class="support__link" title="Newsletter"><i class="fa fa-envelope"></i></a>
-                    </li>
-                    <li class="support__list-item">
-                        <a href="https://framework.zend.com/blog/feed-rss.xml" class="support__link" title="Blog feed"><i class="fa fa-rss"></i></a>
-                    </li>
-                    <li class="support__list-item">
-                        <a href="https://framework.zend.com/security/feed" class="support__link" title="Security feed"><i class="fa fa-rss-square"></i></a>
-                    </li>
                 </ul>
             </div>
         </div>
     </div>
 </footer>
 
+<nav class="cookie-bar navbar navbar-fixed-bottom navbar-default hidden">
+    <div class="container">
+        <p class="navbar-text">
+            We use cookies to allow you to dismiss dialogs such as the Laminas
+            Project notification.
+        </p>
+        <button type="button" class="cookie-button btn btn-default navbar-btn">Allow Cookies</button>
+    </div>
+</nav>
+
     <script>
         var base_url = '../..',
             siteName = 'zend-http';
     </script>
-    <script src="../../js/scripts-8d7ae56abf.js"></script>
-        <script src="../../search/main.js"></script>
+    <script src="/js/scripts.js"></script>
+    <script src="../../search/main.js"></script>
 
     
     <div class="modal" id="mkdocs_search_modal" tabindex="-1" role="dialog" aria-labelledby="Search Modal" aria-hidden="true">

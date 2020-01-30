@@ -1,53 +1,53 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
     <url>
-     <loc>https://docs.zendframework.com/zend-http/</loc>
-     <lastmod>2019-12-30</lastmod>
+     <loc>https://docs.zendframework.com/</loc>
+     <lastmod>2020-01-30</lastmod>
      <changefreq>daily</changefreq>
     </url>
     <url>
-     <loc>https://docs.zendframework.com/zend-http/intro/</loc>
-     <lastmod>2019-12-30</lastmod>
+     <loc>https://docs.zendframework.com/intro/</loc>
+     <lastmod>2020-01-30</lastmod>
      <changefreq>daily</changefreq>
     </url>
     <url>
-     <loc>https://docs.zendframework.com/zend-http/request/</loc>
-     <lastmod>2019-12-30</lastmod>
+     <loc>https://docs.zendframework.com/request/</loc>
+     <lastmod>2020-01-30</lastmod>
      <changefreq>daily</changefreq>
     </url>
     <url>
-     <loc>https://docs.zendframework.com/zend-http/response/</loc>
-     <lastmod>2019-12-30</lastmod>
+     <loc>https://docs.zendframework.com/response/</loc>
+     <lastmod>2020-01-30</lastmod>
      <changefreq>daily</changefreq>
     </url>
     <url>
-     <loc>https://docs.zendframework.com/zend-http/headers/</loc>
-     <lastmod>2019-12-30</lastmod>
+     <loc>https://docs.zendframework.com/headers/</loc>
+     <lastmod>2020-01-30</lastmod>
      <changefreq>daily</changefreq>
     </url>
     <url>
-     <loc>https://docs.zendframework.com/zend-http/client/intro/</loc>
-     <lastmod>2019-12-30</lastmod>
+     <loc>https://docs.zendframework.com/client/intro/</loc>
+     <lastmod>2020-01-30</lastmod>
      <changefreq>daily</changefreq>
     </url>
     <url>
-     <loc>https://docs.zendframework.com/zend-http/client/adapters/</loc>
-     <lastmod>2019-12-30</lastmod>
+     <loc>https://docs.zendframework.com/client/adapters/</loc>
+     <lastmod>2020-01-30</lastmod>
      <changefreq>daily</changefreq>
     </url>
     <url>
-     <loc>https://docs.zendframework.com/zend-http/client/static/</loc>
-     <lastmod>2019-12-30</lastmod>
+     <loc>https://docs.zendframework.com/client/static/</loc>
+     <lastmod>2020-01-30</lastmod>
      <changefreq>daily</changefreq>
     </url>
     <url>
-     <loc>https://docs.zendframework.com/zend-http/client/cookies/</loc>
-     <lastmod>2019-12-30</lastmod>
+     <loc>https://docs.zendframework.com/client/cookies/</loc>
+     <lastmod>2020-01-30</lastmod>
      <changefreq>daily</changefreq>
     </url>
     <url>
-     <loc>https://docs.zendframework.com/zend-http/client/advanced/</loc>
-     <lastmod>2019-12-30</lastmod>
+     <loc>https://docs.zendframework.com/client/advanced/</loc>
+     <lastmod>2020-01-30</lastmod>
      <changefreq>daily</changefreq>
     </url>
 </urlset>

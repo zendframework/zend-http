@@ -7,12 +7,12 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="HTTP message and header abstractions, and HTTP client implementation. (Not a PSR-7 implementation; see Diactoros for PSR-7 support.">  
-    <link rel="canonical" href="https://docs.zendframework.com/zend-http/headers/">
+    <link rel="canonical" href="https://docs.zendframework.com/headers/">
     <link rel="shortcut icon" href="../img/favicon.ico">
 
     <title>Headers - zend-http - Zend Framework Docs</title>
 
-    <link rel="stylesheet" href="../css/styles-5cfabd53ee.css">
+    <link rel="stylesheet" href="/css/styles.css">
 </head>
 <body id="page-top">
 
@@ -220,9 +220,9 @@
     <div class="laminas-announcement">
     <div class="container">
         <div class="row">
-            <div class="col-xs-12">
-                Zend Framework transitions to the Linux Foundation. <a href="https://getlaminas.org">Learn More.</a>
-            </div>
+            <div class="col-xs-12"><strong>
+                This package has moved. Visit its replacement, <a href="https://docs.laminas.dev/laminas-http/">laminas/laminas-http.</a>
+            </strong></div>
         </div>
     </div>
 </div>
@@ -333,16 +333,18 @@ header type.</p>
 <h2 id="quick-start">Quick Start</h2>
 <p>The quickest way to get started interacting with header objects is by retrieving
 an already populated <code>Headers</code> container from a request or response instance.</p>
-<pre class=codehilite><code class=language-php>// $client is an instance of Zend\Http\Client
+<pre><code class="language-php">// $client is an instance of Zend\Http\Client
 
 // You can retrieve the request headers by first retrieving
 // the Request object and then calling getHeaders on it
 $requestHeaders  = $client-&gt;getRequest()-&gt;getHeaders();
 
 // The same method also works for retrieving Response headers
-$responseHeaders = $client-&gt;getResponse()-&gt;getHeaders();</code></pre>
+$responseHeaders = $client-&gt;getResponse()-&gt;getHeaders();
+</code></pre>
+
 <p><code>Zend\Http\Headers</code> can also extract headers from a string:</p>
-<pre class=codehilite><code class=language-php>use Zend\Http\Headers;
+<pre><code class="language-php">use Zend\Http\Headers;
 
 $headerString = &lt;&lt;&lt;EOB
 Host: www.example.com
@@ -354,7 +356,9 @@ $headers = Headers::fromString($headerString);
 // $headers is now populated with three objects
 //   (1) Zend\Http\Header\Host
 //   (2) Zend\Http\Header\ContentType
-//   (3) Zend\Http\Header\ContentLength</code></pre>
+//   (3) Zend\Http\Header\ContentLength
+</code></pre>
+
 <p>Now that you have an instance of <code>Zend\Http\Headers</code>, you can manipulate the
 individual headers it contains using the provided public API methods outlined in
 the <a href="#available-methods">Available Methods</a> section.</p>
@@ -860,12 +864,14 @@ namespace, as well as any specific methods they contain. Each class implements
 content from a list of trusted media providers (including a content distribution
 network), and scripts only from a server under its control hosting sanitized
 Javacript:</p>
-<pre class=codehilite><code class=language-php>// http://www.w3.org/TR/2012/CR-CSP-20121115/#sample-policy-definitions
+<pre><code class="language-php">// http://www.w3.org/TR/2012/CR-CSP-20121115/#sample-policy-definitions
 $csp = new ContentSecurityPolicy();
 $csp-&gt;setDirective('default-src', []); // No sources
 $csp-&gt;setDirective('img-src', ['*']);
 $csp-&gt;setDirective('object-src', ['media1.example.com', 'media2.example.com', '*.cdn.example.com']);
-$csp-&gt;setDirective('script-src', ['trustedscripts.example.com']);</code></pre>
+$csp-&gt;setDirective('script-src', ['trustedscripts.example.com']);
+</code></pre>
+
 <h3>ContentTransferEncoding</h3>
 <p>No additional methods.</p>
 <h3>ContentType</h3>
@@ -1158,7 +1164,7 @@ $csp-&gt;setDirective('script-src', ['trustedscripts.example.com']);</code></pre
 string when multiple values are present.</p>
 <h2 id="examples">Examples</h2>
 <h3>Retrieving headers from a Headers object</h3>
-<pre class=codehilite><code class=language-php>// $client is an instance of Zend\Http\Client
+<pre><code class="language-php">// $client is an instance of Zend\Http\Client
 $response = $client-&gt;send();
 $headers = $response-&gt;getHeaders();
 
@@ -1169,7 +1175,9 @@ $headers-&gt;has('Content-Type');
 
 // We can retrieve all instances of a specific header by using
 // the ``get`` method:
-$contentTypeHeaders = $headers-&gt;get('Content-Type');</code></pre>
+$contentTypeHeaders = $headers-&gt;get('Content-Type');
+</code></pre>
+
 <p>There are three possibilities for the return value of the above call to the <code>get</code> method:</p>
 <ul>
 <li>If no <code>Content-Type</code> header was set in the <code>Request</code>, <code>get</code> will return <code>false</code>.</li>
@@ -1180,7 +1188,7 @@ $contentTypeHeaders = $headers-&gt;get('Content-Type');</code></pre>
   instance per header.</li>
 </ul>
 <h3>Adding headers to a Headers object</h3>
-<pre class=codehilite><code class=language-php>use Zend\Http\Header;
+<pre><code class="language-php">use Zend\Http\Header;
 use Zend\Http\Headers;
 
 $headers = new Headers();
@@ -1209,11 +1217,13 @@ $headers-&gt;addHeaders([
     // We can also pass the header name as the array key and the
     // header content as that array key's value
     'Content-Type' =&gt; 'text/html',
-]);</code></pre>
+]);
+</code></pre>
+
 <h3>Removing headers from a Headers object</h3>
 <p>We can remove all headers of a specific type using the <code>removeHeader</code> method,
 which accepts a single object implementing <code>Zend\Http\Header\HeaderInterface</code></p>
-<pre class=codehilite><code class=language-php>use ArrayIterator;
+<pre><code class="language-php">use ArrayIterator;
 use Zend\Http\Header\HeaderInterface;
 
 // $headers is a pre-configured instance of Zend\Http\Headers
@@ -1234,7 +1244,8 @@ if ($matches instanceof ArrayIterator) {
 
 // In addition to this, we can clear all the headers currently stored in
 // the container by calling the clearHeaders() method
-$matches-&gt;clearHeaders();</code></pre>
+$matches-&gt;clearHeaders();
+</code></pre>
 
 
 
@@ -1421,7 +1432,7 @@ $matches-&gt;clearHeaders();</code></pre>
             
             <div class="col-md-9">
                 <h4 class="footer__headline">Copyright</h4>
-                <p>&copy; 2006-2019 by <a href="https://www.zend.com/">Zend</a>, a <a href="https://www.roguewave.com/">Rogue Wave Company</a>.</p>
+                <p>&copy; 2006-2020 by <a href="https://www.zend.com/">Zend</a> by <a href="https://www.perforce.com/">Perforce</a>.</p>
             </div>
 
             
@@ -1429,10 +1440,10 @@ $matches-&gt;clearHeaders();</code></pre>
                 <h4 class="footer__headline">Support</h4>
                 <ul class="support__list">
                     <li class="support__list-item">
-                        <a href="https://discourse.zendframework.com" class="support__link" title="Forum"><i class="fa fa-comments"></i></a>
+                        <a href="https://discourse.laminas.dev" class="support__link" title="Forum"><i class="fa fa-comments"></i></a>
                     </li>
                     <li class="support__list-item">
-                        <a href="https://zendframework-slack.herokuapp.com" class="support__link" title="Chat"><i class="fa fa-slack"></i></a>
+                        <a href="https://laminas.dev/chat/" class="support__link" title="Chat"><i class="fa fa-slack"></i></a>
                     </li>
                     <li class="support__list-item">
                         <a href="https://github.com/zendframework" class="support__link" title="Github"><i class="fa fa-github"></i></a>
@@ -1440,27 +1451,28 @@ $matches-&gt;clearHeaders();</code></pre>
                     <li class="support__list-item">
                         <a href="https://twitter.com/zfdevteam" class="support__link" title="Twitter"><i class="fa fa-twitter"></i></a>
                     </li>
-                    <li class="support__list-item">
-                        <a href="https://tinyletter.com/mwopzend" class="support__link" title="Newsletter"><i class="fa fa-envelope"></i></a>
-                    </li>
-                    <li class="support__list-item">
-                        <a href="https://framework.zend.com/blog/feed-rss.xml" class="support__link" title="Blog feed"><i class="fa fa-rss"></i></a>
-                    </li>
-                    <li class="support__list-item">
-                        <a href="https://framework.zend.com/security/feed" class="support__link" title="Security feed"><i class="fa fa-rss-square"></i></a>
-                    </li>
                 </ul>
             </div>
         </div>
     </div>
 </footer>
 
+<nav class="cookie-bar navbar navbar-fixed-bottom navbar-default hidden">
+    <div class="container">
+        <p class="navbar-text">
+            We use cookies to allow you to dismiss dialogs such as the Laminas
+            Project notification.
+        </p>
+        <button type="button" class="cookie-button btn btn-default navbar-btn">Allow Cookies</button>
+    </div>
+</nav>
+
     <script>
         var base_url = '..',
             siteName = 'zend-http';
     </script>
-    <script src="../js/scripts-8d7ae56abf.js"></script>
-        <script src="../search/main.js"></script>
+    <script src="/js/scripts.js"></script>
+    <script src="../search/main.js"></script>
 
     
     <div class="modal" id="mkdocs_search_modal" tabindex="-1" role="dialog" aria-labelledby="Search Modal" aria-hidden="true">

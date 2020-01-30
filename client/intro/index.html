@@ -7,12 +7,12 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="HTTP message and header abstractions, and HTTP client implementation. (Not a PSR-7 implementation; see Diactoros for PSR-7 support.">  
-    <link rel="canonical" href="https://docs.zendframework.com/zend-http/client/intro/">
+    <link rel="canonical" href="https://docs.zendframework.com/client/intro/">
     <link rel="shortcut icon" href="../../img/favicon.ico">
 
     <title>Intro - zend-http - Zend Framework Docs</title>
 
-    <link rel="stylesheet" href="../../css/styles-5cfabd53ee.css">
+    <link rel="stylesheet" href="/css/styles.css">
 </head>
 <body id="page-top">
 
@@ -220,9 +220,9 @@
     <div class="laminas-announcement">
     <div class="container">
         <div class="row">
-            <div class="col-xs-12">
-                Zend Framework transitions to the Linux Foundation. <a href="https://getlaminas.org">Learn More.</a>
-            </div>
+            <div class="col-xs-12"><strong>
+                This package has moved. Visit its replacement, <a href="https://docs.laminas.dev/laminas-http/">laminas/laminas-http.</a>
+            </strong></div>
         </div>
     </div>
 </div>
@@ -318,7 +318,7 @@ more details).</p>
 be either a string or a <code>Zend\Uri\Http</code> object), and an array or <code>Traversable</code>
 object containing configuration options. The <code>send()</code> method is used to submit
 the request to the remote server, and a <code>Zend\Http\Response</code> object is returned:</p>
-<pre class=codehilite><code class=language-php>use Zend\Http\Client;
+<pre><code class="language-php">use Zend\Http\Client;
 
 $client = new Client(
     'http://example.org',
@@ -327,10 +327,12 @@ $client = new Client(
         'timeout'      =&gt; 30,
     ]
 );
-$response = $client-&gt;send();</code></pre>
+$response = $client-&gt;send();
+</code></pre>
+
 <p>Both constructor parameters can be left out, and set later using the <code>setUri()</code>
 and <code>setOptions()</code> methods:</p>
-<pre class=codehilite><code class=language-php>use Zend\Http\Client;
+<pre><code class="language-php">use Zend\Http\Client;
 
 $client = new Client();
 $client-&gt;setUri('http://example.org');
@@ -338,11 +340,13 @@ $client-&gt;setOptions([
     'maxredirects' =&gt; 0,
     'timeout'      =&gt; 30,
 ]);
-$response = $client-&gt;send();</code></pre>
+$response = $client-&gt;send();
+</code></pre>
+
 <p><code>Zend\Http\Client</code> can also dispatch requests using a separately configured
 <code>request</code> object (see the <a href="../../request/">Request</a> manual for full details of
 the methods available):</p>
-<pre class=codehilite><code class=language-php>use Zend\Http\Client;
+<pre><code class="language-php">use Zend\Http\Client;
 use Zend\Http\Request;
 
 $request = new Request();
@@ -350,7 +354,9 @@ $request-&gt;setUri('http://example.org');
 
 $client = new Client();
 
-$response = $client-&gt;send($request);</code></pre>
+$response = $client-&gt;send($request);
+</code></pre>
+
 <blockquote>
 <h3>URL validation</h3>
 <p><code>Zend\Http\Client</code> uses <code>Zend\Uri\Http</code> to validate URLs. See the
@@ -458,37 +464,43 @@ options available.</p>
 <h2 id="examples">Examples</h2>
 <h3>Performing a GET request</h3>
 <p>GET is the default method used, and requires no special configuration.</p>
-<pre class=codehilite><code class=language-php>use Zend\Http\Client;
+<pre><code class="language-php">use Zend\Http\Client;
 
 $client = new Client('http://example.org');
-$response = $client-&gt;send();</code></pre>
+$response = $client-&gt;send();
+</code></pre>
+
 <h3>Using request methods other than GET</h3>
 <p>The request method can be set using <code>setMethod()</code>. If no method is specified,
 the method set by the last <code>setMethod()</code> call is used. If <code>setMethod()</code> was
 never called, the default request method is <code>GET</code>.</p>
-<pre class=codehilite><code class=language-php>use Zend\Http\Client;
+<pre><code class="language-php">use Zend\Http\Client;
 
 $client = new Client('http://example.org');
 
 // Performing a POST request
 $client-&gt;setMethod('POST');
-$response = $client-&gt;send();</code></pre>
+$response = $client-&gt;send();
+</code></pre>
+
 <p>For convenience, <code>Zend\Http\Request</code> defines all request methods as class
 constants: <code>Zend\Http\Request::METHOD_GET</code>, <code>Zend\Http\Request::METHOD_POST</code> and
 so on.</p>
-<pre class=codehilite><code class=language-php>use Zend\Http\Client;
+<pre><code class="language-php">use Zend\Http\Client;
 use Zend\Http\Request;
 
 $client = new Client('http://example.org');
 
 // Performing a POST request
 $client-&gt;setMethod(Request::METHOD_POST);
-$response = $client-&gt;send();</code></pre>
+$response = $client-&gt;send();
+</code></pre>
+
 <h3>Setting query parameters</h3>
 <p>Adding query parameters to an HTTP request can be done either by specifying them
 as part of the URL, or by using the <code>setParameterGet()</code> method. This method
 takes the query parameters as an associative array of name/value pairs.</p>
-<pre class=codehilite><code class=language-php>use Zend\Http\Client;
+<pre><code class="language-php">use Zend\Http\Client;
 $client = new Client();
 
 // This is equivalent to setting a URL in the Client's constructor:
@@ -500,14 +512,16 @@ $client-&gt;setParameterGet([
     'middle_name' =&gt; 'Bending',
     'last_name'   =&gt; 'Rodríguez',
     'made_in'     =&gt; 'Mexico',
-]);</code></pre>
+]);
+</code></pre>
+
 <h3>Setting form-encoded body parameters</h3>
 <p>While query parameters can be sent with every request method, other methods can
 accept parameters via the request body. In many cases, these are
 <code>application/x-www-form-urlencoded</code> parameters; zend-http allows you to specify
 such parameters usingthe <code>setParameterPost()</code> method, which is identical to the
 <code>setParameterGet()</code> method in structure.</p>
-<pre class=codehilite><code class=language-php>use Zend\Http\Client;
+<pre><code class="language-php">use Zend\Http\Client;
 
 $client = new Client();
 
@@ -516,7 +530,9 @@ $client-&gt;setParameterPost([
     'language'  =&gt; 'es',
     'country'   =&gt; 'ar',
     'selection' =&gt; [45, 32, 80],
-]);</code></pre>
+]);
+</code></pre>
+
 <p>Note that when sending <code>POST</code> requests (or an request allowing a request body),
 you can set both query and <code>POST</code> parameters. On the other hand, setting POST
 parameters on a <code>GET</code> request will not trigger an error, rendering it useless.</p>
@@ -525,7 +541,7 @@ parameters on a <code>GET</code> request will not trigger an error, rendering it
 default (<code>Zend\Http\Client\Adapter\Socket</code>) adapter, you may need to set the
 <code>sslcapath</code> configuration option in order to allow PHP to validate the SSL
 certificate:</p>
-<pre class=codehilite><code class=language-php>use Zend\Http\Client;
+<pre><code class="language-php">use Zend\Http\Client;
 
 $client = new Client(
     'https://example.org',
@@ -533,13 +549,15 @@ $client = new Client(
         'sslcapath' =&gt; '/etc/ssl/certs',
     ]
 );
-$response = $client-&gt;send();</code></pre>
+$response = $client-&gt;send();
+</code></pre>
+
 <p>The exact path to use will vary depending on your operating system. Without this
 you'll get the exception "Unable to enable crypto on TCP connection" when trying
 to connect.</p>
 <p>Alternatively, you could switch to the curl adapter, which negotiates SSL
 connections more transparently:</p>
-<pre class=codehilite><code class=language-php>use Zend\Http\Client;
+<pre><code class="language-php">use Zend\Http\Client;
 
 $client = new Client(
     'https://example.org',
@@ -547,9 +565,11 @@ $client = new Client(
         'adapter' =&gt; 'Zend\Http\Client\Adapter\Curl',
     ]
 );
-$response = $client-&gt;send();</code></pre>
+$response = $client-&gt;send();
+</code></pre>
+
 <h2 id="complete-example">Complete Example</h2>
-<pre class=codehilite><code class=language-php>use Zend\Http\Client;
+<pre><code class="language-php">use Zend\Http\Client;
 
 $client = new Client();
 $client-&gt;setUri('http://www.example.com');
@@ -562,9 +582,11 @@ $response = $client-&gt;send();
 
 if ($response-&gt;isSuccess()) {
     // the POST was successful
-}</code></pre>
+}
+</code></pre>
+
 <p>or the same thing, using a request object:</p>
-<pre class=codehilite><code class=language-php>use Zend\Http\Client;
+<pre><code class="language-php">use Zend\Http\Client;
 use Zend\Http\Request;
 
 $request = new Request();
@@ -577,7 +599,8 @@ $response = $client-&gt;send($request);
 
 if ($response-&gt;isSuccess()) {
     // the POST was successful
-}</code></pre>
+}
+</code></pre>
 
 
 
@@ -764,7 +787,7 @@ if ($response-&gt;isSuccess()) {
             
             <div class="col-md-9">
                 <h4 class="footer__headline">Copyright</h4>
-                <p>&copy; 2006-2019 by <a href="https://www.zend.com/">Zend</a>, a <a href="https://www.roguewave.com/">Rogue Wave Company</a>.</p>
+                <p>&copy; 2006-2020 by <a href="https://www.zend.com/">Zend</a> by <a href="https://www.perforce.com/">Perforce</a>.</p>
             </div>
 
             
@@ -772,10 +795,10 @@ if ($response-&gt;isSuccess()) {
                 <h4 class="footer__headline">Support</h4>
                 <ul class="support__list">
                     <li class="support__list-item">
-                        <a href="https://discourse.zendframework.com" class="support__link" title="Forum"><i class="fa fa-comments"></i></a>
+                        <a href="https://discourse.laminas.dev" class="support__link" title="Forum"><i class="fa fa-comments"></i></a>
                     </li>
                     <li class="support__list-item">
-                        <a href="https://zendframework-slack.herokuapp.com" class="support__link" title="Chat"><i class="fa fa-slack"></i></a>
+                        <a href="https://laminas.dev/chat/" class="support__link" title="Chat"><i class="fa fa-slack"></i></a>
                     </li>
                     <li class="support__list-item">
                         <a href="https://github.com/zendframework" class="support__link" title="Github"><i class="fa fa-github"></i></a>
@@ -783,27 +806,28 @@ if ($response-&gt;isSuccess()) {
                     <li class="support__list-item">
                         <a href="https://twitter.com/zfdevteam" class="support__link" title="Twitter"><i class="fa fa-twitter"></i></a>
                     </li>
-                    <li class="support__list-item">
-                        <a href="https://tinyletter.com/mwopzend" class="support__link" title="Newsletter"><i class="fa fa-envelope"></i></a>
-                    </li>
-                    <li class="support__list-item">
-                        <a href="https://framework.zend.com/blog/feed-rss.xml" class="support__link" title="Blog feed"><i class="fa fa-rss"></i></a>
-                    </li>
-                    <li class="support__list-item">
-                        <a href="https://framework.zend.com/security/feed" class="support__link" title="Security feed"><i class="fa fa-rss-square"></i></a>
-                    </li>
                 </ul>
             </div>
         </div>
     </div>
 </footer>
 
+<nav class="cookie-bar navbar navbar-fixed-bottom navbar-default hidden">
+    <div class="container">
+        <p class="navbar-text">
+            We use cookies to allow you to dismiss dialogs such as the Laminas
+            Project notification.
+        </p>
+        <button type="button" class="cookie-button btn btn-default navbar-btn">Allow Cookies</button>
+    </div>
+</nav>
+
     <script>
         var base_url = '../..',
             siteName = 'zend-http';
     </script>
-    <script src="../../js/scripts-8d7ae56abf.js"></script>
-        <script src="../../search/main.js"></script>
+    <script src="/js/scripts.js"></script>
+    <script src="../../search/main.js"></script>
 
     
     <div class="modal" id="mkdocs_search_modal" tabindex="-1" role="dialog" aria-labelledby="Search Modal" aria-hidden="true">
